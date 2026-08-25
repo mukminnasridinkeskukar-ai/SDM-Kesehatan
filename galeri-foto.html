@@ -145,19 +145,6 @@
             margin: 0 auto;
         }
 
-        /* Demo Badge */
-        .demo-badge {
-            display: inline-block;
-            background: rgba(245, 158, 11, 0.9);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 16px;
-            animation: pulse 2s infinite;
-        }
-
         /* ============================================
            STATISTICS SECTION
            ============================================ */
@@ -793,8 +780,7 @@
             line-height: 1.7;
         }
 
-        .retry-btn,
-        .demo-btn {
+        .retry-btn {
             padding: 12px 28px;
             font-size: 1rem;
             font-weight: 600;
@@ -805,19 +791,10 @@
             cursor: pointer;
             transition: all var(--transition-normal);
             font-family: inherit;
-            margin: 8px;
         }
 
         .retry-btn:hover {
             background: var(--primary-dark);
-        }
-
-        .demo-btn {
-            background: var(--warning-color);
-        }
-
-        .demo-btn:hover {
-            background: #d97706;
         }
 
         /* Error details box */
@@ -855,23 +832,6 @@
 
         .no-results-text {
             font-size: 1.1rem;
-        }
-
-        /* Warning banner for local file */
-        .local-file-warning {
-            background: linear-gradient(135deg, var(--warning-color), #d97706);
-            color: white;
-            padding: 16px 24px;
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-        }
-
-        .local-file-warning strong {
-            display: block;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
         }
 
         /* ============================================
@@ -921,11 +881,6 @@
         @keyframes shimmer {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         .fade-in {
@@ -1144,8 +1099,7 @@
             .controls-bar,
             .load-more-container,
             .lightbox,
-            .footer,
-            .local-file-warning {
+            .footer {
                 display: none !important;
             }
             
@@ -1171,7 +1125,6 @@
             </div>
             <h1>Galeri Foto Kegiatan</h1>
             <p>Dokumentasi Kegiatan Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
-            <div class="demo-badge hidden" id="demoBadge">🔧 MODE DEMO - Data Contoh</div>
         </div>
     </header>
 
@@ -1201,13 +1154,7 @@
     <!-- ============================================
          MAIN CONTENT
          ============================================ -->
-    <main class="main-content" id="mainContent">
-        
-        <!-- Local File Warning Banner -->
-        <div class="local-file-warning hidden" id="localFileWarning">
-            <strong>⚠️ Website Dibuka dari File Lokal</strong>
-            Beberapa fitur mungkin tidak berfungsi optimal. Untuk hasil terbaik, hosting file ini di web server.
-        </div>
+    <main class="main-content">
         
         <!-- Search & Filter Controls -->
         <div class="controls-bar" id="controlsBar">
@@ -1268,7 +1215,7 @@
         <!-- Loading State -->
         <div class="loading-container" id="loadingState">
             <div class="loading-spinner"></div>
-            <p class="loading-text" id="loadingText">Memuat galeri kegiatan...</p>
+            <p class="loading-text">Memuat galeri kegiatan...</p>
             <div class="loading-bar">
                 <div class="loading-bar-progress"></div>
             </div>
@@ -1330,14 +1277,11 @@
             <p class="error-text" id="errorText">Terjadi kesalahan saat memuat data galeri.</p>
             
             <div class="error-details hidden" id="errorDetails">
-                <strong>Detail Teknis:</strong><br>
+                <strong>Detail Error:</strong><br>
                 <code id="errorCode"></code>
             </div>
             
-            <div style="margin-top: 20px;" id="errorButtons">
-                <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
-                <button class="demo-btn" id="demoBtn">🎬 Lihat Demo</button>
-            </div>
+            <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
         </div>
 
         <!-- Empty State (No Activities) -->
@@ -1390,7 +1334,7 @@
     </footer>
 
     <!-- ============================================
-         JAVASCRIPT - ROBUST VERSION
+         JAVASCRIPT
          ============================================ -->
     <script>
         /**
@@ -1399,151 +1343,30 @@
          * Dinas Kesehatan Kabupaten Kutai Kartanegara
          * =====================================================
          * 
-         * VERSI: 2.0 - ROBUST WITH AUTO FALLBACK
-         * 
-         * FITUR UTAMA:
-         * - Auto-detect local file (file://)
-         * - Auto-fallback to demo mode
-         * - Timeout handling untuk fetch
-         * - Comprehensive error handling
+         * KONFIGURASI:
+         * ---------------------
+         * URL Google Apps Script Web App sudah dikonfigurasi.
+         * Jika terjadi error, akan menampilkan pesan error yang jelas.
          * =====================================================
          */
-        
-        // ============================================
-        // KONFIGURASI
-        // ============================================
         const CONFIG = {
-            // URL Google Apps Script Web App
-            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyfp1-behA5k3fmLFanQvcUBzvgnbnf3AveI0jjReDkTuGQD2Unj4mebdE8rtMugNiodQ/exec",
+            // ================================
+            // ⚙️ KONFIGURASI GOOGLE APPS SCRIPT
+            // ================================
             
-            // Pengaturan tampilan
+            // URL Google Apps Script Web App Anda
+            // Sudah dikonfigurasi untuk produksi
+            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxbIGXgv1JALLAdKNVo8n90z4LdSyUpShebwPSBnnQQRQTy7h4llRW-pvr-nkSEg1fw/exec",
+            
+            // Jumlah kegiatan yang ditampilkan per halaman (untuk load more)
             ITEMS_PER_PAGE: 6,
+            
+            // Jumlah maksimal foto yang ditampilkan per kegiatan di card
             MAX_PHOTOS_PREVIEW: 10,
-            ENABLE_LOAD_MORE: true,
             
-            // Timeout untuk fetch (milidetik)
-            FETCH_TIMEOUT: 15000,
-            
-            // Apakah auto-enable demo saat error
-            AUTO_ENABLE_DEMO_ON_ERROR: true,
-            
-            // Apakah auto-load demo untuk file lokal
-            AUTO_DEMO_FOR_LOCAL_FILE: true
+            // Apakah menampilkan tombol load more
+            ENABLE_LOAD_MORE: true
         };
-
-        // ============================================
-        // DATA DEMO (SAMPLE DATA)
-        // ============================================
-        const DEMO_DATA = [
-            {
-                judul: "Pelatihan Pengelolaan Limbah Fasyankes",
-                tanggal: "15 Agustus 2026",
-                tempat: "Dinas Kesehatan Kabupaten Kutai Kartanegara",
-                folderId: "demo001",
-                foto: [
-                    { nama: "foto1.jpg", fileId: "d001_001", url: "", isDemo: true },
-                    { nama: "foto2.jpg", fileId: "d001_002", url: "", isDemo: true },
-                    { nama: "foto3.jpg", fileId: "d001_003", url: "", isDemo: true },
-                    { nama: "foto4.jpg", fileId: "d001_004", url: "", isDemo: true },
-                    { nama: "foto5.jpg", fileId: "d001_005", url: "", isDemo: true },
-                    { nama: "foto6.jpg", fileId: "d001_006", url: "", isDemo: true },
-                    { nama: "foto7.jpg", fileId: "d001_007", url: "", isDemo: true },
-                    { nama: "foto8.jpg", fileId: "d001_008", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Sosialisasi Platform Digital SDMK",
-                tanggal: "20 Juli 2026",
-                tempat: "Aula Dinas Kesehatan Kukar",
-                folderId: "demo002",
-                foto: [
-                    { nama: "IMG_001.jpg", fileId: "d002_001", url: "", isDemo: true },
-                    { nama: "IMG_002.jpg", fileId: "d002_002", url: "", isDemo: true },
-                    { nama: "IMG_003.jpg", fileId: "d002_003", url: "", isDemo: true },
-                    { nama: "IMG_004.jpg", fileId: "d002_004", url: "", isDemo: true },
-                    { nama: "IMG_005.jpg", fileId: "d002_005", url: "", isDemo: true },
-                    { nama: "IMG_006.jpg", fileId: "d002_006", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Bimbingan Teknis SDM Kesehatan",
-                tanggal: "10 Juni 2026",
-                tempat: "Hotel BSW Tenggarong",
-                folderId: "demo003",
-                foto: [
-                    { nama: "DSC_001.jpg", fileId: "d003_001", url: "", isDemo: true },
-                    { nama: "DSC_002.jpg", fileId: "d003_002", url: "", isDemo: true },
-                    { nama: "DSC_003.jpg", fileId: "d003_003", url: "", isDemo: true },
-                    { nama: "DSC_004.jpg", fileId: "d003_004", url: "", isDemo: true },
-                    { nama: "DSC_005.jpg", fileId: "d003_005", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Rapat Koordinasi Program Kesehatan",
-                tanggal: "5 Mei 2026",
-                tempat: "Ruang Rapat Dinkes Kukar",
-                folderId: "demo004",
-                foto: [
-                    { nama: "rapat1.jpg", fileId: "d004_001", url: "", isDemo: true },
-                    { nama: "rapat2.jpg", fileId: "d004_002", url: "", isDemo: true },
-                    { nama: "rapat3.jpg", fileId: "d004_003", url: "", isDemo: true },
-                    { nama: "rapat4.jpg", fileId: "d004_004", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Penyuluhan Kesehatan Masyarakat",
-                tanggal: "22 April 2026",
-                tempat: "Puskesmas Tenggarong",
-                folderId: "demo005",
-                foto: [
-                    { nama: "penyuluhan1.jpg", fileId: "d005_001", url: "", isDemo: true },
-                    { nama: "penyuluhan2.jpg", fileId: "d005_002", url: "", isDemo: true },
-                    { nama: "penyuluhan3.jpg", fileId: "d005_003", url: "", isDemo: true },
-                    { nama: "penyuluhan4.jpg", fileId: "d005_004", url: "", isDemo: true },
-                    { nama: "penyuluhan5.jpg", fileId: "d005_005", url: "", isDemo: true },
-                    { nama: "penyuluhan6.jpg", fileId: "d005_006", url: "", isDemo: true },
-                    { nama: "penyuluhan7.jpg", fileId: "d005_007", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Vaksinasi Massal Anak Sekolah",
-                tanggal: "18 Maret 2026",
-                tempat: "SDN 001 Tenggarong",
-                folderId: "demo006",
-                foto: [
-                    { nama: "vaksin1.jpg", fileId: "d006_001", url: "", isDemo: true },
-                    { nama: "vaksin2.jpg", fileId: "d006_002", url: "", isDemo: true },
-                    { nama: "vaksin3.jpg", fileId: "d006_003", url: "", isDemo: true },
-                    { nama: "vaksin4.jpg", fileId: "d006_004", url: "", isDemo: true },
-                    { nama: "vaksin5.jpg", fileId: "d006_005", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Workshop Pengembangan Aplikasi Kesehatan",
-                tanggal: "28 Februari 2026",
-                tempat: "Lab Komputer Dinkes Kukar",
-                folderId: "demo007",
-                foto: [
-                    { nama: "workshop1.jpg", fileId: "d007_001", url: "", isDemo: true },
-                    { nama: "workshop2.jpg", fileId: "d007_002", url: "", isDemo: true },
-                    { nama: "workshop3.jpg", fileId: "d007_003", url: "", isDemo: true }
-                ]
-            },
-            {
-                judul: "Upacara Hari Kesehatan Nasional",
-                tanggal: "12 Januari 2026",
-                tempat: "Halaman Kantor Dinkes Kukar",
-                folderId: "demo008",
-                foto: [
-                    { nama: "upacara1.jpg", fileId: "d008_001", url: "", isDemo: true },
-                    { nama: "upacara2.jpg", fileId: "d008_002", url: "", isDemo: true },
-                    { nama: "upacara3.jpg", fileId: "d008_003", url: "", isDemo: true },
-                    { nama: "upacara4.jpg", fileId: "d008_004", url: "", isDemo: true },
-                    { nama: "upacara5.jpg", fileId: "d008_005", url: "", isDemo: true },
-                    { nama: "upacara6.jpg", fileId: "d008_006", url: "", isDemo: true }
-                ]
-            }
-        ];
 
         // ============================================
         // GLOBAL STATE
@@ -1555,16 +1378,12 @@
         let currentLightboxPhotos = [];
         let touchStartX = 0;
         let touchEndX = 0;
-        let isDemoMode = false;
-        let isLocalFile = false;
 
         // ============================================
         // DOM ELEMENTS
         // ============================================
         const elements = {
-            mainContent: document.getElementById('mainContent'),
             loadingState: document.getElementById('loadingState'),
-            loadingText: document.getElementById('loadingText'),
             skeletonLoader: document.getElementById('skeletonLoader'),
             errorState: document.getElementById('errorState'),
             emptyState: document.getElementById('emptyState'),
@@ -1575,7 +1394,6 @@
             loadMoreBtn: document.getElementById('loadMoreBtn'),
             showingInfo: document.getElementById('showingInfo'),
             retryBtn: document.getElementById('retryBtn'),
-            demoBtn: document.getElementById('demoBtn'),
             searchInput: document.getElementById('searchInput'),
             filterTahun: document.getElementById('filterTahun'),
             filterBulan: document.getElementById('filterBulan'),
@@ -1584,13 +1402,10 @@
             totalKegiatan: document.getElementById('totalKegiatan'),
             totalFoto: document.getElementById('totalFoto'),
             totalTahun: document.getElementById('totalTahun'),
-            demoBadge: document.getElementById('demoBadge'),
             errorTitle: document.getElementById('errorTitle'),
             errorText: document.getElementById('errorText'),
             errorCode: document.getElementById('errorCode'),
             errorDetails: document.getElementById('errorDetails'),
-            errorButtons: document.getElementById('errorButtons'),
-            localFileWarning: document.getElementById('localFileWarning'),
             // Lightbox elements
             lightbox: document.getElementById('lightbox'),
             lightboxClose: document.getElementById('lightboxClose'),
@@ -1605,65 +1420,24 @@
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('[Galeri] Initializing gallery...');
             initApp();
         });
 
         async function initApp() {
-            console.log('[Galeri] Starting initialization...');
-            
-            // DETEKSI: Apakah file dibuka dari lokal?
-            isLocalFile = checkIfLocalFile();
-            console.log('[Galeri] Is local file:', isLocalFile);
-            
-            if (isLocalFile) {
-                console.log('[Galeri] ⚠️ Detected local file access');
-                elements.localFileWarning.classList.remove('hidden');
-                
-                if (CONFIG.AUTO_DEMO_FOR_LOCAL_FILE) {
-                    console.log('[Galeri] Auto-enabling demo mode for local file');
-                    showLoading();
-                    setupEventListeners();
-                    
-                    // Tampilkan loading sebentar lalu load demo
-                    await new Promise(resolve => setTimeout(resolve, 800));
-                    loadDemoData();
-                    return;
-                }
-            }
-            
-            // Normal initialization untuk hosted website
             showLoading();
             setupEventListeners();
             
             // Cek apakah URL dikonfigurasi
-            if (!CONFIG.GOOGLE_APPS_SCRIPT_URL || CONFIG.GOOGLE_APPS_SCRIPT_URL.trim() === "" || 
-                CONFIG.GOOGLE_APPS_SCRIPT_URL.includes("ISI_URL")) {
-                console.log('[Galeri] URL Apps Script belum dikonfigurasi');
+            if (!CONFIG.GOOGLE_APPS_SCRIPT_URL || CONFIG.GOOGLE_APPS_SCRIPT_URL.trim() === "") {
+                console.log('[Galeri] URL Apps Script belum dikonfigurasi.');
                 showConfigError();
                 return;
             }
             
-            // Coba fetch data
-            try {
-                await fetchGalleryData();
-            } catch (error) {
-                console.error('[Galeri] Fatal error in initApp:', error);
-                handleFetchError(error);
-            }
-        }
-
-        /**
-         * Deteksi apakah file dibuka dari file:// protocol
-         */
-        function checkIfLocalFile() {
-            const protocol = window.location.protocol;
-            return protocol === 'file:' || protocol === 'file';
+            await fetchGalleryData();
         }
 
         function setupEventListeners() {
-            console.log('[Galeri] Setting up event listeners...');
-            
             // Search input with debounce
             let searchTimeout;
             elements.searchInput.addEventListener('input', function() {
@@ -1682,16 +1456,7 @@
             elements.loadMoreBtn.addEventListener('click', loadMore);
 
             // Retry button
-            elements.retryBtn.addEventListener('click', function() {
-                if (isLocalFile && CONFIG.AUTO_DEMO_FOR_LOCAL_FILE) {
-                    loadDemoData();
-                } else {
-                    fetchGalleryData();
-                }
-            });
-            
-            // Demo button
-            elements.demoBtn.addEventListener('click', loadDemoData);
+            elements.retryBtn.addEventListener('click', fetchGalleryData);
 
             // Lightbox controls
             elements.lightboxClose.addEventListener('click', closeLightbox);
@@ -1714,24 +1479,17 @@
 
             // Prevent context menu on images
             document.addEventListener('contextmenu', preventContextMenuOnImages);
-            
-            console.log('[Galeri] Event listeners set up complete');
         }
 
         // ============================================
-        // DATA FETCHING (ROBUST VERSION)
+        // DATA FETCHING
         // ============================================
         async function fetchGalleryData() {
             showLoading();
             hideError();
 
             try {
-                console.log('[Galeri] Attempting to fetch from:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
-                console.log('[Galeri] Current location:', window.location.href);
-                
-                // Create AbortController untuk timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), CONFIG.FETCH_TIMEOUT);
+                console.log('[Galeri] Mengambil data dari:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
                 
                 const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                     method: 'GET',
@@ -1739,177 +1497,29 @@
                     headers: {
                         'Accept': 'application/json'
                     },
-                    cache: 'no-cache',
-                    signal: controller.signal
+                    cache: 'no-cache'
                 });
 
-                clearTimeout(timeoutId);
-
-                console.log('[Galeri] Response received:', response.status, response.statusText);
+                console.log('[Galeri] Response status:', response.status);
 
                 if (!response.ok) {
                     throw new Error(`HTTP_ERROR_${response.status}`);
                 }
 
                 const result = await response.json();
-                console.log('[Galeri] Data parsed successfully');
+                console.log('[Galeri] Response data:', result);
 
                 if (!result.success) {
-                    throw new Error(result.message || 'API_RETURNED_ERROR');
+                    throw new Error(result.message || 'API_ERROR');
                 }
 
                 if (!result.data || result.data.length === 0) {
-                    console.log('[Galeri] No data returned from API');
                     showEmpty();
                     return;
                 }
 
-                // Success! Process data
+                // Store and process data
                 allActivities = processActivityData(result.data);
-                isDemoMode = false;
-                
-                populateYearFilter(allActivities);
-                updateStatistics(allActivities);
-                applyFiltersAndRender();
-
-                console.log('[Galeri] ✅ Gallery loaded successfully with', allActivities.length, 'activities');
-
-            } catch (error) {
-                console.error('[Galeri] ❌ Fetch failed:', error.name, error.message);
-                handleFetchError(error);
-            }
-        }
-
-        /**
-         * Handle fetch errors - COMPREHENSIVE VERSION
-         */
-        function handleFetchError(error) {
-            hideLoading();
-            
-            let errorMessage = '';
-            let showErrorDetails = false;
-            let shouldAutoDemo = false;
-            
-            console.log('[Galeri] Analyzing error:', error.name, error.message);
-            
-            // Analisis jenis error
-            if (error.name === 'AbortError') {
-                errorMessage = `
-                    <strong>⏱️ Request Timeout!</strong><br><br>
-                    Server terlalu lambat merespons.<br>
-                    Kemungkinan:<br>
-                    • Server sedang sibuk<br>
-                    • Koneksi internet lambat<br>
-                    • File yang dimuat terlalu besar<br><br>
-                    <strong>Solusi:</strong> Coba lagi atau gunakan Mode Demo.
-                `;
-                shouldAutoDemo = true;
-                
-            } else if (error.message.includes('Failed to fetch') || error.message.includes('net::ERR_FAILED')) {
-                // Ini adalah error yang paling umum!
-                errorMessage = `
-                    <strong>🔌 Koneksi Gagal (CORS/Network)</strong><br><br>
-                    <strong>Penyebab paling umum:</strong><br>
-                    ✅ <strong>File dibuka dari komputer lokal</strong> (file://)<br>
-                    &nbsp;&nbsp;&nbsp;→ Browser memblokir request ke server eksternal<br><br>
-                    ✅ URL Google Apps Script salah/tidak valid<br>
-                    ✅ Masalah koneksi internet<br>
-                    ✅ Firewall atau antivirus memblokir<br><br>
-                    <strong>💡 SOLUSI CEPAT:</strong><br>
-                    Klik tombol <strong>"Lihat Demo"</strong> di bawah untuk melihat preview galeri!<br><br>
-                    <small>Untuk data asli, upload file ini ke hosting (GitHub Pages, Netlify, dll)</small>
-                `;
-                showErrorDetails = true;
-                shouldAutoDemo = true;
-                
-            } else if (error.message.includes('HTTP_ERROR_404')) {
-                errorMessage = '<strong>❌ Endpoint Tidak Ditemukan</strong><br><br>URL Google Apps Script tidak valid atau belum di-deploy. Periksa kembali URL konfigurasi.';
-                shouldAutoDemo = true;
-                
-            } else if (error.message.includes('HTTP_ERROR_403')) {
-                errorMessage = '<strong>🚫 Akses Ditolak</strong><br><br>Apps Script di-deploy dengan permission yang salah. Set ke "Anyone" saat deploy.';
-                shouldAutoDemo = true;
-                
-            } else if (error.message.includes('HTTP_ERROR_500')) {
-                errorMessage = '<strong>⚙️ Error Server Internal</strong><br><br>Google Apps Script mengalami error. Coba lagi beberapa saat.';
-                shouldAutoDemo = true;
-                
-            } else {
-                // Error lainnya
-                errorMessage = `<strong>Error Tidak Dikenal</strong><br><br>${escapeHtml(error.message)}`;
-                shouldAutoDemo = true;
-            }
-            
-            // Tampilkan error
-            showError('Gagal Memuat Galeri', errorMessage, error.message, showErrorDetails);
-            
-            // Auto-load demo jika diaktifkan
-            if (shouldAutoDemo && CONFIG.AUTO_ENABLE_DEMO_ON_ERROR) {
-                console.log('[Galeri] Auto-loading demo due to error...');
-                elements.demoBtn.classList.remove('hidden');
-                
-                // Auto-load demo setelah 2 detik (biarkan user baca error dulu)
-                setTimeout(() => {
-                    if (elements.errorState.classList.contains('hidden') === false) {
-                        console.log('[Galeri] Auto-switching to demo mode');
-                        loadDemoData();
-                    }
-                }, 2500);
-            }
-        }
-
-        /**
-         * Show configuration error when URL is not set
-         */
-        function showConfigError() {
-            hideLoading();
-            isDemoMode = true;
-            
-            showError(
-                'Konfigurasi Belum Lengkap',
-                `
-                    <strong>URL Google Apps Script belum dikonfigurasi.</strong><br><br>
-                    Langkah-langkah:<br>
-                    1. Buat Google Apps Script baru di script.google.com<br>
-                    2. Paste kode dari file Code.gs<br>
-                    3. Deploy sebagai Web App<br>
-                    4. Copy URL Web App yang dihasilkan<br>
-                    5. Edit variabel GOOGLE_APPS_SCRIPT_URL di file ini<br><br>
-                    <strong>Atau klik "Lihat Demo" untuk preview:</strong>
-                `,
-                'CONFIG_NOT_SET',
-                false
-            );
-            
-            elements.demoBtn.classList.remove('hidden');
-        }
-
-        /**
-         * Load demo data - GUARANTEED TO WORK!
-         */
-        function loadDemoData() {
-            console.log('[Galeri] 🎬 Loading DEMO DATA...');
-            
-            // Hide semua state lainnya
-            hideError();
-            hideLoading();
-            hideEmpty();
-            
-            // Set flag demo
-            isDemoMode = true;
-            
-            // Show demo badge
-            elements.demoBadge.classList.remove('hidden');
-            
-            // Hide warning jika di local file
-            if (isLocalFile) {
-                elements.localFileWarning.classList.add('hidden');
-            }
-            
-            // Process demo data
-            try {
-                allActivities = processActivityData(DEMO_DATA);
-                console.log('[Galeri] Demo data processed:', allActivities.length, 'activities');
                 
                 // Populate filters
                 populateYearFilter(allActivities);
@@ -1917,32 +1527,80 @@
                 // Update statistics
                 updateStatistics(allActivities);
                 
-                // Apply filters and render
+                // Apply initial filters and render
                 applyFiltersAndRender();
-                
-                console.log('[Galeri] ✅ Demo mode loaded successfully!');
-                
+
             } catch (error) {
-                console.error('[Galeri] Error loading demo:', error);
-                showError(
-                    'Error Demo Mode',
-                    'Gagal memuat data demo. Halaman perlu di-refresh.',
-                    error.message,
-                    false
-                );
+                console.error('[Galeri] Error fetching gallery data:', error);
+                handleFetchError(error);
             }
         }
 
         /**
-         * Process activity data from API or demo
+         * Handle fetch errors with detailed messages
          */
-        function processActivityData(data) {
-            if (!Array.isArray(data)) {
-                console.warn('[Galeri] processActivityData: data is not an array');
-                return [];
+        function handleFetchError(error) {
+            hideLoading();
+            
+            let errorMessage = '';
+            let showErrorDetails = true;
+            
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = `
+                    <strong>Koneksi ke server gagal!</strong><br><br>
+                    Kemungkinan penyebab:<br>
+                    1. URL Google Apps Script salah atau belum di-deploy<br>
+                    2. Website dibuka dari file lokal (file://)<br>
+                    3. Masalah jaringan internet<br>
+                    4. CORS (Cross-Origin) diblokir browser<br><br>
+                    <strong>Solusi:</strong><br>
+                    • Pastikan website di-hosting (bukan file://)<br>
+                    • Cek URL Google Apps Script sudah benar<br>
+                    • Pastikan Apps Script di-deploy dengan akses "Anyone"<br>
+                    • Refresh halaman dan coba lagi
+                `;
+            } else if (error.message === 'HTTP_ERROR_404') {
+                errorMessage = '<strong>Endpoint API tidak ditemukan.</strong><br>Cek kembali URL Google Apps Script.';
+            } else if (error.message === 'HTTP_ERROR_403') {
+                errorMessage = '<strong>Akses ditolak.</strong><br>Pastikan Apps Script di-deploy dengan akses "Anyone".';
+            } else if (error.message === 'HTTP_ERROR_500') {
+                errorMessage = '<strong>Error server internal.</strong><br>Coba lagi beberapa saat.';
+            } else {
+                errorMessage = `Error: ${error.message}`;
+                showErrorDetails = false;
             }
             
+            showError('Gagal Memuat Galeri', errorMessage, error.message, showErrorDetails);
+        }
+
+        /**
+         * Show configuration error when URL is not set
+         */
+        function showConfigError() {
+            hideLoading();
+            
+            showError(
+                'Konfigurasi Belum Lengkap',
+                `
+                    <strong>URL Google Apps Script belum dikonfigurasi.</strong><br><br>
+                    Untuk menggunakan galeri:<br>
+                    1. Buat dan deploy Google Apps Script (Code.gs)<br>
+                    2. Salin URL Web App yang dihasilkan<br>
+                    3. Edit file ini dan cari variabel <code>GOOGLE_APPS_SCRIPT_URL</code><br>
+                    4. Isi dengan URL Google Apps Script Anda<br><br>
+                    <strong>Catatan:</strong> File ini harus di-hosting di server web (tidak bisa dibuka langsung dari file lokal).
+                `,
+                'CONFIG_NOT_SET',
+                true
+            );
+        }
+
+        /**
+         * Process activity data from API
+         */
+        function processActivityData(data) {
             return data.map(activity => {
+                // If metadata is not provided, try to extract from folder name
                 if (!activity.tanggal || !activity.tempat) {
                     const parsed = parseFolderName(activity.judul || '');
                     return {
@@ -1953,7 +1611,7 @@
                     };
                 }
                 return activity;
-            }).filter(activity => activity && activity.judul); // Filter invalid entries
+            });
         }
 
         /**
@@ -1994,10 +1652,6 @@
             const month = parseInt(parts[1], 10) - 1;
             const year = parts[2];
 
-            if (isNaN(day) || isNaN(month) || day < 1 || day > 31 || month < 0 || month > 11) {
-                return dateStr;
-            }
-
             return `${day} ${months[month]} ${year}`;
         }
 
@@ -2012,10 +1666,8 @@
 
             // Filter activities
             filteredActivities = allActivities.filter(activity => {
-                if (!activity) return false;
-                
                 const matchesSearch = !searchTerm || 
-                    (activity.judul && activity.judul.toLowerCase().includes(searchTerm)) ||
+                    activity.judul.toLowerCase().includes(searchTerm) ||
                     (activity.tanggal && activity.tanggal.toLowerCase().includes(searchTerm)) ||
                     (activity.tempat && activity.tempat.toLowerCase().includes(searchTerm));
 
@@ -2031,7 +1683,7 @@
             // Sort activities
             sortActivities(filteredActivities, sortValue);
 
-            // Reset displayed count
+            // Reset displayed count for new filter results
             displayedCount = 0;
 
             // Render or show no results
@@ -2044,12 +1696,11 @@
                 renderGallery();
             }
 
+            // Update results count
             updateResultsCount();
         }
 
         function sortActivities(activities, sortBy) {
-            if (!Array.isArray(activities)) return;
-            
             switch (sortBy) {
                 case 'terbaru':
                     activities.sort((a, b) => compareDates(b.tanggal, a.tanggal));
@@ -2058,10 +1709,10 @@
                     activities.sort((a, b) => compareDates(a.tanggal, b.tanggal));
                     break;
                 case 'az':
-                    activities.sort((a, b) => ((a.judul || '').localeCompare(b.judul || '', 'id')));
+                    activities.sort((a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'));
                     break;
                 case 'za':
-                    activities.sort((a, b) => ((b.judul || '').localeCompare(a.judul || '', 'id')));
+                    activities.sort((a, b) => (b.judul || '').localeCompare(a.judul || '', 'id'));
                     break;
             }
         }
@@ -2093,7 +1744,7 @@
 
         function populateYearFilter(activities) {
             const years = new Set();
-            (activities || []).forEach(activity => {
+            activities.forEach(activity => {
                 const year = extractYear(activity.tanggal);
                 if (year) years.add(year);
             });
@@ -2115,7 +1766,7 @@
             hideLoading();
             hideSkeleton();
             
-            if (!filteredActivities || filteredActivities.length === 0) {
+            if (filteredActivities.length === 0) {
                 showEmpty();
                 return;
             }
@@ -2130,12 +1781,8 @@
             }
 
             activitiesToShow.slice(displayedCount).forEach((activity, index) => {
-                if (activity) {
-                    const card = createActivityCard(activity, displayedCount + index);
-                    if (card) {
-                        elements.galleryContainer.appendChild(card);
-                    }
-                }
+                const card = createActivityCard(activity, displayedCount + index);
+                elements.galleryContainer.appendChild(card);
             });
 
             displayedCount = endIndex;
@@ -2143,8 +1790,6 @@
         }
 
         function createActivityCard(activity, index) {
-            if (!activity) return null;
-            
             const card = document.createElement('article');
             card.className = 'activity-card';
             card.style.animationDelay = `${index * 0.1}s`;
@@ -2178,20 +1823,16 @@
                 <div class="photo-grid">
                     ${displayPhotos.map((foto, photoIndex) => `
                         <div class="photo-item" 
-                             data-index="${index}" 
-                             data-photo="${photoIndex}"
+                             data-activity-index="${getAllActivitiesIndex(activity)}" 
+                             data-photo-index="${photoIndex}"
                              role="button"
                              tabindex="0"
                              aria-label="Lihat foto ${photoIndex + 1}">
-                            ${foto.isDemo ? `
-                                <div class="demo-photo-placeholder">📷</div>
-                            ` : `
-                                <img src="${getPhotoUrl(foto)}" 
-                                     alt="${escapeHtml(activity.judul)} - Foto ${photoIndex + 1}"
-                                     loading="lazy"
-                                     onerror="this.parentElement.innerHTML='<span class=\\'photo-error\\'>❌ Foto gagal</span>';"
-                                >
-                            `}
+                            <img src="${getPhotoUrl(foto)}" 
+                                 alt="${escapeHtml(activity.judul)} - Foto ${photoIndex + 1}"
+                                 loading="lazy"
+                                 onerror="this.parentElement.classList.add('photo-error'); this.style.display='none'; this.parentElement.innerHTML='<span class=\\'photo-error\\'>Foto tidak dapat dimuat</span>';"
+                            >
                             <div class="photo-overlay">
                                 <span class="photo-zoom-icon">🔍</span>
                             </div>
@@ -2199,8 +1840,8 @@
                     `).join('')}
                     ${remainingCount > 0 ? `
                         <div class="more-photos-badge" 
-                             data-index="${index}" 
-                             data-photo="${CONFIG.MAX_PHOTOS_PREVIEW}"
+                             data-activity-index="${getAllActivitiesIndex(activity)}" 
+                             data-photo-index="${CONFIG.MAX_PHOTOS_PREVIEW}"
                              role="button"
                              tabindex="0"
                              aria-label="Lihat ${remainingCount} foto lainnya">
@@ -2210,24 +1851,22 @@
                 </div>
             `;
 
-            // Add click handlers
+            // Add click handlers for photos
             card.querySelectorAll('.photo-item, .more-photos-badge').forEach(item => {
                 item.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index);
-                    const photoIdx = parseInt(this.dataset.photo);
-                    if (!isNaN(idx) && !isNaN(photoIdx)) {
-                        openLightbox(idx, photoIdx);
-                    }
+                    openLightbox(
+                        parseInt(this.dataset.activityIndex),
+                        parseInt(this.dataset.photoIndex)
+                    );
                 });
 
                 item.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        const idx = parseInt(this.dataset.index);
-                        const photoIdx = parseInt(this.dataset.photo);
-                        if (!isNaN(idx) && !isNaN(photoIdx)) {
-                            openLightbox(idx, photoIdx);
-                        }
+                        openLightbox(
+                            parseInt(this.dataset.activityIndex),
+                            parseInt(this.dataset.photoIndex)
+                        );
                     }
                 });
             });
@@ -2235,12 +1874,23 @@
             return card;
         }
 
+        function getAllActivitiesIndex(activity) {
+            return filteredActivities.indexOf(activity);
+        }
+
+        /**
+         * Get photo URL from Apps Script proxy or direct link
+         */
         function getPhotoUrl(foto) {
             if (!foto) return '';
-            if (foto.isDemo) return '';
-            if (foto.url) return foto.url;
             
-            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && !CONFIG.GOOGLE_APPS_SCRIPT_URL.includes("ISI_URL")) {
+            // If Apps Script provides a proxied URL, use it
+            if (foto.url) {
+                return foto.url;
+            }
+            
+            // Otherwise, construct URL through Apps Script proxy
+            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL.trim()) {
                 const baseUrl = CONFIG.GOOGLE_APPS_SCRIPT_URL.replace('/exec', '');
                 return `${baseUrl}/exec?fileId=${encodeURIComponent(foto.fileId)}&action=getImage`;
             }
@@ -2253,7 +1903,7 @@
         }
 
         function updateLoadMoreButton() {
-            if (!filteredActions || displayedCount >= filteredActivities.length) {
+            if (displayedCount >= filteredActivities.length) {
                 hideLoadMore();
             } else {
                 showLoadMore();
@@ -2262,22 +1912,16 @@
         }
 
         function updateResultsCount() {
-            const count = Math.min(displayedCount, (filteredActivities || []).length);
-            const total = (filteredActivities || []).length;
-            elements.resultsCount.innerHTML = `Menampilkan <strong>${count}</strong> dari <strong>${total}</strong> kegiatan`;
+            elements.resultsCount.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
         }
 
         function updateStatistics(activities) {
-            if (!Array.isArray(activities)) return;
-            
             const totalKegiatan = activities.length;
             let totalFoto = 0;
             const years = new Set();
 
             activities.forEach(activity => {
-                if (activity && activity.foto) {
-                    totalFoto += activity.foto.length;
-                }
+                totalFoto += (activity.foto || []).length;
                 const year = extractYear(activity.tanggal);
                 if (year) years.add(year);
             });
@@ -2288,8 +1932,6 @@
         }
 
         function animateNumber(element, target) {
-            if (!element) return;
-            
             const duration = 1000;
             const start = 0;
             const startTime = performance.now();
@@ -2331,12 +1973,6 @@
             elements.lightbox.classList.remove('active');
             document.body.style.overflow = '';
             elements.lightboxImage.src = '';
-            elements.lightboxImage.style.display = '';
-            
-            // Remove demo placeholder if exists
-            const placeholder = elements.lightboxImage.parentElement.querySelector('.demo-lightbox-placeholder');
-            if (placeholder) placeholder.remove();
-            
             currentLightboxPhotos = [];
             currentLightboxIndex = 0;
         }
@@ -2356,31 +1992,6 @@
             if (!foto) return;
 
             elements.lightboxLoading.classList.remove('hidden');
-
-            if (foto.isDemo) {
-                // Show demo placeholder
-                elements.lightboxImage.alt = `Demo Foto ${currentLightboxIndex + 1}`;
-                elements.lightboxImage.style.display = 'none';
-                
-                let placeholder = elements.lightboxImage.parentElement.querySelector('.demo-lightbox-placeholder');
-                if (!placeholder) {
-                    placeholder = document.createElement('div');
-                    placeholder.className = 'demo-photo-placeholder';
-                    placeholder.style.cssText = 'width: 80vw; height: 70vh; display: flex; align-items: center; justify-content: center; font-size: 4rem; flex-direction: column; gap: 16px;';
-                    elements.lightboxImage.parentElement.insertBefore(placeholder, elements.lightboxImage.nextSibling);
-                }
-                placeholder.innerHTML = '📷<br><small>Demo Foto ' + (currentLightboxIndex + 1) + '</small>';
-                placeholder.style.display = 'flex';
-                
-                elements.lightboxLoading.classList.add('hidden');
-                elements.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
-                return;
-            }
-
-            // Real image
-            const placeholder = elements.lightboxImage.parentElement.querySelector('.demo-lightbox-placeholder');
-            if (placeholder) placeholder.style.display = 'none';
-            elements.lightboxImage.style.display = '';
 
             const img = new Image();
             img.onload = function() {
@@ -2482,8 +2093,8 @@
             hideEmpty();
             hideNoResults();
             
-            elements.errorTitle.textContent = title || 'Error';
-            elements.errorText.innerHTML = message || 'Terjadi kesalahan.';
+            elements.errorTitle.textContent = title || 'Gagal Memuat Galeri';
+            elements.errorText.innerHTML = message || 'Terjadi kesalahan saat memuat data galeri.';
             
             if (code) {
                 elements.errorCode.textContent = code;
@@ -2548,8 +2159,17 @@
             return div.innerHTML;
         }
 
-        // Log final status
-        console.log('[Galeri] Script loaded successfully. Ready to initialize.');
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
     </script>
 </body>
 </html>
