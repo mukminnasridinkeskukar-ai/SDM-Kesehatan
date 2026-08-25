@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Foto Kegiatan - SDMK Kesehatan - Dinas Kesehatan Kabupaten Kutai Kartanegara</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           CSS RESET & BASE STYLES
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Color Palette - Government/Health Theme */
+            --primary-color: #0d6efd;
+            --primary-dark: #0a58ca;
+            --primary-light: #3d8bfd;
+            --secondary-color: #0891b2;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Neutral Colors */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --transition-slow: 500ms ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================
+           HEADER SECTION
+           ============================================ */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-container img {
+            max-width: 70px;
+            max-height: 70px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo-fallback {
+            font-size: 40px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.75rem, 5vw, 2.75rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            opacity: 0.95;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           STATISTICS SECTION
+           ============================================ */
+        .stats-section {
+            max-width: 1200px;
+            margin: -30px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        /* ============================================
+           MAIN CONTENT AREA
+           ============================================ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ============================================
+           SEARCH & FILTER BAR
+           ============================================ */
+        .controls-bar {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.6s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all var(--transition-normal);
+            font-family: inherit;
+            background: var(--bg-primary);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px;
+            font-size: 0.9rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            outline: none;
+            cursor: pointer;
+            background: var(--bg-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+            appearance: none;
+            transition: all var(--transition-fast);
+            font-family: inherit;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .sort-group {
+            margin-left: auto;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+        }
+
+        .results-count strong {
+            color: var(--primary-color);
+        }
+
+        /* ============================================
+           LOADING STATE
+           ============================================ */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loading-bar-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            animation: loadingProgress 1.5s ease-in-out infinite;
+        }
+
+        /* Skeleton Loading for Cards */
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 28px;
+        }
+
+        .skeleton-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skeleton-header {
+            padding: 20px;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            animation: shimmer 1.5s infinite;
+            width: 80%;
+        }
+
+        .skeleton-meta {
+            height: 14px;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: shimmer 1.5s infinite;
+            width: 60%;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-meta:last-child {
+            width: 50%;
+            margin-bottom: 0;
+        }
+
+        .skeleton-photos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .skeleton-photo {
+            aspect-ratio: 1;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* ============================================
+           GALLERY GRID - ACTIVITY CARDS
+           ============================================ */
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+            transition: box-shadow var(--transition-normal);
+        }
+
+        .activity-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .activity-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .activity-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .activity-meta-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Photo Grid within Activity Card */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-normal);
+            /* Protection styles */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-item:hover .photo-overlay {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-zoom-icon {
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all var(--transition-normal);
+        }
+
+        .photo-item:hover .photo-zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Photo count badge for activities with many photos */
+        .more-photos-badge {
+            position: absolute;
+            inset: 0;
+            background: rgba(13, 110, 253, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .more-photos-badge:hover {
+            background: rgba(13, 110, 253, 1);
+        }
+
+        /* ============================================
+           LIGHTBOX / FULLSCREEN VIEWER
+           ============================================ */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .lightbox-image-container {
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            /* Protection styles */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Watermark overlay on lightbox image */
+        .watermark-overlay {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ============================================
+           LOAD MORE / PAGINATION
+           ============================================ */
+        .load-more-container {
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .load-more-btn {
+            padding: 14px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: inherit;
+            box-shadow: var(--shadow-md);
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .load-more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .showing-info {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           EMPTY & ERROR STATES
+           ============================================ */
+        .empty-state,
+        .error-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .empty-icon,
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-title,
+        .error-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .empty-text,
+        .error-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .retry-btn {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: var(--primary-color);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: inherit;
+        }
+
+        .retry-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* No search results state */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .no-results-text {
+            font-size: 1.1rem;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes loadingProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Fade in class for dynamic elements */
+        .fade-in {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+
+        /* Large Desktop (max 5 photos per row) */
+        @media (min-width: 1400px) {
+            .photo-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* Desktop/Laptop (4-5 photos per row) */
+        @media (max-width: 1399px) and (min-width: 1024px) {
+            .photo-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Tablet Landscape (3 photos per row) */
+        @media (max-width: 1023px) and (min-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tablet Portrait (2 photos per row) */
+        @media (max-width: 767px) and (min-width: 480px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 18px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sort-group {
+                margin-left: 0;
+            }
+            
+            .results-count {
+                text-align: center;
+            }
+            
+            .activity-title {
+                font-size: 1.15rem;
+            }
+            
+            .activity-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Mobile Small (1-2 photos per row) */
+        @media (max-width: 479px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3px;
+                padding: 3px;
+            }
+            
+            .header {
+                padding: 30px 16px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
+            
+            .logo-container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .stat-number {
+                font-size: 1.75rem;
+            }
+            
+            .controls-bar {
+                padding: 16px;
+            }
+            
+            .search-input {
+                padding: 12px 16px 12px 44px;
+                font-size: 0.95rem;
+            }
+            
+            .activity-header {
+                padding: 18px 18px 14px;
+            }
+            
+            .activity-title {
+                font-size: 1.05rem;
+            }
+            
+            .activity-meta {
+                font-size: 0.85rem;
+            }
+            
+            .lightbox-nav {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+            
+            .lightbox-prev {
+                left: 10px;
+            }
+            
+            .lightbox-next {
+                right: 10px;
+            }
+            
+            .lightbox-close {
+                top: 12px;
+                right: 12px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            .lightbox-counter {
+                font-size: 0.85rem;
+                padding: 8px 18px;
+                bottom: 16px;
+            }
+            
+            .main-content {
+                padding: 24px 16px 40px;
+            }
+        }
+
+        /* Very small screens (1 photo per row) */
+        @media (max-width: 359px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden {
+            display: none !important;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Image error state */
+        .photo-error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            aspect-ratio: 1;
+        }
+
+        /* Print styles - hide non-essential elements */
+        @media print {
+            .header,
+            .controls-bar,
+            .load-more-container,
+            .lightbox,
+            .footer {
+                display: none !important;
+            }
+            
+            .activity-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         HEADER SECTION
+         ============================================ -->
+    <header class="header">
+        <div class="header-content">
+            <!-- Logo Container with Fallback -->
+            <div class="logo-container">
+                <!-- Ganti src dengan path logo Anda -->
+                <img src="logo.png" alt="Logo Dinkes Kukar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="logo-fallback" style="display:none;">DK</span>
+            </div>
+            <h1>Galeri Foto Kegiatan</h1>
+            <p>Dokumentasi Kegiatan Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+        </div>
+    </header>
+
+    <!-- ============================================
+         STATISTICS SECTION
+         ============================================ -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-number" id="totalKegiatan">0</div>
+                <div class="stat-label">Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📷</div>
+                <div class="stat-number" id="totalFoto">0</div>
+                <div class="stat-label">Foto</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-number" id="totalTahun">0</div>
+                <div class="stat-label">Tahun</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-content">
+        
+        <!-- Search & Filter Controls -->
+        <div class="controls-bar" id="controlsBar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Cari kegiatan berdasarkan judul, tanggal, atau tempat..."
+                    autocomplete="off"
+                >
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-group">
+                    <span class="filter-label">Tahun:</span>
+                    <select class="filter-select" id="filterTahun">
+                        <option value="">Semua Tahun</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <span class="filter-label">Bulan:</span>
+                    <select class="filter-select" id="filterBulan">
+                        <option value="">Semua Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group sort-group">
+                    <span class="filter-label">Urutkan:</span>
+                    <select class="filter-select" id="sortBy">
+                        <option value="terbaru">Terbaru</option>
+                        <option value="terlama">Terlama</option>
+                        <option value="az">Nama A-Z</option>
+                        <option value="za">Nama Z-A</option>
+                    </select>
+                </div>
+                
+                <div class="results-count" id="resultsCount">
+                    Menampilkan <strong>0</strong> kegiatan
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Memuat galeri kegiatan...</p>
+            <div class="loading-bar">
+                <div class="loading-bar-progress"></div>
+            </div>
+        </div>
+
+        <!-- Skeleton Loading -->
+        <div class="skeleton-grid" id="skeletonLoader" style="display:none;">
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state hidden" id="errorState">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title">Galeri Tidak Dapat Dimuat</h2>
+            <p class="error-text">Maaf, galeri foto kegiatan belum dapat dimuat. Silakan coba beberapa saat lagi.</p>
+            <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
+        </div>
+
+        <!-- Empty State (No Activities) -->
+        <div class="empty-state hidden" id="emptyState">
+            <div class="empty-icon">📁</div>
+            <h2 class="empty-title">Belum Ada Dokumentasi Kegiatan</h2>
+            <p class="empty-text">Saat ini belum ada dokumentasi foto kegiatan yang tersedia. Silakan kembali lagi nanti.</p>
+        </div>
+
+        <!-- No Search Results -->
+        <div class="no-results hidden" id="noResults">
+            <div class="no-results-icon">🔍</div>
+            <p class="no-results-text">Tidak ditemukan kegiatan yang sesuai dengan pencarian Anda.</p>
+        </div>
+
+        <!-- Gallery Container -->
+        <div class="gallery-container hidden" id="galleryContainer"></div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container hidden" id="loadMoreContainer">
+            <button class="load-more-btn" id="loadMoreBtn">Muat Lebih Banyak</button>
+            <p class="showing-info" id="showingInfo"></p>
+        </div>
+    </main>
+
+    <!-- ============================================
+         LIGHTBOX / FULLSCREEN VIEWER
+         ============================================ -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Viewer Foto">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Foto berikutnya">&#8250;</button>
+        
+        <div class="lightbox-image-container">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage" loading="lazy">
+            <div class="lightbox-loading hidden" id="lightboxLoading">
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="watermark-overlay">© Dinas Kesehatan Kab. Kutai Kartanegara</div>
+        </div>
+        
+        <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    </div>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <p>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        /**
+         * =====================================================
+         * GALERI FOTO KEGIATAN - DINAS KESEHATAN KUKAR
+         * =====================================================
+         * 
+         * KONFIGURASI PENTING:
+         * ---------------------
+         * Ganti nilai di bawah ini dengan konfigurasi Anda.
+         * 
+         * GOOGLE_APPS_SCRIPT_URL: URL dari Google Apps Script Web App
+         * yang telah di-deploy. Format:
+         * https://script.google.com/macros/s/XXXXX/exec
+         * 
+         * CARA MENDAPATKAN URL:
+         * 1. Buat Google Apps Script (Code.gs)
+         * 2. Deploy sebagai Web App
+         * 3. Salin URL yang dihasilkan
+         * 4. Masukkan di bawah ini
+         * =====================================================
+         */
+        const CONFIG = {
+            // ================================
+            // ⚠️ WAJIB DIUBAH ⚠️
+            // ================================
+            
+            // URL Google Apps Script Web App Anda
+            // Contoh: "https://script.google.com/macros/s/Abc123Def456/exec"
+            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyfp1-behA5k3fmLFanQvcUBzvgnbnf3AveI0jjReDkTuGQD2Unj4mebdE8rtMugNiodQ/exec",
+            
+            // Jumlah kegiatan yang ditampilkan per halaman (untuk load more)
+            ITEMS_PER_PAGE: 6,
+            
+            // Jumlah maksimal foto yang ditampilkan per kegiatan di card
+            MAX_PHOTOS_PREVIEW: 10,
+            
+            // Apakah menampilkan tombol load more
+            ENABLE_LOAD_MORE: true
+        };
+
+        /**
+         * =====================================================
+         * PERLINDUNGAN FOTO (DISCLAIMER)
+         * =====================================================
+         * 
+         * PENTING: Perlindungan yang diterapkan di sisi browser
+         * (client-side) TIDAK DAPAT MENJAMIN 100% bahwa foto
+         * tidak bisa disalin/didownload.
+         * 
+         * Pengguna tetap dapat menggunakan:
+         * - Screenshot layar (Print Screen, Snipping Tool)
+         * - Browser Developer Tools (Inspect Element)
+         * - Cache browser
+         * - Ekstensi browser khusus
+         * - Network tab untuk melihat request gambar
+         * 
+         * Tujuan perlindungan ini adalah:
+         * 1. Mencegah download tidak sengaja (klik kanan > Save)
+         * 2. Mencegah drag-and-drop langsung
+         * 3. Memberikan indikasi visual bahwa foto dilindungi
+         * 4. Mengurangi penggunaan yang tidak sah oleh pengguna umum
+         * 
+         * Untuk perlindungan lebih kuat, pertimbangkan:
+         * - Watermark server-side pada gambar
+         * - Hotlink protection
+         * - Akses terautentikasi
+         * - DRM (Digital Rights Management)
+         * =====================================================
+         */
+
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
+        let allActivities = [];          // Semua data kegiatan dari API
+        let filteredActivities = [];     // Kegiatan setelah filter/search
+        let displayedCount = 0;          // Jumlah kegiatan yang sudah ditampilkan
+        let currentLightboxIndex = 0;   // Index foto aktif di lightbox
+        let currentLightboxPhotos = []; // Array foto untuk lightbox saat ini
+        let touchStartX = 0;            // Untuk swipe detection
+        let touchEndX = 0;
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const elements = {
+            loadingState: document.getElementById('loadingState'),
+            skeletonLoader: document.getElementById('skeletonLoader'),
+            errorState: document.getElementById('errorState'),
+            emptyState: document.getElementById('emptyState'),
+            noResults: document.getElementById('noResults'),
+            galleryContainer: document.getElementById('galleryContainer'),
+            controlsBar: document.getElementById('controlsBar'),
+            loadMoreContainer: document.getElementById('loadMoreContainer'),
+            loadMoreBtn: document.getElementById('loadMoreBtn'),
+            showingInfo: document.getElementById('showingInfo'),
+            retryBtn: document.getElementById('retryBtn'),
+            searchInput: document.getElementById('searchInput'),
+            filterTahun: document.getElementById('filterTahun'),
+            filterBulan: document.getElementById('filterBulan'),
+            sortBy: document.getElementById('sortBy'),
+            resultsCount: document.getElementById('resultsCount'),
+            totalKegiatan: document.getElementById('totalKegiatan'),
+            totalFoto: document.getElementById('totalFoto'),
+            totalTahun: document.getElementById('totalTahun'),
+            // Lightbox elements
+            lightbox: document.getElementById('lightbox'),
+            lightboxClose: document.getElementById('lightboxClose'),
+            lightboxPrev: document.getElementById('lightboxPrev'),
+            lightboxNext: document.getElementById('lightboxNext'),
+            lightboxImage: document.getElementById('lightboxImage'),
+            lightboxCounter: document.getElementById('lightboxCounter'),
+            lightboxLoading: document.getElementById('lightboxLoading')
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+
+        async function initApp() {
+            showLoading();
+            setupEventListeners();
+            await fetchGalleryData();
+        }
+
+        function setupEventListeners() {
+            // Search input with debounce
+            let searchTimeout;
+            elements.searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    applyFiltersAndRender();
+                }, 300);
+            });
+
+            // Filter changes
+            elements.filterTahun.addEventListener('change', applyFiltersAndRender);
+            elements.filterBulan.addEventListener('change', applyFiltersAndRender);
+            elements.sortBy.addEventListener('change', applyFiltersAndRender);
+
+            // Load more button
+            elements.loadMoreBtn.addEventListener('click', loadMore);
+
+            // Retry button
+            elements.retryBtn.addEventListener('click', fetchGalleryData);
+
+            // Lightbox controls
+            elements.lightboxClose.addEventListener('click', closeLightbox);
+            elements.lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+            elements.lightboxNext.addEventListener('click', () => navigateLightbox(1));
+
+            // Close lightbox on backdrop click
+            elements.lightbox.addEventListener('click', function(e) {
+                if (e.target === elements.lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyboard);
+
+            // Touch/Swipe support for lightbox
+            elements.lightbox.addEventListener('touchstart', handleTouchStart, { passive: true });
+            elements.lightbox.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+            // Prevent context menu on images (additional protection)
+            document.addEventListener('contextmenu', preventContextMenuOnImages);
+        }
+
+        // ============================================
+        // DATA FETCHING
+        // ============================================
+        async function fetchGalleryData() {
+            showLoading();
+            hideError();
+            hideEmpty();
+
+            try {
+                // Check if config is properly set
+                if (CONFIG.GOOGLE_APPS_SCRIPT_URL === "ISI_URL_APPS_SCRIPT_DISINI" || 
+                    !CONFIG.GOOGLE_APPS_SCRIPT_URL.trim()) {
+                    throw new Error('CONFIG_NOT_SET');
+                }
+
+                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP_ERROR_${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message || 'API_ERROR');
+                }
+
+                if (!result.data || result.data.length === 0) {
+                    showEmpty();
+                    return;
+                }
+
+                // Store and process data
+                allActivities = processActivityData(result.data);
+                
+                // Populate filters
+                populateYearFilter(allActivities);
+                
+                // Update statistics
+                updateStatistics(allActivities);
+                
+                // Apply initial filters and render
+                applyFiltersAndRender();
+
+            } catch (error) {
+                console.error('Error fetching gallery data:', error);
+                
+                if (error.message === 'CONFIG_NOT_SET') {
+                    showError('Konfigurasi Belum Lengkap', 'Silakan atur URL Google Apps Script di file index.html pada variabel CONFIG.GOOGLE_APPS_SCRIPT_URL');
+                } else {
+                    showError();
+                }
+            }
+        }
+
+        /**
+         * Process activity data from API
+         * Handles folder name parsing for metadata extraction
+         */
+        function processActivityData(data) {
+            return data.map(activity => {
+                // If metadata is not provided, try to extract from folder name
+                // Expected format: "DD-MM-YYYY | Judul Kegiatan | Tempat"
+                if (!activity.tanggal || !activity.tempat) {
+                    const parsed = parseFolderName(activity.judul || '');
+                    return {
+                        ...activity,
+                        tanggal: activity.tanggal || parsed.tanggal,
+                        tempat: activity.tempat || parsed.tempat,
+                        judul: parsed.judul || activity.judul
+                    };
+                }
+                return activity;
+            });
+        }
+
+        /**
+         * Parse folder name in format: "DD-MM-YYYY | Judul Kegiatan | Tempat"
+         */
+        function parseFolderName(folderName) {
+            const result = { tanggal: '', tempat: '', judul: '' };
+            
+            if (!folderName) return result;
+
+            // Try to match the pattern: DD-MM-YYYY | Title | Location
+            const pattern = /^(\d{1,2}-\d{1,2}-\d{4})\s*\|\s*(.+?)\s*\|\s*(.+)$/;
+            const match = folderName.match(pattern);
+
+            if (match) {
+                result.tanggal = formatDateIndonesian(match[1]);
+                result.judul = match[2].trim();
+                result.tempat = match[3].trim();
+            } else {
+                // If pattern doesn't match, use the whole name as title
+                result.judul = folderName;
+            }
+
+            return result;
+        }
+
+        /**
+         * Convert DD-MM-YYYY to Indonesian date format
+         */
+        function formatDateIndonesian(dateStr) {
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parts[2];
+
+            return `${day} ${months[month]} ${year}`;
+        }
+
+        // ============================================
+        // FILTERING & SORTING
+        // ============================================
+        function applyFiltersAndRender() {
+            const searchTerm = elements.searchInput.value.toLowerCase().trim();
+            const tahunValue = elements.filterTahun.value;
+            const bulanValue = elements.filterBulan.value;
+            const sortValue = elements.sortBy.value;
+
+            // Filter activities
+            filteredActivities = allActivities.filter(activity => {
+                // Search filter
+                const matchesSearch = !searchTerm || 
+                    activity.judul.toLowerCase().includes(searchTerm) ||
+                    (activity.tanggal && activity.tanggal.toLowerCase().includes(searchTerm)) ||
+                    (activity.tempat && activity.tempat.toLowerCase().includes(searchTerm));
+
+                // Year filter
+                const activityYear = extractYear(activity.tanggal);
+                const matchesYear = !tahunValue || activityYear === tahunValue;
+
+                // Month filter
+                const activityMonth = extractMonth(activity.tanggal);
+                const matchesMonth = !bulanValue || activityMonth === bulanValue;
+
+                return matchesSearch && matchesYear && matchesMonth;
+            });
+
+            // Sort activities
+            sortActivities(filteredActivities, sortValue);
+
+            // Reset displayed count for new filter results
+            displayedCount = 0;
+
+            // Render or show no results
+            if (filteredActivities.length === 0 && allActivities.length > 0) {
+                hideGallery();
+                hideLoadMore();
+                showNoResults();
+            } else {
+                hideNoResults();
+                renderGallery();
+            }
+
+            // Update results count
+            updateResultsCount();
+        }
+
+        function sortActivities(activities, sortBy) {
+            switch (sortBy) {
+                case 'terbaru':
+                    activities.sort((a, b) => compareDates(b.tanggal, a.tanggal));
+                    break;
+                case 'terlama':
+                    activities.sort((a, b) => compareDates(a.tanggal, b.tanggal));
+                    break;
+                case 'az':
+                    activities.sort((a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'));
+                    break;
+                case 'za':
+                    activities.sort((a, b) => (b.judul || '').localeCompare(a.judul || '', 'id'));
+                    break;
+            }
+        }
+
+        function compareDates(dateA, dateB) {
+            // Extract year for comparison (simple approach)
+            const yearA = extractYear(dateA);
+            const yearB = extractYear(dateB);
+            return (yearB || '0').localeCompare(yearA || '0');
+        }
+
+        function extractYear(dateStr) {
+            if (!dateStr) return '';
+            const match = dateStr.match(/\b(20\d{2})\b/);
+            return match ? match[1] : '';
+        }
+
+        function extractMonth(dateStr) {
+            if (!dateStr) return '';
+            const months = ['januari', 'februari', 'maret', 'april', 'mei', 'juni',
+                           'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
+            const lowerDate = dateStr.toLowerCase();
+            for (let i = 0; i < months.length; i++) {
+                if (lowerDate.includes(months[i])) {
+                    return String(i + 1).padStart(2, '0');
+                }
+            }
+            return '';
+        }
+
+        function populateYearFilter(activities) {
+            const years = new Set();
+            activities.forEach(activity => {
+                const year = extractYear(activity.tanggal);
+                if (year) years.add(year);
+            });
+
+            // Clear existing options except default
+            elements.filterTahun.innerHTML = '<option value="">Semua Tahun</option>';
+            
+            // Add years sorted descending
+            [...years].sort((a, b) => b.localeCompare(a)).forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                elements.filterTahun.appendChild(option);
+            });
+        }
+
+        // ============================================
+        // RENDERING
+        // ============================================
+        function renderGallery() {
+            hideLoading();
+            hideSkeleton();
+            
+            if (filteredActivities.length === 0) {
+                showEmpty();
+                return;
+            }
+
+            showGallery();
+
+            // Calculate how many to show
+            const endIndex = Math.min(displayedCount + CONFIG.ITEMS_PER_PAGE, filteredActivities.length);
+            const activitiesToShow = filteredActivities.slice(0, endIndex);
+
+            // Clear and rebuild container (for simplicity)
+            if (displayedCount === 0) {
+                elements.galleryContainer.innerHTML = '';
+            }
+
+            // Render each activity card
+            activitiesToShow.slice(displayedCount).forEach((activity, index) => {
+                const card = createActivityCard(activity, displayedCount + index);
+                elements.galleryContainer.appendChild(card);
+            });
+
+            displayedCount = endIndex;
+
+            // Update load more button
+            updateLoadMoreButton();
+        }
+
+        function createActivityCard(activity, index) {
+            const card = document.createElement('article');
+            card.className = 'activity-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const photos = activity.foto || [];
+            const displayPhotos = photos.slice(0, CONFIG.MAX_PHOTOS_PREVIEW);
+            const remainingCount = Math.max(0, photos.length - CONFIG.MAX_PHOTOS_PREVIEW);
+
+            card.innerHTML = `
+                <div class="activity-header">
+                    <h2 class="activity-title">${escapeHtml(activity.judul || 'Kegiatan Tanpa Judul')}</h2>
+                    <div class="activity-meta">
+                        ${activity.tanggal ? `
+                            <span class="activity-meta-item">
+                                <span class="activity-meta-icon">📅</span>
+                                <span>${escapeHtml(activity.tanggal)}</span>
+                            </span>
+                        ` : ''}
+                        ${activity.tempat ? `
+                            <span class="activity-meta-item">
+                                <span class="activity-meta-icon">📍</span>
+                                <span>${escapeHtml(activity.tempat)}</span>
+                            </span>
+                        ` : ''}
+                        <span class="activity-meta-item">
+                            <span class="activity-meta-icon">📷</span>
+                            <span>${photos.length} foto</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="photo-grid">
+                    ${displayPhotos.map((foto, photoIndex) => `
+                        <div class="photo-item" 
+                             data-activity-index="${getAllActivitiesIndex(activity)}" 
+                             data-photo-index="${photoIndex}"
+                             role="button"
+                             tabindex="0"
+                             aria-label="Lihat foto ${photoIndex + 1}">
+                            <img src="${getPhotoUrl(foto)}" 
+                                 alt="${escapeHtml(activity.judul)} - Foto ${photoIndex + 1}"
+                                 loading="lazy"
+                                 onerror="this.parentElement.classList.add('photo-error'); this.style.display='none'; this.parentElement.innerHTML='<span class=\\'photo-error\\'>Foto tidak dapat dimuat</span>';"
+                            >
+                            <div class="photo-overlay">
+                                <span class="photo-zoom-icon">🔍</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                    ${remainingCount > 0 ? `
+                        <div class="more-photos-badge" 
+                             data-activity-index="${getAllActivitiesIndex(activity)}" 
+                             data-photo-index="${CONFIG.MAX_PHOTOS_PREVIEW}"
+                             role="button"
+                             tabindex="0"
+                             aria-label="Lihat ${remainingCount} foto lainnya">
+                            +${remainingCount}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // Add click handlers for photos
+            card.querySelectorAll('.photo-item, .more-photos-badge').forEach(item => {
+                item.addEventListener('click', function() {
+                    openLightbox(
+                        parseInt(this.dataset.activityIndex),
+                        parseInt(this.dataset.photoIndex)
+                    );
+                });
+
+                item.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openLightbox(
+                            parseInt(this.dataset.activityIndex),
+                            parseInt(this.dataset.photoIndex)
+                        );
+                    }
+                });
+            });
+
+            return card;
+        }
+
+        function getAllActivitiesIndex(activity) {
+            return filteredActivities.indexOf(activity);
+        }
+
+        /**
+         * Get photo URL from Apps Script proxy or direct link
+         * This hides the actual Google Drive file ID from the user
+         */
+        function getPhotoUrl(foto) {
+            if (!foto) return '';
+            
+            // If Apps Script provides a proxied URL, use it
+            if (foto.url) {
+                return foto.url;
+            }
+            
+            // Otherwise, construct URL through Apps Script proxy
+            // This prevents exposing raw Drive URLs
+            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL !== "ISI_URL_APPS_SCRIPT_DISINI") {
+                const baseUrl = CONFIG.GOOGLE_APPS_SCRIPT_URL.replace('/exec', '');
+                return `${baseUrl}/exec?fileId=${encodeURIComponent(foto.fileId)}&action=getImage`;
+            }
+            
+            // Fallback - should not be used in production
+            return '';
+        }
+
+        function loadMore() {
+            renderGallery();
+        }
+
+        function updateLoadMoreButton() {
+            if (displayedCount >= filteredActivities.length) {
+                hideLoadMore();
+            } else {
+                showLoadMore();
+                elements.showingInfo.textContent = `Menampilkan ${displayedCount} dari ${filteredActivities.length} kegiatan`;
+            }
+        }
+
+        function updateResultsCount() {
+            elements.resultsCount.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
+        }
+
+        function updateStatistics(activities) {
+            const totalKegiatan = activities.length;
+            let totalFoto = 0;
+            const years = new Set();
+
+            activities.forEach(activity => {
+                totalFoto += (activity.foto || []).length;
+                const year = extractYear(activity.tanggal);
+                if (year) years.add(year);
+            });
+
+            animateNumber(elements.totalKegiatan, totalKegiatan);
+            animateNumber(elements.totalFoto, totalFoto);
+            animateNumber(elements.totalTahun, years.size);
+        }
+
+        function animateNumber(element, target) {
+            const duration = 1000;
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(start + (target - start) * easeOut);
+                
+                element.textContent = current.toLocaleString('id-ID');
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // ============================================
+        // LIGHTBOX FUNCTIONALITY
+        // ============================================
+        function openLightbox(activityIndex, photoIndex) {
+            const activity = filteredActivities[activityIndex];
+            if (!activity || !activity.foto || activity.foto.length === 0) return;
+
+            currentLightboxPhotos = activity.foto;
+            currentLightboxIndex = photoIndex;
+
+            // Show lightbox
+            elements.lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Load image
+            loadLightboxImage();
+
+            // Update navigation states
+            updateLightboxNav();
+        }
+
+        function closeLightbox() {
+            elements.lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            elements.lightboxImage.src = '';
+            currentLightboxPhotos = [];
+            currentLightboxIndex = 0;
+        }
+
+        function navigateLightbox(direction) {
+            const newIndex = currentLightboxIndex + direction;
+            
+            if (newIndex >= 0 && newIndex < currentLightboxPhotos.length) {
+                currentLightboxIndex = newIndex;
+                loadLightboxImage();
+                updateLightboxNav();
+            }
+        }
+
+        function loadLightboxImage() {
+            const foto = currentLightboxPhotos[currentLightboxIndex];
+            if (!foto) return;
+
+            // Show loading
+            elements.lightboxLoading.classList.remove('hidden');
+
+            // Create new image to preload
+            const img = new Image();
+            img.onload = function() {
+                elements.lightboxImage.src = img.src;
+                elements.lightboxImage.alt = `Foto ${currentLightboxIndex + 1}`;
+                elements.lightboxLoading.classList.add('hidden');
+            };
+            img.onerror = function() {
+                elements.lightboxImage.alt = 'Foto tidak dapat dimuat';
+                elements.lightboxLoading.classList.add('hidden');
+            };
+            
+            // Load image through proxy
+            img.src = getPhotoUrl(foto);
+
+            // Update counter
+            elements.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
+        }
+
+        function updateLightboxNav() {
+            elements.lightboxPrev.disabled = currentLightboxIndex <= 0;
+            elements.lightboxNext.disabled = currentLightboxIndex >= currentLightboxPhotos.length - 1;
+        }
+
+        // Keyboard navigation
+        function handleKeyboard(e) {
+            if (!elements.lightbox.classList.contains('active')) return;
+
+            switch (e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+            }
+        }
+
+        // Touch/Swipe handling
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    navigateLightbox(1); // Swipe left = next
+                } else {
+                    navigateLightbox(-1); // Swipe right = prev
+                }
+            }
+        }
+
+        // Prevent context menu on images
+        function preventContextMenuOnImages(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        }
+
+        // ============================================
+        // UI STATE HELPERS
+        // ============================================
+        function showLoading() {
+            elements.loadingState.classList.remove('hidden');
+            elements.skeletonLoader.style.display = 'grid';
+            elements.galleryContainer.classList.add('hidden');
+            elements.errorState.classList.add('hidden');
+            elements.emptyState.classList.add('hidden');
+            elements.noResults.classList.add('hidden');
+            elements.controlsBar.style.opacity = '0.5';
+            elements.controlsBar.style.pointerEvents = 'none';
+        }
+
+        function hideLoading() {
+            elements.loadingState.classList.add('hidden');
+            elements.skeletonLoader.style.display = 'none';
+            elements.controlsBar.style.opacity = '1';
+            elements.controlsBar.style.pointerEvents = '';
+        }
+
+        function hideSkeleton() {
+            elements.skeletonLoader.style.display = 'none';
+        }
+
+        function showError(title, message) {
+            hideLoading();
+            hideSkeleton();
+            hideGallery();
+            hideLoadMore();
+            hideEmpty();
+            hideNoResults();
+            
+            if (title) {
+                elements.errorState.querySelector('.error-title').textContent = title;
+            }
+            if (message) {
+                elements.errorState.querySelector('.error-text').textContent = message;
+            }
+            
+            elements.errorState.classList.remove('hidden');
+        }
+
+        function hideError() {
+            elements.errorState.classList.add('hidden');
+        }
+
+        function showEmpty() {
+            hideLoading();
+            hideSkeleton();
+            hideGallery();
+            hideLoadMore();
+            elements.emptyState.classList.remove('hidden');
+        }
+
+        function hideEmpty() {
+            elements.emptyState.classList.add('hidden');
+        }
+
+        function showGallery() {
+            elements.galleryContainer.classList.remove('hidden');
+        }
+
+        function hideGallery() {
+            elements.galleryContainer.classList.add('hidden');
+        }
+
+        function showNoResults() {
+            elements.noResults.classList.remove('hidden');
+        }
+
+        function hideNoResults() {
+            elements.noResults.classList.add('hidden');
+        }
+
+        function showLoadMore() {
+            elements.loadMoreContainer.classList.remove('hidden');
+        }
+
+        function hideLoadMore() {
+            elements.loadMoreContainer.classList.add('hidden');
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Debounce utility
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>
