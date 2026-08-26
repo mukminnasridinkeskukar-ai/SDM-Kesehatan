@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeri Foto Kegiatan Dinas Kesehatan Kabupaten Kutai Kartanegara">
+    <title>Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           CSS VARIABLES & RESET
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0a58ca;
+            --primary-light: #3d8bfd;
+            --secondary: #0891b2;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            
+            --transition: 300ms ease;
+            --transition-fast: 150ms ease;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============================================
+           DEBUG PANEL (Temporary)
+           ============================================ */
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 99999;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .debug-panel.minimized {
+            max-height: 40px;
+            overflow: hidden;
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .debug-title {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .debug-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+
+        .debug-close:hover { color: white; }
+
+        .debug-content { display: block; }
+        .debug-panel.minimized .debug-content { display: none; }
+
+        .debug-item {
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            word-break: break-all;
+        }
+
+        .debug-label {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .debug-value {
+            color: #10b981;
+        }
+
+        .debug-error {
+            color: #ef4444;
+            background: rgba(239,68,68,0.1);
+        }
+
+        .debug-warning {
+            color: #f59e0b;
+        }
+
+        .debug-success {
+            color: #10b981;
+        }
+
+        .debug-btn {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: inherit;
+        }
+
+        .debug-btn:hover { background: var(--primary-dark); }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .logo-container svg {
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.75rem, 5vw, 2.75rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           STATISTICS
+           ============================================ */
+        .stats-section {
+            max-width: 1200px;
+            margin: -30px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* Controls Bar */
+        .controls-bar {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.6s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .search-box { position: relative; margin-bottom: 20px; }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            font-size: 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all var(--transition);
+            font-family: inherit;
+            background: var(--bg-primary);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13,110,253,0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+
+        .filter-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px;
+            font-size: 0.9rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            outline: none;
+            cursor: pointer;
+            background: var(--bg-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+            appearance: none;
+            transition: all var(--transition-fast);
+            font-family: inherit;
+        }
+
+        .filter-select:focus { border-color: var(--primary); }
+        .sort-group { margin-left: auto; }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+
+        .results-count strong { color: var(--primary); }
+
+        /* ============================================
+           LOADING STATES
+           ============================================ */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loading-bar-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            animation: loadingProgress 1.5s ease-in-out infinite;
+        }
+
+        /* Skeleton Loading */
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 28px;
+        }
+
+        .skeleton-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skeleton-header { padding: 20px; }
+
+        .skeleton-title {
+            height: 24px;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            animation: shimmer 1.5s infinite;
+            width: 80%;
+        }
+
+        .skeleton-meta {
+            height: 14px;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: shimmer 1.5s infinite;
+            width: 60%;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-meta:last-child { width: 50%; margin-bottom: 0; }
+
+        .skeleton-photos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .skeleton-photo {
+            aspect-ratio: 1;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* ============================================
+           GALLERY GRID
+           ============================================ */
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+            transition: box-shadow var(--transition);
+        }
+
+        .activity-card:hover { box-shadow: var(--shadow-lg); }
+
+        .activity-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .activity-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-meta-item { display: flex; align-items: center; gap: 6px; }
+        .activity-meta-icon { font-size: 1rem; flex-shrink: 0; }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition);
+            user-select: none;
+            pointer-events: none;
+            -webkit-user-drag: none;
+        }
+
+        .photo-item:hover img { transform: scale(1.08); }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0);
+            transition: background var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-item:hover .photo-overlay { background: rgba(0,0,0,0.3); }
+
+        .photo-zoom-icon {
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all var(--transition);
+        }
+
+        .photo-item:hover .photo-zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .more-photos-badge {
+            position: absolute;
+            inset: 0;
+            background: rgba(13,110,253,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .more-photos-badge:hover { background: rgba(13,110,253,1); }
+
+        .photo-error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            aspect-ratio: 1;
+        }
+
+        /* ============================================
+           LIGHTBOX
+           ============================================ */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.97);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-close,
+        .lightbox-nav {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-close {
+            top: 20px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            font-size: 28px;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            font-size: 28px;
+        }
+
+        .lightbox-nav:hover { background: rgba(255,255,255,0.25); }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        .lightbox-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .lightbox-image-container {
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .watermark-overlay {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ============================================
+           LOAD MORE & STATES
+           ============================================ */
+        .load-more-container {
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .load-more-btn {
+            padding: 14px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+            box-shadow: var(--shadow-md);
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .load-more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .showing-info {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state,
+        .error-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .empty-icon,
+        .error-icon { font-size: 4rem; margin-bottom: 20px; }
+
+        .empty-title,
+        .error-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .empty-text,
+        .error-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .retry-btn {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+
+        .retry-btn:hover { background: var(--primary-dark); }
+
+        .error-details {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--error);
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.9rem;
+        }
+
+        .error-details code {
+            background: rgba(239,68,68,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--error);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon { font-size: 3rem; margin-bottom: 16px; }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        .footer p { font-size: 0.9rem; opacity: 0.8; }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes loadingProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 1023px) and (min-width: 768px) {
+            .photo-grid { grid-template-columns: repeat(3, 1fr); }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 767px) and (min-width: 480px) {
+            .photo-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+            .stat-card { padding: 18px; }
+            .stat-number { font-size: 2rem; }
+            .filters-row { flex-direction: column; align-items: stretch; }
+            .filter-group { flex-direction: column; align-items: stretch; }
+            .sort-group { margin-left: 0; }
+            .results-count { text-align: center; }
+            .activity-title { font-size: 1.15rem; }
+            .activity-meta { flex-direction: column; gap: 8px; }
+            
+            .debug-panel {
+                top: 5px;
+                right: 5px;
+                left: 5px;
+                max-width: none;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 479px) {
+            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 3px; }
+            .header { padding: 30px 16px; }
+            .header h1 { font-size: 1.5rem; }
+            .header p { font-size: 0.9rem; }
+            .logo-container { width: 80px; height: 80px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+            .stat-number { font-size: 1.75rem; }
+            .controls-bar { padding: 16px; }
+            .search-input { padding: 12px 16px 12px 44px; font-size: 0.95rem; }
+            .activity-header { padding: 18px 18px 14px; }
+            .activity-title { font-size: 1.05rem; }
+            .activity-meta { font-size: 0.85rem; }
+            .lightbox-nav { width: 44px; height: 44px; font-size: 22px; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 24px; }
+            .lightbox-counter { font-size: 0.85rem; padding: 8px 18px; bottom: 16px; }
+            .main-content { padding: 24px 16px 40px; }
+        }
+
+        @media (max-width: 359px) {
+            .photo-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden { display: none !important; }
+
+        @media print {
+            .header, .controls-bar, .load-more-container, .lightbox, .footer, .debug-panel { display: none !important; }
+            .activity-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+    <!-- DEBUG PANEL -->
+    <div class="debug-panel" id="debugPanel">
+        <div class="debug-header">
+            <span class="debug-title">🔧 DEBUG PANEL</span>
+            <button class="debug-close" id="debugToggle" title="Minimize">−</button>
+            <button class="debug-close" id="debugClose" title="Close">×</button>
+        </div>
+        <div class="debug-content" id="debugContent">
+            <div class="debug-item">
+                <div class="debug-label">⏰ Waktu Load:</div>
+                <div class="debug-value" id="debugTime">Memuat...</div>
+            </div>
+            <div class="debug-item">
+                <div class="debug-label">🌐 URL Halaman:</div>
+                <div class="debug-value" id="debugPageUrl">-</div>
+            </div>
+            <div class="debug-item">
+                <div class="debug-label">📡 API Endpoint:</div>
+                <div class="debug-value" id="debugApiUrl">-</div>
+            </div>
+            <div class="debug-item">
+                <div class="debug-label">📊 Status Response:</div>
+                <div class="debug-value" id="debugStatus">Menunggu...</div>
+            </div>
+            <div class="debug-item" id="debugErrorContainer" style="display:none;">
+                <div class="debug-label">❌ Error Detail:</div>
+                <div class="debug-value debug-error" id="debugErrorDetail">-</div>
+            </div>
+            <div class="debug-item" id="debugResponseContainer" style="display:none;">
+                <div class="debug-label">📦 Response Data:</div>
+                <div class="debug-value debug-success" id="debugResponseData">-</div>
+            </div>
+            <button class="debug-btn" id="testApiBtn">🧪 Test API Connection</button>
+            <button class="debug-btn" id="copyDebugBtn" style="background:#64748b;margin-top:5px;">📋 Copy Debug Info</button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
+                    <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                    <text x="50" y="58" text-anchor="middle" fill="white" font-size="28" font-weight="700" font-family="Poppins, sans-serif">DK</text>
+                    <path d="M30 35 L50 25 L70 35 L70 55 L50 65 L30 55 Z" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+                    <path d="M50 25 L50 65 M30 35 L70 55 M70 35 L30 55" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                </svg>
+            </div>
+            <h1>Galeri Foto Kegiatan</h1>
+            <p>Dokumentasi Kegiatan Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+        </div>
+    </header>
+
+    <!-- STATISTICS -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-number" id="totalKegiatan">0</div>
+                <div class="stat-label">Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📷</div>
+                <div class="stat-number" id="totalFoto">0</div>
+                <div class="stat-label">Foto</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-number" id="totalTahun">0</div>
+                <div class="stat-label">Tahun</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- Search & Filter -->
+        <div class="controls-bar" id="controlsBar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari kegiatan berdasarkan judul, tanggal, atau tempat..." autocomplete="off">
+            </div>
+            <div class="filters-row">
+                <div class="filter-group">
+                    <span class="filter-label">Tahun:</span>
+                    <select class="filter-select" id="filterTahun">
+                        <option value="">Semua Tahun</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Bulan:</span>
+                    <select class="filter-select" id="filterBulan">
+                        <option value="">Semua Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div class="filter-group sort-group">
+                    <span class="filter-label">Urutkan:</span>
+                    <select class="filter-select" id="sortBy">
+                        <option value="terbaru">Terbaru</option>
+                        <option value="terlama">Terlama</option>
+                        <option value="az">Nama A-Z</option>
+                        <option value="za">Nama Z-A</option>
+                    </select>
+                </div>
+                <div class="results-count" id="resultsCount">Menampilkan <strong>0</strong> kegiatan</div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Memuat galeri kegiatan...</p>
+            <div class="loading-bar"><div class="loading-bar-progress"></div></div>
+        </div>
+
+        <!-- Skeleton Loader -->
+        <div class="skeleton-grid" id="skeletonLoader" style="display:none;">
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+                <div class="skeleton-photos">
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state hidden" id="errorState">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title" id="errorTitle">Gagal Memuat Galeri</h2>
+            <p class="error-text" id="errorText">Terjadi kesalahan saat memuat data galeri.</p>
+            <div class="error-details hidden" id="errorDetails">
+                <strong>Detail Error:</strong><br>
+                <code id="errorCode"></code>
+            </div>
+            <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="emptyState">
+            <div class="empty-icon">📁</div>
+            <h2 class="empty-title">Belum Ada Dokumentasi Kegiatan</h2>
+            <p class="empty-text">Saat ini belum ada dokumentasi foto kegiatan yang tersedia. Silakan kembali lagi nanti.</p>
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results hidden" id="noResults">
+            <div class="no-results-icon">🔍</div>
+            <p class="no-results-text">Tidak ditemukan kegiatan yang sesuai dengan pencarian Anda.</p>
+        </div>
+
+        <!-- Gallery Container -->
+        <div class="gallery-container hidden" id="galleryContainer"></div>
+
+        <!-- Load More -->
+        <div class="load-more-container hidden" id="loadMoreContainer">
+            <button class="load-more-btn" id="loadMoreBtn">Muat Lebih Banyak</button>
+            <p class="showing-info" id="showingInfo"></p>
+        </div>
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Viewer Foto">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Foto berikutnya">&#8250;</button>
+        <div class="lightbox-image-container">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage" loading="lazy">
+            <div class="lightbox-loading hidden" id="lightboxLoading">
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="watermark-overlay">© Dinas Kesehatan Kab. Kutai Kartanegara</div>
+        </div>
+        <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara. Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        /**
+         * Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara
+         * ================================================================
+         * VERSION: Debug Mode with Panel
+         */
+        const CONFIG = {
+            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
+            ITEMS_PER_PAGE: 6,
+            MAX_PHOTOS_PREVIEW: 10,
+            ENABLE_LOAD_MORE: true
+        };
+
+        // State
+        let allActivities = [];
+        let filteredActivities = [];
+        let displayedCount = 0;
+        let currentLightboxIndex = 0;
+        let currentLightboxPhotos = [];
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // DOM Elements
+        const $ = id => document.getElementById(id);
+        const el = {
+            loadingState: $('loadingState'),
+            skeletonLoader: $('skeletonLoader'),
+            errorState: $('errorState'),
+            emptyState: $('emptyState'),
+            noResults: $('noResults'),
+            galleryContainer: $('galleryContainer'),
+            controlsBar: $('controlsBar'),
+            loadMoreContainer: $('loadMoreContainer'),
+            loadMoreBtn: $('loadMoreBtn'),
+            showingInfo: $('showingInfo'),
+            retryBtn: $('retryBtn'),
+            searchInput: $('searchInput'),
+            filterTahun: $('filterTahun'),
+            filterBulan: $('filterBulan'),
+            sortBy: $('sortBy'),
+            resultsCount: $('resultsCount'),
+            totalKegiatan: $('totalKegiatan'),
+            totalFoto: $('totalFoto'),
+            totalTahun: $('totalTahun'),
+            errorTitle: $('errorTitle'),
+            errorText: $('errorText'),
+            errorCode: $('errorCode'),
+            errorDetails: $('errorDetails'),
+            lightbox: $('lightbox'),
+            lightboxClose: $('lightboxClose'),
+            lightboxPrev: $('lightboxPrev'),
+            lightboxNext: $('lightboxNext'),
+            lightboxImage: $('lightboxImage'),
+            lightboxCounter: $('lightboxCounter'),
+            lightboxLoading: $('lightboxLoading')
+        };
+
+        // Debug Elements
+        const debug = {
+            panel: $('debugPanel'),
+            toggle: $('debugToggle'),
+            closeBtn: $('debugClose'),
+            time: $('debugTime'),
+            pageUrl: $('debugPageUrl'),
+            apiUrl: $('debugApiUrl'),
+            status: $('debugStatus'),
+            errorContainer: $('debugErrorContainer'),
+            errorDetail: $('debugErrorDetail'),
+            responseContainer: $('debugResponseContainer'),
+            responseData: $('debugResponseData'),
+            testApiBtn: $('testApiBtn'),
+            copyDebugBtn: $('copyDebugBtn')
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        async function initApp() {
+            console.log('[Galeri] === INITIALIZING GALLERY ===');
+            
+            // Update debug info
+            updateDebugInfo();
+            
+            showLoading();
+            setupEventListeners();
+            setupDebugListeners();
+            
+            if (!CONFIG.GOOGLE_APPS_SCRIPT_URL?.trim()) {
+                console.error('[Galeri] ERROR: URL Apps Script tidak dikonfigurasi');
+                showConfigError();
+                return;
+            }
+            
+            console.log('[Galeri] Starting fetch from:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
+            await fetchGalleryData();
+        }
+
+        function updateDebugInfo() {
+            const now = new Date();
+            debug.time.textContent = now.toLocaleString('id-ID');
+            debug.pageUrl.textContent = window.location.href;
+            debug.apiUrl.textContent = CONFIG.GOOGLE_APPS_SCRIPT_URL || '(tidak di-set)';
+        }
+
+        function setupDebugListeners() {
+            debug.toggle.addEventListener('click', () => {
+                debug.panel.classList.toggle('minimized');
+                debug.toggle.textContent = debug.panel.classList.contains('minimized') ? '+' : '−';
+            });
+            
+            debug.closeBtn.addEventListener('click', () => {
+                debug.panel.style.display = 'none';
+            });
+            
+            debug.testApiBtn.addEventListener('click', testApiConnection);
+            debug.copyDebugBtn.addEventListener('click', copyDebugInfo);
+        }
+
+        async function testApiConnection() {
+            debug.testApiBtn.disabled = true;
+            debug.testApiBtn.textContent = '⏳ Testing...';
+            debug.status.textContent = 'Testing connection...';
+            debug.status.className = 'debug-value debug-warning';
+            
+            try {
+                console.log('[DEBUG] Testing API:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
+                
+                const startTime = performance.now();
+                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-cache'
+                });
+                const endTime = performance.now();
+                
+                const duration = Math.round(endTime - startTime);
+                
+                console.log('[DEBUG] Response status:', response.status);
+                console.log('[DEBUG] Response OK:', response.ok);
+                console.log('[DEBUG] Duration:', duration + 'ms');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP_${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                // Update debug panel
+                debug.status.innerHTML = `<span class="debug-success">✅ ${response.status} (${duration}ms)</span>`;
+                debug.status.className = 'debug-value debug-success';
+                debug.responseContainer.style.display = 'block';
+                debug.responseData.textContent = JSON.stringify(result, null, 2).substring(0, 500) + '...';
+                debug.errorContainer.style.display = 'none';
+                
+                console.log('[DEBUG] Success! Data:', result);
+                
+            } catch (error) {
+                console.error('[DEBUG] Test failed:', error);
+                
+                debug.status.innerHTML = `<span class="debug-error">❌ Failed</span>`;
+                debug.status.className = 'debug-value debug-error';
+                debug.errorContainer.style.display = 'block';
+                debug.errorDetail.textContent = error.message + '\n\n' + getDetailedError(error);
+                debug.responseContainer.style.display = 'none';
+            }
+            
+            debug.testApiBtn.disabled = false;
+            debug.testApiBtn.textContent = '🧪 Test API Connection';
+        }
+
+        function getDetailedError(error) {
+            if (error.message?.includes('Failed to fetch')) {
+                return `DETAIL:\n• Resource tidak dapat dimuat\n• Cek koneksi internet\n• Cek apakah URL benar\n• Cek CORS policy\n\nURL: ${CONFIG.GOOGLE_APPS_SCRIPT_URL}`;
+            }
+            if (error.message?.includes('HTTP_404')) {
+                return `DETAIL:\n• Endpoint tidak ditemukan (404)\n• URL mungkin salah atau expired\n• Perlu re-deploy Apps Script`;
+            }
+            if (error.message?.includes('HTTP_403')) {
+                return `DETAIL:\n• Akses ditolak (403)\n• Set deployment access ke "Anyone"`;
+            }
+            return `Error: ${error.message}\nStack: ${error.stack || 'N/A'}`;
+        }
+
+        function copyDebugInfo() {
+            const info = `
+=== GALERI FOTO DEBUG INFO ===
+Waktu: ${new Date().toLocaleString('id-ID')}
+URL Halaman: ${window.location.href}
+API Endpoint: ${CONFIG.GOOGLE_APPS_SCRIPT_URL}
+Status: ${debug.status.textContent}
+Error: ${debug.errorDetail.textContent || '-'}
+Response: ${debug.responseData.textContent || '-'}
+==============================
+            `.trim();
+            
+            navigator.clipboard.writeText(info).then(() => {
+                debug.copyDebugBtn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    debug.copyDebugBtn.textContent = '📋 Copy Debug Info';
+                }, 2000);
+            }).catch(() => {
+                alert('Copy manual:\n\n' + info);
+            });
+        }
+
+        function setupEventListeners() {
+            let searchTimeout;
+            el.searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applyFiltersAndRender, 300);
+            });
+
+            el.filterTahun.addEventListener('change', applyFiltersAndRender);
+            el.filterBulan.addEventListener('change', applyFiltersAndRender);
+            el.sortBy.addEventListener('change', applyFiltersAndRender);
+            el.loadMoreBtn.addEventListener('click', renderGallery);
+            el.retryBtn.addEventListener('click', fetchGalleryData);
+            el.lightboxClose.addEventListener('click', closeLightbox);
+            el.lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+            el.lightboxNext.addEventListener('click', () => navigateLightbox(1));
+            el.lightbox.addEventListener('click', e => { if (e.target === el.lightbox) closeLightbox(); });
+            document.addEventListener('keydown', handleKeyboard);
+            el.lightbox.addEventListener('touchstart', handleTouchStart, { passive: true });
+            el.lightbox.addEventListener('touchend', handleTouchEnd, { passive: true });
+            document.addEventListener('contextmenu', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        }
+
+        // Data Fetching
+        async function fetchGalleryData() {
+            showLoading();
+            hideError();
+
+            try {
+                console.log('[Galeri] Fetching from:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
+                
+                const startTime = performance.now();
+                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-cache'
+                });
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+
+                console.log('[Galeri] Response status:', response.status, `(${duration}ms)`);
+
+                // Update debug
+                debug.status.textContent = `${response.status} (${duration}ms)`;
+
+                if (!response.ok) {
+                    throw new Error(`HTTP_ERROR_${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('[Galeri] Response data:', result);
+
+                // Update debug
+                debug.responseContainer.style.display = 'block';
+                debug.responseData.textContent = JSON.stringify(result, null, 2).substring(0, 300) + '...';
+
+                if (!result.success) throw new Error(result.message || 'API_ERROR');
+                if (!result.data?.length) { 
+                    console.log('[Galeri] No data returned');
+                    showEmpty(); 
+                    return;
+                }
+
+                allActivities = processActivityData(result.data);
+                populateYearFilter(allActivities);
+                updateStatistics(allActivities);
+                applyFiltersAndRender();
+
+            } catch (error) {
+                console.error('[Galeri] ERROR:', error);
+                handleFetchError(error);
+            }
+        }
+
+        function handleFetchError(error) {
+            hideLoading();
+            
+            // Update debug
+            debug.errorContainer.style.display = 'block';
+            debug.errorDetail.textContent = getDetailedError(error);
+            debug.status.innerHTML = `<span class="debug-error">❌ Error</span>`;
+            debug.status.className = 'debug-value debug-error';
+            
+            let msg, showDetails = true;
+
+            if (error.message?.includes('Failed to fetch')) {
+                msg = `<strong>Koneksi ke server gagal!</strong><br><br>
+                       Kemungkinan penyebab:<br>
+                       1. URL Google Apps Script salah atau belum di-deploy<br>
+                       2. Website dibuka dari file lokal (file://)<br>
+                       3. Masalah jaringan internet<br>
+                       4. CORS diblokir browser<br><br>
+                       <strong>Solusi:</strong><br>
+                       • Pastikan website di-hosting<br>
+                       • Cek URL Google Apps Script sudah benar<br>
+                       • Pastikan Apps Script di-deploy dengan akses "Anyone"<br>
+                       • Refresh halaman dan coba lagi<br><br>
+                       <code>URL: ${CONFIG.GOOGLE_APPS_SCRIPT_URL}</code>`;
+            } else if (error.message?.includes('HTTP_ERROR_404')) {
+                msg = `<strong>⚠️ Endpoint API tidak ditemukan (Error 404)!</strong><br><br>
+                       <strong>Kemungkinan penyebab:</strong><br>
+                       1. URL Google Apps Script salah atau sudah berubah<br>
+                       2. Google Apps Script belum di-deploy sebagai Web App<br>
+                       3. Project Apps Script dihapus atau di-revoke<br><br>
+                       <strong>Solusi:</strong><br>
+                       • Buka Google Apps Script Editor<br>
+                       • Klik <strong>Deploy → New deployment</strong><br>
+                       • Pilih type <strong>Web app</strong><br>
+                       • Set access ke <strong>"Anyone"</strong><br>
+                       • Copy URL yang dihasilkan<br>
+                       • Update variabel GOOGLE_APPS_SCRIPT_URL<br><br>
+                       <code>${CONFIG.GOOGLE_APPS_SCRIPT_URL}</code>`;
+            } else if (error.message === 'HTTP_ERROR_403') {
+                msg = '<strong>Akses ditolak.</strong><br>Pastikan Apps Script di-deploy dengan akses "Anyone".';
+            } else if (error.message === 'HTTP_ERROR_500') {
+                msg = '<strong>Error server internal.</strong><br>Coba lagi beberapa saat.';
+            } else {
+                msg = `Error: ${error.message}`;
+                showDetails = false;
+            }
+
+            showError('Gagal Memuat Galeri', msg, error.message, showDetails);
+        }
+
+        function showConfigError() {
+            hideLoading();
+            showError(
+                'Konfigurasi Belum Lengkap',
+                `<strong>URL Google Apps Script belum dikonfigurasi.</strong><br><br>
+                 Untuk menggunakan galeri:<br>
+                 1. Buat dan deploy Google Apps Script (Code.gs)<br>
+                 2. Salin URL Web App yang dihasilkan<br>
+                 3. Edit variabel GOOGLE_APPS_SCRIPT_URL<br>
+                 4. Isi dengan URL Google Apps Script Anda`,
+                'CONFIG_NOT_SET',
+                true
+            );
+        }
+
+        // Data Processing
+        function processActivityData(data) {
+            return data.map(activity => {
+                if (!activity.tanggal || !activity.tempat) {
+                    const parsed = parseFolderName(activity.judul || '');
+                    return {
+                        ...activity,
+                        tanggal: activity.tanggal || parsed.tanggal,
+                        tempat: activity.tempat || parsed.tempat,
+                        judul: parsed.judul || activity.judul
+                    };
+                }
+                return activity;
+            });
+        }
+
+        function parseFolderName(folderName) {
+            const result = { tanggal: '', tempat: '', judul: '' };
+            if (!folderName) return result;
+
+            const pattern = /^(\d{1,2}-\d{1,2}-\d{4})\s*\|\s*(.+?)\s*\|\s*(.+)$/;
+            const match = folderName.match(pattern);
+
+            if (match) {
+                result.tanggal = formatDateIndonesian(match[1]);
+                result.judul = match[2].trim();
+                result.tempat = match[3].trim();
+            } else {
+                result.judul = folderName;
+            }
+            return result;
+        }
+
+        function formatDateIndonesian(dateStr) {
+            const months = ['Januari','Februari','Maret','April','Mei','Juni',
+                           'Juli','Agustus','September','Oktober','November','Desember'];
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parseInt(parts[0])} ${months[parseInt(parts[1]) - 1]} ${parts[2]}`;
+        }
+
+        // Filtering & Sorting
+        function applyFiltersAndRender() {
+            const search = el.searchInput.value.toLowerCase().trim();
+            const tahun = el.filterTahun.value;
+            const bulan = el.filterBulan.value;
+            const sort = el.sortBy.value;
+
+            filteredActivities = allActivities.filter(act => {
+                const matchSearch = !search || 
+                    act.judul?.toLowerCase().includes(search) ||
+                    act.tanggal?.toLowerCase().includes(search) ||
+                    act.tempat?.toLowerCase().includes(search);
+                const matchYear = !tahun || extractYear(act.tanggal) === tahun;
+                const matchMonth = !bulan || extractMonth(act.tanggal) === bulan;
+                return matchSearch && matchYear && matchMonth;
+            });
+
+            sortActivities(filteredActivities, sort);
+            displayedCount = 0;
+
+            if (!filteredActivities.length && allActivities.length) {
+                hideGallery(); hideLoadMore(); showNoResults();
+            } else {
+                hideNoResults(); renderGallery();
+            }
+            updateResultsCount();
+        }
+
+        function sortActivities(activities, sortBy) {
+            const sorts = {
+                terbaru: (a, b) => compareDates(b.tanggal, a.tanggal),
+                terlama: (a, b) => compareDates(a.tanggal, b.tanggal),
+                az: (a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'),
+                za: (a, b) => (b.judul || '').localeCompare(a.judul || '', 'id')
+            };
+            if (sorts[sort]) activities.sort(sorts[sort]);
+        }
+
+        function compareDates(a, b) {
+            return (extractYear(b) || '0').localeCompare(extractYear(a) || '0');
+        }
+
+        function extractYear(dateStr) {
+            if (!dateStr) return '';
+            const m = dateStr.match(/\b(20\d{2})\b/);
+            return m ? m[1] : '';
+        }
+
+        function extractMonth(dateStr) {
+            if (!dateStr) return '';
+            const months = ['januari','februari','maret','april','mei','juni',
+                           'juli','agustus','september','oktober','november','desember'];
+            const lower = dateStr.toLowerCase();
+            for (let i = 0; i < months.length; i++) {
+                if (lower.includes(months[i])) return String(i + 1).padStart(2, '0');
+            }
+            return '';
+        }
+
+        function populateYearFilter(activities) {
+            const years = new Set();
+            activities.forEach(act => { const y = extractYear(act.tanggal); if (y) years.add(y); });
+            
+            el.filterTahun.innerHTML = '<option value="">Semua Tahun</option>';
+            [...years].sort((a, b) => b.localeCompare(a)).forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                el.filterTahun.appendChild(opt);
+            });
+        }
+
+        // Rendering
+        function renderGallery() {
+            hideLoading(); hideSkeleton();
+            
+            if (!filteredActivities.length) { showEmpty(); return; }
+            
+            showGallery();
+            const end = Math.min(displayedCount + CONFIG.ITEMS_PER_PAGE, filteredActivities.length);
+            const toShow = filteredActivities.slice(0, end);
+
+            if (!displayedCount) el.galleryContainer.innerHTML = '';
+
+            toShow.slice(displayedCount).forEach((act, i) => {
+                el.galleryContainer.appendChild(createActivityCard(act, displayedCount + i));
+            });
+
+            displayedCount = end;
+            updateLoadMoreButton();
+        }
+
+        function createActivityCard(activity, index) {
+            const card = document.createElement('article');
+            card.className = 'activity-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const photos = activity.foto || [];
+            const displayPhotos = photos.slice(0, CONFIG.MAX_PHOTOS_PREVIEW);
+            const remaining = Math.max(0, photos.length - CONFIG.MAX_PHOTOS_PREVIEW);
+
+            card.innerHTML = `
+                <div class="activity-header">
+                    <h2 class="activity-title">${escapeHtml(activity.judul || 'Kegiatan Tanpa Judul')}</h2>
+                    <div class="activity-meta">
+                        ${activity.tanggal ? `<span class="activity-meta-item"><span class="activity-meta-icon">📅</span><span>${escapeHtml(activity.tanggal)}</span></span>` : ''}
+                        ${activity.tempat ? `<span class="activity-meta-item"><span class="activity-meta-icon">📍</span><span>${escapeHtml(activity.tempat)}</span></span>` : ''}
+                        <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span>${photos.length} foto</span></span>
+                    </div>
+                </div>
+                <div class="photo-grid">
+                    ${displayPhotos.map((foto, i) => `
+                        <div class="photo-item" data-index="${filteredActivities.indexOf(activity)}" data-photo="${i}" role="button" tabindex="0" aria-label="Lihat foto ${i + 1}">
+                            <img src="${getPhotoUrl(foto)}" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="lazy"
+                                 onerror="this.parentElement.classList.add('photo-error'); this.style.display='none'; this.parentElement.innerHTML='<span class=\\'photo-error\\'>Foto tidak tersedia</span>';">
+                            <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
+                        </div>
+                    `).join('')}
+                    ${remaining > 0 ? `
+                        <div class="more-photos-badge" data-index="${filteredActivities.indexOf(activity)}" data-photo="${CONFIG.MAX_PHOTOS_PREVIEW}" role="button" tabindex="0" aria-label="Lihat ${remaining} foto lainnya">+${remaining}</div>
+                    ` : ''}
+                </div>
+            `;
+
+            card.querySelectorAll('.photo-item, .more-photos-badge').forEach(item => {
+                item.addEventListener('click', () => openLightbox(+item.dataset.index, +item.dataset.photo));
+                item.addEventListener('keypress', e => { if (/Enter| /.test(e.key)) { e.preventDefault(); openLightbox(+item.dataset.index, +item.dataset.photo); }});
+            });
+
+            return card;
+        }
+
+        function getPhotoUrl(foto) {
+            if (!foto) return '';
+            if (foto.url) return foto.url;
+            if (CONFIG.GOOGLE_APPS_SCRIPT_URL?.trim()) {
+                const base = CONFIG.GOOGLE_APPS_SCRIPT_URL.replace('/exec', '');
+                return `${base}/exec?fileId=${encodeURIComponent(foto.fileId)}&action=getImage`;
+            }
+            return '';
+        }
+
+        function updateLoadMoreButton() {
+            if (displayedCount >= filteredActivities.length) {
+                hideLoadMore();
+            } else {
+                showLoadMore();
+                el.showingInfo.textContent = `Menampilkan ${displayedCount} dari ${filteredActivities.length} kegiatan`;
+            }
+        }
+
+        function updateResultsCount() {
+            el.resultsCount.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
+        }
+
+        function updateStatistics(activities) {
+            let totalFoto = 0;
+            const years = new Set();
+            activities.forEach(act => {
+                totalFoto += (act.foto || []).length;
+                const y = extractYear(act.tanggal);
+                if (y) years.add(y);
+            });
+            animateNumber(el.totalKegiatan, activities.length);
+            animateNumber(el.totalFoto, totalFoto);
+            animateNumber(el.totalTahun, years.size);
+        }
+
+        function animateNumber(element, target) {
+            const duration = 1000;
+            const start = performance.now();
+            
+            function update(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                element.textContent = Math.round(target * ease).toLocaleString('id-ID');
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // Lightbox
+        function openLightbox(actIdx, photoIdx) {
+            const act = filteredActivities[actIdx];
+            if (!act?.foto?.length) return;
+
+            currentLightboxPhotos = act.foto;
+            currentLightboxIndex = photoIdx;
+
+            el.lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            loadLightboxImage();
+            updateLightboxNav();
+        }
+
+        function closeLightbox() {
+            el.lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            el.lightboxImage.src = '';
+            currentLightboxPhotos = [];
+            currentLightboxIndex = 0;
+        }
+
+        function navigateLightbox(dir) {
+            const idx = currentLightboxIndex + dir;
+            if (idx >= 0 && idx < currentLightboxPhotos.length) {
+                currentLightboxIndex = idx;
+                loadLightboxImage();
+                updateLightboxNav();
+            }
+        }
+
+        function loadLightboxImage() {
+            const foto = currentLightboxPhotos[currentLightboxIndex];
+            if (!foto) return;
+
+            el.lightboxLoading.classList.remove('hidden');
+
+            const img = new Image();
+            img.onload = () => {
+                el.lightboxImage.src = img.src;
+                el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1}`;
+                el.lightboxLoading.classList.add('hidden');
+            };
+            img.onerror = () => {
+                el.lightboxImage.alt = 'Foto tidak dapat dimuat';
+                el.lightboxLoading.classList.add('hidden');
+            };
+            img.src = getPhotoUrl(foto);
+            el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
+        }
+
+        function updateLightboxNav() {
+            el.lightboxPrev.disabled = currentLightboxIndex <= 0;
+            el.lightboxNext.disabled = currentLightboxIndex >= currentLightboxPhotos.length - 1;
+        }
+
+        function handleKeyboard(e) {
+            if (!el.lightbox.classList.contains('active')) return;
+            switch(e.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': navigateLightbox(-1); break;
+                case 'ArrowRight': navigateLightbox(1); break;
+            }
+        }
+
+        function handleTouchStart(e) { touchStartX = e.changedTouches[0].screenX; }
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) navigateLightbox(diff > 0 ? 1 : -1);
+        }
+
+        // UI State Helpers
+        function showLoading() {
+            el.loadingState.classList.remove('hidden');
+            el.skeletonLoader.style.display = 'grid';
+            el.galleryContainer.classList.add('hidden');
+            el.errorState.classList.add('hidden');
+            el.emptyState.classList.add('hidden');
+            el.noResults.classList.add('hidden');
+            el.controlsBar.style.opacity = '0.5';
+            el.controlsBar.style.pointerEvents = 'none';
+        }
+
+        function hideLoading() {
+            el.loadingState.classList.add('hidden');
+            el.skeletonLoader.style.display = 'none';
+            el.controlsBar.style.opacity = '1';
+            el.controlsBar.style.pointerEvents = '';
+        }
+
+        function hideSkeleton() { el.skeletonLoader.style.display = 'none'; }
+
+        function showError(title, message, code, showDetails) {
+            hideLoading(); hideSkeleton(); hideGallery(); hideLoadMore(); hideEmpty(); hideNoResults();
+            el.errorTitle.textContent = title;
+            el.errorText.innerHTML = message;
+            if (code) el.errorCode.textContent = code;
+            el.errorDetails.classList.toggle('hidden', !(showDetails && code));
+            el.errorState.classList.remove('hidden');
+        }
+
+        function hideError() { el.errorState.classList.add('hidden'); }
+        function showEmpty() { hideLoading(); hideSkeleton(); hideGallery(); hideLoadMore(); el.emptyState.classList.remove('hidden'); }
+        function hideEmpty() { el.emptyState.classList.add('hidden'); }
+        function showGallery() { el.galleryContainer.classList.remove('hidden'); }
+        function hideGallery() { el.galleryContainer.classList.add('hidden'); }
+        function showNoResults() { el.noResults.classList.remove('hidden'); }
+        function hideNoResults() { el.noResults.classList.add('hidden'); }
+        function showLoadMore() { el.loadMoreContainer.classList.remove('hidden'); }
+        function hideLoadMore() { el.loadMoreContainer.classList.add('hidden'); }
+
+        // Utility
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
