@@ -1103,7 +1103,7 @@
          * VERSION: Final v2.0 - 5 Photos per Row + Fullscreen Lightbox
          */
         const CONFIG = {
-            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
+            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzF2EbfsU81Yqxi8dzGAqwzsZxMf1TQ1yMAOooUf0yVh_tC4PZSb2XK4jqvDwXvPByGpQ/exec",
             ITEMS_PER_PAGE: 6,
             MAX_PHOTOS_PREVIEW: 10, // Maksimal 10 foto ditampilkan, sisanya "+X"
             ENABLE_LOAD_MORE: true
@@ -1431,9 +1431,9 @@
                 <div class="photo-grid">
                     ${displayPhotos.map((foto, i) => `
                         <div class="photo-item" data-index="${filteredActivities.indexOf(activity)}" data-photo="${i}" role="button" tabindex="0" aria-label="Lihat foto ${i + 1}">
-                            <img src="${getPhotoUrl(foto)}" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="lazy"
-                                 onload="this.classList.add('loaded');"
-                                 onerror="this.style.display='none'; this.parentElement.querySelector('.photo-placeholder')?.classList.add('hidden'); this.parentElement.classList.add('photo-error-state'); this.parentElement.innerHTML='<div class=\\'photo-error\\'><span class=\\'photo-error-icon\\'>🖼️</span><span>Foto tidak tersedia</span></div>';">
+                            <img src="" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="lazy"
+                                 data-foto-idx="${i}"
+                                 style="opacity: 0; transition: opacity 0.3s ease;">
                             <div class="photo-placeholder">📷</div>
                             <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
                         </div>
@@ -1444,6 +1444,17 @@
                 </div>
             `;
 
+            // Initialize images with fallback mechanism
+            card.querySelectorAll('.photo-item img[data-foto-idx]').forEach(img => {
+                const fotoIdx = parseInt(img.dataset.fotoIdx);
+                const foto = displayPhotos[fotoIdx];
+                
+                if (foto) {
+                    // Use the new multi-method fallback loader
+                    loadImageWithFallback(img, foto);
+                }
+            });
+
             card.querySelectorAll('.photo-item, .more-photos-badge').forEach(item => {
                 item.addEventListener('click', () => openLightbox(+item.dataset.index, +item.dataset.photo));
                 item.addEventListener('keypress', e => { if (/Enter| /.test(e.key)) { e.preventDefault(); openLightbox(+item.dataset.index, +item.dataset.photo); }});
@@ -1452,18 +1463,133 @@
             return card;
         }
 
-        function getPhotoUrl(foto) {
+        /**
+         * Get Photo URL dengan MULTI-METHOD FALLBACK
+         * 
+         * Prioritas URL (dari yang paling reliable):
+         * 1. foto.url - Primary URL dari Code.gs (Google Thumbnails API)
+         * 2. foto.thumbnailUrl - Thumbnail version
+         * 3. foto.downloadUrl - Direct download
+         * 4. foto.viewUrl - View mode
+         * 5. Generate manual URL sebagai fallback terakhir
+         */
+        function getPhotoUrl(foto, urlIndex = 0) {
             if (!foto) return '';
-            // Gunakan URL langsung dari Google Drive jika ada
-            if (foto.url) {
-                return foto.url;
+            
+            // Array of possible URLs in priority order
+            const urls = [];
+            
+            // Method 1: Primary URL (dari response API)
+            if (foto.url) urls.push(foto.url);
+            
+            // Method 2: Thumbnail URL
+            if (foto.thumbnailUrl) urls.push(foto.thumbnailUrl);
+            
+            // Method 3: Download URL
+            if (foto.downloadUrl) urls.push(foto.downloadUrl);
+            
+            // Method 4: View URL
+            if (foto.viewUrl) urls.push(foto.viewUrl);
+            
+            // Method 5: allUrls array jika ada
+            if (Array.isArray(foto.allUrls)) {
+                foto.allUrls.forEach(url => {
+                    if (url && !urls.includes(url)) urls.push(url);
+                });
             }
-            // Fallback ke proxy Apps Script
-            if (CONFIG.GOOGLE_APPS_SCRIPT_URL?.trim()) {
-                const base = CONFIG.GOOGLE_APPS_SCRIPT_URL.replace('/exec', '');
-                return `${base}/exec?fileId=${encodeURIComponent(foto.fileId)}&action=getImage`;
+            
+            // Method 6: Manual generation sebagai fallback terakhir
+            if (foto.fileId) {
+                const manualUrls = [
+                    // Google Thumbnails API (paling reliable)
+                    `https://lh3.googleusercontent.com/d/${foto.fileId}=w800-h600`,
+                    // Alternative thumbnail
+                    `https://drive.google.com/thumbnail?id=${foto.fileId}&sz=w1000`,
+                    // Direct download
+                    `https://drive.google.com/uc?export=download&id=${foto.fileId}`,
+                    // View mode
+                    `https://drive.google.com/uc?export=view&id=${foto.fileId}`
+                ];
+                
+                manualUrls.forEach(url => {
+                    if (!urls.includes(url)) urls.push(url);
+                });
             }
-            return '';
+            
+            // Return URL berdasarkan index (untuk fallback mechanism)
+            if (urlIndex < urls.length) {
+                return urls[urlIndex];
+            }
+            
+            // Return URL pertama jika index out of range
+            return urls[0] || '';
+        }
+        
+        /**
+         * Load image dengan automatic fallback
+         * Jika URL pertama gagal, coba URL berikutnya secara otomatis
+         */
+        function loadImageWithFallback(imgElement, foto, maxAttempts = 4) {
+            let currentAttempt = 0;
+            
+            function tryLoad() {
+                const url = getPhotoUrl(foto, currentAttempt);
+                if (!url) {
+                    handleImageError();
+                    return;
+                }
+                
+                console.log(`[Galeri] Loading image attempt ${currentAttempt + 1}:`, url.substring(0, 80) + '...');
+                
+                // Create test image
+                const testImg = new Image();
+                testImg.crossOrigin = 'anonymous';
+                
+                testImg.onload = () => {
+                    console.log(`[Galeri] ✅ Image loaded successfully on attempt ${currentAttempt + 1}`);
+                    imgElement.src = url;
+                    imgElement.classList.add('loaded');
+                    
+                    // Hide placeholder
+                    const placeholder = imgElement.parentElement?.querySelector('.photo-placeholder');
+                    if (placeholder) {
+                        placeholder.classList.add('hidden');
+                    }
+                };
+                
+                testImg.onerror = () => {
+                    console.warn(`[Galeri] ❌ Attempt ${currentAttempt + 1} failed`);
+                    currentAttempt++;
+                    
+                    if (currentAttempt < maxAttempts) {
+                        // Try next URL
+                        tryLoad();
+                    } else {
+                        // All attempts failed
+                        handleImageError();
+                    }
+                };
+                
+                testImg.src = url;
+            }
+            
+            function handleImageError() {
+                console.error('[Galeri] ❌ All image loading attempts failed');
+                imgElement.style.display = 'none';
+                
+                const container = imgElement.parentElement;
+                if (container) {
+                    container.classList.add('photo-error-state');
+                    container.innerHTML = `
+                        <div class="photo-error">
+                            <span class="photo-error-icon">🖼️</span>
+                            <span>Foto tidak tersedia</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            tryLoad();
         }
 
         function updateLoadMoreButton() {
@@ -1541,18 +1667,54 @@
             if (!foto) return;
 
             el.lightboxLoading.classList.remove('hidden');
+            el.lightboxImage.style.opacity = '0';
 
-            const img = new Image();
-            img.onload = () => {
-                el.lightboxImage.src = img.src;
-                el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1}`;
-                el.lightboxLoading.classList.add('hidden');
-            };
-            img.onerror = () => {
+            // Use multi-method fallback for lightbox too
+            let attempt = 0;
+            const maxAttempts = 4;
+            
+            function tryLoadLightbox() {
+                const url = getPhotoUrl(foto, attempt);
+                if (!url) {
+                    handleLightboxError();
+                    return;
+                }
+                
+                console.log(`[Galeri] Loading lightbox image attempt ${attempt + 1}:`, url.substring(0, 80) + '...');
+                
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                
+                img.onload = () => {
+                    console.log(`[Galeri] ✅ Lightbox image loaded on attempt ${attempt + 1}`);
+                    el.lightboxImage.src = url;
+                    el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1}`;
+                    el.lightboxImage.style.opacity = '1';
+                    el.lightboxLoading.classList.add('hidden');
+                };
+                
+                img.onerror = () => {
+                    console.warn(`[Galeri] ❌ Lightbox attempt ${attempt + 1} failed`);
+                    attempt++;
+                    
+                    if (attempt < maxAttempts) {
+                        tryLoadLightbox();
+                    } else {
+                        handleLightboxError();
+                    }
+                };
+                
+                img.src = url;
+            }
+            
+            function handleLightboxError() {
+                console.error('[Galeri] ❌ All lightbox loading attempts failed');
                 el.lightboxImage.alt = 'Foto tidak dapat dimuat';
+                el.lightboxImage.src = '';
                 el.lightboxLoading.classList.add('hidden');
-            };
-            img.src = getPhotoUrl(foto);
+            }
+            
+            tryLoadLightbox();
             el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
         }
 
