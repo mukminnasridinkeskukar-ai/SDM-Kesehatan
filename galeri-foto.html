@@ -444,7 +444,7 @@
             user-select: none;
             pointer-events: none;
             -webkit-user-drag: none;
-            opacity: 0;
+            opacity: 0.5; /* Mulai dengan opacity rendah, bukan 0 */
         }
 
         .photo-item img.loaded {
@@ -1453,9 +1453,8 @@
                 <div class="photo-grid">
                     ${displayPhotos.map((foto, i) => `
                         <div class="photo-item" data-index="${filteredActivities.indexOf(activity)}" data-photo="${i}" role="button" tabindex="0" aria-label="Lihat foto ${i + 1}">
-                            <img src="" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="lazy"
-                                 data-foto-idx="${i}"
-                                 style="opacity: 0; transition: opacity 0.3s ease;">
+                            <img src="about:blank" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="eager"
+                                 data-foto-idx="${i}">
                             <div class="photo-placeholder">📷</div>
                             <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
                         </div>
@@ -1523,14 +1522,16 @@
             // Method 6: Manual generation sebagai fallback terakhir
             if (foto.fileId) {
                 const manualUrls = [
-                    // Google Thumbnails API (paling reliable)
+                    // Google Thumbnails API (paling reliable untuk Google Drive)
+                    `https://lh3.googleusercontent.com/d/${foto.fileId}=w400-h300`,
+                    // Ukuran lebih besar untuk thumbnail
                     `https://lh3.googleusercontent.com/d/${foto.fileId}=w800-h600`,
-                    // Alternative thumbnail
-                    `https://drive.google.com/thumbnail?id=${foto.fileId}&sz=w1000`,
-                    // Direct download
-                    `https://drive.google.com/uc?export=download&id=${foto.fileId}`,
-                    // View mode
-                    `https://drive.google.com/uc?export=view&id=${foto.fileId}`
+                    // Drive thumbnail dengan parameter sz
+                    `https://drive.google.com/thumbnail?id=${foto.fileId}&sz=w800`,
+                    // View mode (kadang works)
+                    `https://drive.google.com/uc?export=view&id=${foto.fileId}`,
+                    // Download mode (kadang works)
+                    `https://drive.google.com/uc?export=download&id=${foto.fileId}`
                 ];
                 
                 manualUrls.forEach(url => {
@@ -1548,28 +1549,34 @@
         }
         
         /**
-         * Load image dengan automatic fallback
-         * Jika URL pertama gagal, coba URL berikutnya secara otomatis
+         * Load image dengan automatic fallback - FIXED VERSION
+         * Langsung set src ke img element tanpa test image terpisah
+         * Tidak menggunakan crossOrigin untuk menghindari CORS error
          */
-        function loadImageWithFallback(imgElement, foto, maxAttempts = 4) {
+        function loadImageWithFallback(imgElement, foto, maxAttempts = 6) {
             let currentAttempt = 0;
+            let isLoading = true;
+            
+            // Show loading state
+            imgElement.style.opacity = '0.3';
             
             function tryLoad() {
+                if (!isLoading || currentAttempt >= maxAttempts) return;
+                
                 const url = getPhotoUrl(foto, currentAttempt);
                 if (!url) {
                     handleImageError();
                     return;
                 }
                 
-                console.log(`[Galeri] Loading image attempt ${currentAttempt + 1}:`, url.substring(0, 80) + '...');
+                console.log(`[Galeri] 📷 Loading attempt ${currentAttempt + 1}/${maxAttempts}:`, url.substring(0, 100) + '...');
                 
-                // Create test image
-                const testImg = new Image();
-                testImg.crossOrigin = 'anonymous';
-                
-                testImg.onload = () => {
-                    console.log(`[Galeri] ✅ Image loaded successfully on attempt ${currentAttempt + 1}`);
-                    imgElement.src = url;
+                // Set event handlers SEBELUM mengubah src
+                imgElement.onload = function() {
+                    if (!isLoading) return;
+                    console.log(`[Galeri] ✅ SUCCESS on attempt ${currentAttempt + 1}`);
+                    isLoading = false;
+                    imgElement.style.opacity = '1';
                     imgElement.classList.add('loaded');
                     
                     // Hide placeholder
@@ -1577,26 +1584,34 @@
                     if (placeholder) {
                         placeholder.classList.add('hidden');
                     }
+                    
+                    // Remove shimmer animation
+                    const photoItem = imgElement.closest('.photo-item');
+                    if (photoItem) {
+                        photoItem.style.animation = 'none';
+                    }
                 };
                 
-                testImg.onerror = () => {
-                    console.warn(`[Galeri] ❌ Attempt ${currentAttempt + 1} failed`);
+                imgElement.onerror = function() {
+                    if (!isLoading) return;
+                    console.warn(`[Galeri] ❌ FAILED attempt ${currentAttempt + 1}`);
                     currentAttempt++;
                     
                     if (currentAttempt < maxAttempts) {
-                        // Try next URL
-                        tryLoad();
+                        // Try next URL after short delay
+                        setTimeout(tryLoad, 100);
                     } else {
-                        // All attempts failed
                         handleImageError();
                     }
                 };
                 
-                testImg.src = url;
+                // Set src - ini akan trigger load
+                imgElement.src = url;
             }
             
             function handleImageError() {
-                console.error('[Galeri] ❌ All image loading attempts failed');
+                console.error('[Galeri] ❌ All attempts failed for photo');
+                isLoading = false;
                 imgElement.style.display = 'none';
                 
                 const container = imgElement.parentElement;
@@ -1605,13 +1620,22 @@
                     container.innerHTML = `
                         <div class="photo-error">
                             <span class="photo-error-icon">🖼️</span>
-                            <span>Foto tidak tersedia</span>
+                            <span>Foto gagal</span>
                         </div>
                     `;
                 }
             }
             
+            // Start loading
             tryLoad();
+            
+            // Safety timeout - jika setelah 15 detik masih loading, tampilkan error
+            setTimeout(() => {
+                if (isLoading) {
+                    console.warn('[Galeri] ⏰ Loading timeout - showing error state');
+                    handleImageError();
+                }
+            }, 15000);
         }
 
         function updateLoadMoreButton() {
@@ -1691,53 +1715,66 @@
             el.lightboxLoading.classList.remove('hidden');
             el.lightboxImage.style.opacity = '0';
 
-            // Use multi-method fallback for lightbox too
+            // Use multi-method fallback for lightbox - FIXED: no crossOrigin
             let attempt = 0;
-            const maxAttempts = 4;
+            const maxAttempts = 6;
+            let isLoading = true;
             
             function tryLoadLightbox() {
+                if (!isLoading || attempt >= maxAttempts) return;
+                
                 const url = getPhotoUrl(foto, attempt);
                 if (!url) {
                     handleLightboxError();
                     return;
                 }
                 
-                console.log(`[Galeri] Loading lightbox image attempt ${attempt + 1}:`, url.substring(0, 80) + '...');
+                console.log(`[Galeri] 🔍 Lightbox attempt ${attempt + 1}/${maxAttempts}:`, url.substring(0, 100) + '...');
                 
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                
-                img.onload = () => {
-                    console.log(`[Galeri] ✅ Lightbox image loaded on attempt ${attempt + 1}`);
-                    el.lightboxImage.src = url;
-                    el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1}`;
+                // Langsung gunakan lightbox image, bukan test image
+                el.lightboxImage.onload = function() {
+                    if (!isLoading) return;
+                    console.log(`[Galeri] ✅ Lightbox SUCCESS on attempt ${attempt + 1}`);
+                    isLoading = false;
                     el.lightboxImage.style.opacity = '1';
+                    el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1} - ${foto.nama || 'Kegiatan'}`;
                     el.lightboxLoading.classList.add('hidden');
                 };
                 
-                img.onerror = () => {
-                    console.warn(`[Galeri] ❌ Lightbox attempt ${attempt + 1} failed`);
+                el.lightboxImage.onerror = function() {
+                    if (!isLoading) return;
+                    console.warn(`[Galeri] ❌ Lightbox attempt ${attempt + 1} FAILED`);
                     attempt++;
                     
                     if (attempt < maxAttempts) {
-                        tryLoadLightbox();
+                        setTimeout(tryLoadLightbox, 100);
                     } else {
                         handleLightboxError();
                     }
                 };
                 
-                img.src = url;
+                // Trigger load
+                el.lightboxImage.src = url;
             }
             
             function handleLightboxError() {
-                console.error('[Galeri] ❌ All lightbox loading attempts failed');
+                console.error('[Galeri] ❌ All lightbox attempts failed');
+                isLoading = false;
                 el.lightboxImage.alt = 'Foto tidak dapat dimuat';
-                el.lightboxImage.src = '';
+                el.lightboxImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif" font-size="14"%3EFoto Error%3C/text%3E%3C/svg%3E';
                 el.lightboxLoading.classList.add('hidden');
             }
             
             tryLoadLightbox();
             el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
+            
+            // Safety timeout
+            setTimeout(() => {
+                if (isLoading) {
+                    console.warn('[Galeri] ⏰ Lightbox loading timeout');
+                    handleLightboxError();
+                }
+            }, 20000);
         }
 
         function updateLightboxNav() {
