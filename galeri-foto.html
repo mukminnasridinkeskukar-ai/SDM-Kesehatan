@@ -198,9 +198,11 @@
         }
 
         .stat-number {
+            font-family: 'Poppins', sans-serif;
             font-size: 2rem;
             font-weight: 700;
-            font-family: 'Poppins', sans-serif;
+            line-height: 1;
+            margin-bottom: 0.25rem;
         }
 
         .stat-label {
@@ -209,515 +211,541 @@
         }
 
         /* ============================================
-           MAIN GALLERY CONTAINER
+           GALLERY CONTAINER
            ============================================ */
-        .main-container {
+        .gallery-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        .results-info {
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Gallery Container - Activity Based with 10-col Grid */
-        .gallery-container {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* Activity Card */
-        .activity-card {
+        /* ============================================
+           ACTIVITY SECTION
+           ============================================ */
+        .activity-section {
             background: var(--bg-card);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            animation: fadeInUp 0.4s ease forwards;
-            opacity: 0;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .activity-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .activity-header {
-            padding: 14px 18px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
         }
 
         .activity-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
             font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
         }
 
         .activity-meta {
             display: flex;
-            gap: 16px;
             flex-wrap: wrap;
-            font-size: 0.82rem;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            opacity: 0.95;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .activity-description {
+            padding: 1rem 2rem;
+            background: rgba(13, 110, 253, 0.05);
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
             color: var(--text-secondary);
         }
 
-        .activity-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .activity-meta-icon {
-            font-size: 0.9rem;
-        }
-
-        /* Photo Grid - 10 Columns */
+        /* ============================================
+           PHOTO GRID
+           ============================================ */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 3px;
-            padding: 6px;
-            background: var(--bg-secondary);
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem 2rem;
         }
 
-        /* Photo Item */
-        .photo-item {
+        .photo-card {
             position: relative;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 4/3;
+            border-radius: var(--radius-md);
             overflow: hidden;
             cursor: pointer;
-            border-radius: 2px;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            border: 1px solid rgba(0,0,0,0.08);
-            background: #e2e8f0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            contain: layout;
         }
 
-        .photo-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-            z-index: 5;
-            border-color: var(--primary);
-        }
-
-        .photo-item img {
+        .photo-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-            transition: opacity 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
         }
 
-        .photo-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            animation: shimmer 1.5s infinite;
+        .photo-card:hover img {
+            transform: scale(1.08);
         }
-
-        @keyframes shimmer {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-
-        .photo-placeholder.hidden { display: none; }
 
         .photo-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
         }
 
-        .photo-item:hover .photo-overlay { opacity: 1; }
-
-        .photo-zoom-icon {
-            font-size: 1.5rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        .photo-card:hover .photo-overlay {
+            opacity: 1;
         }
 
-        /* Photo Error State */
-        .photo-error-state {
-            background: #fee2e2 !important;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            aspect-ratio: 1 / 1;
+        .photo-title {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            line-height: 1.3;
         }
 
-        .photo-error {
-            text-align: center;
-            color: #dc2626;
-            font-size: 0.75rem;
-            padding: 0.5rem;
+        /* Shimmer loading effect */
+        .shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                var(--bg-secondary) 0%,
+                var(--bg-card) 50%,
+                var(--bg-secondary) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
         }
 
-        .photo-error-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
 
         /* ============================================
-           LIGHTBOX - FULL SCREEN POPUP
+           LIGHTBOX
            ============================================ */
         .lightbox {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.95);
             z-index: 10000;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            padding: 2rem;
             backdrop-filter: blur(10px);
         }
 
         .lightbox.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            font-size: 2rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 10002;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
         }
 
-        .lightbox-close:hover {
-            background: rgba(255,255,255,0.25);
-            transform: rotate(90deg);
-        }
-
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            font-size: 1.8rem;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 10001;
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-        }
-
-        .lightbox-nav:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
-
-        .lightbox-nav:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
+            gap: 1rem;
         }
 
         .lightbox-image-container {
             position: relative;
-            max-width: calc(100vw - 160px);
-            max-height: calc(100vh - 120px);
+            max-width: 100%;
+            max-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .lightbox-image {
+        .lightbox-image-container img {
             max-width: 100%;
-            max-height: 100%;
+            max-height: 80vh;
             object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.6);
-            transition: all 0.3s ease;
-        }
-
-        .lightbox-image.landscape {
-            max-width: 90vw;
-            max-height: calc(90vh * 10/16);
-        }
-
-        .lightbox-image.portrait {
-            max-width: calc(90vh * 9/16);
-            max-height: 90vh;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
         .lightbox-loading {
             position: absolute;
-            color: white;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .lightbox-loading.hidden { display: none; }
-
-        .spinner {
-            width: 28px;
-            height: 28px;
-            border: 3px solid rgba(255,255,255,0.3);
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-        .lightbox-counter {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
+        .lightbox-info {
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            z-index: 10001;
+            text-align: center;
         }
 
         .lightbox-title {
-            position: absolute;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            max-width: 60%;
-            text-align: center;
-            z-index: 10001;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
-        /* Loading & Empty States */
-        .loading-state, .empty-state, .error-state {
+        .lightbox-counter {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .lightbox-close {
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .lightbox-prev {
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-next {
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* ============================================
+           STATES
+           ============================================ */
+        .loading-state,
+        .error-state,
+        .empty-state,
+        .no-results-state {
             text-align: center;
             padding: 4rem 2rem;
-            color: var(--text-secondary);
+            display: none;
         }
 
-        .loading-icon { font-size: 3rem; margin-bottom: 1rem; animation: spin 1s linear infinite; display: inline-block; }
-        .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .error-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .loading-state.active,
+        .error-state.active,
+        .empty-state.active,
+        .no-results-state.active {
+            display: block;
+        }
 
-        .loading-state h3, .empty-state h3, .error-state h3 {
+        .state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .state-title {
             font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--text-primary);
         }
 
-        .hidden { display: none !important; }
+        .state-message {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
 
-        /* Footer */
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem;
+            }
+
+            .title-group h1 {
+                font-size: 1.1rem;
+            }
+
+            .toolbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .toolbar-inner {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .stats-bar {
+                padding: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .gallery-container {
+                padding: 1rem;
+            }
+
+            .activity-header {
+                padding: 1rem 1.25rem;
+            }
+
+            .activity-title {
+                font-size: 1.1rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                padding: 1rem 1.25rem 1.5rem;
+                gap: 0.75rem;
+            }
+
+            .lightbox {
+                padding: 1rem;
+            }
+
+            .lightbox-close,
+            .lightbox-prev,
+            .lightbox-next {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .activity-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
         .footer {
+            background: var(--text-primary);
+            color: white;
             text-align: center;
             padding: 2rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
             margin-top: 3rem;
         }
 
-        /* Responsive Breakpoints */
-        @media (max-width: 1200px) { .photo-grid { grid-template-columns: repeat(8, 1fr); } }
-        @media (max-width: 992px) { .photo-grid { grid-template-columns: repeat(6, 1fr); } }
-        @media (max-width: 768px) { 
-            .photo-grid { grid-template-columns: repeat(4, 1fr); }
-            .header-content { padding: 0.5rem 0; }
-            .title-group h1 { font-size: 1.1rem; }
-            .toolbar-inner { padding: 0.5rem 0; }
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
         }
-        @media (max-width: 480px) { 
-            .photo-grid { grid-template-columns: repeat(3, 1fr); } 
-            .main-container { padding: 1rem; }
-            .activity-header { flex-direction: column; align-items: flex-start; }
+
+        .update-info {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
+    <!-- ============================================
+         HEADER
+         ============================================ -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <div class="title-group">
+                    <h1>Galeri Foto Kegiatan</h1>
+                    <p>Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<!-- Header -->
-<header class="header">
-    <div class="header-content">
-        <div class="logo-section">
-            <div class="logo">
-                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="40" height="40" rx="8" fill="white" fill-opacity="0.2"/>
-                    <path d="M10 30V14L20 20L30 14V30" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="20" cy="11" r="4" stroke="white" stroke-width="2"/>
+    <!-- ============================================
+         TOOLBAR
+         ============================================ -->
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <div class="search-box">
+                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
                 </svg>
+                <input type="text" id="searchInput" placeholder="Cari kegiatan atau foto...">
             </div>
-            <div class="title-group">
-                <h1>Galeri Foto Kegiatan</h1>
-                <p>Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+            <select id="filterTahun" class="filter-select">
+                <option value="">Semua Tahun</option>
+            </select>
+            <select id="sortBy" class="filter-select">
+                <option value="terbaru">Terbaru</option>
+                <option value="terlama">Terlama</option>
+                <option value="judul">Judul (A-Z)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- ============================================
+         STATISTICS BAR
+         ============================================ -->
+    <div class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" id="totalKegiatan">0</div>
+                <div class="stat-label">Kegiatan</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalFoto">0</div>
+                <div class="stat-label">Total Foto</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalTahun">0</div>
+                <div class="stat-label">Tahun Aktif</div>
             </div>
         </div>
     </div>
-</header>
 
-<!-- Toolbar -->
-<div class="toolbar">
-    <div class="toolbar-inner">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Cari kegiatan...">
+    <!-- ============================================
+         STATES
+         ============================================ -->
+    <div class="gallery-container">
+        <div id="loadingState" class="loading-state active">
+            <div class="state-icon">📸</div>
+            <div class="state-title">Memuat Galeri...</div>
+            <div class="state-message">Sedang memuat data foto kegiatan</div>
         </div>
-        <select id="filterTahun" class="filter-select">
-            <option value="">Semua Tahun</option>
-        </select>
-        <select id="sortBy" class="filter-select">
-            <option value="terbaru">Terbaru</option>
-            <option value="terlama">Terlama</option>
-            <option value="az">A-Z</option>
-            <option value="za">Z-A</option>
-        </select>
-    </div>
-</div>
 
-<!-- Statistics -->
-<div class="stats-bar">
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-number" id="totalKegiatan">0</div>
-            <div class="stat-label">Kegiatan</div>
+        <div id="errorState" class="error-state">
+            <div class="state-icon">⚠️</div>
+            <div class="state-title">Terjadi Kesalahan</div>
+            <div class="state-message" id="errorMessage">Gagal memuat data galeri</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-number" id="totalFoto">0</div>
-            <div class="stat-label">Foto</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number" id="totalTahun">0</div>
-            <div class="stat-label">Tahun</div>
-        </div>
-    </div>
-</div>
 
-<!-- Main Content -->
-<main class="main-container">
-    <!-- Results Info -->
-    <div class="results-info" id="resultsInfo"></div>
+        <div id="emptyState" class="empty-state">
+            <div class="state-icon">🖼️</div>
+            <div class="state-title">Belum Ada Foto</div>
+            <div class="state-message">Belum ada foto kegiatan yang tersedia</div>
+        </div>
 
-    <!-- Loading State -->
-    <div class="loading-state" id="loadingState">
-        <div class="loading-icon">⏳</div>
-        <h3>Memuat Galeri Foto...</h3>
-        <p>Mengambil data foto</p>
+        <div id="noResultsState" class="no-results-state">
+            <div class="state-icon">🔍</div>
+            <div class="state-title">Tidak Ditemukan</div>
+            <div class="state-message">Tidak ada hasil yang cocok dengan pencarian Anda</div>
+        </div>
+
+        <div id="resultsInfo" style="margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;"></div>
+
+        <div id="galleryContainer"></div>
     </div>
 
-    <!-- Error State -->
-    <div class="error-state hidden" id="errorState">
-        <div class="error-icon">❌</div>
-        <h3>Gagal Memuat Data</h3>
-        <p id="errorMessage">Terjadi kesalahan saat mengambil data</p>
-        <button onclick="initGallery()" style="margin-top:1rem;padding:0.7rem 1.5rem;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;">
-            🔄 Coba Lagi
+    <!-- ============================================
+         LIGHTBOX
+         ============================================ -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Tutup">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
         </button>
-    </div>
-
-    <!-- Empty State -->
-    <div class="empty-state hidden" id="emptyState">
-        <div class="empty-icon">📷</div>
-        <h3>Belum Ada Foto</h3>
-        <p>Galeri foto masih kosong</p>
-    </div>
-
-    <!-- No Results State -->
-    <div class="empty-state hidden" id="noResultsState">
-        <div class="empty-icon">🔍</div>
-        <h3>Tidak Ditemukan</h3>
-        <p>Tidak ada kegiatan yang cocok dengan pencarian</p>
-    </div>
-
-    <!-- Gallery Container -->
-    <div class="gallery-container hidden" id="galleryContainer"></div>
-</main>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" onclick="navigateLightbox(-1)">❮</button>
-    <button class="lightbox-nav lightbox-next" id="lightboxNext" onclick="navigateLightbox(1)">❯</button>
-    
-    <div class="lightbox-image-container" id="lightboxImageContainer">
-        <img src="" alt="" class="lightbox-image" id="lightboxImage">
-        <div class="lightbox-loading" id="lightboxLoading">
-            <div class="spinner"></div>
-            <span>Memuat foto...</span>
+        <button class="lightbox-prev" onclick="prevPhoto()" aria-label="Sebelumnya">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <button class="lightbox-next" onclick="nextPhoto()" aria-label="Selanjutnya">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+        
+        <div class="lightbox-content">
+            <div class="lightbox-image-container" id="lightboxImageContainer">
+                <div class="lightbox-loading" id="lightboxLoading"></div>
+                <img id="lightboxImage" src="" alt="" style="display: none;">
+            </div>
+            <div class="lightbox-info">
+                <div class="lightbox-title" id="lightboxTitle"></div>
+                <div class="lightbox-counter" id="lightboxCounter"></div>
+            </div>
         </div>
     </div>
-    
-    <div class="lightbox-title" id="lightboxTitle"></div>
-    <div class="lightbox-counter" id="lightboxCounter"></div>
-</div>
 
-<!-- Footer -->
-<footer class="footer">
-    <p>&copy; 2024 Dinas Kesehatan Kabupaten Kutai Kartanegara. Powered by Cloudinary CDN.</p>
-</footer>
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <p>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+        <p class="update-info">Terakhir diupdate: 2026-08-26 22:16:29</p>
+    </footer>
 
-<!--
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   🖼️ DATA GALERI FOTO - CLOUDINARY INTEGRATION             ║
-║                                                              ║
-║   Edit data di bawah untuk menambah/mengubah kegiatan       ║
-║   Setiap "activity" = 1 kegiatan dengan folder sendiri      ║
-║                                                              ║
-║   CARA MENAMBAH FOTO:                                       ║
-║   1. Upload foto ke Cloudinary                             ║
-║   2. Copy Public ID dari Media Library                     ║
-║   3. Paste di array "photos"                               ║
-║   4. Save & refresh halaman                                ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
--->
-<script type="application/json" id="galleryData">
+    <!-- ============================================
+         EMBEDDED DATA (Auto-generated)
+         ============================================ -->
+    <script type="application/json" id="galleryData">
 {
   "config": {
     "cloudName": "cla7jrww",
@@ -725,123 +753,436 @@
   },
   "activities": [
     {
-      "id": "pelatihan-pencegahan-kusta-030826",
-      "judul": "Pelatihan Pencegahan dan Pengendalian Penyakit Kusta dan Frambusia bagi Pengelola Program Kusta dan Frambusia Tingkat Puskesmas",
-      "tanggal": "03 Agustus 2026",
-      "tempat": "Jalan W. Monginsidi, Samarinda (UPTD Bapelkes Prov. Kaltim)",
+      "id": "kegiatan-20260821",
+      "judul": "Dokumentasi Kegiatan - 21 Agustus 2026",
+      "tanggal": "21 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
       "tahun": "2026",
-      "folderPath": "GALERI FOTO SDMK/03-08-2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 21 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-21",
       "photos": [
-        { "publicId": "Salinan_2026-08-03_08.40.20_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Pembukaan Pelatihan PPI" },
-        { "publicId": "Salinan_2026-08-03_08.47.22_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Suasana Kegiatan" },
-        { "publicId": "Salinan_2026-08-03_08.40.41_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Peserta Pelatihan" },
-        { "publicId": "Salinan_2026-08-03_08.47.16_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Materi Presentasi" },
-        { "publicId": "Salinan_IMG_20260803_092827", "title": "Sesi Diskusi" },
-        { "publicId": "Salinan_IMG_20260803_084251", "title": "Praktik Lapangan" },
-        { "publicId": "Salinan_IMG_20260803_084248", "title": "Simulasi PPI" },
-        { "publicId": "Salinan_2026-08-03_08.59.02_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Foto Bersama" },
-        { "publicId": "Salinan_2026-08-03_08.42.13_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Sertifikat Peserta" },
-        { "publicId": "Salinan_2026-08-03_08.59.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Kegiatan" },
-        { "publicId": "Salinan_2026-08-03_08.40.46_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Penutupan Acara" },
-        { "publicId": "Salinan_2026-08-03_09.11.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Narasumber 1" },
-        { "publicId": "Salinan_2026-08-03_09.11.15_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Narasumber 2" },
-        { "publicId": "Salinan_2026-08-03_08.59.23_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Panitia Pelaksana" },
-        { "publicId": "Salinan_IMG_20260803_091138", "title": "Peserta Antusias" },
-        { "publicId": "Salinan_2026-08-03_09.11.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Tanya Jawab" },
-        { "publicId": "Salinan_2026-08-03_09.11.05_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Evaluasi Kegiatan" },
-        { "publicId": "Salinan_IMG_20260803_091146", "title": "Kelompok Diskusi 1" },
-        { "publicId": "Salinan_IMG_20260803_091147", "title": "Kelompok Diskusi 2" },
-        { "publicId": "Salinan_2026-08-03_08.59.24_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Presentasi Hasil" },
-        { "publicId": "Salinan_2026-08-03_09.11.06_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Apresiasi Peserta" },
-        { "publicId": "Salinan_IMG_20260803_092804", "title": "Dokumentasi Tambahan 1" },
-        { "publicId": "Salinan_2026-08-03_09.26.50_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 2" },
-        { "publicId": "Salinan_IMG_20260803_092757", "title": "Dokumentasi Tambahan 3" },
-        { "publicId": "Salinan_IMG_20260803_092733_1", "title": "Dokumentasi Tambahan 4" },
-        { "publicId": "Salinan_2026-08-03_09.26.53_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 5" },
-        { "publicId": "Salinan_IMG_20260803_092733", "title": "Dokumentasi Tambahan 6" },
-        { "publicId": "Salinan_IMG_20260803_091159", "title": "Dokumentasi Tambahan 7" },
-        { "publicId": "Salinan_IMG_20260803_091157", "title": "Dokumentasi Tambahan 8" },
-        { "publicId": "Salinan_IMG_20260803_091211", "title": "Dokumentasi Tambahan 9" },
-        { "publicId": "Salinan_IMG_20260803_092825", "title": "Dokumentasi Tambahan 10" }
+        {
+          "publicId": "IMG_20260821_090939_368",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "2026-08-21_08.30.43_Jalan_Wahid_Hasyim_I__Nama-Rezani_Aksad_S.H",
+          "title": "Dokumentasi (2)"
+        },
+        {
+          "publicId": "IMG-20260821-WA0117",
+          "title": "Dokumentasi (3)"
+        },
+        {
+          "publicId": "IMG-20260821-WA0162",
+          "title": "Dokumentasi (4)"
+        },
+        {
+          "publicId": "IMG_20260821_081416_282",
+          "title": "Dokumentasi (5)"
+        }
       ]
     },
     {
-      "id": "rapat-koordinasi-sdmk-040826",
-      "judul": "Rapat Koordinasi Penyiapan Data SDMK",
-      "tanggal": "04 Agustus 2026",
-      "tempat": "Hotel Ibis, Samarinda",
+      "id": "kegiatan-20260820",
+      "judul": "Dokumentasi Kegiatan - 20 Agustus 2026",
+      "tanggal": "20 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
       "tahun": "2026",
-      "folderPath": "GALERI FOTO SDMK/04-08-2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 20 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-20",
       "photos": [
-        { "publicId": "IMG_20260804_193255", "title": "Pembukaan Rapat" },
-        { "publicId": "IMG_20260804_192752", "title": "Peserta Rapat" },
-        { "publicId": "IMG_20260804_192744", "title": "Narasumber Utama" },
-        { "publicId": "IMG_20260804_192736", "title": "Presentasi Data SDMK" },
-        { "publicId": "IMG_20260804_192724", "title": "Diskusi Data" },
-        { "publicId": "2026-08-04_19.16.48_No_42_Jalan_Mulawarman", "title": "Sesi Tanya Jawab" },
-        { "publicId": "2026-08-04_19.16.46_No_42_Jalan_Mulawarman", "title": "Koordinator Bidang" },
-        { "publicId": "IMG_20260804_200430", "title": "Dokumentasi Rapat 1" },
-        { "publicId": "Salinan_2026-08-04_08.02.37_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 2" },
-        { "publicId": "Salinan_2026-08-04_08.04.34_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 3" },
-        { "publicId": "Salinan_2026-08-04_08.02.22_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 4" },
-        { "publicId": "Salinan_2026-08-04_08.04.47_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 5" },
-        { "publicId": "Salinan_2026-08-04_08.05.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 6" },
-        { "publicId": "Salinan_2026-08-04_08.04.26_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 7" },
-        { "publicId": "Salinan_2026-08-04_08.05.36_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 8" },
-        { "publicId": "Salinan_2026-08-04_08.04.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 9" },
-        { "publicId": "Salinan_2026-08-04_08.02.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 10" },
-        { "publicId": "Salinan_2026-08-04_09.59.31_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Sesi Siang Hari" },
-        { "publicId": "Salinan_2026-08-04_09.59.10_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Presentasi Kelompok" },
-        { "publicId": "Salinan_2026-08-04_14.47.32_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Sesi Sore Hari" },
-        { "publicId": "Salinan_2026-08-04_09.58.25_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Rekomendasi Hasil" },
-        { "publicId": "Salinan_2026-08-04_14.30.16_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Rencana Tindak Lanjut" },
-        { "publicId": "Salinan_2026-08-04_14.29.14_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Penutupan Rapat" },
-        { "publicId": "Salinan_2026-08-04_08.06.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Foto Bersama Peserta" },
-        { "publicId": "Salinan_2026-08-04_09.58.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Panitia Pelaksana" },
-        { "publicId": "Salinan_2026-08-04_14.30.17_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 1" },
-        { "publicId": "Salinan_2026-08-04_08.06.35_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 2" },
-        { "publicId": "Salinan_2026-08-04_08.06.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 3" },
-        { "publicId": "Salinan_2026-08-04_14.47.20_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 4" },
-        { "publicId": "Salinan_2026-08-04_08.06.23_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 5" }
+        {
+          "publicId": "IMG_20260820_132636_001",
+          "title": "Dokumentasi (1)"
+        }
       ]
     },
     {
-      "id": "pelatihan-limbah-fasyankes-180826",
-      "judul": "Pelatihan Pengelolaan Limbah Fasyankes",
+      "id": "kegiatan-20260819",
+      "judul": "Dokumentasi Kegiatan - 19 Agustus 2026",
+      "tanggal": "19 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
+      "tahun": "2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 19 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-19",
+      "photos": [
+        {
+          "publicId": "IMG_20260819_141541",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "IMG-20260819-WA0115",
+          "title": "Dokumentasi (2)"
+        }
+      ]
+    },
+    {
+      "id": "kegiatan-20260818",
+      "judul": "Dokumentasi Kegiatan - 18 Agustus 2026",
       "tanggal": "18 Agustus 2026",
-      "tempat": "UPTD Bapelkes Kaltim, Samarinda",
+      "tempat": "Dokumentasi Kegiatan",
       "tahun": "2026",
-      "folderPath": "GALERI FOTO SDMK/18-08-2026",
-      "photos": []
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 18 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-18",
+      "photos": [
+        {
+          "publicId": "IMG-20260818-WA0037",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "IMG-20260818-WA0038",
+          "title": "Dokumentasi (2)"
+        },
+        {
+          "publicId": "WhatsApp_Image_2026-08-18_at_11.28.15",
+          "title": "Dokumentasi (3)"
+        },
+        {
+          "publicId": "WhatsApp_Image_2026-08-18_at_11.28.35",
+          "title": "Dokumentasi (4)"
+        }
+      ]
+    },
+    {
+      "id": "kegiatan-20260807",
+      "judul": "Dokumentasi Kegiatan - 7 Agustus 2026",
+      "tanggal": "7 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
+      "tahun": "2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 7 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-07",
+      "photos": [
+        {
+          "publicId": "2026-08-07_15.23.23_Jl._Wolter_Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (1)"
+        }
+      ]
+    },
+    {
+      "id": "kegiatan-20260805",
+      "judul": "Dokumentasi Kegiatan - 5 Agustus 2026",
+      "tanggal": "5 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
+      "tahun": "2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 5 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-05",
+      "photos": [
+        {
+          "publicId": "IMG_20260805_093240",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "IMG_20260805_093313",
+          "title": "Dokumentasi (2)"
+        },
+        {
+          "publicId": "IMG_20260805_093301",
+          "title": "Dokumentasi (3)"
+        },
+        {
+          "publicId": "IMG_20260805_093306",
+          "title": "Dokumentasi (4)"
+        },
+        {
+          "publicId": "IMG_20260805_093257",
+          "title": "Dokumentasi (5)"
+        },
+        {
+          "publicId": "IMG_20260805_093304",
+          "title": "Dokumentasi (6)"
+        }
+      ]
+    },
+    {
+      "id": "kegiatan-20260804",
+      "judul": "Dokumentasi Kegiatan - 4 Agustus 2026",
+      "tanggal": "4 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
+      "tahun": "2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 4 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-04",
+      "photos": [
+        {
+          "publicId": "IMG_20260804_193255",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "IMG_20260804_192752",
+          "title": "Dokumentasi (2)"
+        },
+        {
+          "publicId": "IMG_20260804_192744",
+          "title": "Dokumentasi (3)"
+        },
+        {
+          "publicId": "IMG_20260804_192736",
+          "title": "Dokumentasi (4)"
+        },
+        {
+          "publicId": "IMG_20260804_192724",
+          "title": "Dokumentasi (5)"
+        },
+        {
+          "publicId": "2026-08-04_19.16.48_No_42_Jalan_Mulawarman",
+          "title": "Dokumentasi (6)"
+        },
+        {
+          "publicId": "2026-08-04_19.16.46_No_42_Jalan_Mulawarman",
+          "title": "Dokumentasi (7)"
+        },
+        {
+          "publicId": "IMG_20260804_200430",
+          "title": "Dokumentasi (8)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.02.37_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (9)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.04.34_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (10)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.02.22_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (11)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.04.47_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (12)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.05.42_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (13)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.04.26_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (14)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.05.36_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (15)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.04.00_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (16)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.02.14_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (17)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_09.59.31_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (18)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_09.59.10_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (19)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_14.47.32_47_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (20)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_09.58.25_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (21)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_14.30.16_47_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (22)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.06.42_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (23)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_14.29.14_47_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (24)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_09.58.42_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (25)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_14.30.17_47_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (26)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.06.35_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (27)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.06.00_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (28)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_14.47.20_47_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (29)"
+        },
+        {
+          "publicId": "Salinan_2026-08-04_08.06.23_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (30)"
+        }
+      ]
+    },
+    {
+      "id": "kegiatan-20260803",
+      "judul": "Dokumentasi Kegiatan - 3 Agustus 2026",
+      "tanggal": "3 Agustus 2026",
+      "tempat": "Dokumentasi Kegiatan",
+      "tahun": "2026",
+      "deskripsi": "Dokumentasi foto kegiatan tanggal 3 Agustus 2026",
+      "folderPath": "GALERI FOTO SDMK/2026-08-03",
+      "photos": [
+        {
+          "publicId": "Salinan_2026-08-03_08.40.20_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (1)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.47.22_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (2)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.40.41_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (3)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.47.16_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (4)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092827",
+          "title": "Dokumentasi (5)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_084251",
+          "title": "Dokumentasi (6)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_084248",
+          "title": "Dokumentasi (7)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.59.02_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (8)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.42.13_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (9)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.59.14_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (10)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.40.46_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (11)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.11.00_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (12)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.11.15_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (13)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.59.23_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (14)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091138",
+          "title": "Dokumentasi (15)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.11.14_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (16)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.11.05_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (17)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091146",
+          "title": "Dokumentasi (18)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091147",
+          "title": "Dokumentasi (19)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_08.59.24_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (20)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.11.06_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (21)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092804",
+          "title": "Dokumentasi (22)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.26.50_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (23)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092757",
+          "title": "Dokumentasi (24)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092733_1",
+          "title": "Dokumentasi (25)"
+        },
+        {
+          "publicId": "Salinan_2026-08-03_09.26.53_39_Jalan_W._Monginsidi__Judul-Jam",
+          "title": "Dokumentasi (26)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092733",
+          "title": "Dokumentasi (27)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091159",
+          "title": "Dokumentasi (28)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091157",
+          "title": "Dokumentasi (29)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_091211",
+          "title": "Dokumentasi (30)"
+        },
+        {
+          "publicId": "Salinan_IMG_20260803_092825",
+          "title": "Dokumentasi (31)"
+        }
+      ]
     }
   ]
 }
-</script>
+    </script>
 
-<script>
+    <script>
 /**
  * ============================================
  * GALERI FOTO STANDALONE + CLOUDINARY
  * ============================================
  * 
- * Versi: v6.0 - Fully Standalone (1 File HTML)
+ * Versi: v7.0 - AUTO-UPDATE ENABLED
  * Integrasi: Cloudinary CDN (Client-side URL Generation)
  * 
  * ✅ Tanpa backend
  * ✅ Tanpa database  
- * ✅ Tanpa GitHub repo khusus
- * ✅ Upload langsung ke hosting manapun
+ * ✅ Auto-update via Python script
  */
 
 // ============================================
 // CONFIGURATION
 // ============================================
 const CONFIG = {
-    // Cloudinary - Ganti dengan cloud name Anda
     CLOUD_NAME: 'cla7jrww',
-    
-    // Default image transformations
-    // CATATAN: Gunakan / bukan , untuk memisahkan parameter!
     TRANSFORMS: {
         thumbnail: 'w_400,h_300,c_fill/q_auto',
         original: 'q_auto:good',
@@ -890,36 +1231,22 @@ const el = {
 // ============================================
 // CLOUDINARY URL GENERATOR (Client-side)
 // ============================================
-/**
- * Generate Cloudinary URL secara client-side
- * Tidak perlu API Secret!
- */
 function getCloudinaryUrl(publicId, transformation = '') {
     if (!publicId) return '';
     const base = `https://res.cloudinary.com/${CONFIG.CLOUD_NAME}/image/upload`;
-    
-    // URL encode publicId to handle special characters (spaces, dots, etc.)
-    // But preserve forward slashes for folder structure
     const encodedPublicId = publicId.split('/').map(segment => 
         encodeURIComponent(segment)
     ).join('/');
-    
     return transformation ? `${base}/${transformation}/${encodedPublicId}` : `${base}/${encodedPublicId}`;
 }
 
-/**
- * Process photo data - tambahkan URL Cloudinary
- */
 function processPhoto(photo, activityJudul, index) {
     return {
         ...photo,
-        // Generate URLs
         url: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.thumbnail),
         thumbnailUrl: getCloudinaryUrl(photo.publicId, 'w200,h200,c_fill,q_auto:low'),
         originalUrl: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.original),
         lightboxUrl: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.lightbox),
-        
-        // Display info
         _displayTitle: photo.title || `${activityJudul} - Foto ${index + 1}`
     };
 }
@@ -932,7 +1259,6 @@ function initGallery() {
     hideError();
 
     try {
-        // Ambil data dari embedded JSON
         const dataElement = document.getElementById('galleryData');
         if (!dataElement) throw new Error('Data element not found');
         
@@ -943,357 +1269,300 @@ function initGallery() {
             showEmpty();
             return;
         }
-        
-        // Process activities - generate URLs
-        allActivities = rawData.activities.map(activity => ({
-            ...activity,
-            jumlahFoto: activity.photos?.length || 0,
-            foto: (activity.photos || []).map((photo, idx) => 
-                processPhoto(photo, activity.judul, idx)
-            ),
-            previewPhoto: activity.photos?.[0] ? {
-                publicId: activity.photos[0].publicId,
-                url: getCloudinaryUrl(activity.photos[0].publicId, CONFIG.TRANSFORMS.thumbnail)
-            } : null
-        }));
-        
-        console.log(`[Galeri] ✅ Processed ${allActivities.length} activities`);
-        
-        populateYearFilter(allActivities);
-        updateStatistics(allActivities);
-        applyFiltersAndRender();
 
+        // Process activities
+        allActivities = rawData.activities.map(act => ({
+            ...act,
+            photos: act.photos.map((photo, idx) => processPhoto(photo, act.judul, idx))
+        }));
+
+        console.log(`[Galeri] ✅ Loaded ${allActivities.length} activities`);
+        
+        hideLoading();
+        populateFilters();
+        applyFilters();
+        
     } catch (error) {
         console.error('[Galeri] ❌ Error:', error);
-        handleFetchError(error);
+        showError(error.message);
     }
 }
 
-function handleFetchError(error) {
-    hideLoading();
-    el.errorMessage.textContent = `Error: ${error.message}`;
-    showError();
+// ============================================
+// FILTERS & SEARCH
+// ============================================
+function populateFilters() {
+    // Populate tahun filter
+    const years = [...new Set(allActivities.map(a => a.tahun))].sort().reverse();
+    el.filterTahun.innerHTML = '<option value="">Semua Tahun</option>' + 
+        years.map(y => `<option value="${y}">${y}</option>`).join('');
 }
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
+function applyFilters() {
+    const searchTerm = el.searchInput.value.toLowerCase().trim();
+    const tahunFilter = el.filterTahun.value;
+    const sortBy = el.sortBy.value;
 
-function extractYear(dateStr) {
-    if (!dateStr) return '';
-    const m = dateStr.match(/\b(20\d{2})\b/);
-    return m ? m[1] : '';
-}
-
-// ============================================
-// FILTERING & SORTING
-// ============================================
-function applyFiltersAndRender() {
-    const search = el.searchInput.value.toLowerCase().trim();
-    const tahun = el.filterTahun.value;
-    const sortValue = el.sortBy.value;
-
-    filteredActivities = allActivities.filter(act => {
-        const matchSearch = !search || 
-            act.judul?.toLowerCase().includes(search) ||
-            act.tanggal?.toLowerCase().includes(search) ||
-            act.tempat?.toLowerCase().includes(search);
-        const matchYear = !tahun || extractYear(act.tanggal) === tahun || act.tahun === tahun;
-        return matchSearch && matchYear;
+    // Filter
+    filteredActivities = allActivities.filter(activity => {
+        // Search filter
+        const matchesSearch = !searchTerm || 
+            activity.judul.toLowerCase().includes(searchTerm) ||
+            activity.deskripsi.toLowerCase().includes(searchTerm) ||
+            activity.tempat.toLowerCase().includes(searchTerm) ||
+            activity.photos.some(p => p._displayTitle.toLowerCase().includes(searchTerm));
+        
+        // Year filter
+        const matchesYear = !tahunFilter || activity.tahun === tahunFilter;
+        
+        return matchesSearch && matchesYear;
     });
 
-    sortActivities(filteredActivities, sortValue);
-    displayedCount = 0;
+    // Sort
+    switch(sortBy) {
+        case 'terlama':
+            filteredActivities.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+            break;
+        case 'judul':
+            filteredActivities.sort((a, b) => a.judul.localeCompare(b.judul));
+            break;
+        default: // terbaru
+            filteredActivities.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+    }
 
-    if (!filteredActivities.length && allActivities.length) {
-        hideGallery(); showNoResults();
-    } else if (!filteredActivities.length) {
-        showEmpty();
-    } else {
-        hideNoResults(); renderGallery();
+    renderGallery();
+    updateStats();
+}
+
+function updateStats() {
+    const totalPhotos = filteredActivities.reduce((sum, a) => sum + a.photos.length, 0);
+    const years = new Set(filteredActivities.map(a => a.tahun)).size;
+    
+    animateNumber(el.totalKegiatan, filteredActivities.length);
+    animateNumber(el.totalFoto, totalPhotos);
+    animateNumber(el.totalTahun, years);
+    
+    el.resultsInfo.textContent = `Menampilkan ${filteredActivities.length} kegiatan dengan ${totalPhotos} foto`;
+}
+
+function animateNumber(element, target) {
+    const start = parseInt(element.textContent) || 0;
+    const duration = 300;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(start + (target - start) * progress);
+        element.textContent = current;
+        
+        if (progress < 1) requestAnimationFrame(update);
     }
     
-    updateResultsCount();
-}
-
-function sortActivities(activities, sortValue) {
-    const sortFunctions = {
-        terbaru: (a, b) => (b.tahun || '').localeCompare(a.tahun || ''),
-        terlama: (a, b) => (a.tahun || '').localeCompare(b.tahun || ''),
-        az: (a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'),
-        za: (b, a) => (a.judul || '').localeCompare(b.judul || '', 'id')
-    };
-    
-    if (sortFunctions[sortValue]) {
-        activities.sort(sortFunctions[sortValue]);
-    }
-}
-
-function populateYearFilter(activities) {
-    const years = new Set();
-    activities.forEach(act => { 
-        const y = extractYear(act.tanggal) || act.tahun;
-        if (y) years.add(y); 
-    });
-    
-    el.filterTahun.innerHTML = '<option value="">Semua Tahun</option>';
-    [...years].sort((a, b) => b.localeCompare(a)).forEach(y => {
-        const opt = document.createElement('option');
-        opt.value = y;
-        opt.textContent = y;
-        el.filterTahun.appendChild(opt);
-    });
+    requestAnimationFrame(update);
 }
 
 // ============================================
 // RENDERING
 // ============================================
 function renderGallery() {
-    hideLoading();
+    if (!filteredActivities.length) {
+        if (allActivities.length) {
+            showNoResults();
+        } else {
+            showEmpty();
+        }
+        return;
+    }
+
+    hideAllStates();
     
-    if (!filteredActivities.length) { showEmpty(); return; }
+    const html = filteredActivities.map(activity => `
+        <section class="activity-section" data-id="${activity.id}">
+            <div class="activity-header">
+                <h2 class="activity-title">${activity.judul}</h2>
+                <div class="activity-meta">
+                    <span class="meta-item">
+                        📅 ${activity.tanggal}
+                    </span>
+                    <span class="meta-item">
+                        📍 ${activity.tempat}
+                    </span>
+                    <span class="meta-item">
+                        📷 ${activity.photos.length} Foto
+                    </span>
+                </div>
+            </div>
+            ${activity.deskripsi ? `<div class="activity-description">${activity.deskripsi}</div>` : ''}
+            <div class="photo-grid">
+                ${activity.photos.map((photo, idx) => `
+                    <div class="photo-card" onclick="openLightbox(${idx}, '${activity.id}')" title="${photo._displayTitle}">
+                        <div class="shimmer"></div>
+                        <img src="${photo.url}" alt="${photo._displayTitle}" 
+                             loading="lazy" onload="this.previousElementSibling.style.display='none'"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23f1f5f9%22 width=%22400%22 height=%22300%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2394a3b8%22>Photo</text></svg>'">
+                        <div class="photo-overlay">
+                            <span class="photo-title">${photo._displayTitle}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+    `).join('');
+
+    el.galleryContainer.innerHTML = html;
     
-    showGallery();
-    const end = Math.min(displayedCount + 20, filteredActivities.length);
-    const toShow = filteredActivities.slice(displayedCount, end);
-
-    if (!displayedCount) el.galleryContainer.innerHTML = '';
-
-    toShow.forEach((act, i) => {
-        el.galleryContainer.appendChild(createActivityCard(act, displayedCount + i));
-    });
-
-    displayedCount = end;
+    // Preload first images
+    preloadImages();
 }
 
-/**
- * Create Activity Card dengan header ringkas + grid 10 kolom foto
- */
-function createActivityCard(activity, index) {
-    const card = document.createElement('article');
-    card.className = 'activity-card';
-    card.style.animationDelay = `${index * 0.08}s`;
-
-    const photos = activity.foto || [];
-    const activityIndex = filteredActivities.indexOf(activity);
-
-    card.innerHTML = `
-        <div class="activity-header">
-            <h2 class="activity-title">${escapeHtml(activity.judul || 'Kegiatan Tanpa Judul')}</h2>
-            <div class="activity-meta">
-                ${activity.tanggal ? `<span class="activity-meta-item"><span class="activity-meta-icon">📅</span><span>${escapeHtml(activity.tanggal)}</span></span>` : ''}
-                ${activity.tempat ? `<span class="activity-meta-item"><span class="activity-meta-icon">📍</span><span>${escapeHtml(activity.tempat)}</span></span>` : ''}
-                <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span><strong>${photos.length}</strong> foto</span></span>
-            </div>
-        </div>
-        <div class="photo-grid">
-            ${photos.map((foto, photoIdx) => `
-                <div class="photo-item" data-activity="${activityIndex}" data-photo="${photoIdx}" role="button" tabindex="0" aria-label="Lihat foto ${photoIdx + 1}">
-                    <img src="${escapeHtml(foto.url)}" alt="${escapeHtml(foto._displayTitle)}" loading="lazy" onerror="this.parentElement.classList.add('photo-error-state');this.style.display='none';">
-                    <div class="photo-placeholder">📷</div>
-                    <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
-                </div>
-            `).join('')}
-        </div>
-    `;
-
-    // Event listeners for lightbox
-    card.querySelectorAll('.photo-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const actIdx = parseInt(item.dataset.activity);
-            const photoIdx = parseInt(item.dataset.photo);
-            openLightbox(actIdx, photoIdx);
-        });
-        item.addEventListener('keypress', e => { 
-            if (/Enter| /.test(e.key)) { 
-                e.preventDefault(); 
-                openLightbox(parseInt(item.dataset.activity), parseInt(item.dataset.photo)); 
-            }
-        });
+function preloadImages() {
+    const images = document.querySelectorAll('.photo-card img');
+    images.forEach((img, idx) => {
+        if (idx < 10) { // Preload first 10 images
+            const preloadImg = new Image();
+            preloadImg.src = img.src;
+        }
     });
-
-    return card;
 }
 
 // ============================================
 // LIGHTBOX
 // ============================================
-function openLightbox(actIdx, photoIdx) {
-    const act = filteredActivities[actIdx];
-    if (!act?.foto?.length) return;
-
-    currentLightboxPhotos = act.foto;
-    currentLightboxIndex = photoIdx;
-
+function openLightbox(photoIndex, activityId) {
+    const activity = allActivities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    currentLightboxPhotos = activity.photos;
+    currentLightboxIndex = photoIndex;
+    
     el.lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
-    loadLightboxImage();
-    updateLightboxNav();
+    
+    showLightboxPhoto();
 }
 
 function closeLightbox() {
     el.lightbox.classList.remove('active');
     document.body.style.overflow = '';
-    el.lightboxImage.src = '';
-    currentLightboxPhotos = [];
-    currentLightboxIndex = 0;
+    el.lightboxImage.style.display = 'none';
+    el.lightboxLoading.style.display = 'block';
 }
 
-function navigateLightbox(dir) {
-    const idx = currentLightboxIndex + dir;
-    if (idx >= 0 && idx < currentLightboxPhotos.length) {
-        currentLightboxIndex = idx;
-        loadLightboxImage();
-        updateLightboxNav();
-    }
-}
-
-function loadLightboxImage() {
-    const foto = currentLightboxPhotos[currentLightboxIndex];
-    if (!foto) return;
-
-    el.lightboxLoading.classList.remove('hidden');
-    el.lightboxImage.style.opacity = '0';
+function showLightboxPhoto() {
+    const photo = currentLightboxPhotos[currentLightboxIndex];
+    if (!photo) return;
     
-    // Reset classes
-    el.lightboxImage.classList.remove('landscape', 'portrait');
-
-    // Use high-res URL for lightbox
-    const url = foto.lightboxUrl || foto.originalUrl || foto.url;
-    
-    console.log('[Galeri] 🔍 Loading lightbox:', url.substring(0, 60) + '...');
-    
-    el.lightboxImage.onload = function() {
-        console.log('[Galeri] ✅ Lightbox loaded');
-        applyAspectRatio();
-        el.lightboxImage.style.opacity = '1';
-        el.lightboxImage.alt = foto._displayTitle || `Foto ${currentLightboxIndex + 1}`;
-        el.lightboxLoading.classList.add('hidden');
-    };
-    
-    el.lightboxImage.onerror = function() {
-        console.error('[Galeri] ❌ Lightbox load failed');
-        el.lightboxLoading.classList.add('hidden');
-        el.lightboxImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif"%3EError%3C/text%3E%3C/svg%3E';
-    };
-    
-    el.lightboxImage.src = url;
+    el.lightboxImage.style.display = 'none';
+    el.lightboxLoading.style.display = 'block';
+    el.lightboxTitle.textContent = photo._displayTitle;
     el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
-    el.lightboxTitle.textContent = foto._displayTitle || '';
-}
-
-function applyAspectRatio() {
+    
     const img = el.lightboxImage;
-    const naturalWidth = img.naturalWidth;
-    const naturalHeight = img.naturalHeight;
-    
-    if (!naturalWidth || !naturalHeight) return;
-    
-    const ratio = naturalWidth / naturalHeight;
-    
-    if (ratio > 1) {
-        img.classList.add('landscape');
-    } else if (ratio < 1) {
-        img.classList.add('portrait');
-    }
+    img.onload = () => {
+        el.lightboxLoading.style.display = 'none';
+        img.style.display = 'block';
+    };
+    img.onerror = () => {
+        el.lightboxLoading.style.display = 'none';
+        img.alt = 'Gagal memuat gambar';
+    };
+    img.src = photo.lightboxUrl;
+    img.alt = photo._displayTitle;
 }
 
-function updateLightboxNav() {
-    el.lightboxPrev.disabled = currentLightboxIndex <= 0;
-    el.lightboxNext.disabled = currentLightboxIndex >= currentLightboxPhotos.length - 1;
+function nextPhoto() {
+    currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxPhotos.length;
+    showLightboxPhoto();
 }
 
-// Keyboard navigation for lightbox
+function prevPhoto() {
+    currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxPhotos.length) % currentLightboxPhotos.length;
+    showLightboxPhoto();
+}
+
+// Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (!el.lightbox.classList.contains('active')) return;
     
     switch(e.key) {
         case 'Escape': closeLightbox(); break;
-        case 'ArrowLeft': navigateLightbox(-1); break;
-        case 'ArrowRight': navigateLightbox(1); break;
+        case 'ArrowRight': nextPhoto(); break;
+        case 'ArrowLeft': prevPhoto(); break;
     }
 });
 
-// ============================================
-// UI HELPERS
-// ============================================
-function showLoading() { el.loadingState.classList.remove('hidden'); }
-function hideLoading() { el.loadingState.classList.add('hidden'); }
-function showError() { el.errorState.classList.remove('hidden'); }
-function hideError() { el.errorState.classList.add('hidden'); }
-function showEmpty() { hideLoading(); hideGallery(); el.emptyState.classList.remove('hidden'); }
-function hideEmpty() { el.emptyState.classList.add('hidden'); }
-function showNoResults() { el.noResultsState.classList.remove('hidden'); }
-function hideNoResults() { el.noResultsState.classList.add('hidden'); }
-function showGallery() { el.galleryContainer.classList.remove('hidden'); }
-function hideGallery() { el.galleryContainer.classList.add('hidden'); }
+// Close lightbox on background click
+el.lightbox.addEventListener('click', (e) => {
+    if (e.target === el.lightbox) closeLightbox();
+});
 
-function updateResultsCount() {
-    el.resultsInfo.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
+// ============================================
+// STATE HELPERS
+// ============================================
+function showLoading() {
+    hideAllStates();
+    el.loadingState.classList.add('active');
 }
 
-function updateStatistics(activities) {
-    let totalFoto = 0;
-    const years = new Set();
-    activities.forEach(act => {
-        totalFoto += (act.foto || []).length;
-        const y = extractYear(act.tanggal) || act.tahun;
-        if (y) years.add(y);
-    });
-    animateNumber(el.totalKegiatan, activities.length);
-    animateNumber(el.totalFoto, totalFoto);
-    animateNumber(el.totalTahun, years.size);
+function hideLoading() {
+    el.loadingState.classList.remove('active');
 }
 
-function animateNumber(element, target) {
-    const duration = 1000;
-    const start = performance.now();
-    
-    function update(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        element.textContent = Math.round(target * ease).toLocaleString('id-ID');
-        if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
+function showError(message) {
+    hideAllStates();
+    el.errorMessage.textContent = message;
+    el.errorState.classList.add('active');
+}
+
+function hideError() {
+    el.errorState.classList.remove('active');
+}
+
+function showEmpty() {
+    hideAllStates();
+    el.emptyState.classList.add('active');
+}
+
+function showNoResults() {
+    hideAllStates();
+    el.noResultsState.classList.add('active');
+}
+
+function hideAllStates() {
+    el.loadingState.classList.remove('active');
+    el.errorState.classList.remove('active');
+    el.emptyState.classList.remove('active');
+    el.noResultsState.classList.remove('active');
 }
 
 // ============================================
 // EVENT LISTENERS
 // ============================================
-el.searchInput.addEventListener('input', debounce(applyFiltersAndRender, 300));
-el.filterTahun.addEventListener('change', applyFiltersAndRender);
-el.sortBy.addEventListener('change', applyFiltersAndRender);
+el.searchInput.addEventListener('debounced' in window ? 'debounced' : 'input', debounce(applyFilters, 300));
+el.filterTahun.addEventListener('change', applyFilters);
+el.sortBy.addEventListener('change', applyFilters);
 
+// Debounce utility
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
+        timeout = setTimeout(later, wait);
     };
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
-console.log('%c🖼️ Galeri Foto SDM Kesehatan - Standalone Version', 'font-size: 18px; font-weight: bold; color: #0d6efd;');
-console.log('%cIntegrated with Cloudinary CDN', 'color: #0891b2;');
-console.log('%cEdit data in <script type="application/json" id="galleryData">', 'color: #f59e0b;');
-
-// Start gallery when DOM ready
 document.addEventListener('DOMContentLoaded', initGallery);
 
-// Also try immediately in case DOM already loaded
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    initGallery();
-}
-</script>
-
+console.log('%c📸 Galeri Foto SDMK - Auto-update v7.0', 'color: #0d6efd; font-size: 14px; font-weight: bold;');
+console.log('%cLast updated: 2026-08-26 22:16:29', 'color: #64748b;');
+    </script>
 </body>
 </html>
