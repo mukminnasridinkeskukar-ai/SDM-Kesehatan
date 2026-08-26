@@ -307,132 +307,121 @@
             animation: loadingProgress 1.5s ease-in-out infinite;
         }
 
-        /* Skeleton Loading */
+        /* Skeleton Loading - Grid 10 kolom flat */
         .skeleton-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 28px;
-        }
-
-        .skeleton-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-        }
-
-        .skeleton-header { padding: 20px; }
-
-        .skeleton-title {
-            height: 24px;
-            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
-            background-size: 200% 100%;
-            border-radius: 4px;
-            margin-bottom: 12px;
-            animation: shimmer 1.5s infinite;
-            width: 80%;
-        }
-
-        .skeleton-meta {
-            height: 14px;
-            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
-            background-size: 200% 100%;
-            border-radius: 4px;
-            animation: shimmer 1.5s infinite;
-            width: 60%;
-            margin-bottom: 8px;
-        }
-
-        .skeleton-meta:last-child { width: 50%; margin-bottom: 0; }
-
-        .skeleton-photos {
-            display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 4px;
-            padding: 6px;
+            gap: 3px;
+            padding: 3px;
+            width: 100%;
         }
 
         .skeleton-photo {
-            aspect-ratio: 1;
+            aspect-ratio: 1 / 1;
             background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
             background-size: 200% 100%;
-            border-radius: 4px;
+            border-radius: 2px;
             animation: shimmer 1.5s infinite;
+            border: 1px solid rgba(0,0,0,0.08);
         }
 
         /* ============================================
-           GALLERY GRID - 5 FOTO PER BARIS
+           GALLERY GRID - PER KEGIATAN DENGAN HEADER RINGKAS
            ============================================ */
         .gallery-container {
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 24px;
+            width: 100%;
         }
 
+        /* Activity Card - Container per kegiatan dengan header ringkas */
         .activity-card {
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: var(--shadow-md);
-            animation: fadeInUp 0.5s ease forwards;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.4s ease forwards;
             opacity: 0;
-            transition: box-shadow var(--transition);
+            transition: box-shadow var(--transition-fast);
         }
 
-        .activity-card:hover { box-shadow: var(--shadow-lg); }
+        .activity-card:hover {
+            box-shadow: var(--shadow-md);
+        }
 
+        /* Header Ringkas - Hanya judul dan info singkat */
         .activity-header {
-            padding: 24px 24px 16px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .activity-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.35rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 12px;
             line-height: 1.3;
+            flex: 1;
+            min-width: 200px;
         }
 
         .activity-meta {
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            font-size: 0.95rem;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.8rem;
             color: var(--text-secondary);
+            white-space: nowrap;
         }
 
-        .activity-meta-item { display: flex; align-items: center; gap: 6px; }
-        .activity-meta-icon { font-size: 1rem; flex-shrink: 0; }
+        .activity-meta-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+        }
+        
+        .activity-meta-icon { 
+            font-size: 0.85rem; 
+            flex-shrink: 0; 
+        }
 
-        /* Photo Grid - 10 FOTO PER BARIS (COMPACT) */
+        /* Photo Grid - 10 Kolom di dalam setiap kegiatan */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 4px;
+            gap: 3px;
             padding: 6px;
+            width: 100%;
             background: var(--bg-secondary);
-            border-radius: var(--radius-md);
         }
 
         .photo-item {
             position: relative;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1 / 1; /* Square shape seragam */
             overflow: hidden;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 2px;
             background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
             background-size: 200% 100%;
             animation: photoShimmer 2s infinite;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, z-index 0s;
+            border: 1px solid rgba(0,0,0,0.08);
         }
 
         .photo-item:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            z-index: 10;
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            z-index: 5;
+            border-color: var(--primary);
         }
 
         .photo-item img {
@@ -638,20 +627,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 70px; /* Minimal padding untuk navigasi */
+            padding: 20px 60px; /* Minimal padding untuk navigasi */
             z-index: 100001;
         }
 
         .lightbox-image {
-            max-width: calc(100vw - 140px);   /* Hampir full width */
-            max-height: calc(100vh - 80px);    /* Hampir full height */
+            max-width: calc(100vw - 120px);   /* Hampir full width */
+            max-height: calc(100vh - 40px);    /* Hampir full height */
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 2px;
+            border-radius: 4px;
             user-select: none;
             -webkit-user-drag: none;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
             transition: transform 0.25s ease, opacity 0.25s ease;
         }
 
@@ -843,67 +832,50 @@
            RESPONSIVE DESIGN - 10 FOTO PER BARIS DI DESKTOP
            ============================================ */
         
-        /* Large Desktop - 10 kolom */
+        /* RESPONSIVE - Grid 10 kolom di desktop besar */
         @media (min-width: 1600px) {
-            .main-content { max-width: 1800px; }
-            .photo-grid { grid-template-columns: repeat(10, 1fr); gap: 5px; padding: 8px; }
-            .lightbox-image-container { padding: 40px 80px; }
-            .lightbox-image { max-width: calc(100vw - 160px); max-height: calc(100vh - 80px); }
+            .main-content { max-width: 100%; padding: 30px 10px; }
+            .photo-grid { grid-template-columns: repeat(10, 1fr); gap: 3px; padding: 3px; }
+            .skeleton-grid { grid-template-columns: repeat(10, 1fr); }
         }
 
-        /* Desktop - 8-9 kolom */
         @media (min-width: 1400px) and (max-width: 1599px) {
-            .main-content { max-width: 1400px; }
-            .photo-grid { grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 6px; }
-            .lightbox-image-container { padding: 40px 70px; }
-            .lightbox-image { max-width: calc(100vw - 140px); max-height: calc(100vh - 80px); }
+            .main-content { max-width: 100%; padding: 25px 8px; }
+            .photo-grid { grid-template-columns: repeat(9, 1fr); gap: 3px; padding: 3px; }
+            .skeleton-grid { grid-template-columns: repeat(9, 1fr); }
         }
 
-        /* Small Desktop / Large Tablet - 6-7 kolom */
-        @media (min-width: 1024px) and (max-width: 1399px) {
-            .main-content { max-width: 100%; }
-            .photo-grid { grid-template-columns: repeat(6, 1fr); gap: 4px; padding: 6px; }
-            .lightbox-image-container { padding: 40px 60px; }
-            .lightbox-image { max-width: calc(100vw - 120px); max-height: calc(100vh - 80px); }
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .main-content { max-width: 100%; padding: 20px 8px; }
+            .photo-grid { grid-template-columns: repeat(8, 1fr); gap: 3px; padding: 3px; }
+            .skeleton-grid { grid-template-columns: repeat(8, 1fr); }
+        }
+
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            .main-content { max-width: 100%; padding: 20px 8px; }
+            .photo-grid { grid-template-columns: repeat(7, 1fr); gap: 3px; padding: 3px; }
+            .skeleton-grid { grid-template-columns: repeat(7, 1fr); }
         }
         
-        /* Tablet Landscape - 5 kolom */
-        @media (max-width: 1023px) and (min-width: 768px) {
-            .photo-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 5px; }
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .photo-grid { grid-template-columns: repeat(6, 1fr); gap: 3px; padding: 3px; }
+            .skeleton-grid { grid-template-columns: repeat(6, 1fr); }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
-            .main-content { max-width: 100%; }
-            .lightbox-image-container { padding: 40px 50px; }
-            .lightbox-image { max-width: calc(100vw - 100px); max-height: calc(100vh - 80px); }
-            .lightbox-nav { width: 46px; height: 46px; font-size: 22px; }
-            .lightbox-prev { left: 8px; }
-            .lightbox-next { right: 8px; }
-            .lightbox-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 22px; }
         }
 
-        /* Tablet Portrait - 4 kolom */
-        @media (max-width: 767px) and (min-width: 480px) {
-            .photo-grid { grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 5px; }
+        @media (min-width: 480px) and (max-width: 767px) {
+            .photo-grid { grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 2px; }
+            .skeleton-grid { grid-template-columns: repeat(4, 1fr); }
             .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
-            .stat-card { padding: 18px; }
-            .stat-number { font-size: 2rem; }
             .filters-row { flex-direction: column; align-items: stretch; }
             .filter-group { flex-direction: column; align-items: stretch; }
             .sort-group { margin-left: 0; }
             .results-count { text-align: center; }
-            .activity-title { font-size: 1.15rem; }
-            .activity-meta { flex-direction: column; gap: 8px; }
-            .lightbox-image-container { padding: 35px 20px; }
-            .lightbox-image { max-width: calc(100vw - 40px); max-height: calc(100vh - 70px); }
-            .lightbox-nav { width: 42px; height: 42px; font-size: 20px; }
-            .lightbox-prev { left: 6px; }
-            .lightbox-next { right: 6px; }
-            .lightbox-close { top: 8px; right: 8px; width: 38px; height: 38px; font-size: 20px; }
-            .lightbox-counter { bottom: 14px; font-size: 0.8rem; padding: 6px 14px; }
         }
 
-        /* Mobile Small - 3 kolom */
         @media (max-width: 479px) {
-            .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 4px; }
+            .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
+            .skeleton-grid { grid-template-columns: repeat(3, 1fr); }
             .header { padding: 24px 12px; }
             .header h1 { font-size: 1.25rem; }
             .header p { font-size: 0.8rem; }
@@ -912,22 +884,13 @@
             .stat-number { font-size: 1.5rem; }
             .controls-bar { padding: 12px; }
             .search-input { padding: 10px 12px 10px 36px; font-size: 0.88rem; }
-            .activity-header { padding: 14px 12px 10px; }
-            .activity-title { font-size: 0.95rem; }
-            .activity-meta { font-size: 0.78rem; }
-            .main-content { padding: 16px 10px 32px; }
-            .lightbox-image-container { padding: 30px 10px; }
-            .lightbox-image { max-width: calc(100vw - 20px); max-height: calc(100vh - 60px); }
-            .lightbox-nav { width: 36px; height: 36px; font-size: 18px; }
-            .lightbox-prev { left: 4px; }
-            .lightbox-next { right: 4px; }
-            .lightbox-close { top: 6px; right: 6px; width: 34px; height: 34px; font-size: 18px; }
-            .watermark-overlay { font-size: 0.65rem; bottom: 50px; right: 10px; display: none; }
+            .main-content { padding: 16px 6px 32px; }
+            .watermark-overlay { display: none; }
         }
 
-        /* Very small screens - 2 kolom */
         @media (max-width: 359px) {
-            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 3px; }
+            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 2px; }
+            .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         /* ============================================
@@ -1032,34 +995,20 @@
             <div class="loading-bar"><div class="loading-bar-progress"></div></div>
         </div>
 
-        <!-- Skeleton Loader -->
+        <!-- Skeleton Loader - Flat Grid 10 Kolom -->
         <div class="skeleton-grid" id="skeletonLoader" style="display:none;">
-            <div class="skeleton-card">
-                <div class="skeleton-header">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-meta"></div>
-                    <div class="skeleton-meta"></div>
-                </div>
-                <div class="skeleton-photos">
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div>
-                </div>
-            </div>
-            <div class="skeleton-card">
-                <div class="skeleton-header">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-meta"></div>
-                    <div class="skeleton-meta"></div>
-                </div>
-                <div class="skeleton-photos">
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div>
-                </div>
-            </div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+            <div class="skeleton-photo"></div><div class="skeleton-photo"></div>
         </div>
 
         <!-- Error State -->
@@ -1122,12 +1071,11 @@
         /**
          * Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara
          * ================================================================
-         * VERSION: Final v2.0 - 5 Photos per Row + Fullscreen Lightbox
+         * VERSION: v4.0 - PER KEGIATAN DENGAN GRID 10 KOLOM
          */
         const CONFIG = {
             GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
-            ITEMS_PER_PAGE: 6,
-            MAX_PHOTOS_PREVIEW: 10, // Maksimal 10 foto ditampilkan, sisanya "+X"
+            ITEMS_PER_PAGE: 10, // Tampilkan 10 kegiatan per load
             ENABLE_LOAD_MORE: true
         };
 
@@ -1238,6 +1186,7 @@
                 if (!result.data?.length) { showEmpty(); return; }
 
                 allActivities = processActivityData(result.data);
+                
                 populateYearFilter(allActivities);
                 updateStatistics(allActivities);
                 applyFiltersAndRender();
@@ -1334,13 +1283,14 @@
             return `${parseInt(parts[0])} ${months[parseInt(parts[1]) - 1]} ${parts[2]}`;
         }
 
-        // Filtering & Sorting
+        // Filtering & Sorting - PER KEGIATAN
         function applyFiltersAndRender() {
             const search = el.searchInput.value.toLowerCase().trim();
             const tahun = el.filterTahun.value;
             const bulan = el.filterBulan.value;
             const sortValue = el.sortBy.value;
 
+            // Filter activities
             filteredActivities = allActivities.filter(act => {
                 const matchSearch = !search || 
                     act.judul?.toLowerCase().includes(search) ||
@@ -1357,6 +1307,8 @@
 
             if (!filteredActivities.length && allActivities.length) {
                 hideGallery(); hideLoadMore(); showNoResults();
+            } else if (!filteredActivities.length) {
+                showEmpty();
             } else {
                 hideNoResults(); renderGallery();
             }
@@ -1412,7 +1364,7 @@
             });
         }
 
-        // Rendering
+        // Rendering - PER KEGIATAN DENGAN HEADER RINGKAS
         function renderGallery() {
             hideLoading(); hideSkeleton();
             
@@ -1420,11 +1372,11 @@
             
             showGallery();
             const end = Math.min(displayedCount + CONFIG.ITEMS_PER_PAGE, filteredActivities.length);
-            const toShow = filteredActivities.slice(0, end);
+            const toShow = filteredActivities.slice(displayedCount, end);
 
             if (!displayedCount) el.galleryContainer.innerHTML = '';
 
-            toShow.slice(displayedCount).forEach((act, i) => {
+            toShow.forEach((act, i) => {
                 el.galleryContainer.appendChild(createActivityCard(act, displayedCount + i));
             });
 
@@ -1432,14 +1384,16 @@
             updateLoadMoreButton();
         }
 
+        /**
+         * Create Activity Card dengan header ringkas + grid 10 kolom foto
+         */
         function createActivityCard(activity, index) {
             const card = document.createElement('article');
             card.className = 'activity-card';
-            card.style.animationDelay = `${index * 0.1}s`;
+            card.style.animationDelay = `${index * 0.08}s`;
 
             const photos = activity.foto || [];
-            const displayPhotos = photos.slice(0, CONFIG.MAX_PHOTOS_PREVIEW);
-            const remaining = Math.max(0, photos.length - CONFIG.MAX_PHOTOS_PREVIEW);
+            const activityIndex = filteredActivities.indexOf(activity);
 
             card.innerHTML = `
                 <div class="activity-header">
@@ -1447,38 +1401,43 @@
                     <div class="activity-meta">
                         ${activity.tanggal ? `<span class="activity-meta-item"><span class="activity-meta-icon">📅</span><span>${escapeHtml(activity.tanggal)}</span></span>` : ''}
                         ${activity.tempat ? `<span class="activity-meta-item"><span class="activity-meta-icon">📍</span><span>${escapeHtml(activity.tempat)}</span></span>` : ''}
-                        <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span>${photos.length} foto</span></span>
+                        <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span><strong>${photos.length}</strong> foto</span></span>
                     </div>
                 </div>
                 <div class="photo-grid">
-                    ${displayPhotos.map((foto, i) => `
-                        <div class="photo-item" data-index="${filteredActivities.indexOf(activity)}" data-photo="${i}" role="button" tabindex="0" aria-label="Lihat foto ${i + 1}">
-                            <img src="about:blank" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="eager"
-                                 data-foto-idx="${i}">
+                    ${photos.map((foto, photoIdx) => `
+                        <div class="photo-item" data-activity="${activityIndex}" data-photo="${photoIdx}" role="button" tabindex="0" aria-label="Lihat foto ${photoIdx + 1}">
+                            <img src="about:blank" alt="${escapeHtml(activity.judul)} - Foto ${photoIdx + 1}" loading="eager">
                             <div class="photo-placeholder">📷</div>
                             <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
                         </div>
                     `).join('')}
-                    ${remaining > 0 ? `
-                        <div class="more-photos-badge" data-index="${filteredActivities.indexOf(activity)}" data-photo="${CONFIG.MAX_PHOTOS_PREVIEW}" role="button" tabindex="0" aria-label="Lihat ${remaining} foto lainnya">+${remaining}</div>
-                    ` : ''}
                 </div>
             `;
 
             // Initialize images with fallback mechanism
-            card.querySelectorAll('.photo-item img[data-foto-idx]').forEach(img => {
-                const fotoIdx = parseInt(img.dataset.fotoIdx);
-                const foto = displayPhotos[fotoIdx];
-                
+            card.querySelectorAll('.photo-item img').forEach((img, photoIdx) => {
+                const foto = photos[photoIdx];
                 if (foto) {
-                    // Use the new multi-method fallback loader
                     loadImageWithFallback(img, foto);
                 }
             });
 
-            card.querySelectorAll('.photo-item, .more-photos-badge').forEach(item => {
-                item.addEventListener('click', () => openLightbox(+item.dataset.index, +item.dataset.photo));
-                item.addEventListener('keypress', e => { if (/Enter| /.test(e.key)) { e.preventDefault(); openLightbox(+item.dataset.index, +item.dataset.photo); }});
+            // Event listeners for lightbox
+            card.querySelectorAll('.photo-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const actIdx = parseInt(item.dataset.activity);
+                    const photoIdx = parseInt(item.dataset.photo);
+                    openLightbox(actIdx, photoIdx);
+                });
+                item.addEventListener('keypress', e => { 
+                    if (/Enter| /.test(e.key)) { 
+                        e.preventDefault(); 
+                        const actIdx = parseInt(e.target.dataset.activity);
+                        const photoIdx = parseInt(e.target.dataset.photo);
+                        openLightbox(actIdx, photoIdx); 
+                    }
+                });
             });
 
             return card;
@@ -1677,12 +1636,12 @@
             requestAnimationFrame(update);
         }
 
-        // Lightbox - FULL SCREEN
+        // Lightbox - FULL SCREEN (PER KEGIATAN)
         function openLightbox(actIdx, photoIdx) {
             const act = filteredActivities[actIdx];
             if (!act?.foto?.length) return;
 
-            currentLightboxPhotos = act.foto;
+            currentLightboxPhotos = act.foto; // Foto dari kegiatan ini saja
             currentLightboxIndex = photoIdx;
 
             el.lightbox.classList.add('active');
@@ -1737,7 +1696,7 @@
                     console.log(`[Galeri] ✅ Lightbox SUCCESS on attempt ${attempt + 1}`);
                     isLoading = false;
                     el.lightboxImage.style.opacity = '1';
-                    el.lightboxImage.alt = `Foto ${currentLightboxIndex + 1} - ${foto.nama || 'Kegiatan'}`;
+                    el.lightboxImage.alt = foto._displayTitle || `Foto ${currentLightboxIndex + 1}`;
                     el.lightboxLoading.classList.add('hidden');
                 };
                 
