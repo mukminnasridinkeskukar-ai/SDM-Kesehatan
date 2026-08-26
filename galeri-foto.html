@@ -126,7 +126,7 @@
            STATISTICS
            ============================================ */
         .stats-section {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: -30px auto 0;
             padding: 0 20px;
             position: relative;
@@ -181,7 +181,7 @@
            MAIN CONTENT
            ============================================ */
         .main-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 40px 20px 60px;
         }
@@ -347,7 +347,7 @@
 
         .skeleton-photos {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 4px;
             padding: 4px;
         }
@@ -361,7 +361,7 @@
         }
 
         /* ============================================
-           GALLERY GRID
+           GALLERY GRID - 5 FOTO PER BARIS
            ============================================ */
         .gallery-container {
             display: flex;
@@ -406,7 +406,7 @@
         .activity-meta-item { display: flex; align-items: center; gap: 6px; }
         .activity-meta-icon { font-size: 1rem; flex-shrink: 0; }
 
-        /* Photo Grid */
+        /* Photo Grid - SELALU 5 KOLOM */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -480,20 +480,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-secondary);
-            color: var(--text-muted);
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            color: white;
             font-size: 0.85rem;
             aspect-ratio: 1;
+            text-align: center;
+            padding: 8px;
         }
 
         /* ============================================
-           LIGHTBOX
+           LIGHTBOX - FULL SCREEN
            ============================================ */
         .lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.97);
-            z-index: 9999;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 99999;
             display: none;
             align-items: center;
             justify-content: center;
@@ -508,9 +512,9 @@
 
         .lightbox-close,
         .lightbox-nav {
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            border: none;
+            position: fixed;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             color: white;
             cursor: pointer;
@@ -518,84 +522,104 @@
             align-items: center;
             justify-content: center;
             transition: all var(--transition-fast);
-            z-index: 10001;
+            z-index: 100002;
             backdrop-filter: blur(10px);
         }
 
         .lightbox-close {
             top: 20px;
             right: 24px;
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             font-size: 28px;
+            z-index: 100003;
         }
 
         .lightbox-close:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.3);
             transform: rotate(90deg);
         }
 
         .lightbox-nav {
+            position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            width: 56px;
-            height: 56px;
-            font-size: 28px;
+            width: 60px;
+            height: 60px;
+            font-size: 32px;
+            z-index: 100002;
         }
 
-        .lightbox-nav:hover { background: rgba(255,255,255,0.25); }
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
-        .lightbox-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+        .lightbox-nav:hover { 
+            background: rgba(255, 255, 255, 0.3); 
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-prev { left: 24px; }
+        .lightbox-next { right: 24px; }
+        .lightbox-nav:disabled { 
+            opacity: 0.2; 
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
 
         .lightbox-image-container {
-            max-width: 90vw;
-            max-height: 85vh;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            padding: 80px 100px;
         }
 
         .lightbox-image {
-            max-width: 100%;
-            max-height: 85vh;
+            max-width: calc(100vw - 200px);
+            max-height: calc(100vh - 160px);
+            width: auto;
+            height: auto;
             object-fit: contain;
             border-radius: var(--radius-md);
             user-select: none;
             -webkit-user-drag: none;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
         }
 
         .lightbox-counter {
-            position: absolute;
-            bottom: 24px;
+            position: fixed;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 10px 24px;
+            padding: 12px 28px;
             border-radius: 30px;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            font-weight: 500;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100002;
         }
 
         .lightbox-loading {
-            position: absolute;
+            position: fixed;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100001;
         }
 
         .watermark-overlay {
-            position: absolute;
-            bottom: 60px;
-            right: 20px;
-            color: rgba(255,255,255,0.3);
-            font-size: 0.8rem;
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
             pointer-events: none;
             user-select: none;
+            z-index: 100002;
         }
 
         /* ============================================
@@ -746,13 +770,19 @@
         }
 
         /* ============================================
-           RESPONSIVE DESIGN
+           RESPONSIVE DESIGN - TETAP 5 KOLOM DI DESKTOP
            ============================================ */
+        
+        /* Tablet Landscape - 3 kolom */
         @media (max-width: 1023px) and (min-width: 768px) {
             .photo-grid { grid-template-columns: repeat(3, 1fr); }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
+            .main-content { max-width: 100%; }
+            .lightbox-image-container { padding: 70px 60px; }
+            .lightbox-image { max-width: calc(100vw - 120px); max-height: calc(100vh - 140px); }
         }
 
+        /* Tablet Portrait - 2 kolom */
         @media (max-width: 767px) and (min-width: 480px) {
             .photo-grid { grid-template-columns: repeat(2, 1fr); }
             .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -764,8 +794,16 @@
             .results-count { text-align: center; }
             .activity-title { font-size: 1.15rem; }
             .activity-meta { flex-direction: column; gap: 8px; }
+            .lightbox-image-container { padding: 60px 30px; }
+            .lightbox-image { max-width: calc(100vw - 60px); max-height: calc(100vh - 120px); }
+            .lightbox-nav { width: 48px; height: 48px; font-size: 24px; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-close { top: 12px; right: 12px; width: 44px; height: 44px; font-size: 24px; }
+            .lightbox-counter { bottom: 20px; font-size: 0.9rem; padding: 8px 18px; }
         }
 
+        /* Mobile Small - 2 kolom */
         @media (max-width: 479px) {
             .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 3px; }
             .header { padding: 30px 16px; }
@@ -779,16 +817,24 @@
             .activity-header { padding: 18px 18px 14px; }
             .activity-title { font-size: 1.05rem; }
             .activity-meta { font-size: 0.85rem; }
-            .lightbox-nav { width: 44px; height: 44px; font-size: 22px; }
-            .lightbox-prev { left: 10px; }
-            .lightbox-next { right: 10px; }
-            .lightbox-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 24px; }
-            .lightbox-counter { font-size: 0.85rem; padding: 8px 18px; bottom: 16px; }
             .main-content { padding: 24px 16px 40px; }
+            .lightbox-image-container { padding: 50px 15px; }
+            .lightbox-image { max-width: calc(100vw - 30px); max-height: calc(100vh - 100px); }
+            .lightbox-nav { width: 42px; height: 42px; font-size: 20px; }
+            .lightbox-prev { left: 8px; }
+            .lightbox-next { right: 8px; }
+            .lightbox-close { top: 8px; right: 8px; width: 40px; height: 40px; font-size: 22px; }
         }
 
+        /* Very small screens - 1 kolom */
         @media (max-width: 359px) {
             .photo-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Large Desktop - Pastikan tetap 5 kolom */
+        @media (min-width: 1400px) {
+            .main-content { max-width: 1600px; }
+            .photo-grid { grid-template-columns: repeat(5, 1fr); }
         }
 
         /* ============================================
@@ -903,7 +949,7 @@
                 </div>
                 <div class="skeleton-photos">
                     <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div>
                 </div>
             </div>
             <div class="skeleton-card">
@@ -914,18 +960,7 @@
                 </div>
                 <div class="skeleton-photos">
                     <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                </div>
-            </div>
-            <div class="skeleton-card">
-                <div class="skeleton-header">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-meta"></div>
-                    <div class="skeleton-meta"></div>
-                </div>
-                <div class="skeleton-photos">
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+                    <div class="skeleton-photo"></div><div class="skeleton-photo"></div>
                 </div>
             </div>
         </div>
@@ -965,8 +1000,8 @@
         </div>
     </main>
 
-    <!-- LIGHTBOX -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Viewer Foto">
+    <!-- LIGHTBOX - FULL SCREEN -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Viewer Foto Fullscreen">
         <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">&times;</button>
         <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
         <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Foto berikutnya">&#8250;</button>
@@ -975,8 +1010,8 @@
             <div class="lightbox-loading hidden" id="lightboxLoading">
                 <div class="loading-spinner"></div>
             </div>
-            <div class="watermark-overlay">© Dinas Kesehatan Kab. Kutai Kartanegara</div>
         </div>
+        <div class="watermark-overlay">© Dinas Kesehatan Kab. Kutai Kartanegara</div>
         <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
     </div>
 
@@ -990,12 +1025,12 @@
         /**
          * Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara
          * ================================================================
-         * VERSION: Final - Bug Fixed
+         * VERSION: Final v2.0 - 5 Photos per Row + Fullscreen Lightbox
          */
         const CONFIG = {
             GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
             ITEMS_PER_PAGE: 6,
-            MAX_PHOTOS_PREVIEW: 10,
+            MAX_PHOTOS_PREVIEW: 10, // Maksimal 10 foto ditampilkan, sisanya "+X"
             ENABLE_LOAD_MORE: true
         };
 
@@ -1202,7 +1237,7 @@
             return `${parseInt(parts[0])} ${months[parseInt(parts[1]) - 1]} ${parts[2]}`;
         }
 
-        // Filtering & Sorting - ✅ BUG FIXED
+        // Filtering & Sorting
         function applyFiltersAndRender() {
             const search = el.searchInput.value.toLowerCase().trim();
             const tahun = el.filterTahun.value;
@@ -1219,7 +1254,6 @@
                 return matchSearch && matchYear && matchMonth;
             });
 
-            // ✅ FIXED: Use correct variable name
             sortActivities(filteredActivities, sortValue);
             
             displayedCount = 0;
@@ -1232,7 +1266,6 @@
             updateResultsCount();
         }
 
-        // ✅ BUG FIXED: Changed parameter name from 'sortBy' to 'sortValue' to avoid conflict
         function sortActivities(activities, sortValue) {
             const sortFunctions = {
                 terbaru: (a, b) => compareDates(b.tanggal, a.tanggal),
@@ -1241,7 +1274,6 @@
                 za: (a, b) => (b.judul || '').localeCompare(a.judul || '', 'id')
             };
             
-            // ✅ FIXED: Use sortValue instead of undefined 'sort' variable
             if (sortFunctions[sortValue]) {
                 activities.sort(sortFunctions[sortValue]);
             }
@@ -1325,7 +1357,7 @@
                     ${displayPhotos.map((foto, i) => `
                         <div class="photo-item" data-index="${filteredActivities.indexOf(activity)}" data-photo="${i}" role="button" tabindex="0" aria-label="Lihat foto ${i + 1}">
                             <img src="${getPhotoUrl(foto)}" alt="${escapeHtml(activity.judul)} - Foto ${i + 1}" loading="lazy"
-                                 onerror="this.parentElement.classList.add('photo-error'); this.style.display='none'; this.parentElement.innerHTML='<span class=\\'photo-error\\'>Foto tidak tersedia</span>';">
+                                 onerror="this.onerror=null; this.parentElement.classList.add('photo-error'); this.style.display='none'; this.parentElement.innerHTML='<span class=\\'photo-error\\'>🖼️</span>';">
                             <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
                         </div>
                     `).join('')}
@@ -1345,7 +1377,11 @@
 
         function getPhotoUrl(foto) {
             if (!foto) return '';
-            if (foto.url) return foto.url;
+            // Gunakan URL langsung dari Google Drive jika ada
+            if (foto.url) {
+                return foto.url;
+            }
+            // Fallback ke proxy Apps Script
             if (CONFIG.GOOGLE_APPS_SCRIPT_URL?.trim()) {
                 const base = CONFIG.GOOGLE_APPS_SCRIPT_URL.replace('/exec', '');
                 return `${base}/exec?fileId=${encodeURIComponent(foto.fileId)}&action=getImage`;
@@ -1392,7 +1428,7 @@
             requestAnimationFrame(update);
         }
 
-        // Lightbox
+        // Lightbox - FULL SCREEN
         function openLightbox(actIdx, photoIdx) {
             const act = filteredActivities[actIdx];
             if (!act?.foto?.length) return;
