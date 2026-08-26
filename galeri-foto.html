@@ -627,13 +627,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px 60px; /* Minimal padding untuk navigasi */
+            padding: 30px 70px; /* Padding untuk navigasi */
             z-index: 100001;
         }
 
+        /* Lightbox Image - Default (auto) */
         .lightbox-image {
-            max-width: calc(100vw - 120px);   /* Hampir full width */
-            max-height: calc(100vh - 40px);    /* Hampir full height */
+            max-width: calc(100vw - 140px);
+            max-height: calc(100vh - 60px);
             width: auto;
             height: auto;
             object-fit: contain;
@@ -641,7 +642,36 @@
             user-select: none;
             -webkit-user-drag: none;
             box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
-            transition: transform 0.25s ease, opacity 0.25s ease;
+            transition: all 0.3s ease;
+        }
+
+        /* Lightbox Image - LANDSCAPE (Rasio 16:10) */
+        .lightbox-image.landscape {
+            /* Rasio 16:10 = width : height = 1.6 : 1 */
+            width: auto;
+            height: calc((calc(100vw - 140px)) / 1.6); /* height = width / 1.6 */
+            max-width: calc(100vw - 140px);
+            max-height: calc(100vh - 80px);
+            object-fit: contain;
+        }
+
+        /* Lightbox Image - PORTRAIT (Rasio 9:16) */
+        .lightbox-image.portrait {
+            /* Rasio 9:16 = width : height = 9 : 16 = 0.5625 : 1 */
+            width: calc((calc(100vh - 80px)) * 0.5625); /* width = height * 0.5625 */
+            height: auto;
+            max-width: calc(100vw - 140px);
+            max-height: calc(100vh - 80px);
+            object-fit: contain;
+        }
+
+        /* Lightbox Image Container - Adjust for aspect ratios */
+        .lightbox-image-container.landscape-mode {
+            padding: 40px 70px;
+        }
+
+        .lightbox-image-container.portrait-mode {
+            padding: 50px 80px;
         }
 
         .lightbox-counter {
@@ -1118,6 +1148,7 @@
             lightboxClose: $('lightboxClose'),
             lightboxPrev: $('lightboxPrev'),
             lightboxNext: $('lightboxNext'),
+            lightboxImageContainer: document.querySelector('.lightbox-image-container'),
             lightboxImage: $('lightboxImage'),
             lightboxCounter: $('lightboxCounter'),
             lightboxLoading: $('lightboxLoading')
@@ -1673,6 +1704,10 @@
 
             el.lightboxLoading.classList.remove('hidden');
             el.lightboxImage.style.opacity = '0';
+            
+            // Reset classes sebelumnya
+            el.lightboxImage.classList.remove('landscape', 'portrait');
+            el.lightboxImageContainer.classList.remove('landscape-mode', 'portrait-mode');
 
             // Use multi-method fallback for lightbox - FIXED: no crossOrigin
             let attempt = 0;
@@ -1695,6 +1730,10 @@
                     if (!isLoading) return;
                     console.log(`[Galeri] ✅ Lightbox SUCCESS on attempt ${attempt + 1}`);
                     isLoading = false;
+                    
+                    // Deteksi orientasi dan terapkan rasio yang sesuai
+                    applyAspectRatio();
+                    
                     el.lightboxImage.style.opacity = '1';
                     el.lightboxImage.alt = foto._displayTitle || `Foto ${currentLightboxIndex + 1}`;
                     el.lightboxLoading.classList.add('hidden');
@@ -1716,9 +1755,55 @@
                 el.lightboxImage.src = url;
             }
             
+            /**
+             * Deteksi orientasi gambar dan terapkan rasio yang sesuai
+             * - Landscape (lebar > tinggi): Rasio 16:10
+             * - Portrait (tinggi > lebar): Rasio 9:16
+             */
+            function applyAspectRatio() {
+                const img = el.lightboxImage;
+                const container = el.lightboxImageContainer;
+                const naturalWidth = img.naturalWidth;
+                const naturalHeight = img.naturalHeight;
+                
+                if (!naturalWidth || !naturalHeight) {
+                    console.warn('[Galeri] ⚠️ Cannot detect image dimensions, using default');
+                    return;
+                }
+                
+                const ratio = naturalWidth / naturalHeight;
+                console.log(`[Galeri] 📐 Image dimensions: ${naturalWidth}x${naturalHeight}, ratio: ${ratio.toFixed(2)}`);
+                
+                // Hapus class lama
+                img.classList.remove('landscape', 'portrait');
+                container.classList.remove('landscape-mode', 'portrait-mode');
+                
+                // Tentukan orientasi berdasarkan rasio
+                // Landscape: ratio > 1.1 (lebih lebar dari tinggi)
+                // Portrait: ratio < 0.9 (lebih tinggi dari lebar)
+                // Square/around 1: gunakan default
+                
+                if (ratio > 1.1) {
+                    // LANDSCAPE - Terapkan rasio 16:10 (1.6)
+                    console.log('[Galeri] 🖼️ Applying LANDSCAPE mode (16:10)');
+                    img.classList.add('landscape');
+                    container.classList.add('landscape-mode');
+                } else if (ratio < 0.9) {
+                    // PORTRAIT - Terapkan rasio 9:16 (0.5625)
+                    console.log('[Galeri] 📱 Applying PORTRAIT mode (9:16)');
+                    img.classList.add('portrait');
+                    container.classList.add('portrait-mode');
+                } else {
+                    // NEAR SQUARE - Gunakan default (contain)
+                    console.log('[Galeri] 🎯 Applying DEFAULT/SQUARE mode');
+                }
+            }
+            
             function handleLightboxError() {
                 console.error('[Galeri] ❌ All lightbox attempts failed');
                 isLoading = false;
+                el.lightboxImage.classList.remove('landscape', 'portrait');
+                el.lightboxImageContainer.classList.remove('landscape-mode', 'portrait-mode');
                 el.lightboxImage.alt = 'Foto tidak dapat dimuat';
                 el.lightboxImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif" font-size="14"%3EFoto Error%3C/text%3E%3C/svg%3E';
                 el.lightboxLoading.classList.add('hidden');
