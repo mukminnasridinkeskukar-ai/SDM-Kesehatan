@@ -841,10 +841,11 @@ const CONFIG = {
     CLOUD_NAME: 'cla7jrww',
     
     // Default image transformations
+    // CATATAN: Gunakan / bukan , untuk memisahkan parameter!
     TRANSFORMS: {
-        thumbnail: 'w400,h300,c_fill,q_auto',
+        thumbnail: 'w_400,h_300,c_fill/q_auto',
         original: 'q_auto:good',
-        lightbox: 'w1200,c_limit,q_auto:good'
+        lightbox: 'w_1200,c_limit/q_auto:good'
     }
 };
 
@@ -896,7 +897,14 @@ const el = {
 function getCloudinaryUrl(publicId, transformation = '') {
     if (!publicId) return '';
     const base = `https://res.cloudinary.com/${CONFIG.CLOUD_NAME}/image/upload`;
-    return transformation ? `${base}/${transformation}/${publicId}` : `${base}/${publicId}`;
+    
+    // URL encode publicId to handle special characters (spaces, dots, etc.)
+    // But preserve forward slashes for folder structure
+    const encodedPublicId = publicId.split('/').map(segment => 
+        encodeURIComponent(segment)
+    ).join('/');
+    
+    return transformation ? `${base}/${transformation}/${encodedPublicId}` : `${base}/${encodedPublicId}`;
 }
 
 /**
