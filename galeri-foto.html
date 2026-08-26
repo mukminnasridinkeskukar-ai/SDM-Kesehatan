@@ -41,26 +41,21 @@
             
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
             
             --radius-sm: 6px;
-            --radius-md: 10px;
+            --radius-md: 12px;
             --radius-lg: 16px;
             
-            --transition: 300ms ease;
-            --transition-fast: 150ms ease;
+            --header-height: 64px;
         }
 
-        html { scroll-behavior: smooth; }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
         }
 
         /* ============================================
@@ -69,273 +64,173 @@
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 40px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
         }
 
         .header-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-        }
-
-        .logo-container {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border-radius: var(--radius-sm);
+            padding: 6px;
             backdrop-filter: blur(10px);
-            border: 3px solid rgba(255,255,255,0.3);
         }
 
-        .logo-container svg {
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-        }
-
-        .header h1 {
+        .title-group h1 {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(1.75rem, 5vw, 2.75rem);
+            font-size: 1.35rem;
             font-weight: 700;
-            margin-bottom: 12px;
             letter-spacing: -0.02em;
         }
 
-        .header p {
-            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-            opacity: 0.95;
-            max-width: 600px;
-            margin: 0 auto;
+        .title-group p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: 400;
         }
 
         /* ============================================
-           STATISTICS
+           SEARCH & FILTER BAR
            ============================================ */
-        .stats-section {
+        .toolbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: var(--header-height);
+            z-index: 999;
+        }
+
+        .toolbar-inner {
             max-width: 1400px;
-            margin: -30px auto 0;
-            padding: 0 20px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
             position: relative;
-            z-index: 10;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            animation: fadeInUp 0.6s ease forwards;
-            opacity: 0;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .stat-icon { font-size: 1.5rem; margin-bottom: 8px; }
-        
-        .stat-number {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* ============================================
-           MAIN CONTENT
-           ============================================ */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px 60px;
-        }
-
-        /* Controls Bar */
-        .controls-bar {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-md);
-            animation: fadeInUp 0.6s ease 0.4s forwards;
-            opacity: 0;
-        }
-
-        .search-box { position: relative; margin-bottom: 20px; }
-
-        .search-input {
+        .search-box input {
             width: 100%;
-            padding: 14px 20px 14px 50px;
-            font-size: 1rem;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
             border: 2px solid var(--border);
             border-radius: var(--radius-md);
-            outline: none;
-            transition: all var(--transition);
-            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
             background: var(--bg-primary);
         }
 
-        .search-input:focus {
+        .search-box input:focus {
+            outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(13,110,253,0.1);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
         }
 
         .search-icon {
             position: absolute;
-            left: 18px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.2rem;
             color: var(--text-muted);
-        }
-
-        .filters-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .filter-group { display: flex; align-items: center; gap: 8px; }
-
-        .filter-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
+            pointer-events: none;
         }
 
         .filter-select {
-            padding: 10px 36px 10px 14px;
-            font-size: 0.9rem;
+            padding: 0.7rem 1rem;
             border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
-            outline: none;
-            cursor: pointer;
-            background: var(--bg-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
-            appearance: none;
-            transition: all var(--transition-fast);
-            font-family: inherit;
-        }
-
-        .filter-select:focus { border-color: var(--primary); }
-        .sort-group { margin-left: auto; }
-
-        .results-count {
+            border-radius: var(--radius-md);
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            padding: 10px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
         }
 
-        .results-count strong { color: var(--primary); }
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
 
         /* ============================================
-           LOADING STATES
+           STATISTICS BAR
            ============================================ */
-        .loading-container {
-            text-align: center;
-            padding: 60px 20px;
+        .stats-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.25rem 2rem;
+            color: white;
         }
 
-        .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        .loading-text {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        .loading-bar {
-            width: 200px;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
+        .stats-grid {
+            max-width: 1400px;
             margin: 0 auto;
-            overflow: hidden;
-        }
-
-        .loading-bar-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 2px;
-            animation: loadingProgress 1.5s ease-in-out infinite;
-        }
-
-        /* Skeleton Loading - Grid 10 kolom flat */
-        .skeleton-grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 3px;
-            padding: 3px;
-            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
         }
 
-        .skeleton-photo {
-            aspect-ratio: 1 / 1;
-            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
-            background-size: 200% 100%;
-            border-radius: 2px;
-            animation: shimmer 1.5s infinite;
-            border: 1px solid rgba(0,0,0,0.08);
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
         }
 
         /* ============================================
-           GALLERY GRID - PER KEGIATAN DENGAN HEADER RINGKAS
+           MAIN GALLERY CONTAINER
            ============================================ */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .results-info {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Gallery Container - Activity Based with 10-col Grid */
         .gallery-container {
             display: flex;
             flex-direction: column;
             gap: 24px;
-            width: 100%;
         }
 
-        /* Activity Card - Container per kegiatan dengan header ringkas */
+        /* Activity Card */
         .activity-card {
             background: var(--bg-card);
             border-radius: var(--radius-md);
@@ -344,16 +239,15 @@
             border: 1px solid var(--border);
             animation: fadeInUp 0.4s ease forwards;
             opacity: 0;
-            transition: box-shadow var(--transition-fast);
         }
 
-        .activity-card:hover {
-            box-shadow: var(--shadow-md);
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header Ringkas - Hanya judul dan info singkat */
         .activity-header {
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -364,57 +258,49 @@
         }
 
         .activity-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--text-primary);
-            line-height: 1.3;
-            flex: 1;
-            min-width: 200px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .activity-meta {
             display: flex;
-            align-items: center;
             gap: 16px;
-            font-size: 0.8rem;
+            flex-wrap: wrap;
+            font-size: 0.82rem;
             color: var(--text-secondary);
-            white-space: nowrap;
         }
 
-        .activity-meta-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
-        }
-        
-        .activity-meta-icon { 
-            font-size: 0.85rem; 
-            flex-shrink: 0; 
+        .activity-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        /* Photo Grid - 10 Kolom di dalam setiap kegiatan */
+        .activity-meta-icon {
+            font-size: 0.9rem;
+        }
+
+        /* Photo Grid - 10 Columns */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 3px;
             padding: 6px;
-            width: 100%;
             background: var(--bg-secondary);
         }
 
+        /* Photo Item */
         .photo-item {
             position: relative;
-            aspect-ratio: 1 / 1; /* Square shape seragam */
+            aspect-ratio: 1 / 1;
             overflow: hidden;
             cursor: pointer;
             border-radius: 2px;
-            background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
-            background-size: 200% 100%;
-            animation: photoShimmer 2s infinite;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            transition: transform 0.15s ease, box-shadow 0.15s ease, z-index 0s;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
             border: 1px solid rgba(0,0,0,0.08);
+            background: #e2e8f0;
         }
 
         .photo-item:hover {
@@ -428,198 +314,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-            user-select: none;
-            pointer-events: none;
-            -webkit-user-drag: none;
-            opacity: 0.5; /* Mulai dengan opacity rendah, bukan 0 */
+            display: block;
+            transition: opacity 0.3s ease;
         }
 
-        .photo-item img.loaded {
-            opacity: 1;
-        }
-
-        .photo-item:hover img.loaded { transform: scale(1.05); }
-
-        /* Photo Loading Placeholder */
         .photo-placeholder {
             position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: var(--text-muted);
-            font-size: 1rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .photo-item img.loaded + .photo-placeholder,
-        .photo-placeholder.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .photo-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0);
-            transition: background var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: inherit;
-            z-index: 2;
-        }
-
-        .photo-item:hover .photo-overlay { background: rgba(0,0,0,0.4); }
-
-        .photo-zoom-icon {
-            color: white;
-            font-size: 1.2rem;
-            opacity: 0;
-            transform: scale(0.7);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-
-        .photo-item:hover .photo-zoom-icon {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .more-photos-badge {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(13,110,253,0.95) 0%, rgba(8,145,178,0.95) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 0.02em;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            border-radius: inherit;
-            box-shadow: 0 4px 12px rgba(13,110,253,0.3);
-        }
-
-        .more-photos-badge:hover { 
-            background: linear-gradient(135deg, rgba(13,110,253,1) 0%, rgba(8,145,178,1) 100%);
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(13,110,253,0.4);
-        }
-
-        .photo-error {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            aspect-ratio: 1;
-            text-align: center;
-            padding: 6px;
-            gap: 2px;
-        }
-
-        .photo-error-icon {
-            font-size: 1rem;
-            opacity: 0.7;
-        }
-
-        @keyframes photoShimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .photo-item.photo-error-state {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            animation: none;
-        }
-
-        /* ============================================
-           LIGHTBOX - TRUE FULLSCREEN (100% LAYAR)
-           ============================================ */
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.96);
-            z-index: 99999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .lightbox.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .lightbox-close,
-        .lightbox-nav {
-            position: fixed;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            z-index: 100002;
-            backdrop-filter: blur(4px);
-        }
-
-        .lightbox-close {
-            top: 12px;
-            right: 16px;
-            width: 44px;
-            height: 44px;
-            font-size: 24px;
-            z-index: 100003;
-        }
-
-        .lightbox-close:hover {
-            background: rgba(239, 68, 68, 0.9);
-            border-color: rgba(239, 68, 68, 0.5);
-            transform: rotate(90deg) scale(1.1);
-        }
-
-        .lightbox-nav {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 52px;
-            height: 52px;
-            font-size: 26px;
-            z-index: 100002;
-        }
-
-        .lightbox-nav:hover { 
-            background: rgba(255, 255, 255, 0.25); 
-            transform: translateY(-50%) scale(1.15);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .lightbox-prev { left: 12px; }
-        .lightbox-next { right: 12px; }
-        .lightbox-nav:disabled { 
-            opacity: 0.15; 
-            cursor: not-allowed;
-            transform: translateY(-50%) scale(0.8);
-        }
-
-        .lightbox-image-container {
-            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -627,1268 +327,965 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px 70px; /* Padding untuk navigasi */
-            z-index: 100001;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            animation: shimmer 1.5s infinite;
         }
 
-        /* Lightbox Image - Default (auto) */
-        .lightbox-image {
-            max-width: calc(100vw - 140px);
-            max-height: calc(100vh - 60px);
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            border-radius: 4px;
-            user-select: none;
-            -webkit-user-drag: none;
-            box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
-            transition: all 0.3s ease;
+        @keyframes shimmer {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
         }
 
-        /* Lightbox Image - LANDSCAPE (Rasio 16:10) */
-        .lightbox-image.landscape {
-            /* Rasio 16:10 = width : height = 1.6 : 1 */
-            width: auto;
-            height: calc((calc(100vw - 140px)) / 1.6); /* height = width / 1.6 */
-            max-width: calc(100vw - 140px);
-            max-height: calc(100vh - 80px);
-            object-fit: contain;
-        }
+        .photo-placeholder.hidden { display: none; }
 
-        /* Lightbox Image - PORTRAIT (Rasio 9:16) */
-        .lightbox-image.portrait {
-            /* Rasio 9:16 = width : height = 9 : 16 = 0.5625 : 1 */
-            width: calc((calc(100vh - 80px)) * 0.5625); /* width = height * 0.5625 */
-            height: auto;
-            max-width: calc(100vw - 140px);
-            max-height: calc(100vh - 80px);
-            object-fit: contain;
-        }
-
-        /* Lightbox Image Container - Adjust for aspect ratios */
-        .lightbox-image-container.landscape-mode {
-            padding: 40px 70px;
-        }
-
-        .lightbox-image-container.portrait-mode {
-            padding: 50px 80px;
-        }
-
-        .lightbox-counter {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 100002;
-        }
-
-        .lightbox-loading {
-            position: fixed;
+        .photo-overlay {
+            position: absolute;
             inset: 0;
+            background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 100001;
+            opacity: 0;
+            transition: opacity 0.2s ease;
         }
 
-        .watermark-overlay {
-            position: fixed;
-            bottom: 80px;
-            right: 30px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.9rem;
-            pointer-events: none;
-            user-select: none;
-            z-index: 100002;
-        }
+        .photo-item:hover .photo-overlay { opacity: 1; }
 
-        /* ============================================
-           LOAD MORE & STATES
-           ============================================ */
-        .load-more-container {
-            text-align: center;
-            margin-top: 40px;
-            animation: fadeInUp 0.5s ease forwards;
-        }
-
-        .load-more-btn {
-            padding: 14px 40px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition);
-            font-family: inherit;
-            box-shadow: var(--shadow-md);
-        }
-
-        .load-more-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .load-more-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .showing-info {
-            margin-top: 16px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state,
-        .error-state {
-            text-align: center;
-            padding: 80px 20px;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-        }
-
-        .empty-icon,
-        .error-icon { font-size: 4rem; margin-bottom: 20px; }
-
-        .empty-title,
-        .error-title {
-            font-family: 'Poppins', sans-serif;
+        .photo-zoom-icon {
             font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .empty-text,
-        .error-text {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-            max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
+        /* Photo Error State */
+        .photo-error-state {
+            background: #fee2e2 !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
         }
 
-        .retry-btn {
-            padding: 12px 28px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            background: var(--primary);
+        .photo-error {
+            text-align: center;
+            color: #dc2626;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+        }
+
+        .photo-error-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+
+        /* ============================================
+           LIGHTBOX - FULL SCREEN POPUP
+           ============================================ */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
             border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition);
-            font-family: inherit;
-        }
-
-        .retry-btn:hover { background: var(--primary-dark); }
-
-        .error-details {
-            background: var(--bg-secondary);
-            border-left: 4px solid var(--error);
-            padding: 16px;
-            margin: 20px auto;
-            max-width: 500px;
-            text-align: left;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 0.9rem;
-        }
-
-        .error-details code {
-            background: rgba(239,68,68,0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: var(--error);
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-
-        .no-results-icon { font-size: 3rem; margin-bottom: 16px; }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            background: var(--text-primary);
             color: white;
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 40px;
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
-        .footer p { font-size: 0.9rem; opacity: 0.8; }
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.25);
+            transform: rotate(90deg);
+        }
 
-        /* ============================================
-           ANIMATIONS
-           ============================================ */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        .lightbox-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .lightbox-image-container {
+            position: relative;
+            max-width: calc(100vw - 160px);
+            max-height: calc(100vh - 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-image.landscape {
+            max-width: 90vw;
+            max-height: calc(90vh * 10/16);
+        }
+
+        .lightbox-image.portrait {
+            max-width: calc(90vh * 9/16);
+            max-height: 90vh;
+        }
+
+        .lightbox-loading {
+            position: absolute;
+            color: white;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lightbox-loading.hidden { display: none; }
+
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes loadingProgress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .lightbox-counter {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 10001;
         }
 
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .lightbox-title {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            max-width: 60%;
+            text-align: center;
+            z-index: 10001;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* ============================================
-           RESPONSIVE DESIGN - 10 FOTO PER BARIS DI DESKTOP
-           ============================================ */
-        
-        /* RESPONSIVE - Grid 10 kolom di desktop besar */
-        @media (min-width: 1600px) {
-            .main-content { max-width: 100%; padding: 30px 10px; }
-            .photo-grid { grid-template-columns: repeat(10, 1fr); gap: 3px; padding: 3px; }
-            .skeleton-grid { grid-template-columns: repeat(10, 1fr); }
+        /* Loading & Empty States */
+        .loading-state, .empty-state, .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
         }
 
-        @media (min-width: 1400px) and (max-width: 1599px) {
-            .main-content { max-width: 100%; padding: 25px 8px; }
-            .photo-grid { grid-template-columns: repeat(9, 1fr); gap: 3px; padding: 3px; }
-            .skeleton-grid { grid-template-columns: repeat(9, 1fr); }
+        .loading-icon { font-size: 3rem; margin-bottom: 1rem; animation: spin 1s linear infinite; display: inline-block; }
+        .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .error-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .loading-state h3, .empty-state h3, .error-state h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
-        @media (min-width: 1200px) and (max-width: 1399px) {
-            .main-content { max-width: 100%; padding: 20px 8px; }
-            .photo-grid { grid-template-columns: repeat(8, 1fr); gap: 3px; padding: 3px; }
-            .skeleton-grid { grid-template-columns: repeat(8, 1fr); }
-        }
-
-        @media (min-width: 1024px) and (max-width: 1199px) {
-            .main-content { max-width: 100%; padding: 20px 8px; }
-            .photo-grid { grid-template-columns: repeat(7, 1fr); gap: 3px; padding: 3px; }
-            .skeleton-grid { grid-template-columns: repeat(7, 1fr); }
-        }
-        
-        @media (min-width: 768px) and (max-width: 1023px) {
-            .photo-grid { grid-template-columns: repeat(6, 1fr); gap: 3px; padding: 3px; }
-            .skeleton-grid { grid-template-columns: repeat(6, 1fr); }
-            .stats-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        @media (min-width: 480px) and (max-width: 767px) {
-            .photo-grid { grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 2px; }
-            .skeleton-grid { grid-template-columns: repeat(4, 1fr); }
-            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
-            .filters-row { flex-direction: column; align-items: stretch; }
-            .filter-group { flex-direction: column; align-items: stretch; }
-            .sort-group { margin-left: 0; }
-            .results-count { text-align: center; }
-        }
-
-        @media (max-width: 479px) {
-            .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
-            .skeleton-grid { grid-template-columns: repeat(3, 1fr); }
-            .header { padding: 24px 12px; }
-            .header h1 { font-size: 1.25rem; }
-            .header p { font-size: 0.8rem; }
-            .logo-container { width: 64px; height: 64px; }
-            .stats-grid { grid-template-columns: 1fr; gap: 8px; }
-            .stat-number { font-size: 1.5rem; }
-            .controls-bar { padding: 12px; }
-            .search-input { padding: 10px 12px 10px 36px; font-size: 0.88rem; }
-            .main-content { padding: 16px 6px 32px; }
-            .watermark-overlay { display: none; }
-        }
-
-        @media (max-width: 359px) {
-            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 2px; }
-            .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        /* ============================================
-           UTILITY CLASSES
-           ============================================ */
         .hidden { display: none !important; }
 
-        @media print {
-            .header, .controls-bar, .load-more-container, .lightbox, .footer { display: none !important; }
-            .activity-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) { .photo-grid { grid-template-columns: repeat(8, 1fr); } }
+        @media (max-width: 992px) { .photo-grid { grid-template-columns: repeat(6, 1fr); } }
+        @media (max-width: 768px) { 
+            .photo-grid { grid-template-columns: repeat(4, 1fr); }
+            .header-content { padding: 0.5rem 0; }
+            .title-group h1 { font-size: 1.1rem; }
+            .toolbar-inner { padding: 0.5rem 0; }
+        }
+        @media (max-width: 480px) { 
+            .photo-grid { grid-template-columns: repeat(3, 1fr); } 
+            .main-container { padding: 1rem; }
+            .activity-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
-                    <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-                    <text x="50" y="58" text-anchor="middle" fill="white" font-size="28" font-weight="700" font-family="Poppins, sans-serif">DK</text>
-                    <path d="M30 35 L50 25 L70 35 L70 55 L50 65 L30 55 Z" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
-                    <path d="M50 25 L50 65 M30 35 L70 55 M70 35 L30 55" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="white" fill-opacity="0.2"/>
+                    <path d="M10 30V14L20 20L30 14V30" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="20" cy="11" r="4" stroke="white" stroke-width="2"/>
                 </svg>
             </div>
-            <h1>Galeri Foto Kegiatan</h1>
-            <p>Dokumentasi Kegiatan Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
-        </div>
-    </header>
-
-    <!-- STATISTICS -->
-    <section class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">📋</div>
-                <div class="stat-number" id="totalKegiatan">0</div>
-                <div class="stat-label">Kegiatan</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📷</div>
-                <div class="stat-number" id="totalFoto">0</div>
-                <div class="stat-label">Foto</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📅</div>
-                <div class="stat-number" id="totalTahun">0</div>
-                <div class="stat-label">Tahun</div>
+            <div class="title-group">
+                <h1>Galeri Foto Kegiatan</h1>
+                <p>Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
             </div>
         </div>
-    </section>
+    </div>
+</header>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-        <!-- Search & Filter -->
-        <div class="controls-bar" id="controlsBar">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="searchInput" placeholder="Cari kegiatan berdasarkan judul, tanggal, atau tempat..." autocomplete="off">
-            </div>
-            <div class="filters-row">
-                <div class="filter-group">
-                    <span class="filter-label">Tahun:</span>
-                    <select class="filter-select" id="filterTahun">
-                        <option value="">Semua Tahun</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <span class="filter-label">Bulan:</span>
-                    <select class="filter-select" id="filterBulan">
-                        <option value="">Semua Bulan</option>
-                        <option value="01">Januari</option>
-                        <option value="02">Februari</option>
-                        <option value="03">Maret</option>
-                        <option value="04">April</option>
-                        <option value="05">Mei</option>
-                        <option value="06">Juni</option>
-                        <option value="07">Juli</option>
-                        <option value="08">Agustus</option>
-                        <option value="09">September</option>
-                        <option value="10">Oktober</option>
-                        <option value="11">November</option>
-                        <option value="12">Desember</option>
-                    </select>
-                </div>
-                <div class="filter-group sort-group">
-                    <span class="filter-label">Urutkan:</span>
-                    <select class="filter-select" id="sortBy">
-                        <option value="terbaru">Terbaru</option>
-                        <option value="terlama">Terlama</option>
-                        <option value="az">Nama A-Z</option>
-                        <option value="za">Nama Z-A</option>
-                    </select>
-                </div>
-                <div class="results-count" id="resultsCount">Menampilkan <strong>0</strong> kegiatan</div>
-            </div>
+<!-- Toolbar -->
+<div class="toolbar">
+    <div class="toolbar-inner">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Cari kegiatan...">
         </div>
+        <select id="filterTahun" class="filter-select">
+            <option value="">Semua Tahun</option>
+        </select>
+        <select id="sortBy" class="filter-select">
+            <option value="terbaru">Terbaru</option>
+            <option value="terlama">Terlama</option>
+            <option value="az">A-Z</option>
+            <option value="za">Z-A</option>
+        </select>
+    </div>
+</div>
 
-        <!-- Loading State -->
-        <div class="loading-container" id="loadingState">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">Memuat galeri kegiatan...</p>
-            <div class="loading-bar"><div class="loading-bar-progress"></div></div>
+<!-- Statistics -->
+<div class="stats-bar">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number" id="totalKegiatan">0</div>
+            <div class="stat-label">Kegiatan</div>
         </div>
-
-        <!-- Skeleton Loader - Flat Grid 10 Kolom -->
-        <div class="skeleton-grid" id="skeletonLoader" style="display:none;">
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div><div class="skeleton-photo"></div>
-            <div class="skeleton-photo"></div><div class="skeleton-photo"></div>
+        <div class="stat-item">
+            <div class="stat-number" id="totalFoto">0</div>
+            <div class="stat-label">Foto</div>
         </div>
-
-        <!-- Error State -->
-        <div class="error-state hidden" id="errorState">
-            <div class="error-icon">⚠️</div>
-            <h2 class="error-title" id="errorTitle">Gagal Memuat Galeri</h2>
-            <p class="error-text" id="errorText">Terjadi kesalahan saat memuat data galeri.</p>
-            <div class="error-details hidden" id="errorDetails">
-                <strong>Detail Error:</strong><br>
-                <code id="errorCode"></code>
-            </div>
-            <button class="retry-btn" id="retryBtn">🔄 Coba Lagi</button>
+        <div class="stat-item">
+            <div class="stat-number" id="totalTahun">0</div>
+            <div class="stat-label">Tahun</div>
         </div>
+    </div>
+</div>
 
-        <!-- Empty State -->
-        <div class="empty-state hidden" id="emptyState">
-            <div class="empty-icon">📁</div>
-            <h2 class="empty-title">Belum Ada Dokumentasi Kegiatan</h2>
-            <p class="empty-text">Saat ini belum ada dokumentasi foto kegiatan yang tersedia. Silakan kembali lagi nanti.</p>
-        </div>
+<!-- Main Content -->
+<main class="main-container">
+    <!-- Results Info -->
+    <div class="results-info" id="resultsInfo"></div>
 
-        <!-- No Results -->
-        <div class="no-results hidden" id="noResults">
-            <div class="no-results-icon">🔍</div>
-            <p class="no-results-text">Tidak ditemukan kegiatan yang sesuai dengan pencarian Anda.</p>
-        </div>
-
-        <!-- Gallery Container -->
-        <div class="gallery-container hidden" id="galleryContainer"></div>
-
-        <!-- Load More -->
-        <div class="load-more-container hidden" id="loadMoreContainer">
-            <button class="load-more-btn" id="loadMoreBtn">Muat Lebih Banyak</button>
-            <p class="showing-info" id="showingInfo"></p>
-        </div>
-    </main>
-
-    <!-- LIGHTBOX - FULL SCREEN -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Viewer Foto Fullscreen">
-        <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">&times;</button>
-        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
-        <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Foto berikutnya">&#8250;</button>
-        <div class="lightbox-image-container">
-            <img src="" alt="" class="lightbox-image" id="lightboxImage" loading="lazy">
-            <div class="lightbox-loading hidden" id="lightboxLoading">
-                <div class="loading-spinner"></div>
-            </div>
-        </div>
-        <div class="watermark-overlay">© Dinas Kesehatan Kab. Kutai Kartanegara</div>
-        <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    <!-- Loading State -->
+    <div class="loading-state" id="loadingState">
+        <div class="loading-icon">⏳</div>
+        <h3>Memuat Galeri Foto...</h3>
+        <p>Mengambil data foto</p>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <p>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara. Hak Cipta Dilindungi.</p>
-    </footer>
+    <!-- Error State -->
+    <div class="error-state hidden" id="errorState">
+        <div class="error-icon">❌</div>
+        <h3>Gagal Memuat Data</h3>
+        <p id="errorMessage">Terjadi kesalahan saat mengambil data</p>
+        <button onclick="initGallery()" style="margin-top:1rem;padding:0.7rem 1.5rem;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;">
+            🔄 Coba Lagi
+        </button>
+    </div>
 
-    <!-- JAVASCRIPT -->
-    <script>
-        /**
-         * Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara
-         * ================================================================
-         * VERSION: v4.0 - PER KEGIATAN DENGAN GRID 10 KOLOM
-         */
-        const CONFIG = {
-            GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
-            ITEMS_PER_PAGE: 10, // Tampilkan 10 kegiatan per load
-            ENABLE_LOAD_MORE: true
-        };
+    <!-- Empty State -->
+    <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon">📷</div>
+        <h3>Belum Ada Foto</h3>
+        <p>Galeri foto masih kosong</p>
+    </div>
 
-        // State
-        let allActivities = [];
-        let filteredActivities = [];
-        let displayedCount = 0;
-        let currentLightboxIndex = 0;
-        let currentLightboxPhotos = [];
-        let touchStartX = 0;
-        let touchEndX = 0;
+    <!-- No Results State -->
+    <div class="empty-state hidden" id="noResultsState">
+        <div class="empty-icon">🔍</div>
+        <h3>Tidak Ditemukan</h3>
+        <p>Tidak ada kegiatan yang cocok dengan pencarian</p>
+    </div>
 
-        // DOM Elements
-        const $ = id => document.getElementById(id);
-        const el = {
-            loadingState: $('loadingState'),
-            skeletonLoader: $('skeletonLoader'),
-            errorState: $('errorState'),
-            emptyState: $('emptyState'),
-            noResults: $('noResults'),
-            galleryContainer: $('galleryContainer'),
-            controlsBar: $('controlsBar'),
-            loadMoreContainer: $('loadMoreContainer'),
-            loadMoreBtn: $('loadMoreBtn'),
-            showingInfo: $('showingInfo'),
-            retryBtn: $('retryBtn'),
-            searchInput: $('searchInput'),
-            filterTahun: $('filterTahun'),
-            filterBulan: $('filterBulan'),
-            sortBy: $('sortBy'),
-            resultsCount: $('resultsCount'),
-            totalKegiatan: $('totalKegiatan'),
-            totalFoto: $('totalFoto'),
-            totalTahun: $('totalTahun'),
-            errorTitle: $('errorTitle'),
-            errorText: $('errorText'),
-            errorCode: $('errorCode'),
-            errorDetails: $('errorDetails'),
-            lightbox: $('lightbox'),
-            lightboxClose: $('lightboxClose'),
-            lightboxPrev: $('lightboxPrev'),
-            lightboxNext: $('lightboxNext'),
-            lightboxImageContainer: document.querySelector('.lightbox-image-container'),
-            lightboxImage: $('lightboxImage'),
-            lightboxCounter: $('lightboxCounter'),
-            lightboxLoading: $('lightboxLoading')
-        };
+    <!-- Gallery Container -->
+    <div class="gallery-container hidden" id="galleryContainer"></div>
+</main>
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', initApp);
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" onclick="navigateLightbox(-1)">❮</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" onclick="navigateLightbox(1)">❯</button>
+    
+    <div class="lightbox-image-container" id="lightboxImageContainer">
+        <img src="" alt="" class="lightbox-image" id="lightboxImage">
+        <div class="lightbox-loading" id="lightboxLoading">
+            <div class="spinner"></div>
+            <span>Memuat foto...</span>
+        </div>
+    </div>
+    
+    <div class="lightbox-title" id="lightboxTitle"></div>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
 
-        async function initApp() {
-            showLoading();
-            setupEventListeners();
-            
-            if (!CONFIG.GOOGLE_APPS_SCRIPT_URL?.trim()) {
-                showConfigError();
-                return;
-            }
-            
-            await fetchGalleryData();
-        }
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2024 Dinas Kesehatan Kabupaten Kutai Kartanegara. Powered by Cloudinary CDN.</p>
+</footer>
 
-        function setupEventListeners() {
-            let searchTimeout;
-            el.searchInput.addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(applyFiltersAndRender, 300);
-            });
+<!--
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   🖼️ DATA GALERI FOTO - CLOUDINARY INTEGRATION             ║
+║                                                              ║
+║   Edit data di bawah untuk menambah/mengubah kegiatan       ║
+║   Setiap "activity" = 1 kegiatan dengan folder sendiri      ║
+║                                                              ║
+║   CARA MENAMBAH FOTO:                                       ║
+║   1. Upload foto ke Cloudinary                             ║
+║   2. Copy Public ID dari Media Library                     ║
+║   3. Paste di array "photos"                               ║
+║   4. Save & refresh halaman                                ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+-->
+<script type="application/json" id="galleryData">
+{
+  "config": {
+    "cloudName": "cla7jrww",
+    "rootFolder": "GALERI FOTO SDMK"
+  },
+  "activities": [
+    {
+      "id": "pelatihan-pencegahan-kusta-030826",
+      "judul": "Pelatihan Pencegahan dan Pengendalian Penyakit Kusta dan Frambusia bagi Pengelola Program Kusta dan Frambusia Tingkat Puskesmas",
+      "tanggal": "03 Agustus 2026",
+      "tempat": "Jalan W. Monginsidi, Samarinda (UPTD Bapelkes Prov. Kaltim)",
+      "tahun": "2026",
+      "folderPath": "GALERI FOTO SDMK/03-08-2026",
+      "photos": [
+        { "publicId": "Salinan_2026-08-03_08.40.20_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Pembukaan Pelatihan PPI" },
+        { "publicId": "Salinan_2026-08-03_08.47.22_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Suasana Kegiatan" },
+        { "publicId": "Salinan_2026-08-03_08.40.41_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Peserta Pelatihan" },
+        { "publicId": "Salinan_2026-08-03_08.47.16_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Materi Presentasi" },
+        { "publicId": "Salinan_IMG_20260803_092827", "title": "Sesi Diskusi" },
+        { "publicId": "Salinan_IMG_20260803_084251", "title": "Praktik Lapangan" },
+        { "publicId": "Salinan_IMG_20260803_084248", "title": "Simulasi PPI" },
+        { "publicId": "Salinan_2026-08-03_08.59.02_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Foto Bersama" },
+        { "publicId": "Salinan_2026-08-03_08.42.13_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Sertifikat Peserta" },
+        { "publicId": "Salinan_2026-08-03_08.59.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Kegiatan" },
+        { "publicId": "Salinan_2026-08-03_08.40.46_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Penutupan Acara" },
+        { "publicId": "Salinan_2026-08-03_09.11.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Narasumber 1" },
+        { "publicId": "Salinan_2026-08-03_09.11.15_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Narasumber 2" },
+        { "publicId": "Salinan_2026-08-03_08.59.23_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Panitia Pelaksana" },
+        { "publicId": "Salinan_IMG_20260803_091138", "title": "Peserta Antusias" },
+        { "publicId": "Salinan_2026-08-03_09.11.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Tanya Jawab" },
+        { "publicId": "Salinan_2026-08-03_09.11.05_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Evaluasi Kegiatan" },
+        { "publicId": "Salinan_IMG_20260803_091146", "title": "Kelompok Diskusi 1" },
+        { "publicId": "Salinan_IMG_20260803_091147", "title": "Kelompok Diskusi 2" },
+        { "publicId": "Salinan_2026-08-03_08.59.24_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Presentasi Hasil" },
+        { "publicId": "Salinan_2026-08-03_09.11.06_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Apresiasi Peserta" },
+        { "publicId": "Salinan_IMG_20260803_092804", "title": "Dokumentasi Tambahan 1" },
+        { "publicId": "Salinan_2026-08-03_09.26.50_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 2" },
+        { "publicId": "Salinan_IMG_20260803_092757", "title": "Dokumentasi Tambahan 3" },
+        { "publicId": "Salinan_IMG_20260803_092733_1", "title": "Dokumentasi Tambahan 4" },
+        { "publicId": "Salinan_2026-08-03_09.26.53_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 5" },
+        { "publicId": "Salinan_IMG_20260803_092733", "title": "Dokumentasi Tambahan 6" },
+        { "publicId": "Salinan_IMG_20260803_091159", "title": "Dokumentasi Tambahan 7" },
+        { "publicId": "Salinan_IMG_20260803_091157", "title": "Dokumentasi Tambahan 8" },
+        { "publicId": "Salinan_IMG_20260803_091211", "title": "Dokumentasi Tambahan 9" },
+        { "publicId": "Salinan_IMG_20260803_092825", "title": "Dokumentasi Tambahan 10" }
+      ]
+    },
+    {
+      "id": "rapat-koordinasi-sdmk-040826",
+      "judul": "Rapat Koordinasi Penyiapan Data SDMK",
+      "tanggal": "04 Agustus 2026",
+      "tempat": "Hotel Ibis, Samarinda",
+      "tahun": "2026",
+      "folderPath": "GALERI FOTO SDMK/04-08-2026",
+      "photos": [
+        { "publicId": "IMG_20260804_193255", "title": "Pembukaan Rapat" },
+        { "publicId": "IMG_20260804_192752", "title": "Peserta Rapat" },
+        { "publicId": "IMG_20260804_192744", "title": "Narasumber Utama" },
+        { "publicId": "IMG_20260804_192736", "title": "Presentasi Data SDMK" },
+        { "publicId": "IMG_20260804_192724", "title": "Diskusi Data" },
+        { "publicId": "2026-08-04_19.16.48_No_42_Jalan_Mulawarman", "title": "Sesi Tanya Jawab" },
+        { "publicId": "2026-08-04_19.16.46_No_42_Jalan_Mulawarman", "title": "Koordinator Bidang" },
+        { "publicId": "IMG_20260804_200430", "title": "Dokumentasi Rapat 1" },
+        { "publicId": "Salinan_2026-08-04_08.02.37_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 2" },
+        { "publicId": "Salinan_2026-08-04_08.04.34_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 3" },
+        { "publicId": "Salinan_2026-08-04_08.02.22_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 4" },
+        { "publicId": "Salinan_2026-08-04_08.04.47_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 5" },
+        { "publicId": "Salinan_2026-08-04_08.05.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 6" },
+        { "publicId": "Salinan_2026-08-04_08.04.26_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 7" },
+        { "publicId": "Salinan_2026-08-04_08.05.36_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 8" },
+        { "publicId": "Salinan_2026-08-04_08.04.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 9" },
+        { "publicId": "Salinan_2026-08-04_08.02.14_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Rapat 10" },
+        { "publicId": "Salinan_2026-08-04_09.59.31_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Sesi Siang Hari" },
+        { "publicId": "Salinan_2026-08-04_09.59.10_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Presentasi Kelompok" },
+        { "publicId": "Salinan_2026-08-04_14.47.32_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Sesi Sore Hari" },
+        { "publicId": "Salinan_2026-08-04_09.58.25_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Rekomendasi Hasil" },
+        { "publicId": "Salinan_2026-08-04_14.30.16_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Rencana Tindak Lanjut" },
+        { "publicId": "Salinan_2026-08-04_14.29.14_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Penutupan Rapat" },
+        { "publicId": "Salinan_2026-08-04_08.06.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Foto Bersama Peserta" },
+        { "publicId": "Salinan_2026-08-04_09.58.42_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Panitia Pelaksana" },
+        { "publicId": "Salinan_2026-08-04_14.30.17_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 1" },
+        { "publicId": "Salinan_2026-08-04_08.06.35_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 2" },
+        { "publicId": "Salinan_2026-08-04_08.06.00_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 3" },
+        { "publicId": "Salinan_2026-08-04_14.47.20_47_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 4" },
+        { "publicId": "Salinan_2026-08-04_08.06.23_39_Jalan_W._Monginsidi__Judul-Jam", "title": "Dokumentasi Tambahan 5" }
+      ]
+    },
+    {
+      "id": "pelatihan-limbah-fasyankes-180826",
+      "judul": "Pelatihan Pengelolaan Limbah Fasyankes",
+      "tanggal": "18 Agustus 2026",
+      "tempat": "UPTD Bapelkes Kaltim, Samarinda",
+      "tahun": "2026",
+      "folderPath": "GALERI FOTO SDMK/18-08-2026",
+      "photos": []
+    }
+  ]
+}
+</script>
 
-            el.filterTahun.addEventListener('change', applyFiltersAndRender);
-            el.filterBulan.addEventListener('change', applyFiltersAndRender);
-            el.sortBy.addEventListener('change', applyFiltersAndRender);
-            el.loadMoreBtn.addEventListener('click', renderGallery);
-            el.retryBtn.addEventListener('click', fetchGalleryData);
-            el.lightboxClose.addEventListener('click', closeLightbox);
-            el.lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
-            el.lightboxNext.addEventListener('click', () => navigateLightbox(1));
-            el.lightbox.addEventListener('click', e => { if (e.target === el.lightbox) closeLightbox(); });
-            document.addEventListener('keydown', handleKeyboard);
-            el.lightbox.addEventListener('touchstart', handleTouchStart, { passive: true });
-            el.lightbox.addEventListener('touchend', handleTouchEnd, { passive: true });
-            document.addEventListener('contextmenu', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
-        }
+<script>
+/**
+ * ============================================
+ * GALERI FOTO STANDALONE + CLOUDINARY
+ * ============================================
+ * 
+ * Versi: v6.0 - Fully Standalone (1 File HTML)
+ * Integrasi: Cloudinary CDN (Client-side URL Generation)
+ * 
+ * ✅ Tanpa backend
+ * ✅ Tanpa database  
+ * ✅ Tanpa GitHub repo khusus
+ * ✅ Upload langsung ke hosting manapun
+ */
 
-        // Data Fetching
-        async function fetchGalleryData() {
-            showLoading();
-            hideError();
+// ============================================
+// CONFIGURATION
+// ============================================
+const CONFIG = {
+    // Cloudinary - Ganti dengan cloud name Anda
+    CLOUD_NAME: 'cla7jrww',
+    
+    // Default image transformations
+    TRANSFORMS: {
+        thumbnail: 'w400,h300,c_fill,q_auto',
+        original: 'q_auto:good',
+        lightbox: 'w1200,c_limit,q_auto:good'
+    }
+};
 
-            try {
-                console.log('[Galeri] Fetching from:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
-                
-                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: { 'Accept': 'application/json' },
-                    cache: 'no-cache'
-                });
+// ============================================
+// STATE
+// ============================================
+let allActivities = [];
+let filteredActivities = [];
+let displayedCount = 0;
 
-                console.log('[Galeri] Response status:', response.status);
+// Lightbox state
+let currentLightboxPhotos = [];
+let currentLightboxIndex = 0;
 
-                if (!response.ok) throw new Error(`HTTP_ERROR_${response.status}`);
+// ============================================
+// DOM ELEMENTS
+// ============================================
+const el = {
+    searchInput: document.getElementById('searchInput'),
+    filterTahun: document.getElementById('filterTahun'),
+    sortBy: document.getElementById('sortBy'),
+    totalKegiatan: document.getElementById('totalKegiatan'),
+    totalFoto: document.getElementById('totalFoto'),
+    totalTahun: document.getElementById('totalTahun'),
+    resultsInfo: document.getElementById('resultsInfo'),
+    loadingState: document.getElementById('loadingState'),
+    errorState: document.getElementById('errorState'),
+    errorMessage: document.getElementById('errorMessage'),
+    emptyState: document.getElementById('emptyState'),
+    noResultsState: document.getElementById('noResultsState'),
+    galleryContainer: document.getElementById('galleryContainer'),
+    lightbox: document.getElementById('lightbox'),
+    lightboxImage: document.getElementById('lightboxImage'),
+    lightboxImageContainer: document.getElementById('lightboxImageContainer'),
+    lightboxLoading: document.getElementById('lightboxLoading'),
+    lightboxTitle: document.getElementById('lightboxTitle'),
+    lightboxCounter: document.getElementById('lightboxCounter'),
+    lightboxPrev: document.getElementById('lightboxPrev'),
+    lightboxNext: document.getElementById('lightboxNext')
+};
 
-                const result = await response.json();
-                console.log('[Galeri] Data received:', result.data?.length || 0, 'activities');
+// ============================================
+// CLOUDINARY URL GENERATOR (Client-side)
+// ============================================
+/**
+ * Generate Cloudinary URL secara client-side
+ * Tidak perlu API Secret!
+ */
+function getCloudinaryUrl(publicId, transformation = '') {
+    if (!publicId) return '';
+    const base = `https://res.cloudinary.com/${CONFIG.CLOUD_NAME}/image/upload`;
+    return transformation ? `${base}/${transformation}/${publicId}` : `${base}/${publicId}`;
+}
 
-                if (!result.success) throw new Error(result.message || 'API_ERROR');
-                if (!result.data?.length) { showEmpty(); return; }
+/**
+ * Process photo data - tambahkan URL Cloudinary
+ */
+function processPhoto(photo, activityJudul, index) {
+    return {
+        ...photo,
+        // Generate URLs
+        url: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.thumbnail),
+        thumbnailUrl: getCloudinaryUrl(photo.publicId, 'w200,h200,c_fill,q_auto:low'),
+        originalUrl: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.original),
+        lightboxUrl: getCloudinaryUrl(photo.publicId, CONFIG.TRANSFORMS.lightbox),
+        
+        // Display info
+        _displayTitle: photo.title || `${activityJudul} - Foto ${index + 1}`
+    };
+}
 
-                allActivities = processActivityData(result.data);
-                
-                populateYearFilter(allActivities);
-                updateStatistics(allActivities);
-                applyFiltersAndRender();
+// ============================================
+// DATA LOADING (from embedded JSON)
+// ============================================
+function initGallery() {
+    showLoading();
+    hideError();
 
-            } catch (error) {
-                console.error('[Galeri] Error:', error);
-                handleFetchError(error);
-            }
-        }
-
-        function handleFetchError(error) {
-            hideLoading();
-            let msg, showDetails = true;
-
-            if (error.message?.includes('Failed to fetch')) {
-                msg = `<strong>Koneksi ke server gagal!</strong><br><br>
-                       Kemungkinan penyebab:<br>
-                       1. URL Google Apps Script salah atau belum di-deploy<br>
-                       2. Website dibuka dari file lokal (file://)<br>
-                       3. Masalah jaringan internet<br>
-                       4. CORS diblokir browser<br><br>
-                       <strong>Solusi:</strong><br>
-                       • Pastikan website di-hosting<br>
-                       • Cek URL Google Apps Script sudah benar<br>
-                       • Pastikan Apps Script di-deploy dengan akses "Anyone"<br>
-                       • Refresh halaman dan coba lagi`;
-            } else if (error.message?.includes('HTTP_ERROR_404')) {
-                msg = `<strong>Endpoint API tidak ditemukan (404).</strong><br>Cek kembali URL Google Apps Script.`;
-            } else if (error.message === 'HTTP_ERROR_403') {
-                msg = '<strong>Akses ditolak.</strong><br>Pastikan Apps Script di-deploy dengan akses "Anyone".';
-            } else if (error.message === 'HTTP_ERROR_500') {
-                msg = '<strong>Error server internal.</strong><br>Coba lagi beberapa saat.';
-            } else {
-                msg = `Error: ${error.message}`;
-                showDetails = false;
-            }
-
-            showError('Gagal Memuat Galeri', msg, error.message, showDetails);
-        }
-
-        function showConfigError() {
-            hideLoading();
-            showError(
-                'Konfigurasi Belum Lengkap',
-                `<strong>URL Google Apps Script belum dikonfigurasi.</strong><br><br>
-                 Untuk menggunakan galeri:<br>
-                 1. Buat dan deploy Google Apps Script (Code.gs)<br>
-                 2. Salin URL Web App yang dihasilkan<br>
-                 3. Edit variabel GOOGLE_APPS_SCRIPT_URL<br>
-                 4. Isi dengan URL Google Apps Script Anda`,
-                'CONFIG_NOT_SET',
-                true
-            );
-        }
-
-        // Data Processing
-        function processActivityData(data) {
-            return data.map(activity => {
-                if (!activity.tanggal || !activity.tempat) {
-                    const parsed = parseFolderName(activity.judul || '');
-                    return {
-                        ...activity,
-                        tanggal: activity.tanggal || parsed.tanggal,
-                        tempat: activity.tempat || parsed.tempat,
-                        judul: parsed.judul || activity.judul
-                    };
-                }
-                return activity;
-            });
-        }
-
-        function parseFolderName(folderName) {
-            const result = { tanggal: '', tempat: '', judul: '' };
-            if (!folderName) return result;
-
-            const pattern = /^(\d{1,2}-\d{1,2}-\d{4})\s*\|\s*(.+?)\s*\|\s*(.+)$/;
-            const match = folderName.match(pattern);
-
-            if (match) {
-                result.tanggal = formatDateIndonesian(match[1]);
-                result.judul = match[2].trim();
-                result.tempat = match[3].trim();
-            } else {
-                result.judul = folderName;
-            }
-            return result;
-        }
-
-        function formatDateIndonesian(dateStr) {
-            const months = ['Januari','Februari','Maret','April','Mei','Juni',
-                           'Juli','Agustus','September','Oktober','November','Desember'];
-            const parts = dateStr.split('-');
-            if (parts.length !== 3) return dateStr;
-            return `${parseInt(parts[0])} ${months[parseInt(parts[1]) - 1]} ${parts[2]}`;
-        }
-
-        // Filtering & Sorting - PER KEGIATAN
-        function applyFiltersAndRender() {
-            const search = el.searchInput.value.toLowerCase().trim();
-            const tahun = el.filterTahun.value;
-            const bulan = el.filterBulan.value;
-            const sortValue = el.sortBy.value;
-
-            // Filter activities
-            filteredActivities = allActivities.filter(act => {
-                const matchSearch = !search || 
-                    act.judul?.toLowerCase().includes(search) ||
-                    act.tanggal?.toLowerCase().includes(search) ||
-                    act.tempat?.toLowerCase().includes(search);
-                const matchYear = !tahun || extractYear(act.tanggal) === tahun;
-                const matchMonth = !bulan || extractMonth(act.tanggal) === bulan;
-                return matchSearch && matchYear && matchMonth;
-            });
-
-            sortActivities(filteredActivities, sortValue);
-            
-            displayedCount = 0;
-
-            if (!filteredActivities.length && allActivities.length) {
-                hideGallery(); hideLoadMore(); showNoResults();
-            } else if (!filteredActivities.length) {
-                showEmpty();
-            } else {
-                hideNoResults(); renderGallery();
-            }
-            updateResultsCount();
-        }
-
-        function sortActivities(activities, sortValue) {
-            const sortFunctions = {
-                terbaru: (a, b) => compareDates(b.tanggal, a.tanggal),
-                terlama: (a, b) => compareDates(a.tanggal, b.tanggal),
-                az: (a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'),
-                za: (a, b) => (b.judul || '').localeCompare(a.judul || '', 'id')
-            };
-            
-            if (sortFunctions[sortValue]) {
-                activities.sort(sortFunctions[sortValue]);
-            }
-        }
-
-        function compareDates(dateA, dateB) {
-            const yearA = extractYear(dateA);
-            const yearB = extractYear(dateB);
-            return (yearB || '0').localeCompare(yearA || '0');
-        }
-
-        function extractYear(dateStr) {
-            if (!dateStr) return '';
-            const m = dateStr.match(/\b(20\d{2})\b/);
-            return m ? m[1] : '';
-        }
-
-        function extractMonth(dateStr) {
-            if (!dateStr) return '';
-            const months = ['januari','februari','maret','april','mei','juni',
-                           'juli','agustus','september','oktober','november','desember'];
-            const lower = dateStr.toLowerCase();
-            for (let i = 0; i < months.length; i++) {
-                if (lower.includes(months[i])) return String(i + 1).padStart(2, '0');
-            }
-            return '';
-        }
-
-        function populateYearFilter(activities) {
-            const years = new Set();
-            activities.forEach(act => { const y = extractYear(act.tanggal); if (y) years.add(y); });
-            
-            el.filterTahun.innerHTML = '<option value="">Semua Tahun</option>';
-            [...years].sort((a, b) => b.localeCompare(a)).forEach(y => {
-                const opt = document.createElement('option');
-                opt.value = y;
-                opt.textContent = y;
-                el.filterTahun.appendChild(opt);
-            });
-        }
-
-        // Rendering - PER KEGIATAN DENGAN HEADER RINGKAS
-        function renderGallery() {
-            hideLoading(); hideSkeleton();
-            
-            if (!filteredActivities.length) { showEmpty(); return; }
-            
-            showGallery();
-            const end = Math.min(displayedCount + CONFIG.ITEMS_PER_PAGE, filteredActivities.length);
-            const toShow = filteredActivities.slice(displayedCount, end);
-
-            if (!displayedCount) el.galleryContainer.innerHTML = '';
-
-            toShow.forEach((act, i) => {
-                el.galleryContainer.appendChild(createActivityCard(act, displayedCount + i));
-            });
-
-            displayedCount = end;
-            updateLoadMoreButton();
-        }
-
-        /**
-         * Create Activity Card dengan header ringkas + grid 10 kolom foto
-         */
-        function createActivityCard(activity, index) {
-            const card = document.createElement('article');
-            card.className = 'activity-card';
-            card.style.animationDelay = `${index * 0.08}s`;
-
-            const photos = activity.foto || [];
-            const activityIndex = filteredActivities.indexOf(activity);
-
-            card.innerHTML = `
-                <div class="activity-header">
-                    <h2 class="activity-title">${escapeHtml(activity.judul || 'Kegiatan Tanpa Judul')}</h2>
-                    <div class="activity-meta">
-                        ${activity.tanggal ? `<span class="activity-meta-item"><span class="activity-meta-icon">📅</span><span>${escapeHtml(activity.tanggal)}</span></span>` : ''}
-                        ${activity.tempat ? `<span class="activity-meta-item"><span class="activity-meta-icon">📍</span><span>${escapeHtml(activity.tempat)}</span></span>` : ''}
-                        <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span><strong>${photos.length}</strong> foto</span></span>
-                    </div>
-                </div>
-                <div class="photo-grid">
-                    ${photos.map((foto, photoIdx) => `
-                        <div class="photo-item" data-activity="${activityIndex}" data-photo="${photoIdx}" role="button" tabindex="0" aria-label="Lihat foto ${photoIdx + 1}">
-                            <img src="about:blank" alt="${escapeHtml(activity.judul)} - Foto ${photoIdx + 1}" loading="eager">
-                            <div class="photo-placeholder">📷</div>
-                            <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            // Initialize images with fallback mechanism
-            card.querySelectorAll('.photo-item img').forEach((img, photoIdx) => {
-                const foto = photos[photoIdx];
-                if (foto) {
-                    loadImageWithFallback(img, foto);
-                }
-            });
-
-            // Event listeners for lightbox
-            card.querySelectorAll('.photo-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const actIdx = parseInt(item.dataset.activity);
-                    const photoIdx = parseInt(item.dataset.photo);
-                    openLightbox(actIdx, photoIdx);
-                });
-                item.addEventListener('keypress', e => { 
-                    if (/Enter| /.test(e.key)) { 
-                        e.preventDefault(); 
-                        const actIdx = parseInt(e.target.dataset.activity);
-                        const photoIdx = parseInt(e.target.dataset.photo);
-                        openLightbox(actIdx, photoIdx); 
-                    }
-                });
-            });
-
-            return card;
-        }
-
-        /**
-         * Get Photo URL dengan MULTI-METHOD FALLBACK
-         * 
-         * Prioritas URL (dari yang paling reliable):
-         * 1. foto.url - Primary URL dari Code.gs (Google Thumbnails API)
-         * 2. foto.thumbnailUrl - Thumbnail version
-         * 3. foto.downloadUrl - Direct download
-         * 4. foto.viewUrl - View mode
-         * 5. Generate manual URL sebagai fallback terakhir
-         */
-        function getPhotoUrl(foto, urlIndex = 0) {
-            if (!foto) return '';
-            
-            // Array of possible URLs in priority order
-            const urls = [];
-            
-            // Method 1: Primary URL (dari response API)
-            if (foto.url) urls.push(foto.url);
-            
-            // Method 2: Thumbnail URL
-            if (foto.thumbnailUrl) urls.push(foto.thumbnailUrl);
-            
-            // Method 3: Download URL
-            if (foto.downloadUrl) urls.push(foto.downloadUrl);
-            
-            // Method 4: View URL
-            if (foto.viewUrl) urls.push(foto.viewUrl);
-            
-            // Method 5: allUrls array jika ada
-            if (Array.isArray(foto.allUrls)) {
-                foto.allUrls.forEach(url => {
-                    if (url && !urls.includes(url)) urls.push(url);
-                });
-            }
-            
-            // Method 6: Manual generation sebagai fallback terakhir
-            if (foto.fileId) {
-                const manualUrls = [
-                    // Google Thumbnails API (paling reliable untuk Google Drive)
-                    `https://lh3.googleusercontent.com/d/${foto.fileId}=w400-h300`,
-                    // Ukuran lebih besar untuk thumbnail
-                    `https://lh3.googleusercontent.com/d/${foto.fileId}=w800-h600`,
-                    // Drive thumbnail dengan parameter sz
-                    `https://drive.google.com/thumbnail?id=${foto.fileId}&sz=w800`,
-                    // View mode (kadang works)
-                    `https://drive.google.com/uc?export=view&id=${foto.fileId}`,
-                    // Download mode (kadang works)
-                    `https://drive.google.com/uc?export=download&id=${foto.fileId}`
-                ];
-                
-                manualUrls.forEach(url => {
-                    if (!urls.includes(url)) urls.push(url);
-                });
-            }
-            
-            // Return URL berdasarkan index (untuk fallback mechanism)
-            if (urlIndex < urls.length) {
-                return urls[urlIndex];
-            }
-            
-            // Return URL pertama jika index out of range
-            return urls[0] || '';
+    try {
+        // Ambil data dari embedded JSON
+        const dataElement = document.getElementById('galleryData');
+        if (!dataElement) throw new Error('Data element not found');
+        
+        const rawData = JSON.parse(dataElement.textContent);
+        console.log('[Galeri] 📡 Data loaded from embedded JSON');
+        
+        if (!rawData.activities || !rawData.activities.length) {
+            showEmpty();
+            return;
         }
         
-        /**
-         * Load image dengan automatic fallback - FIXED VERSION
-         * Langsung set src ke img element tanpa test image terpisah
-         * Tidak menggunakan crossOrigin untuk menghindari CORS error
-         */
-        function loadImageWithFallback(imgElement, foto, maxAttempts = 6) {
-            let currentAttempt = 0;
-            let isLoading = true;
-            
-            // Show loading state
-            imgElement.style.opacity = '0.3';
-            
-            function tryLoad() {
-                if (!isLoading || currentAttempt >= maxAttempts) return;
-                
-                const url = getPhotoUrl(foto, currentAttempt);
-                if (!url) {
-                    handleImageError();
-                    return;
-                }
-                
-                console.log(`[Galeri] 📷 Loading attempt ${currentAttempt + 1}/${maxAttempts}:`, url.substring(0, 100) + '...');
-                
-                // Set event handlers SEBELUM mengubah src
-                imgElement.onload = function() {
-                    if (!isLoading) return;
-                    console.log(`[Galeri] ✅ SUCCESS on attempt ${currentAttempt + 1}`);
-                    isLoading = false;
-                    imgElement.style.opacity = '1';
-                    imgElement.classList.add('loaded');
-                    
-                    // Hide placeholder
-                    const placeholder = imgElement.parentElement?.querySelector('.photo-placeholder');
-                    if (placeholder) {
-                        placeholder.classList.add('hidden');
-                    }
-                    
-                    // Remove shimmer animation
-                    const photoItem = imgElement.closest('.photo-item');
-                    if (photoItem) {
-                        photoItem.style.animation = 'none';
-                    }
-                };
-                
-                imgElement.onerror = function() {
-                    if (!isLoading) return;
-                    console.warn(`[Galeri] ❌ FAILED attempt ${currentAttempt + 1}`);
-                    currentAttempt++;
-                    
-                    if (currentAttempt < maxAttempts) {
-                        // Try next URL after short delay
-                        setTimeout(tryLoad, 100);
-                    } else {
-                        handleImageError();
-                    }
-                };
-                
-                // Set src - ini akan trigger load
-                imgElement.src = url;
+        // Process activities - generate URLs
+        allActivities = rawData.activities.map(activity => ({
+            ...activity,
+            jumlahFoto: activity.photos?.length || 0,
+            foto: (activity.photos || []).map((photo, idx) => 
+                processPhoto(photo, activity.judul, idx)
+            ),
+            previewPhoto: activity.photos?.[0] ? {
+                publicId: activity.photos[0].publicId,
+                url: getCloudinaryUrl(activity.photos[0].publicId, CONFIG.TRANSFORMS.thumbnail)
+            } : null
+        }));
+        
+        console.log(`[Galeri] ✅ Processed ${allActivities.length} activities`);
+        
+        populateYearFilter(allActivities);
+        updateStatistics(allActivities);
+        applyFiltersAndRender();
+
+    } catch (error) {
+        console.error('[Galeri] ❌ Error:', error);
+        handleFetchError(error);
+    }
+}
+
+function handleFetchError(error) {
+    hideLoading();
+    el.errorMessage.textContent = `Error: ${error.message}`;
+    showError();
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function extractYear(dateStr) {
+    if (!dateStr) return '';
+    const m = dateStr.match(/\b(20\d{2})\b/);
+    return m ? m[1] : '';
+}
+
+// ============================================
+// FILTERING & SORTING
+// ============================================
+function applyFiltersAndRender() {
+    const search = el.searchInput.value.toLowerCase().trim();
+    const tahun = el.filterTahun.value;
+    const sortValue = el.sortBy.value;
+
+    filteredActivities = allActivities.filter(act => {
+        const matchSearch = !search || 
+            act.judul?.toLowerCase().includes(search) ||
+            act.tanggal?.toLowerCase().includes(search) ||
+            act.tempat?.toLowerCase().includes(search);
+        const matchYear = !tahun || extractYear(act.tanggal) === tahun || act.tahun === tahun;
+        return matchSearch && matchYear;
+    });
+
+    sortActivities(filteredActivities, sortValue);
+    displayedCount = 0;
+
+    if (!filteredActivities.length && allActivities.length) {
+        hideGallery(); showNoResults();
+    } else if (!filteredActivities.length) {
+        showEmpty();
+    } else {
+        hideNoResults(); renderGallery();
+    }
+    
+    updateResultsCount();
+}
+
+function sortActivities(activities, sortValue) {
+    const sortFunctions = {
+        terbaru: (a, b) => (b.tahun || '').localeCompare(a.tahun || ''),
+        terlama: (a, b) => (a.tahun || '').localeCompare(b.tahun || ''),
+        az: (a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'),
+        za: (b, a) => (a.judul || '').localeCompare(b.judul || '', 'id')
+    };
+    
+    if (sortFunctions[sortValue]) {
+        activities.sort(sortFunctions[sortValue]);
+    }
+}
+
+function populateYearFilter(activities) {
+    const years = new Set();
+    activities.forEach(act => { 
+        const y = extractYear(act.tanggal) || act.tahun;
+        if (y) years.add(y); 
+    });
+    
+    el.filterTahun.innerHTML = '<option value="">Semua Tahun</option>';
+    [...years].sort((a, b) => b.localeCompare(a)).forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        el.filterTahun.appendChild(opt);
+    });
+}
+
+// ============================================
+// RENDERING
+// ============================================
+function renderGallery() {
+    hideLoading();
+    
+    if (!filteredActivities.length) { showEmpty(); return; }
+    
+    showGallery();
+    const end = Math.min(displayedCount + 20, filteredActivities.length);
+    const toShow = filteredActivities.slice(displayedCount, end);
+
+    if (!displayedCount) el.galleryContainer.innerHTML = '';
+
+    toShow.forEach((act, i) => {
+        el.galleryContainer.appendChild(createActivityCard(act, displayedCount + i));
+    });
+
+    displayedCount = end;
+}
+
+/**
+ * Create Activity Card dengan header ringkas + grid 10 kolom foto
+ */
+function createActivityCard(activity, index) {
+    const card = document.createElement('article');
+    card.className = 'activity-card';
+    card.style.animationDelay = `${index * 0.08}s`;
+
+    const photos = activity.foto || [];
+    const activityIndex = filteredActivities.indexOf(activity);
+
+    card.innerHTML = `
+        <div class="activity-header">
+            <h2 class="activity-title">${escapeHtml(activity.judul || 'Kegiatan Tanpa Judul')}</h2>
+            <div class="activity-meta">
+                ${activity.tanggal ? `<span class="activity-meta-item"><span class="activity-meta-icon">📅</span><span>${escapeHtml(activity.tanggal)}</span></span>` : ''}
+                ${activity.tempat ? `<span class="activity-meta-item"><span class="activity-meta-icon">📍</span><span>${escapeHtml(activity.tempat)}</span></span>` : ''}
+                <span class="activity-meta-item"><span class="activity-meta-icon">📷</span><span><strong>${photos.length}</strong> foto</span></span>
+            </div>
+        </div>
+        <div class="photo-grid">
+            ${photos.map((foto, photoIdx) => `
+                <div class="photo-item" data-activity="${activityIndex}" data-photo="${photoIdx}" role="button" tabindex="0" aria-label="Lihat foto ${photoIdx + 1}">
+                    <img src="${escapeHtml(foto.url)}" alt="${escapeHtml(foto._displayTitle)}" loading="lazy" onerror="this.parentElement.classList.add('photo-error-state');this.style.display='none';">
+                    <div class="photo-placeholder">📷</div>
+                    <div class="photo-overlay"><span class="photo-zoom-icon">🔍</span></div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    // Event listeners for lightbox
+    card.querySelectorAll('.photo-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const actIdx = parseInt(item.dataset.activity);
+            const photoIdx = parseInt(item.dataset.photo);
+            openLightbox(actIdx, photoIdx);
+        });
+        item.addEventListener('keypress', e => { 
+            if (/Enter| /.test(e.key)) { 
+                e.preventDefault(); 
+                openLightbox(parseInt(item.dataset.activity), parseInt(item.dataset.photo)); 
             }
-            
-            function handleImageError() {
-                console.error('[Galeri] ❌ All attempts failed for photo');
-                isLoading = false;
-                imgElement.style.display = 'none';
-                
-                const container = imgElement.parentElement;
-                if (container) {
-                    container.classList.add('photo-error-state');
-                    container.innerHTML = `
-                        <div class="photo-error">
-                            <span class="photo-error-icon">🖼️</span>
-                            <span>Foto gagal</span>
-                        </div>
-                    `;
-                }
-            }
-            
-            // Start loading
-            tryLoad();
-            
-            // Safety timeout - jika setelah 15 detik masih loading, tampilkan error
-            setTimeout(() => {
-                if (isLoading) {
-                    console.warn('[Galeri] ⏰ Loading timeout - showing error state');
-                    handleImageError();
-                }
-            }, 15000);
-        }
+        });
+    });
 
-        function updateLoadMoreButton() {
-            if (displayedCount >= filteredActivities.length) {
-                hideLoadMore();
-            } else {
-                showLoadMore();
-                el.showingInfo.textContent = `Menampilkan ${displayedCount} dari ${filteredActivities.length} kegiatan`;
-            }
-        }
+    return card;
+}
 
-        function updateResultsCount() {
-            el.resultsCount.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
-        }
+// ============================================
+// LIGHTBOX
+// ============================================
+function openLightbox(actIdx, photoIdx) {
+    const act = filteredActivities[actIdx];
+    if (!act?.foto?.length) return;
 
-        function updateStatistics(activities) {
-            let totalFoto = 0;
-            const years = new Set();
-            activities.forEach(act => {
-                totalFoto += (act.foto || []).length;
-                const y = extractYear(act.tanggal);
-                if (y) years.add(y);
-            });
-            animateNumber(el.totalKegiatan, activities.length);
-            animateNumber(el.totalFoto, totalFoto);
-            animateNumber(el.totalTahun, years.size);
-        }
+    currentLightboxPhotos = act.foto;
+    currentLightboxIndex = photoIdx;
 
-        function animateNumber(element, target) {
-            const duration = 1000;
-            const start = performance.now();
-            
-            function update(now) {
-                const progress = Math.min((now - start) / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3);
-                element.textContent = Math.round(target * ease).toLocaleString('id-ID');
-                if (progress < 1) requestAnimationFrame(update);
-            }
-            requestAnimationFrame(update);
-        }
+    el.lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    loadLightboxImage();
+    updateLightboxNav();
+}
 
-        // Lightbox - FULL SCREEN (PER KEGIATAN)
-        function openLightbox(actIdx, photoIdx) {
-            const act = filteredActivities[actIdx];
-            if (!act?.foto?.length) return;
+function closeLightbox() {
+    el.lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    el.lightboxImage.src = '';
+    currentLightboxPhotos = [];
+    currentLightboxIndex = 0;
+}
 
-            currentLightboxPhotos = act.foto; // Foto dari kegiatan ini saja
-            currentLightboxIndex = photoIdx;
+function navigateLightbox(dir) {
+    const idx = currentLightboxIndex + dir;
+    if (idx >= 0 && idx < currentLightboxPhotos.length) {
+        currentLightboxIndex = idx;
+        loadLightboxImage();
+        updateLightboxNav();
+    }
+}
 
-            el.lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            loadLightboxImage();
-            updateLightboxNav();
-        }
+function loadLightboxImage() {
+    const foto = currentLightboxPhotos[currentLightboxIndex];
+    if (!foto) return;
 
-        function closeLightbox() {
-            el.lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-            el.lightboxImage.src = '';
-            currentLightboxPhotos = [];
-            currentLightboxIndex = 0;
-        }
+    el.lightboxLoading.classList.remove('hidden');
+    el.lightboxImage.style.opacity = '0';
+    
+    // Reset classes
+    el.lightboxImage.classList.remove('landscape', 'portrait');
 
-        function navigateLightbox(dir) {
-            const idx = currentLightboxIndex + dir;
-            if (idx >= 0 && idx < currentLightboxPhotos.length) {
-                currentLightboxIndex = idx;
-                loadLightboxImage();
-                updateLightboxNav();
-            }
-        }
+    // Use high-res URL for lightbox
+    const url = foto.lightboxUrl || foto.originalUrl || foto.url;
+    
+    console.log('[Galeri] 🔍 Loading lightbox:', url.substring(0, 60) + '...');
+    
+    el.lightboxImage.onload = function() {
+        console.log('[Galeri] ✅ Lightbox loaded');
+        applyAspectRatio();
+        el.lightboxImage.style.opacity = '1';
+        el.lightboxImage.alt = foto._displayTitle || `Foto ${currentLightboxIndex + 1}`;
+        el.lightboxLoading.classList.add('hidden');
+    };
+    
+    el.lightboxImage.onerror = function() {
+        console.error('[Galeri] ❌ Lightbox load failed');
+        el.lightboxLoading.classList.add('hidden');
+        el.lightboxImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif"%3EError%3C/text%3E%3C/svg%3E';
+    };
+    
+    el.lightboxImage.src = url;
+    el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
+    el.lightboxTitle.textContent = foto._displayTitle || '';
+}
 
-        function loadLightboxImage() {
-            const foto = currentLightboxPhotos[currentLightboxIndex];
-            if (!foto) return;
+function applyAspectRatio() {
+    const img = el.lightboxImage;
+    const naturalWidth = img.naturalWidth;
+    const naturalHeight = img.naturalHeight;
+    
+    if (!naturalWidth || !naturalHeight) return;
+    
+    const ratio = naturalWidth / naturalHeight;
+    
+    if (ratio > 1) {
+        img.classList.add('landscape');
+    } else if (ratio < 1) {
+        img.classList.add('portrait');
+    }
+}
 
-            el.lightboxLoading.classList.remove('hidden');
-            el.lightboxImage.style.opacity = '0';
-            
-            // Reset classes sebelumnya
-            el.lightboxImage.classList.remove('landscape', 'portrait');
-            el.lightboxImageContainer.classList.remove('landscape-mode', 'portrait-mode');
+function updateLightboxNav() {
+    el.lightboxPrev.disabled = currentLightboxIndex <= 0;
+    el.lightboxNext.disabled = currentLightboxIndex >= currentLightboxPhotos.length - 1;
+}
 
-            // Use multi-method fallback for lightbox - FIXED: no crossOrigin
-            let attempt = 0;
-            const maxAttempts = 6;
-            let isLoading = true;
-            
-            function tryLoadLightbox() {
-                if (!isLoading || attempt >= maxAttempts) return;
-                
-                const url = getPhotoUrl(foto, attempt);
-                if (!url) {
-                    handleLightboxError();
-                    return;
-                }
-                
-                console.log(`[Galeri] 🔍 Lightbox attempt ${attempt + 1}/${maxAttempts}:`, url.substring(0, 100) + '...');
-                
-                // Langsung gunakan lightbox image, bukan test image
-                el.lightboxImage.onload = function() {
-                    if (!isLoading) return;
-                    console.log(`[Galeri] ✅ Lightbox SUCCESS on attempt ${attempt + 1}`);
-                    isLoading = false;
-                    
-                    // Deteksi orientasi dan terapkan rasio yang sesuai
-                    applyAspectRatio();
-                    
-                    el.lightboxImage.style.opacity = '1';
-                    el.lightboxImage.alt = foto._displayTitle || `Foto ${currentLightboxIndex + 1}`;
-                    el.lightboxLoading.classList.add('hidden');
-                };
-                
-                el.lightboxImage.onerror = function() {
-                    if (!isLoading) return;
-                    console.warn(`[Galeri] ❌ Lightbox attempt ${attempt + 1} FAILED`);
-                    attempt++;
-                    
-                    if (attempt < maxAttempts) {
-                        setTimeout(tryLoadLightbox, 100);
-                    } else {
-                        handleLightboxError();
-                    }
-                };
-                
-                // Trigger load
-                el.lightboxImage.src = url;
-            }
-            
-            /**
-             * Deteksi orientasi gambar dan terapkan rasio yang sesuai
-             * - Landscape (lebar > tinggi): Rasio 16:10
-             * - Portrait (tinggi > lebar): Rasio 9:16
-             */
-            function applyAspectRatio() {
-                const img = el.lightboxImage;
-                const container = el.lightboxImageContainer;
-                const naturalWidth = img.naturalWidth;
-                const naturalHeight = img.naturalHeight;
-                
-                if (!naturalWidth || !naturalHeight) {
-                    console.warn('[Galeri] ⚠️ Cannot detect image dimensions, using default');
-                    return;
-                }
-                
-                const ratio = naturalWidth / naturalHeight;
-                console.log(`[Galeri] 📐 Image dimensions: ${naturalWidth}x${naturalHeight}, ratio: ${ratio.toFixed(2)}`);
-                
-                // Hapus class lama
-                img.classList.remove('landscape', 'portrait');
-                container.classList.remove('landscape-mode', 'portrait-mode');
-                
-                // Tentukan orientasi berdasarkan rasio
-                // Landscape: ratio > 1.1 (lebih lebar dari tinggi)
-                // Portrait: ratio < 0.9 (lebih tinggi dari lebar)
-                // Square/around 1: gunakan default
-                
-                if (ratio > 1.1) {
-                    // LANDSCAPE - Terapkan rasio 16:10 (1.6)
-                    console.log('[Galeri] 🖼️ Applying LANDSCAPE mode (16:10)');
-                    img.classList.add('landscape');
-                    container.classList.add('landscape-mode');
-                } else if (ratio < 0.9) {
-                    // PORTRAIT - Terapkan rasio 9:16 (0.5625)
-                    console.log('[Galeri] 📱 Applying PORTRAIT mode (9:16)');
-                    img.classList.add('portrait');
-                    container.classList.add('portrait-mode');
-                } else {
-                    // NEAR SQUARE - Gunakan default (contain)
-                    console.log('[Galeri] 🎯 Applying DEFAULT/SQUARE mode');
-                }
-            }
-            
-            function handleLightboxError() {
-                console.error('[Galeri] ❌ All lightbox attempts failed');
-                isLoading = false;
-                el.lightboxImage.classList.remove('landscape', 'portrait');
-                el.lightboxImageContainer.classList.remove('landscape-mode', 'portrait-mode');
-                el.lightboxImage.alt = 'Foto tidak dapat dimuat';
-                el.lightboxImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="sans-serif" font-size="14"%3EFoto Error%3C/text%3E%3C/svg%3E';
-                el.lightboxLoading.classList.add('hidden');
-            }
-            
-            tryLoadLightbox();
-            el.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
-            
-            // Safety timeout
-            setTimeout(() => {
-                if (isLoading) {
-                    console.warn('[Galeri] ⏰ Lightbox loading timeout');
-                    handleLightboxError();
-                }
-            }, 20000);
-        }
+// Keyboard navigation for lightbox
+document.addEventListener('keydown', (e) => {
+    if (!el.lightbox.classList.contains('active')) return;
+    
+    switch(e.key) {
+        case 'Escape': closeLightbox(); break;
+        case 'ArrowLeft': navigateLightbox(-1); break;
+        case 'ArrowRight': navigateLightbox(1); break;
+    }
+});
 
-        function updateLightboxNav() {
-            el.lightboxPrev.disabled = currentLightboxIndex <= 0;
-            el.lightboxNext.disabled = currentLightboxIndex >= currentLightboxPhotos.length - 1;
-        }
+// ============================================
+// UI HELPERS
+// ============================================
+function showLoading() { el.loadingState.classList.remove('hidden'); }
+function hideLoading() { el.loadingState.classList.add('hidden'); }
+function showError() { el.errorState.classList.remove('hidden'); }
+function hideError() { el.errorState.classList.add('hidden'); }
+function showEmpty() { hideLoading(); hideGallery(); el.emptyState.classList.remove('hidden'); }
+function hideEmpty() { el.emptyState.classList.add('hidden'); }
+function showNoResults() { el.noResultsState.classList.remove('hidden'); }
+function hideNoResults() { el.noResultsState.classList.add('hidden'); }
+function showGallery() { el.galleryContainer.classList.remove('hidden'); }
+function hideGallery() { el.galleryContainer.classList.add('hidden'); }
 
-        function handleKeyboard(e) {
-            if (!el.lightbox.classList.contains('active')) return;
-            switch(e.key) {
-                case 'Escape': closeLightbox(); break;
-                case 'ArrowLeft': navigateLightbox(-1); break;
-                case 'ArrowRight': navigateLightbox(1); break;
-            }
-        }
+function updateResultsCount() {
+    el.resultsInfo.innerHTML = `Menampilkan <strong>${Math.min(displayedCount, filteredActivities.length)}</strong> dari <strong>${filteredActivities.length}</strong> kegiatan`;
+}
 
-        function handleTouchStart(e) { touchStartX = e.changedTouches[0].screenX; }
-        function handleTouchEnd(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) navigateLightbox(diff > 0 ? 1 : -1);
-        }
+function updateStatistics(activities) {
+    let totalFoto = 0;
+    const years = new Set();
+    activities.forEach(act => {
+        totalFoto += (act.foto || []).length;
+        const y = extractYear(act.tanggal) || act.tahun;
+        if (y) years.add(y);
+    });
+    animateNumber(el.totalKegiatan, activities.length);
+    animateNumber(el.totalFoto, totalFoto);
+    animateNumber(el.totalTahun, years.size);
+}
 
-        // UI State Helpers
-        function showLoading() {
-            el.loadingState.classList.remove('hidden');
-            el.skeletonLoader.style.display = 'grid';
-            el.galleryContainer.classList.add('hidden');
-            el.errorState.classList.add('hidden');
-            el.emptyState.classList.add('hidden');
-            el.noResults.classList.add('hidden');
-            el.controlsBar.style.opacity = '0.5';
-            el.controlsBar.style.pointerEvents = 'none';
-        }
+function animateNumber(element, target) {
+    const duration = 1000;
+    const start = performance.now();
+    
+    function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        element.textContent = Math.round(target * ease).toLocaleString('id-ID');
+        if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+}
 
-        function hideLoading() {
-            el.loadingState.classList.add('hidden');
-            el.skeletonLoader.style.display = 'none';
-            el.controlsBar.style.opacity = '1';
-            el.controlsBar.style.pointerEvents = '';
-        }
+// ============================================
+// EVENT LISTENERS
+// ============================================
+el.searchInput.addEventListener('input', debounce(applyFiltersAndRender, 300));
+el.filterTahun.addEventListener('change', applyFiltersAndRender);
+el.sortBy.addEventListener('change', applyFiltersAndRender);
 
-        function hideSkeleton() { el.skeletonLoader.style.display = 'none'; }
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
 
-        function showError(title, message, code, showDetails) {
-            hideLoading(); hideSkeleton(); hideGallery(); hideLoadMore(); hideEmpty(); hideNoResults();
-            el.errorTitle.textContent = title;
-            el.errorText.innerHTML = message;
-            if (code) el.errorCode.textContent = code;
-            el.errorDetails.classList.toggle('hidden', !(showDetails && code));
-            el.errorState.classList.remove('hidden');
-        }
+// ============================================
+// INITIALIZATION
+// ============================================
+console.log('%c🖼️ Galeri Foto SDM Kesehatan - Standalone Version', 'font-size: 18px; font-weight: bold; color: #0d6efd;');
+console.log('%cIntegrated with Cloudinary CDN', 'color: #0891b2;');
+console.log('%cEdit data in <script type="application/json" id="galleryData">', 'color: #f59e0b;');
 
-        function hideError() { el.errorState.classList.add('hidden'); }
-        function showEmpty() { hideLoading(); hideSkeleton(); hideGallery(); hideLoadMore(); el.emptyState.classList.remove('hidden'); }
-        function hideEmpty() { el.emptyState.classList.add('hidden'); }
-        function showGallery() { el.galleryContainer.classList.remove('hidden'); }
-        function hideGallery() { el.galleryContainer.classList.add('hidden'); }
-        function showNoResults() { el.noResults.classList.remove('hidden'); }
-        function hideNoResults() { el.noResults.classList.add('hidden'); }
-        function showLoadMore() { el.loadMoreContainer.classList.remove('hidden'); }
-        function hideLoadMore() { el.loadMoreContainer.classList.add('hidden'); }
+// Start gallery when DOM ready
+document.addEventListener('DOMContentLoaded', initGallery);
 
-        // Utility
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>
+// Also try immediately in case DOM already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initGallery();
+}
+</script>
+
 </body>
 </html>
