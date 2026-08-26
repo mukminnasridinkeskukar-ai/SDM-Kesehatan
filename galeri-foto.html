@@ -990,6 +990,7 @@
         /**
          * Galeri Foto Kegiatan - Dinas Kesehatan Kabupaten Kutai Kartanegara
          * ================================================================
+         * VERSION: Final - Bug Fixed
          */
         const CONFIG = {
             GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxTlXWpsfxGWvw2K4T2NszXrE8a792iLkWA3jd_zprx5-iEFZwc_HPgT_sP_nlTKQ9ziQ/exec",
@@ -1085,6 +1086,8 @@
             hideError();
 
             try {
+                console.log('[Galeri] Fetching from:', CONFIG.GOOGLE_APPS_SCRIPT_URL);
+                
                 const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                     method: 'GET',
                     mode: 'cors',
@@ -1092,9 +1095,12 @@
                     cache: 'no-cache'
                 });
 
+                console.log('[Galeri] Response status:', response.status);
+
                 if (!response.ok) throw new Error(`HTTP_ERROR_${response.status}`);
 
                 const result = await response.json();
+                console.log('[Galeri] Data received:', result.data?.length || 0, 'activities');
 
                 if (!result.success) throw new Error(result.message || 'API_ERROR');
                 if (!result.data?.length) { showEmpty(); return; }
@@ -1105,6 +1111,7 @@
                 applyFiltersAndRender();
 
             } catch (error) {
+                console.error('[Galeri] Error:', error);
                 handleFetchError(error);
             }
         }
@@ -1125,8 +1132,8 @@
                        • Cek URL Google Apps Script sudah benar<br>
                        • Pastikan Apps Script di-deploy dengan akses "Anyone"<br>
                        • Refresh halaman dan coba lagi`;
-            } else if (error.message === 'HTTP_ERROR_404') {
-                msg = '<strong>Endpoint API tidak ditemukan.</strong><br>Cek kembali URL Google Apps Script.';
+            } else if (error.message?.includes('HTTP_ERROR_404')) {
+                msg = `<strong>Endpoint API tidak ditemukan (404).</strong><br>Cek kembali URL Google Apps Script.`;
             } else if (error.message === 'HTTP_ERROR_403') {
                 msg = '<strong>Akses ditolak.</strong><br>Pastikan Apps Script di-deploy dengan akses "Anyone".';
             } else if (error.message === 'HTTP_ERROR_500') {
@@ -1195,12 +1202,12 @@
             return `${parseInt(parts[0])} ${months[parseInt(parts[1]) - 1]} ${parts[2]}`;
         }
 
-        // Filtering & Sorting
+        // Filtering & Sorting - ✅ BUG FIXED
         function applyFiltersAndRender() {
             const search = el.searchInput.value.toLowerCase().trim();
             const tahun = el.filterTahun.value;
             const bulan = el.filterBulan.value;
-            const sort = el.sortBy.value;
+            const sortValue = el.sortBy.value;
 
             filteredActivities = allActivities.filter(act => {
                 const matchSearch = !search || 
@@ -1212,7 +1219,9 @@
                 return matchSearch && matchYear && matchMonth;
             });
 
-            sortActivities(filteredActivities, sort);
+            // ✅ FIXED: Use correct variable name
+            sortActivities(filteredActivities, sortValue);
+            
             displayedCount = 0;
 
             if (!filteredActivities.length && allActivities.length) {
@@ -1223,18 +1232,25 @@
             updateResultsCount();
         }
 
-        function sortActivities(activities, sortBy) {
-            const sorts = {
+        // ✅ BUG FIXED: Changed parameter name from 'sortBy' to 'sortValue' to avoid conflict
+        function sortActivities(activities, sortValue) {
+            const sortFunctions = {
                 terbaru: (a, b) => compareDates(b.tanggal, a.tanggal),
                 terlama: (a, b) => compareDates(a.tanggal, b.tanggal),
                 az: (a, b) => (a.judul || '').localeCompare(b.judul || '', 'id'),
                 za: (a, b) => (b.judul || '').localeCompare(a.judul || '', 'id')
             };
-            if (sorts[sort]) activities.sort(sorts[sort]);
+            
+            // ✅ FIXED: Use sortValue instead of undefined 'sort' variable
+            if (sortFunctions[sortValue]) {
+                activities.sort(sortFunctions[sortValue]);
+            }
         }
 
-        function compareDates(a, b) {
-            return (extractYear(b) || '0').localeCompare(extractYear(a) || '0');
+        function compareDates(dateA, dateB) {
+            const yearA = extractYear(dateA);
+            const yearB = extractYear(dateB);
+            return (yearB || '0').localeCompare(yearA || '0');
         }
 
         function extractYear(dateStr) {
@@ -1363,14 +1379,14 @@
             animateNumber(el.totalTahun, years.size);
         }
 
-        function animateNumber(el, target) {
+        function animateNumber(element, target) {
             const duration = 1000;
             const start = performance.now();
             
             function update(now) {
                 const progress = Math.min((now - start) / duration, 1);
                 const ease = 1 - Math.pow(1 - progress, 3);
-                el.textContent = Math.round(target * ease).toLocaleString('id-ID');
+                element.textContent = Math.round(target * ease).toLocaleString('id-ID');
                 if (progress < 1) requestAnimationFrame(update);
             }
             requestAnimationFrame(update);
