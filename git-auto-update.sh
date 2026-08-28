@@ -8,11 +8,21 @@
 # 3. Commit & push ke Git repository
 
 # Configuration
-REPO_DIR="/home/z/my-project"  # ← Ganti dengan path repository Anda
+REPO_DIR="/home/z/my-project"
 HTML_FILE="download/galeri-foto-standalone.html"
 LOG_FILE="scripts/git-update.log"
-VENV_PYTHON="/home/z/my-project/venv/bin/python"
-PYTHON_SCRIPT="/home/z/my-project/scripts/bento-masonry-gallery-v4.py"  # ← Modern Bento + Masonry v4.0
+# Auto-detect Python (prioritas: venv > system python3 > python)
+if [ -x "$REPO_DIR/venv/bin/python" ]; then
+    VENV_PYTHON="$REPO_DIR/venv/bin/python"
+elif command -v python3 &> /dev/null; then
+    VENV_PYTHON="python3"
+elif command -v python &> /dev/null; then
+    VENV_PYTHON="python"
+else
+    echo "[$TIMESTAMP] ❌ ERROR: Python not found" >> "$REPO_DIR/$LOG_FILE"
+    exit 1
+fi
+PYTHON_SCRIPT="$REPO_DIR/scripts/bento-masonry-gallery-v4.py"
 
 # Get timestamp
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
@@ -57,7 +67,9 @@ if ! git diff --quiet "$HTML_FILE"; then
 ✨ Modern Clean Design"
 
     # Step 5: Push to remote
-    git push origin main  # ← Ganti 'main' dengan branch Anda (main/master)
+    # Auto-detect branch (main or master)
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+    git push origin "$CURRENT_BRANCH"
     
     if [ $? -eq 0 ]; then
         echo "[$TIMESTAMP] ✅ SUCCESS: Committed and pushed to Git!" >> "$REPO_DIR/$LOG_FILE"
