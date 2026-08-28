@@ -1,0 +1,3435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Kegiatan - Dinas Kesehatan</title>
+    
+    <!-- Cloudinary SDK -->
+    <script src="https://upload.cloudinary.com/global/all.js" type="texttext/javascript"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           CSS VARIABLES & ROOT
+        ============================================ */
+        :root {
+            /* Colors - Light Mode */
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --border-color: #e5e5e5;
+            --overlay-dark: rgba(0, 0, 0, 0.7);
+            --overlay-light: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Playfair Display', Georgia, serif;
+            
+            /* Spacing */
+            --nav-height: 70px;
+            --container-max: 1400px;
+            
+            /* Transitions */
+            --transition-fast: 200ms ease-out;
+            --transition-base: 300ms ease-out;
+            --transition-slow: 500ms ease-out;
+            --transition-slower: 700ms ease-out;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --accent-color: #3b82f6;
+            --accent-hover: #60a5fa;
+            --border-color: #2a2a2a;
+            --overlay-dark: rgba(0, 0, 0, 0.85);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* ============================================
+           RESET & BASE
+        ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color var(--transition-slow), color var(--transition-slow);
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color var(--transition-fast);
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: inherit;
+        }
+        
+        input, select, textarea {
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        /* Photo Protection */
+        .gallery-photo,
+        .lightbox-image,
+        .filmstrip-thumb img,
+        .hero-bg-img {
+            -webkit-user-drag: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .gallery-photo,
+        .lightbox-image {
+            context-menu: none;
+        }
+        
+        /* ============================================
+           NAVBAR
+        ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            z-index: 1000;
+            transition: all var(--transition-base);
+            background: transparent;
+        }
+        
+        .navbar.scrolled {
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .navbar-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--accent-color);
+        }
+        
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .navbar-nav a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color var(--transition-fast);
+        }
+        
+        .navbar-nav a:hover,
+        .navbar-nav a.active {
+            color: var(--text-primary);
+        }
+        
+        .navbar-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width var(--transition-base);
+        }
+        
+        .navbar-nav a:hover::after,
+        .navbar-nav a.active::after {
+            width: 100%;
+        }
+        
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            background: var(--bg-tertiary);
+        }
+        
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+        
+        .search-btn svg,
+        .theme-btn svg,
+        .admin-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all var(--transition-base);
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-nav {
+                position: fixed;
+                top: var(--nav-height);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateX(100%);
+                transition: transform var(--transition-slow);
+            }
+            
+            .navbar-nav.open {
+                transform: translateX(0);
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .navbar-container {
+                padding: 0 1rem;
+            }
+        }
+        
+        /* ============================================
+           HERO SECTION
+        ============================================ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        
+        .hero-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+        
+        @keyframes heroZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.4) 0%,
+                rgba(0, 0, 0, 0.6) 50%,
+                rgba(0, 0, 0, 0.8) 100%
+            );
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero-institution {
+            font-size: 0.95rem;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all var(--transition-base);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-cta svg {
+            width: 20px;
+            height: 20px;
+            transition: transform var(--transition-fast);
+        }
+        
+        .hero-cta:hover svg {
+            transform: translateX(5px);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        .scroll-indicator span {
+            display: block;
+            width: 24px;
+            height: 38px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            position: relative;
+        }
+        
+        .scroll-indicator span::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: white;
+            border-radius: 2px;
+            animation: scrollWheel 2s ease-in-out infinite;
+        }
+        
+        @keyframes scrollWheel {
+            0%, 100% { opacity: 1; top: 6px; }
+            50% { opacity: 0.3; top: 18px; }
+        }
+        
+        /* ============================================
+           FILTER SECTION
+        ============================================ */
+        .filter-section {
+            position: sticky;
+            top: var(--nav-height);
+            z-index: 100;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            transition: all var(--transition-base);
+        }
+        
+        .filter-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            border-radius: 50px;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+        
+        .filter-btn:hover {
+            color: var(--text-primary);
+            background: var(--border-color);
+        }
+        
+        .filter-btn.active {
+            color: white;
+            background: var(--accent-color);
+        }
+        
+        .search-box {
+            position: relative;
+            margin-left: auto;
+        }
+        
+        .search-input {
+            width: 250px;
+            padding: 0.65rem 1rem 0.65rem 2.75rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-section {
+                padding: 0.75rem 0;
+            }
+            
+            .filter-container {
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+            
+            .filter-group {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .search-box {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+        }
+        
+        /* ============================================
+           FEATURED EVENT
+        ============================================ */
+        .featured-event {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+        
+        .featured-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+        }
+        
+        .featured-header {
+            margin-bottom: 3rem;
+        }
+        
+        .event-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+        
+        .event-title-main {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .event-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        
+        .featured-image-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            aspect-ratio: 16/9;
+            cursor: pointer;
+            transition: transform var(--transition-slow);
+        }
+        
+        .featured-image-wrapper:hover {
+            transform: scale(1.01);
+        }
+        
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+        
+        .featured-image-wrapper:hover .featured-image {
+            transform: scale(1.03);
+        }
+        
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 3rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+        }
+        
+        .featured-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .meta-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+        }
+        
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .photo-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .featured-event {
+                padding: 3rem 1rem;
+            }
+            
+            .featured-overlay {
+                padding: 1.5rem;
+            }
+            
+            .featured-meta {
+                gap: 1rem;
+            }
+        }
+        
+        /* ============================================
+           HORIZONTAL GALLERY
+        ============================================ */
+        .gallery-section {
+            padding: 4rem 0;
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+        
+        .gallery-header {
+            max-width: var(--container-max);
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .gallery-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+        
+        .gallery-counter {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .gallery-counter .current {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .horizontal-gallery {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .gallery-track {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 4rem;
+            cursor: grab;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        
+        .gallery-track::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .gallery-track.dragging {
+            cursor: grabbing;
+            scroll-snap-type: none;
+        }
+        
+        .gallery-slide {
+            flex-shrink: 0;
+            position: relative;
+            transition: all var(--transition-slow);
+            scroll-snap-align: center;
+        }
+        
+        .gallery-slide.active {
+            transform: scale(1.05);
+        }
+        
+        .gallery-photo-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-slow);
+        }
+        
+        .gallery-slide.active .gallery-photo-wrapper {
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .gallery-photo {
+            display: block;
+            object-fit: cover;
+            transition: all var(--transition-slow);
+        }
+        
+        .gallery-slide:not(.active) .gallery-photo {
+            opacity: 0.7;
+            filter: brightness(0.9);
+        }
+        
+        .gallery-slide.active .gallery-photo {
+            opacity: 1;
+            filter: brightness(1);
+        }
+        
+        .gallery-photo-wrapper:hover .gallery-photo {
+            transform: scale(1.03);
+        }
+        
+        /* Gallery Navigation Arrows */
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        
+        .gallery-nav.prev {
+            left: 1rem;
+        }
+        
+        .gallery-nav.next {
+            right: 1rem;
+        }
+        
+        .gallery-nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+        
+        .gallery-nav-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .gallery-nav-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Progress Bar */
+        .gallery-progress {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .progress-bar {
+            height: 3px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #60a5fa);
+            border-radius: 3px;
+            transition: width var(--transition-fast);
+        }
+        
+        /* Gallery Sizes */
+        .gallery-slide {
+            width: 450px;
+            height: 300px;
+        }
+        
+        .gallery-slide.active {
+            width: 550px;
+            height: 370px;
+        }
+        
+        .gallery-photo {
+            width: 100%;
+            height: 100%;
+        }
+        
+        @media (max-width: 1024px) {
+            .gallery-slide {
+                width: 350px;
+                height: 240px;
+            }
+            
+            .gallery-slide.active {
+                width: 420px;
+                height: 290px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-track {
+                padding: 1rem 2rem;
+                gap: 1rem;
+            }
+            
+            .gallery-slide {
+                width: 280px;
+                height: 200px;
+            }
+            
+            .gallery-slide.active {
+                width: 320px;
+                height: 230px;
+            }
+            
+            .gallery-nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .gallery-nav-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        
+        /* ============================================
+           FILMSTRIP
+        ============================================ */
+        .filmstrip-section {
+            padding: 2rem 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .filmstrip-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .filmstrip-track {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .filmstrip-track::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .filmstrip-track::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .filmstrip-track::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        .filmstrip-item {
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .filmstrip-thumb {
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            transition: all var(--transition-fast);
+            opacity: 0.6;
+        }
+        
+        .filmstrip-item.active .filmstrip-thumb {
+            border-color: var(--accent-color);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .filmstrip-item:hover .filmstrip-thumb {
+            opacity: 1;
+            border-color: var(--text-muted);
+        }
+        
+        .filmstrip-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .filmstrip-number {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 0.35rem;
+        }
+        
+        .filmstrip-item.active .filmstrip-number {
+            color: var(--accent-color);
+        }
+        
+        /* ============================================
+           EVENT STORY / INFO
+        ============================================ */
+        .event-story {
+            padding: 6rem 2rem;
+            background: var(--bg-primary);
+        }
+        
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .story-header {
+            margin-bottom: 3rem;
+        }
+        
+        .story-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .story-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .story-date-location {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .story-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 3rem 0;
+        }
+        
+        .story-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .story-description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .next-event-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 3rem;
+            padding: 1rem 2rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all var(--transition-base);
+        }
+        
+        .next-event-link:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .next-event-link svg {
+            width: 20px;
+            height: 20px;
+            transition: transform var(--transition-fast);
+        }
+        
+        .next-event-link:hover svg {
+            transform: translateX(5px);
+        }
+        
+        /* ============================================
+           LIGHTBOX
+        ============================================ */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+        }
+        
+        .lightbox.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all var(--transition-fast);
+        }
+        
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .lightbox-close svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.1em;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            width: 90vw;
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-image-wrapper {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+            cursor: grab;
+        }
+        
+        .lightbox-image-wrapper.zoomed {
+            cursor: move;
+        }
+        
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            transition: transform var(--transition-fast);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            z-index: 10;
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-nav.prev {
+            left: 2rem;
+        }
+        
+        .lightbox-nav.next {
+            right: 2rem;
+        }
+        
+        .lightbox-nav svg {
+            width: 28px;
+            height: 28px;
+        }
+        
+        .lightbox-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            color: white;
+            text-align: center;
+        }
+        
+        .lightbox-event-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .lightbox-event-meta {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .lightbox-controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 10;
+        }
+        
+        .lightbox-control-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .lightbox-control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .lightbox-control-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .lightbox-content {
+                width: 100vw;
+                height: 100vh;
+            }
+            
+            .lightbox-image {
+                max-height: 80vh;
+            }
+            
+            .lightbox-nav {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .lightbox-nav.prev {
+                left: 0.75rem;
+            }
+            
+            .lightbox-nav.next {
+                right: 0.75rem;
+            }
+            
+            .lightbox-caption {
+                padding: 1.5rem 1rem;
+            }
+            
+            .lightbox-controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+        
+        /* ============================================
+           ADMIN PANEL
+        ============================================ */
+        .admin-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            padding: 1rem;
+        }
+        
+        .admin-modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .admin-panel {
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            transform: scale(0.95) translateY(20px);
+            transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-modal.open .admin-panel {
+            transform: scale(1) translateY(0);
+        }
+        
+        .admin-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .admin-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .admin-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .admin-close:hover {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .admin-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        
+        .admin-tab {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: transparent;
+            border-radius: 8px;
+            transition: all var(--transition-fast);
+        }
+        
+        .admin-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+        
+        .admin-tab.active {
+            color: var(--accent-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+        
+        /* Upload Form */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .form-select,
+        .form-input {
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+        
+        .form-select:focus,
+        .form-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .dropzone {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: var(--bg-tertiary);
+        }
+        
+        .dropzone:hover,
+        .dropzone.dragover {
+            border-color: var(--accent-color);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .dropzone-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            color: var(--text-muted);
+        }
+        
+        .dropzone-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dropzone-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .dropzone-input {
+            display: none;
+        }
+        
+        /* Preview Grid */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-tertiary);
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-remove {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .preview-item:hover .preview-remove {
+            opacity: 1;
+        }
+        
+        /* Progress */
+        .upload-progress {
+            margin-top: 1rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-track {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill-upload {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #60a5fa);
+            border-radius: 4px;
+            transition: width var(--transition-fast);
+        }
+        
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Manage Photos */
+        .manage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .manage-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: grab;
+            background: var(--bg-tertiary);
+            border: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .manage-item.featured {
+            border-color: #f59e0b;
+        }
+        
+        .manage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .manage-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .manage-item:hover .manage-item-overlay {
+            opacity: 1;
+        }
+        
+        .manage-action-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+        
+        .manage-action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .manage-action-btn.delete:hover {
+            background: #ef4444;
+        }
+        
+        .drag-handle {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            padding: 0.25rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            cursor: grab;
+        }
+        
+        /* ============================================
+           LOADING STATE
+        ============================================ */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+        
+        /* ============================================
+           EMPTY STATE
+        ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* ============================================
+           TOAST NOTIFICATION
+        ============================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 11000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .toast {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInRight 0.3s ease-out;
+            border-left: 4px solid var(--accent-color);
+            max-width: 360px;
+        }
+        
+        .toast.success {
+            border-left-color: #22c55e;
+        }
+        
+        .toast.error {
+            border-left-color: #ef4444;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* ============================================
+           UTILITIES
+        ============================================ */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         NAVBAR
+    ============================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">
+                GALERI <span>KEGIATAN</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbarNav">
+                <li><a href="#beranda" class="active">Beranda</a></li>
+                <li><a href="#kegiatan">Kegiatan</a></li>
+                <li><a href="#tahun">Tahun</a></li>
+                <li><a href="#kategori">Kategori</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <button class="nav-btn search-btn" id="searchToggle" aria-label="Search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>
+                <button class="nav-btn theme-btn" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <button class="nav-btn admin-btn" id="adminToggle" aria-label="Admin Panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </button>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO SECTION
+    ============================================ -->
+    <section class="hero" id="beranda">
+        <div class="hero-background">
+            <img src="" alt="" class="hero-bg-img" id="heroImage">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <p class="hero-label">Dokumentasi Visual</p>
+            <h1 class="hero-title">Galeri Kegiatan</h1>
+            <p class="hero-subtitle">Dinas Kesehatan Provinsi</p>
+            <p class="hero-institution">Mencatat Setiap Momen Berharga</p>
+            <a href="#kegiatan" class="hero-cta">
+                Explore Gallery
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FILTER SECTION
+    ============================================ -->
+    <section class="filter-section" id="filters">
+        <div class="filter-container">
+            <div class="filter-group">
+                <span class="filter-label">Tahun</span>
+                <div class="filter-options" id="yearFilters">
+                    <button class="filter-btn active" data-year="all">Semua</button>
+                    <button class="filter-btn" data-year="2026">2026</button>
+                    <button class="filter-btn" data-year="2025">2025</button>
+                    <button class="filter-btn" data-year="2024">2024</button>
+                    <button class="filter-btn" data-year="2023">2023</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Kategori</span>
+                <div class="filter-options" id="categoryFilters">
+                    <button class="filter-btn active" data-category="all">Semua</button>
+                    <button class="filter-btn" data-category="pelatihan">Pelatihan</button>
+                    <button class="filter-btn" data-category="bimtek">Bimtek</button>
+                    <button class="filter-btn" data-category="sosialisasi">Sosialisasi</button>
+                    <button class="filter-btn" data-category="rapat">Rapat</button>
+                    <button class="filter-btn" data-category="kunjungan">Kunjungan</button>
+                    <button class="filter-btn" data-category="lainnya">Lainnya</button>
+                </div>
+            </div>
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input type="text" class="search-input" placeholder="Cari kegiatan..." id="searchInput">
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         MAIN CONTENT
+    ============================================ -->
+    <main id="mainContent">
+        <!-- Featured Event -->
+        <section class="featured-event" id="featuredEvent">
+            <div class="featured-container">
+                <div class="featured-header">
+                    <p class="event-number" id="eventNumber">01</p>
+                    <h2 class="event-title-main" id="eventTitle">Memuat Kegiatan...</h2>
+                    <p class="event-subtitle" id="eventSubtitle"></p>
+                </div>
+                <div class="featured-image-wrapper" id="featuredWrapper">
+                    <img src="" alt="" class="featured-image" id="featuredImage">
+                    <div class="featured-overlay">
+                        <div class="featured-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Tanggal</span>
+                                <span class="meta-value" id="featuredDate">-</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Lokasi</span>
+                                <span class="meta-value" id="featuredLocation">-</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="photo-count-badge">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                    <span id="featuredPhotoCount">0</span> Foto
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horizontal Gallery -->
+        <section class="gallery-section" id="kegiatan">
+            <div class="gallery-header">
+                <h3 class="gallery-title">Dokumentasi Foto</h3>
+                <p class="gallery-counter">
+                    <span class="current" id="currentPhoto">01</span> 
+                    <span id="totalPhotos">── 00</span>
+                </p>
+            </div>
+            
+            <div class="horizontal-gallery">
+                <button class="gallery-nav prev" id="galleryPrev">
+                    <button class="gallery-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+                </button>
+                
+                <div class="gallery-track" id="galleryTrack">
+                    <!-- Photos will be injected here -->
+                </div>
+                
+                <button class="gallery-nav next" id="galleryNext">
+                    <button class="gallery-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </button>
+            </div>
+            
+            <div class="gallery-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="galleryProgress" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filmstrip -->
+        <section class="filmstrip-section">
+            <div class="filmstrip-container">
+                <div class="filmstrip-track" id="filmstripTrack">
+                    <!-- Thumbnails will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Story -->
+        <section class="event-story" id="eventStory">
+            <div class="story-container">
+                <div class="story-header">
+                    <p class="story-number" id="storyNumber">01</p>
+                    <h2 class="story-title" id="storyTitle">Memuat...</h2>
+                    <div class="story-date-location">
+                        <span id="storyDate">-</span>
+                        <span id="storyLocation">-</span>
+                    </div>
+                </div>
+                
+                <div class="story-divider"></div>
+                
+                <div class="story-stats">
+                    <div class="stat-card">
+                        <p class="stat-value" id="statPhotos">0</p>
+                        <p class="stat-label">Dokumentasi Foto</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-value" id="statCategory">-</p>
+                        <p class="stat-label">Kategori</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-value" id="statYear">-</p>
+                        <p class="stat-label">Tahun</p>
+                    </div>
+                </div>
+                
+                <div class="story-description" id="storyDescription">
+                    <p>Memuat deskripsi kegiatan...</p>
+                </div>
+                
+                <a href="#" class="next-event-link" id="nextEventLink">
+                    Next Event
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================
+         LIGHTBOX
+    ============================================ -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        
+        <p class="lightbox-counter" id="lightboxCounter">01 / 00</p>
+        
+        <div class="lightbox-content">
+            <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+            
+            <div class="lightbox-image-wrapper" id="lightboxImageWrapper">
+                <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            </div>
+            
+            <button class="lightbox-nav next" id="lightboxNext" aria-label="Next">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="lightbox-caption">
+            <p class="lightbox-event-title" id="lightboxEventTitle"></p>
+            <p class="lightbox-event-meta" id="lightboxEventMeta"></p>
+        </div>
+        
+        <div class="lightbox-controls">
+            <button class="lightbox-control-btn" id="zoomOut" aria-label="Zoom Out">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="8" y1="11" x2="14" y2="11"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+            <button class="lightbox-control-btn" id="zoomReset" aria-label="Reset Zoom">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            </button>
+            <button class="lightbox-control-btn" id="zoomIn" aria-label="Zoom In">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="11" y1="8" x2="11" y2="14"/>
+                    <line x1="8" y1="11" x2="14" y2="11"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================
+         ADMIN MODAL
+    ============================================ -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2 class="admin-title">Panel Admin</h2>
+                <button class="admin-close" id="adminClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="admin-body">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="upload">Upload Foto</button>
+                    <button class="admin-tab" data-tab="manage">Kelola Foto</button>
+                </div>
+                
+                <!-- Upload Tab -->
+                <div class="tab-content" id="uploadTab">
+                    <form class="upload-form" id="uploadForm">
+                        <div class="form-group">
+                            <label class="form-label">Pilih Kegiatan</label>
+                            <select class="form-select" id="eventSelect" required>
+                                <option value="">-- Pilih Kegiatan --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tahun Kegiatan</label>
+                            <select class="form-select" id="yearSelect" required>
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Kategori</label>
+                            <select class="form-select" id="categorySelect" required>
+                                <option value="pelatihan">Pelatihan</option>
+                                <option value="bimtek">Bimtek</option>
+                                <option value="sosialisasi">Sosialisasi</option>
+                                <option value="rapat">Rapat</option>
+                                <option value="kunjungan">Kunjungan</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        
+                        <div class="dropzone" id="dropzone">
+                            <input type="file" class="dropzone-input" id="fileInput" multiple accept="image/*">
+                            <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <p class="dropzone-text">Drag & Drop Foto di Sini</p>
+                            <p class="dropzone-hint">atau klik untuk memilih file</p>
+                        </div>
+                        
+                        <div class="preview-grid" id="previewGrid"></div>
+                        
+                        <div class="upload-progress hidden" id="uploadProgress">
+                            <div class="progress-header">
+                                <span id="uploadStatus">Mengunggah...</span>
+                                <span id="uploadPercent">0%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-upload" id="uploadProgressFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="uploadBtn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Upload ke Cloudinary
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Manage Tab -->
+                <div class="tab-content hidden" id="manageTab">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Pilih Kegiatan untuk Dikelola</label>
+                        <select class="form-select" id="manageEventSelect">
+                            <option value="">-- Pilih Kegiatan --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="manage-grid" id="manageGrid">
+                        <!-- Managed photos will appear here -->
+                    </div>
+                    
+                    <p class="empty-state hidden" id="manageEmpty">
+                        <span class="empty-title">Pilih kegiatan untuk melihat foto</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================
+         JAVASCRIPT
+    ============================================ -->
+    <script>
+        // ============================================
+        // CLOUDINARY CONFIGURATION
+        // ============================================
+        const CLOUDINARY_CONFIG = {
+            cloudName: 'cla7jrww',
+            uploadPreset: 'galeri_kegiatan',
+            baseFolder: 'galeri-kegiatan'
+        };
+
+        // Generate Cloudinary URL with transformations
+        function getCloudinaryUrl(publicId, options = {}) {
+            const {
+                width = 800,
+                height = 600,
+                quality = 'auto',
+                format = 'auto',
+                crop = 'fill'
+            } = options;
+            
+            return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_${width},h_${height},q_${quality},f_${format},c_${crop}/${publicId}`;
+        }
+
+        // Get thumbnail URL
+        function getThumbnailUrl(publicId) {
+            return getCloudinaryUrl(publicId, { width: 160, height: 120, quality: 'auto:good' });
+        }
+
+        // Get full resolution URL for lightbox
+        function getFullSizeUrl(publicId) {
+            return getCloudinaryUrl(publicId, { width: 1920, height: 1080, quality: 'auto:good' });
+        }
+
+        // ============================================
+        // APPLICATION STATE
+        // ============================================
+        const state = {
+            events: [],
+            currentEventIndex: 0,
+            currentPhotoIndex: 0,
+            photos: [],
+            filteredEvents: [],
+            selectedFiles: [],
+            theme: localStorage.getItem('theme') || 'light',
+            lightboxOpen: false,
+            zoomLevel: 1,
+            isDragging: false,
+            startX: 0,
+            scrollLeft: 0
+        };
+
+        // ============================================
+        // SAMPLE DATA (Will be replaced with Cloudinary API)
+        // ============================================
+        const sampleEvents = [
+            {
+                id: 'evt-001',
+                title: 'Sosialisasi Platform Digital Pengelolaan SDM Kesehatan',
+                subtitle: 'Peningkatan Kompetensi Digital',
+                date: '25 Agustus 2026',
+                location: 'Tenggarong',
+                year: '2026',
+                category: 'sosialisasi',
+                description: 'Kegiatan sosialisasi platform digital untuk pengelolaan sumber daya manusia kesehatan di wilayah Kutai Kartanegara. Acara ini dihadiri oleh para tenaga kesehatan dari berbagai puskesmas dan rumah sakit se-Kaltim.',
+                photoCount: 38,
+                featuredPhoto: 'galeri-kegiatan/2026/sosialisasi-sdmk/featured',
+                folder: 'galeri-kegiatan/2026/sosialisasi-sdmk'
+            },
+            {
+                id: 'evt-002',
+                title: 'Bimtek Implementasi Standar Akreditasi',
+                subtitle: 'Peningkatan Mutu Pelayanan',
+                date: '18 Agustus 2026',
+                location: 'Balikpapan',
+                year: '2026',
+                category: 'bimtek',
+                description: 'Bimbingan teknis implementasi standar akreditasi fasilitas kesehatan tingkat pertama. Peserta berasal dari berbagai FKTP se-Provinsi Kalimantan Timur.',
+                photoCount: 52,
+                featuredPhoto: 'galeri-kegiatan/2026/bimtek/featured',
+                folder: 'galeri-kegiatan/2026/bimtek'
+            },
+            {
+                id: 'evt-003',
+                title: 'Pelatihan Penanganan Darurat Medis',
+                subtitle: 'Emergency Response Training',
+                date: '10 Agustus 2026',
+                location: 'Samarinda',
+                year: '2026',
+                category: 'pelatihan',
+                description: 'Pelatihan penanganan darurat medis untuk tim penanggulangan bencana daerah. Meliputi simulasi evakuasi, P3K lanjutan, dan koordinasi dengan rumah sakit rujukan.',
+                photoCount: 45,
+                featuredPhoto: 'galeri-kegiatan/2026/pelatihan/featured',
+                folder: 'galeri-kegiatan/2026/pelatihan'
+            },
+            {
+                id: 'evt-004',
+                title: 'Rapat Koordinasi Program Prioritas',
+                subtitle: 'Evaluasi Semester I Tahun 2026',
+                date: '5 Juli 2026',
+                location: 'Samarinda',
+                year: '2026',
+                category: 'rapat',
+                description: 'Rapat koordinasi evaluasi program prioritas Dinas Kesehatan semester I tahun 2026. Membahas capaian, kendala, dan strategi percepatan program.',
+                photoCount: 24,
+                featuredPhoto: 'galeri-kegiatan/2026/rapat/featured',
+                folder: 'galeri-kegiatan/2026/rapat'
+            },
+            {
+                id: 'evt-005',
+                title: 'Kunjungan Kerja ke Puskesmas Terpencil',
+                subtitle: 'Supervisi dan Pembinaan',
+                date: '28 Juni 2026',
+                location: 'Mahakam Ulu',
+                year: '2026',
+                category: 'kunjungan',
+                description: 'Kunjungan kerja kepala dinas ke puskesmas terpencil di wilayah Mahakam Ulu untuk melakukan supervisi dan pembinaan pelayanan kesehatan dasar.',
+                photoCount: 33,
+                featuredPhoto: 'galeri-kegiatan/2026/kunjungan/featured',
+                folder: 'galeri-kegiatan/2026/kunjungan'
+            }
+        ];
+
+        // Sample photos for demo (using placeholder)
+        function generateSamplePhotos(eventFolder, count) {
+            const photos = [];
+            for (let i = 1; i <= count; i++) {
+                photos.push({
+                    id: `photo-${i}`,
+                    publicId: `${eventFolder}/photo-${String(i).padStart(3, '0')}`,
+                    caption: `Dokumentasi kegiatan - Foto ${i}`,
+                    sortOrder: i,
+                    width: 1920,
+                    height: 1280,
+                    format: 'jpg'
+                });
+            }
+            return photos;
+        }
+
+        // Initialize events with sample data
+        state.events = sampleEvents.map(event => ({
+            ...event,
+            photos: generateSamplePhotos(event.folder, event.photoCount)
+        }));
+        state.filteredEvents = [...state.events];
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const elements = {
+            navbar: document.getElementById('navbar'),
+            navbarNav: document.getElementById('navbarNav'),
+            mobileMenuToggle: document.getElementById('mobileMenuToggle'),
+            themeToggle: document.getElementById('themeToggle'),
+            adminToggle: document.getElementById('adminToggle'),
+            searchToggle: document.getElementById('searchToggle'),
+            heroImage: document.getElementById('heroImage'),
+            eventNumber: document.getElementById('eventNumber'),
+            eventTitle: document.getElementById('eventTitle'),
+            eventSubtitle: document.getElementById('eventSubtitle'),
+            featuredWrapper: document.getElementById('featuredWrapper'),
+            featuredImage: document.getElementById('featuredImage'),
+            featuredDate: document.getElementById('featuredDate'),
+            featuredLocation: document.getElementById('featuredLocation'),
+            featuredPhotoCount: document.getElementById('featuredPhotoCount'),
+            galleryTrack: document.getElementById('galleryTrack'),
+            galleryPrev: document.getElementById('galleryPrev'),
+            galleryNext: document.getElementById('galleryNext'),
+            currentPhoto: document.getElementById('currentPhoto'),
+            totalPhotos: document.getElementById('totalPhotos'),
+            galleryProgress: document.getElementById('galleryProgress'),
+            filmstripTrack: document.getElementById('filmstripTrack'),
+            storyNumber: document.getElementById('storyNumber'),
+            storyTitle: document.getElementById('storyTitle'),
+            storyDate: document.getElementById('storyDate'),
+            storyLocation: document.getElementById('storyLocation'),
+            statPhotos: document.getElementById('statPhotos'),
+            statCategory: document.getElementById('statCategory'),
+            statYear: document.getElementById('statYear'),
+            storyDescription: document.getElementById('storyDescription'),
+            nextEventLink: document.getElementById('nextEventLink'),
+            lightbox: document.getElementById('lightbox'),
+            lightboxClose: document.getElementById('lightboxClose'),
+            lightboxCounter: document.getElementById('lightboxCounter'),
+            lightboxImage: document.getElementById('lightboxImage'),
+            lightboxImageWrapper: document.getElementById('lightboxImageWrapper'),
+            lightboxPrev: document.getElementById('lightboxPrev'),
+            lightboxNext: document.getElementById('lightboxNext'),
+            lightboxEventTitle: document.getElementById('lightboxEventTitle'),
+            lightboxEventMeta: document.getElementById('lightboxEventMeta'),
+            zoomIn: document.getElementById('zoomIn'),
+            zoomOut: document.getElementById('zoomOut'),
+            zoomReset: document.getElementById('zoomReset'),
+            adminModal: document.getElementById('adminModal'),
+            adminClose: document.getElementById('adminClose'),
+            uploadForm: document.getElementById('uploadForm'),
+            eventSelect: document.getElementById('eventSelect'),
+            manageEventSelect: document.getElementById('manageEventSelect'),
+            dropzone: document.getElementById('dropzone'),
+            fileInput: document.getElementById('fileInput'),
+            previewGrid: document.getElementById('previewGrid'),
+            uploadProgress: document.getElementById('uploadProgress'),
+            uploadProgressFill: document.getElementById('uploadProgressFill'),
+            uploadPercent: document.getElementById('uploadPercent'),
+            uploadBtn: document.getElementById('uploadBtn'),
+            manageGrid: document.getElementById('manageGrid'),
+            searchInput: document.getElementById('searchInput'),
+            yearFilters: document.getElementById('yearFilters'),
+            categoryFilters: document.getElementById('categoryFilters'),
+            toastContainer: document.getElementById('toastContainer')
+        };
+
+        // ============================================
+        // THEME MANAGEMENT
+        // ============================================
+        function initTheme() {
+            if (state.theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                updateThemeIcons();
+            }
+        }
+
+        function toggleTheme() {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', state.theme);
+            localStorage.setItem('theme', state.theme);
+            updateThemeIcons();
+        }
+
+        function updateThemeIcons() {
+            const sunIcon = elements.themeToggle.querySelector('.sun-icon');
+            const moonIcon = elements.themeToggle.querySelector('.moon-icon');
+            
+            if (state.theme === 'dark') {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
+
+        // ============================================
+        // NAVBAR FUNCTIONALITY
+        // ============================================
+        function handleScroll() {
+            if (window.scrollY > 50) {
+                elements.navbar.classList.add('scrolled');
+            } else {
+                elements.navbar.classList.remove('scrolled');
+            }
+        }
+
+        function toggleMobileMenu() {
+            elements.navbarNav.classList.toggle('open');
+        }
+
+        // ============================================
+        // EVENT RENDERING
+        // ============================================
+        function renderCurrentEvent() {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            // Update hero image (use placeholder or actual Cloudinary image)
+            const heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
+            elements.heroImage.src = heroUrl;
+            elements.heroImage.alt = event.title;
+
+            // Update featured section
+            elements.eventNumber.textContent = String(state.currentEventIndex + 1).padStart(2, '0');
+            elements.eventTitle.textContent = event.title;
+            elements.eventSubtitle.textContent = event.subtitle || '';
+            
+            const featuredUrl = `https://picsum.photos/seed/${event.featuredPhoto}/1600/900`;
+            elements.featuredImage.src = featuredUrl;
+            elements.featuredImage.alt = event.title;
+            elements.featuredDate.textContent = event.date;
+            elements.featuredLocation.textContent = event.location;
+            elements.featuredPhotoCount.textContent = event.photoCount;
+
+            // Update story section
+            elements.storyNumber.textContent = String(state.currentEventIndex + 1).padStart(2, '0');
+            elements.storyTitle.textContent = event.title;
+            elements.storyDate.textContent = event.date;
+            elements.storyLocation.textContent = event.location;
+            elements.statPhotos.textContent = event.photoCount;
+            elements.statCategory.textContent = event.category.charAt(0).toUpperCase() + event.category.slice(1);
+            elements.statYear.textContent = event.year;
+            elements.storyDescription.innerHTML = `<p>${event.description}</p>`;
+
+            // Update next event link
+            const nextIndex = state.currentEventIndex + 1;
+            if (nextIndex < state.filteredEvents.length) {
+                const nextEvent = state.filteredEvents[nextIndex];
+                elements.nextEventLink.style.display = 'inline-flex';
+                elements.nextEventLink.innerHTML = `
+                    ${nextEvent.title.substring(0, 30)}...
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                `;
+                elements.nextEventLink.onclick = () => goToEvent(nextIndex);
+            } else {
+                elements.nextEventLink.style.display = 'none';
+            }
+
+            // Render gallery
+            renderGallery(event.photos);
+            renderFilmstrip(event.photos);
+
+            // Reset current photo index
+            state.currentPhotoIndex = 0;
+            updateGalleryState();
+        }
+
+        function goToEvent(index) {
+            if (index >= 0 && index < state.filteredEvents.length) {
+                state.currentEventIndex = index;
+                
+                // Add fade transition
+                const mainContent = document.getElementById('mainContent');
+                mainContent.style.opacity = '0';
+                mainContent.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    renderCurrentEvent();
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                    
+                    // Scroll to featured section
+                    document.getElementById('featuredEvent').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        // ============================================
+        // HORIZONTAL GALLERY
+        // ============================================
+        function renderGallery(photos) {
+            elements.galleryTrack.innerHTML = '';
+            
+            photos.forEach((photo, index) => {
+                const slide = document.createElement('div');
+                slide.className = `gallery-slide ${index === 0 ? 'active' : ''}`;
+                slide.dataset.index = index;
+                
+                // Use placeholder images for demo
+                const imageUrl = `https://picsum.photos/seed/${photo.publicId}/550/370`;
+                
+                slide.innerHTML = `
+                    <div class="gallery-photo-wrapper">
+                        <img 
+                            src="${imageUrl}" 
+                            alt="${photo.caption}" 
+                            class="gallery-photo"
+                            loading="${index < 3 ? 'eager' : 'lazy'}"
+                            data-public-id="${photo.publicId}"
+                        >
+                    </div>
+                `;
+                
+                slide.addEventListener('click', () => openLightbox(index));
+                elements.galleryTrack.appendChild(slide);
+            });
+
+            // Update counter
+            elements.totalPhotos.textContent = `── ${String(photos.length).padStart(2, '0')}`;
+            
+            // Initialize drag scrolling
+            initGalleryDrag();
+        }
+
+        function initGalleryDrag() {
+            const track = elements.galleryTrack;
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.classList.add('dragging');
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.classList.remove('dragging');
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.classList.remove('dragging');
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeft - walk;
+            });
+
+            // Mouse wheel horizontal scroll
+            track.addEventListener('wheel', (e) => {
+                if (e.shiftKey || e.deltaY !== 0) {
+                    e.preventDefault();
+                    track.scrollLeft += e.deltaY || e.deltaX;
+                    updateActiveSlide();
+                }
+            }, { passive: false });
+        }
+
+        function updateActiveSlide() {
+            const slides = elements.galleryTrack.querySelectorAll('.gallery-slide');
+            const trackRect = elements.galleryTrack.getBoundingClientRect();
+            const trackCenter = trackRect.left + trackRect.width / 2;
+            
+            let closestIndex = 0;
+            let closestDistance = Infinity;
+
+            slides.forEach((slide, index) => {
+                const slideRect = slide.getBoundingClientRect();
+                const slideCenter = slideRect.left + slideRect.width / 2;
+                const distance = Math.abs(trackCenter - slideCenter);
+                
+                slide.classList.remove('active');
+                
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestIndex = index;
+                }
+            });
+
+            if (slides[closestIndex]) {
+                slides[closestIndex].classList.add('active');
+                state.currentPhotoIndex = closestIndex;
+                updateGalleryState();
+                updateFilmstripActive(closestIndex);
+            }
+        }
+
+        function updateGalleryState() {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            elements.currentPhoto.textContent = String(state.currentPhotoIndex + 1).padStart(2, '0');
+            
+            const progress = ((state.currentPhotoIndex + 1) / event.photos.length) * 100;
+            elements.galleryProgress.style.width = `${progress}%`;
+        }
+
+        function navigateGallery(direction) {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            let newIndex = state.currentPhotoIndex + direction;
+            if (newIndex < 0) newIndex = event.photos.length - 1;
+            if (newIndex >= event.photos.length) newIndex = 0;
+
+            scrollToSlide(newIndex);
+        }
+
+        function scrollToSlide(index) {
+            const slides = elements.galleryTrack.querySelectorAll('.gallery-slide');
+            const targetSlide = slides[index];
+            if (!targetSlide) return;
+
+            const track = elements.galleryTrack;
+            const slideRect = targetSlide.getBoundingClientRect();
+            const trackRect = track.getBoundingClientRect();
+            const scrollTarget = targetSlide.offsetLeft - (trackRect.width / 2) + (slideRect.width / 2);
+
+            track.scrollTo({
+                left: scrollTarget,
+                behavior: 'smooth'
+            });
+
+            state.currentPhotoIndex = index;
+            updateGalleryState();
+            updateFilmstripActive(index);
+        }
+
+        // Gallery navigation buttons
+        elements.galleryPrev.addEventListener('click', () => navigateGallery(-1));
+        elements.galleryNext.addEventListener('click', () => navigateGallery(1));
+
+        // ============================================
+        // FILMSTRIP
+        // ============================================
+        function renderFilmstrip(photos) {
+            elements.filmstripTrack.innerHTML = '';
+
+            photos.forEach((photo, index) => {
+                const item = document.createElement('div');
+                item.className = `filmstrip-item ${index === 0 ? 'active' : ''}`;
+                item.dataset.index = index;
+
+                const thumbUrl = `https://picsum.photos/seed/${photo.publicId}-thumb/80/60`;
+
+                item.innerHTML = `
+                    <div class="filmstrip-thumb">
+                        <img src="${thumbUrl}" alt="Foto ${index + 1}" loading="lazy">
+                    </div>
+                    <p class="filmstrip-number">${String(index + 1).padStart(2, '0')}</p>
+                `;
+
+                item.addEventListener('click', () => scrollToSlide(index));
+                elements.filmstripTrack.appendChild(item);
+            });
+        }
+
+        function updateFilmstripActive(activeIndex) {
+            const items = elements.filmstripTrack.querySelectorAll('.filmstrip-item');
+            items.forEach((item, index) => {
+                item.classList.toggle('active', index === activeIndex);
+                
+                // Scroll filmstrip to show active item
+                if (index === activeIndex) {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            });
+        }
+
+        // ============================================
+        // LIGHTBOX
+        // ============================================
+        function openLightbox(photoIndex) {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            state.lightboxOpen = true;
+            state.currentPhotoIndex = photoIndex;
+            state.zoomLevel = 1;
+
+            elements.lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            updateLightboxContent();
+        }
+
+        function closeLightbox() {
+            state.lightboxOpen = false;
+            state.zoomLevel = 1;
+            elements.lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+            resetLightboxZoom();
+        }
+
+        function updateLightboxContent() {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            const photo = event.photos[state.currentPhotoIndex];
+            if (!photo) return;
+
+            const fullSizeUrl = `https://picsum.photos/seed/${photo.publicId}-full/1920/1080`;
+
+            elements.lightboxImage.src = fullSizeUrl;
+            elements.lightboxImage.alt = photo.caption;
+            elements.lightboxCounter.textContent = `${String(state.currentPhotoIndex + 1).padStart(2, '0')} / ${String(event.photos.length).padStart(2, '0')}`;
+            elements.lightboxEventTitle.textContent = event.title;
+            elements.lightboxEventMeta.textContent = `${event.location} · ${event.date}`;
+        }
+
+        function navigateLightbox(direction) {
+            const event = state.filteredEvents[state.currentEventIndex];
+            if (!event) return;
+
+            let newIndex = state.currentPhotoIndex + direction;
+            if (newIndex < 0) newIndex = event.photos.length - 1;
+            if (newIndex >= event.photos.length) newIndex = 0;
+
+            state.currentPhotoIndex = newIndex;
+            resetLightboxZoom();
+            updateLightboxContent();
+            scrollToSlide(newIndex);
+        }
+
+        // Lightbox zoom functionality
+        function setLightboxZoom(level) {
+            state.zoomLevel = Math.max(0.5, Math.min(5, level));
+            elements.lightboxImage.style.transform = `scale(${state.zoomLevel})`;
+            elements.lightboxImageWrapper.classList.toggle('zoomed', state.zoomLevel > 1);
+        }
+
+        function resetLightboxZoom() {
+            state.zoomLevel = 1;
+            elements.lightboxImage.style.transform = 'scale(1)';
+            elements.lightboxImageWrapper.classList.remove('zoomed');
+        }
+
+        // Lightbox drag when zoomed
+        let lightboxDragStart = { x: 0, y: 0 };
+        let lightboxTranslate = { x: 0, y: 0 };
+
+        elements.lightboxImageWrapper.addEventListener('mousedown', (e) => {
+            if (state.zoomLevel > 1) {
+                lightboxDragStart = { x: e.clientX - lightboxTranslate.x, y: e.clientY - lightboxTranslate.y };
+                elements.lightboxImageWrapper.style.cursor = 'move';
+                
+                const onMove = (e) => {
+                    lightboxTranslate.x = e.clientX - lightboxDragStart.x;
+                    lightboxTranslate.y = e.clientY - lightboxDragStart.y;
+                    elements.lightboxImage.style.transform = `translate(${lightboxTranslate.x}px, ${lightboxTranslate.y}px) scale(${state.zoomLevel})`;
+                };
+                
+                const onUp = () => {
+                    elements.lightboxImageWrapper.style.cursor = state.zoomLevel > 1 ? 'move' : 'grab';
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                };
+                
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            }
+        });
+
+        // Lightbox touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        elements.lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        elements.lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const diff = touchStartX - touchEndX;
+            const threshold = 50;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    navigateLightbox(1); // Swipe left = next
+                } else {
+                    navigateLightbox(-1); // Swipe right = prev
+                }
+            }
+        }
+
+        // Lightbox pinch zoom
+        let initialPinchDistance = 0;
+        let initialZoom = 1;
+
+        elements.lightbox.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                initialZoom = state.zoomLevel;
+            }
+        }, { passive: true });
+
+        elements.lightbox.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                const currentPinchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                const scale = currentPinchDistance / initialPinchDistance;
+                setLightboxZoom(initialZoom * scale);
+            }
+        }, { passive: true });
+
+        // Lightbox event listeners
+        elements.lightboxClose.addEventListener('click', closeLightbox);
+        elements.lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+        elements.lightboxNext.addEventListener('click', () => navigateLightbox(1));
+        elements.zoomIn.addEventListener('click', () => setLightboxZoom(state.zoomLevel + 0.25));
+        elements.zoomOut.addEventListener('click', () => setLightboxZoom(state.zoomLevel - 0.25));
+        elements.zoomReset.addEventListener('click', resetLightboxZoom);
+
+        // Close lightbox on background click
+        elements.lightbox.addEventListener('click', (e) => {
+            if (e.target === elements.lightbox || e.target.closest('.lightbox-content') === null && !e.target.closest('.lightbox-nav')) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!state.lightboxOpen) return;
+
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+                case '+':
+                case '=':
+                    setLightboxZoom(state.zoomLevel + 0.25);
+                    break;
+                case '-':
+                    setLightboxZoom(state.zoomLevel - 0.25);
+                    break;
+                case '0':
+                    resetLightboxZoom();
+                    break;
+            }
+        });
+
+        // ============================================
+        // ADMIN PANEL
+        // ============================================
+        function openAdminPanel() {
+            elements.adminModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            populateEventSelects();
+        }
+
+        function closeAdminPanel() {
+            elements.adminModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        elements.adminToggle.addEventListener('click', openAdminPanel);
+        elements.adminClose.addEventListener('click', closeAdminPanel);
+
+        // Close modal on background click
+        elements.adminModal.addEventListener('click', (e) => {
+            if (e.target === elements.adminModal) {
+                closeAdminPanel();
+            }
+        });
+
+        // Admin tabs
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+                const tabName = tab.dataset.tab;
+                document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+            });
+        });
+
+        // Populate event selects
+        function populateEventSelects() {
+            const selects = [elements.eventSelect, elements.manageEventSelect];
+            
+            selects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
+                
+                state.events.forEach(event => {
+                    const option = document.createElement('option');
+                    option.value = event.id;
+                    option.textContent = event.title.substring(0, 50) + (event.title.length > 50 ? '...' : '');
+                    select.appendChild(option);
+                });
+
+                select.value = currentValue;
+            });
+        }
+
+        // File upload handling
+        const droppedFiles = [];
+
+        elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+
+        elements.dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            elements.dropzone.classList.add('dragover');
+        });
+
+        elements.dropzone.addEventListener('dragleave', () => {
+            elements.dropzone.classList.remove('dragover');
+        });
+
+        elements.dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            elements.dropzone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        elements.fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const validFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            validFiles.forEach(file => {
+                droppedFiles.push(file);
+                addPreviewItem(file);
+            });
+
+            updateUploadButton();
+        }
+
+        function addPreviewItem(file) {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.dataset.fileName = file.name;
+                item.innerHTML = `
+                    <img src="${e.target.result}" alt="${file.name}">
+                    <button class="preview-remove" onclick="removePreviewItem(this)">×</button>
+                `;
+                elements.previewGrid.appendChild(item);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        window.removePreviewItem = function(btn) {
+            const item = btn.closest('.preview-item');
+            const fileName = item.dataset.fileName;
+            const index = droppedFiles.findIndex(f => f.name === fileName);
+            
+            if (index > -1) {
+                droppedFiles.splice(index, 1);
+            }
+            
+            item.remove();
+            updateUploadButton();
+        };
+
+        function updateUploadButton() {
+            elements.uploadBtn.disabled = droppedFiles.length === 0 || !elements.eventSelect.value;
+            
+            if (droppedFiles.length > 0) {
+                elements.uploadBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Upload ${droppedFiles.length} Foto ke Cloudinary
+                `;
+            }
+        }
+
+        elements.eventSelect.addEventListener('change', updateUploadButton);
+
+        // Form submission - Upload to Cloudinary
+        elements.uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (droppedFiles.length === 0 || !elements.eventSelect.value) {
+                showToast('Pilih kegiatan dan tambahkan foto', 'error');
+                return;
+            }
+
+            const event = state.events.find(ev => ev.id === elements.eventSelect.value);
+            const year = elements.yearSelect.value;
+            const category = elements.categorySelect.value;
+
+            elements.uploadProgress.classList.remove('hidden');
+            elements.uploadBtn.disabled = true;
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (let i = 0; i < droppedFiles.length; i++) {
+                const file = droppedFiles[i];
+                const formData = new FormData();
+                
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+                formData.append('folder', `${CLOUDINARY_CONFIG.baseFolder}/${year}/${category}/${event.title.toLowerCase().replace(/\s+/g, '-')}`);
+
+                try {
+                    const response = await fetch(
+                        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
+                        { method: 'POST', body: formData }
+                    );
+
+                    const data = await response.json();
+
+                    if (data.secure_url) {
+                        successCount++;
+                    } else {
+                        failCount++;
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    failCount++;
+                }
+
+                const progress = ((i + 1) / droppedFiles.length) * 100;
+                elements.uploadProgressFill.style.width = `${progress}%`;
+                elements.uploadPercent.textContent = `${Math.round(progress)}%`;
+                elements.uploadStatus.textContent = `Mengunggah ${i + 1} dari ${droppedFiles.length}...`;
+            }
+
+            // Show result
+            if (failCount === 0) {
+                showToast(`${successCount} foto berhasil diunggah!`, 'success');
+            } else {
+                showToast(`${successCount} berhasil, ${failCount} gagal`, 'error');
+            }
+
+            // Reset form
+            setTimeout(() => {
+                elements.previewGrid.innerHTML = '';
+                droppedFiles.length = 0;
+                elements.uploadProgress.classList.add('hidden');
+                elements.uploadProgressFill.style.width = '0%';
+                elements.uploadBtn.disabled = true;
+                elements.uploadBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Upload ke Cloudinary
+                `;
+            }, 2000);
+        });
+
+        // Manage photos tab
+        elements.manageEventSelect.addEventListener('change', async (e) => {
+            const eventId = e.target.value;
+            
+            if (!eventId) {
+                elements.manageGrid.innerHTML = '';
+                return;
+            }
+
+            const event = state.events.find(ev => ev.id === eventId);
+            if (!event) return;
+
+            renderManageGrid(event);
+        });
+
+        function renderManageGrid(event) {
+            elements.manageGrid.innerHTML = '';
+
+            event.photos.forEach((photo, index) => {
+                const item = document.createElement('div');
+                item.className = 'manage-item';
+                item.draggable = true;
+                item.dataset.index = index;
+                item.dataset.photoId = photo.id;
+
+                const thumbUrl = `https://picsum.photos/seed/${photo.publicId}-manage/150/150`;
+
+                item.innerHTML = `
+                    <div class="drag-handle">↕</div>
+                    <img src="${thumbUrl}" alt="${photo.caption}">
+                    <div class="manage-item-overlay">
+                        <button class="manage-action-btn featured-btn">Set Featured</button>
+                        <button class="manage-action-btn edit-btn">Edit Caption</button>
+                        <button class="manage-action-btn delete-btn delete">Hapus</button>
+                    </div>
+                `;
+
+                // Drag and drop sorting
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+
+                // Action buttons
+                item.querySelector('.featured-btn').addEventListener('click', () => {
+                    document.querySelectorAll('.manage-item').forEach(i => i.classList.remove('featured'));
+                    item.classList.add('featured');
+                    showToast('Foto ditetapkan sebagai Featured', 'success');
+                });
+
+                item.querySelector('.delete-btn').addEventListener('click', () => {
+                    if (confirm('Hapus foto ini?')) {
+                        item.remove();
+                        showToast('Foto dihapus', 'success');
+                    }
+                });
+
+                elements.manageGrid.appendChild(item);
+            });
+        }
+
+        // Drag and drop handlers for sorting
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this !== draggedItem) {
+                const allItems = [...elements.manageGrid.children];
+                const draggedIndex = allItems.indexOf(draggedItem);
+                const droppedIndex = allItems.indexOf(this);
+
+                if (draggedIndex < droppedIndex) {
+                    this.after(draggedItem);
+                } else {
+                    this.before(draggedItem);
+                }
+
+                showToast('Urutan foto diperbarui', 'success');
+            }
+        }
+
+        function handleDragEnd() {
+            this.style.opacity = '1';
+            draggedItem = null;
+        }
+
+        // ============================================
+        // FILTER & SEARCH
+        // ============================================
+        function applyFilters() {
+            const activeYearFilter = document.querySelector('#yearFilters .filter-btn.active');
+            const activeCategoryFilter = document.querySelector('#categoryFilters .filter-btn.active');
+            const searchTerm = elements.searchInput.value.toLowerCase().trim();
+
+            const yearFilter = activeYearFilter ? activeYearFilter.dataset.year : 'all';
+            const categoryFilter = activeCategoryFilter ? activeCategoryFilter.dataset.category : 'all';
+
+            state.filteredEvents = state.events.filter(event => {
+                const matchesYear = yearFilter === 'all' || event.year === yearFilter;
+                const matchesCategory = categoryFilter === 'all' || event.category === categoryFilter;
+                const matchesSearch = searchTerm === '' || 
+                    event.title.toLowerCase().includes(searchTerm) ||
+                    event.location.toLowerCase().includes(searchTerm) ||
+                    event.category.toLowerCase().includes(searchTerm) ||
+                    event.date.includes(searchTerm);
+
+                return matchesYear && matchesCategory && matchesSearch;
+            });
+
+            state.currentEventIndex = 0;
+            renderCurrentEvent();
+
+            if (state.filteredEvents.length === 0) {
+                showToast('Tidak ada kegiatan yang cocok dengan filter', 'error');
+            }
+        }
+
+        // Year filter click handlers
+        elements.yearFilters.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                elements.yearFilters.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                applyFilters();
+            }
+        });
+
+        // Category filter click handlers
+        elements.categoryFilters.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                elements.categoryFilters.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                applyFilters();
+            }
+        });
+
+        // Search with debounce
+        let searchTimeout;
+        elements.searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(applyFilters, 300);
+        });
+
+        // ============================================
+        // TOAST NOTIFICATIONS
+        // ============================================
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    ${type === 'success' 
+                        ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
+                        : type === 'error'
+                        ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
+                        : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+                    }
+                </svg>
+                <span>${message}</span>
+            `;
+            
+            elements.toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ============================================
+        // INTERSECTION OBSERVER FOR LAZY LOADING
+        // ============================================
+        function setupIntersectionObserver() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '50px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                        }
+                        observer.unobserve(img);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                observer.observe(img);
+            });
+        }
+
+        // ============================================
+        // EVENT LISTENERS INITIALIZATION
+        // ============================================
+        function initEventListeners() {
+            // Scroll handling
+            window.addEventListener('scroll', handleScroll);
+            
+            // Theme toggle
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            
+            // Mobile menu
+            elements.mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+            
+            // Close mobile menu on link click
+            elements.navbarNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    elements.navbarNav.classList.remove('open');
+                });
+            });
+
+            // Featured image click opens lightbox
+            elements.featuredWrapper.addEventListener('click', () => openLightbox(0));
+
+            // Close modals on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (state.lightboxOpen) {
+                        closeLightbox();
+                    }
+                    if (elements.adminModal.classList.contains('open')) {
+                        closeAdminPanel();
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            initTheme();
+            initEventListeners();
+            renderCurrentEvent();
+            setupIntersectionObserver();
+
+            // Show welcome message
+            console.log('%c📸 Galeri Kegiatan - Immersive Horizontal Event Gallery', 
+                'color: #2563eb; font-size: 16px; font-weight: bold;');
+            console.log('%cPowered by Cloudinary', 
+                'color: #666; font-size: 12px;');
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', init);
+
+        // ============================================
+        // CLOUDINARY AUTO-SYNC (Optional Enhancement)
+        // ============================================
+        async function syncWithCloudinary() {
+            /**
+             * This function can be implemented to automatically fetch
+             * the latest folder structure from Cloudinary Admin API.
+             * 
+             * Note: This requires server-side implementation or
+             * using Cloudinary's signed uploads with notifications.
+             * 
+             * For now, we use client-side unsigned uploads which
+             * don't require server-side code.
+             */
+            
+            console.log('Cloudinary sync ready. Using unsigned upload preset:', CLOUDINARY_CONFIG.uploadPreset);
+        }
+
+        // Run sync check
+        syncWithCloudinary();
+    </script>
+</body>
+</html>
