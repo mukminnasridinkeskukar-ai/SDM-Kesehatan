@@ -645,6 +645,12 @@
             .thumb-item { width: 55px; height: 55px; }
         }
 
+        /* Image Error State */
+        .gallery-item.image-error {
+            opacity: 0.7;
+            border: 2px dashed #ef4444;
+        }
+
         /* Print Styles */
         @media print {
             .header, .filter-section, .lightbox-overlay, .footer { display: none; }
@@ -904,10 +910,8 @@
          */
         async function fetchPhotosFromCloudinary() {
             // Method 1: Try to use Cloudinary Admin Search API (if CORS enabled)
-            // Method 2: Use a JSON manifest file
-            // Method 3: Use resource listing via search widget
-            
-            // For this standalone version, we'll try multiple methods
+            // Method 2: Use a JSON manifest file (multiple locations)
+            // Method 3: Demo/Sample data for testing
             
             let photos = [];
 
@@ -931,19 +935,40 @@
                 console.log('Direct API failed (expected), trying alternative methods...');
             }
 
-            // TRY 2: Check for JSON manifest file (recommended for production)
+            // TRY 2: Check for JSON manifest file in MULTIPLE LOCATIONS
             if (photos.length === 0) {
-                try {
-                    const manifestUrl = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '/')}gallery-manifest.json`;
-                    const manifestResponse = await fetch(manifestUrl);
-                    
-                    if (manifestResponse.ok) {
-                        const manifest = await manifestResponse.json();
-                        photos = manifest.photos || [];
-                        console.log(`Loaded ${photos.length} photos from manifest`);
+                const possibleManifestPaths = [
+                    // Same directory as HTML
+                    'gallery-manifest.json',
+                    // Absolute path from origin
+                    `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '/')}gallery-manifest.json`,
+                    // Root level
+                    '/gallery-manifest.json',
+                    // One level up
+                    '../gallery-manifest.json'
+                ];
+                
+                for (const manifestUrl of possibleManifestPaths) {
+                    try {
+                        console.log(`Trying manifest: ${manifestUrl}`);
+                        const manifestResponse = await fetch(manifestUrl);
+                        
+                        if (manifestResponse.ok) {
+                            const manifest = await manifestResponse.json();
+                            if (manifest.photos && manifest.photos.length > 0) {
+                                photos = manifest.photos;
+                                console.log(`✅ Loaded ${photos.length} photos from: ${manifestUrl}`);
+                                break;
+                            }
+                        }
+                    } catch (e) {
+                        console.log(`Not found: ${manifestUrl}`);
+                        continue;
                     }
-                } catch (e) {
-                    console.log('No manifest file found');
+                }
+                
+                if (photos.length === 0) {
+                    console.log('⚠️ No manifest file found in any location');
                 }
             }
 
@@ -1029,6 +1054,7 @@
 
         /**
          * Load and render gallery
+         * OPTIMIZED: Removed per-image validation to avoid 429 rate limiting
          */
         async function loadGallery() {
             showLoading(true);
@@ -1036,7 +1062,41 @@
             hideEmpty();
 
             try {
-                const rawPhotos = await fetchPhotosFromCloudinary();
+                // Check cache first to avoid repeated API calls
+                const cacheKey = 'gallery_cache_v1';
+                let rawPhotos = [];
+                
+                try {
+                    const cachedData = localStorage.getItem(cacheKey);
+                    if (cachedData) {
+                        const parsed = JSON.parse(cachedData);
+                        // Use cache if less than 30 minutes old
+                        const cacheAge = Date.now() - parsed.timestamp;
+                        if (cacheAge < 30 * 60 * 1000) { // 30 minutes
+                            console.log('📦 Using cached data');
+                            rawPhotos = parsed.photos;
+                            updateCacheStatus(true, Math.floor(cacheAge / 60000));
+                        }
+                    }
+                } catch (e) {
+                    console.log('No valid cache found');
+                }
+                
+                // Fetch fresh data only if no cache
+                if (rawPhotos.length === 0) {
+                    rawPhotos = await fetchPhotosFromCloudinary();
+                    
+                    // Cache the results
+                    try {
+                        localStorage.setItem(cacheKey, JSON.stringify({
+                            timestamp: Date.now(),
+                            photos: rawPhotos
+                        }));
+                        console.log('💾 Data cached for 30 minutes');
+                    } catch (e) {
+                        console.log('Could not cache data (storage full?)');
+                    }
+                }
                 
                 if (rawPhotos.length === 0) {
                     showEmpty();
@@ -1047,17 +1107,8 @@
                 // Process photos with activity info
                 state.photos = rawPhotos.map(extractActivityInfo);
                 
-                // Validate image URLs (filter out broken images)
-                const validPhotos = [];
-                for (const photo of state.photos) {
-                    const url = getImageUrl(photo.publicId, CONFIG.thumbnailTransform);
-                    const isValid = await validateImageUrl(url);
-                    if (isValid) {
-                        validPhotos.push(photo);
-                    }
-                }
-                
-                state.photos = validPhotos;
+                // SKIP URL validation to avoid 429 errors!
+                // Manifest is pre-validated during generation
                 state.filteredPhotos = [...state.photos];
                 
                 // Extract unique categories
@@ -1132,6 +1183,9 @@
             // Alternate between patterns for visual variety
             const patterns = ['pattern-a', 'pattern-b', 'pattern-c'];
             grid.className = `bento-grid ${patterns[Math.floor(Math.random() * patterns.length)]}`;
+            
+            // Setup lazy loading to avoid 429 rate limiting
+            setTimeout(() => setupLazyLoading(), 100);
         }
 
         /**
@@ -1144,8 +1198,13 @@
             
             const imageUrl = getImageUrl(photo.publicId, CONFIG.thumbnailTransform);
             
+            // Use data-src for lazy loading to avoid 429 rate limiting
             item.innerHTML = `
-                <img src="${imageUrl}" alt="${photo.title}" loading="lazy" decoding="async">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23e2e8f0' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2394a3b8'%3E⏳%3C/text%3E%3C/svg%3E" 
+                     data-src="${imageUrl}" 
+                     alt="${photo.title}" 
+                     decoding="async"
+                     style="background: #f1f5f9;">
                 <div class="item-overlay">
                     <div class="item-title">${photo.title}</div>
                     <div class="item-meta">
@@ -1153,6 +1212,17 @@
                     </div>
                 </div>
             `;
+
+            // Handle image load error gracefully
+            const img = item.querySelector('img');
+            img.addEventListener('error', function() {
+                this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23fee2e2' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23dc2626'%3E❌ Error%3C/text%3E%3C/svg%3E";
+                this.parentElement.classList.add('image-error');
+            });
+
+            img.addEventListener('load', function() {
+                this.style.background = 'transparent';
+            });
 
             item.addEventListener('click', () => openLightbox(index));
             
@@ -1471,6 +1541,46 @@
             animateNumber('totalPhotos', photos);
             animateNumber('totalActivities', activities);
             animateNumber('totalCategories', categories);
+        }
+
+        /**
+         * Update cache status indicator
+         */
+        function updateCacheStatus(isCached, ageMinutes) {
+            // Optional: Show cache status to user
+            console.log(`📦 Cache: ${isCached ? 'Active (' + ageMinutes + ' min old)' : 'Expired/None'}`);
+        }
+
+        /**
+         * Lazy load images with Intersection Observer
+         * Reduces simultaneous requests to avoid 429 errors
+         */
+        function setupLazyLoading() {
+            const images = document.querySelectorAll('.gallery-item img[data-src]');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                }, {
+                    rootMargin: '50px',
+                    threshold: 0.1
+                });
+
+                images.forEach(img => imageObserver.observe(img));
+            } else {
+                // Fallback for older browsers
+                images.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                });
+            }
         }
 
         function animateNumber(elementId, target) {
