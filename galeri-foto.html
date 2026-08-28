@@ -120,7 +120,7 @@
             border: none;
             background: none;
         }
-        
+
         /* ============================================
            HEADER / HERO SECTION
         ============================================ */
@@ -184,7 +184,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        
+
         /* Header Controls */
         .header-controls {
             display: flex;
@@ -201,22 +201,18 @@
             width: 220px;
             padding: 10px 16px 10px 42px;
             border: 1px solid var(--border-color);
-            border-radius: 50px;
+            border-radius: var(--radius-md);
             background: var(--bg-secondary);
             color: var(--text-primary);
             font-size: 14px;
             transition: all var(--transition-fast);
-            outline: none;
         }
         
         .search-input:focus {
+            outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px var(--accent-light);
             width: 280px;
-        }
-        
-        .search-input::placeholder {
-            color: var(--text-muted);
         }
         
         .search-icon {
@@ -227,37 +223,18 @@
             color: var(--text-muted);
             pointer-events: none;
         }
-        
-        .filter-select {
-            padding: 10px 36px 10px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23868e96' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            transition: all var(--transition-fast);
-            outline: none;
-        }
-        
-        .filter-select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px var(--accent-light);
-        }
-        
+
+        /* Dark Mode Toggle */
         .theme-toggle {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--bg-tertiary);
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
             transition: all var(--transition-fast);
             color: var(--text-secondary);
         }
@@ -265,400 +242,457 @@
         .theme-toggle:hover {
             background: var(--accent-light);
             color: var(--accent-color);
-            transform: rotate(15deg);
+            border-color: var(--accent-color);
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+        [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+        [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+        /* ============================================
+           HERO SECTION
+        ============================================ */
+        .hero-section {
+            padding: 80px 24px 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
         }
         
-        .mobile-menu-btn {
-            display: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--bg-tertiary);
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--accent-light);
+            color: var(--accent-color);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        
+        .hero-title {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
             color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+            line-height: 1.6;
         }
-        
-        /* Stats Bar */
-        .stats-bar {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-light);
-            padding: 16px 0;
-        }
-        
-        .stats-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
+
+        .hero-stats {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 32px;
+            gap: 48px;
             flex-wrap: wrap;
         }
         
         .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            text-align: center;
         }
         
         .stat-number {
-            font-size: 24px;
+            font-size: 36px;
             font-weight: 800;
             color: var(--accent-color);
-            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 4px;
         }
         
         .stat-label {
             font-size: 13px;
             color: var(--text-muted);
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        
-        /* Category Filter Pills */
-        .category-filters {
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-light);
-            padding: 12px 0;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .category-filters::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .filters-inner {
+
+        /* ============================================
+           CATEGORY FILTERS
+        ============================================ */
+        .filters-section {
+            padding: 0 24px 32px;
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 0 24px;
+        }
+        
+        .filters-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .filter-pill {
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: all var(--transition-fast);
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid transparent;
-        }
-        
-        .filter-pill:hover {
-            background: var(--accent-light);
-            color: var(--accent-color);
-        }
-        
-        .filter-pill.active {
-            background: var(--accent-color);
-            color: white;
+        .filter-btn:hover {
             border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
         }
         
-        /* ============================================
-           MAIN CONTENT AREA
-        ============================================ */
-        .main-content {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 40px 24px 80px;
+        .filter-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .filter-count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
         }
         
+        .filter-btn:not(.active) .filter-count {
+            background: var(--bg-tertiary);
+        }
+
         /* ============================================
-           FEATURED EVENT SECTION (BENTO LAYOUT)
+           FEATURED EVENT SECTION
         ============================================ */
         .featured-section {
-            margin-bottom: 64px;
+            padding: 0 24px 60px;
+            max-width: var(--max-width);
+            margin: 0 auto;
         }
         
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
         
-        .section-title-group {
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             display: flex;
             align-items: center;
             gap: 12px;
         }
         
-        .section-badge {
-            padding: 6px 14px;
+        .section-title-icon {
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-radius: 50px;
+            font-size: 18px;
         }
-        
-        .section-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
-        }
-        
+
         /* Featured Bento Grid */
-        .featured-bento {
+        .featured-grid {
             display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            grid-template-rows: repeat(2, 240px);
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 400px 200px;
             gap: 16px;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 300px 200px 150px 150px;
+            }
         }
         
         .featured-main {
-            grid-row: 1 / -1;
+            grid-row: 1 / 3;
             position: relative;
             border-radius: var(--radius-lg);
             overflow: hidden;
             cursor: pointer;
-            background: var(--bg-tertiary);
         }
         
-        .featured-main img {
+        .featured-secondary {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .featured-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform var(--transition-slow);
         }
         
-        .featured-main:hover img {
-            transform: scale(1.04);
+        .featured-card:hover .featured-img {
+            transform: scale(1.05);
         }
         
         .featured-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.8) 100%);
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 28px;
             opacity: 0;
             transition: opacity var(--transition-normal);
         }
         
-        .featured-main:hover .featured-overlay,
-        .featured-sub:hover .featured-overlay {
+        .featured-card:hover .featured-overlay {
             opacity: 1;
         }
         
-        .featured-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-color);
-            margin-bottom: 8px;
+        .featured-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            width: fit-content;
         }
         
-        .featured-event-title {
+        .featured-title {
             font-size: 22px;
             font-weight: 700;
             color: white;
-            line-height: 1.3;
             margin-bottom: 8px;
         }
         
         .featured-meta {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
             display: flex;
             align-items: center;
             gap: 16px;
-            font-size: 13px;
-            color: rgba(255,255,255,0.8);
         }
         
-        .featured-meta svg {
-            width: 14px;
-            height: 14px;
-            margin-right: 4px;
-        }
-        
-        .featured-sub {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            cursor: pointer;
-            background: var(--bg-tertiary);
-        }
-        
-        .featured-sub img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform var(--transition-slow);
-        }
-        
-        .featured-sub:hover img {
-            transform: scale(1.06);
-        }
-        
-        .featured-sub .featured-overlay {
-            padding: 20px;
-        }
-        
-        .featured-sub .featured-event-title {
-            font-size: 16px;
-        }
-        
-        .photo-count-badge {
+        .featured-photo-count {
             position: absolute;
-            top: 14px;
-            right: 14px;
-            padding: 6px 12px;
-            background: rgba(0,0,0,0.65);
+            top: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
             color: white;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 8px 14px;
             border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
-        
+
         /* ============================================
-           EVENT SECTIONS (MASONRY BENTO)
+           GALLERY GRID SECTION
         ============================================ */
-        .event-section {
+        .gallery-section {
+            padding: 0 24px 80px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        
+        .activity-group {
             margin-bottom: 64px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
-        .event-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .event-header {
+        .activity-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border-light);
         }
         
-        .event-info h2 {
-            font-size: 20px;
+        .activity-info h2 {
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 6px;
-            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
         
-        .event-meta {
+        .activity-meta {
             display: flex;
-            align-items: center;
-            gap: 16px;
             flex-wrap: wrap;
-            font-size: 13px;
+            gap: 16px;
+            font-size: 14px;
             color: var(--text-muted);
         }
         
-        .event-meta-item {
+        .activity-meta-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
         
-        .event-meta-item svg {
-            width: 14px;
-            height: 14px;
-            opacity: 0.7;
-        }
-        
-        .event-category-tag {
-            padding: 5px 12px;
+        .activity-category-badge {
+            display: inline-flex;
+            padding: 6px 14px;
             background: var(--accent-light);
             color: var(--accent-color);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
         }
-        
-        /* BENTO LAYOUT VARIATIONS */
-        
-        /* Layout A: Large left + 2x2 grid right */
-        .bento-layout-a {
+
+        /* Bento Layout Variations */
+        .gallery-grid {
             display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            grid-template-rows: repeat(2, 200px);
-            gap: 14px;
+            gap: 16px;
         }
         
-        .bento-layout-a .bento-large {
-            grid-row: 1 / -1;
-        }
-        
-        /* Layout B: Top banner + 3 columns below */
-        .bento-layout-b {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: 180px 180px;
-            gap: 14px;
-        }
-        
-        .bento-layout-b .bento-wide {
-            grid-column: 1 / -1;
-            grid-row: 1;
-        }
-        
-        /* Layout C: Asymmetric masonry-like */
-        .bento-layout-c {
-            display: grid;
+        /* Layout A: Mixed sizes */
+        .layout-a {
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 190px);
-            gap: 14px;
+            grid-auto-rows: 200px;
         }
         
-        .bento-layout-c .bento-tall {
-            grid-row: 1 / -1;
+        .layout-a .photo-card:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
         }
         
-        .bento-layout-c .bento-wide-2 {
+        .layout-a .photo-card:nth-child(4) {
             grid-column: span 2;
         }
         
-        /* Bento Card Base */
-        .bento-card {
-            position: relative;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            cursor: pointer;
-            background: var(--bg-tertiary);
-            aspect-ratio: auto;
+        @media (max-width: 1024px) {
+            .layout-a {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .layout-a .photo-card:nth-child(1) {
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+            .layout-a .photo-card:nth-child(4) {
+                grid-column: span 1;
+            }
         }
         
-        .bento-card img {
+        @media (max-width: 640px) {
+            .layout-a {
+                grid-template-columns: 1fr;
+            }
+            .layout-a .photo-card:nth-child(1),
+            .layout-a .photo-card:nth-child(4) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+
+        /* Layout B: Masonry-like */
+        .layout-b {
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 240px;
+        }
+        
+        .layout-b .photo-card:nth-child(3n+1) {
+            grid-row: span 2;
+        }
+        
+        @media (max-width: 1024px) {
+            .layout-b {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .layout-b {
+                grid-template-columns: 1fr;
+                grid-auto-rows: 240px;
+            }
+            .layout-b .photo-card:nth-child(3n+1) {
+                grid-row: span 1;
+            }
+        }
+
+        /* Layout C: Grid with featured */
+        .layout-c {
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 220px;
+        }
+        
+        .layout-c .photo-card:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        
+        @media (max-width: 1024px) {
+            .layout-c {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .layout-c .photo-card:first-child {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .layout-c {
+                grid-template-columns: 1fr;
+            }
+            .layout-c .photo-card:first-child {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+
+        /* Photo Card */
+        .photo-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--bg-secondary);
+        }
+        
+        .photo-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform var(--transition-slow);
         }
         
-        .bento-card:hover img {
-            transform: scale(1.05);
+        .photo-card:hover img {
+            transform: scale(1.08);
         }
         
-        .bento-card-overlay {
+        .photo-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
             opacity: 0;
             transition: opacity var(--transition-normal);
             display: flex;
@@ -666,206 +700,152 @@
             padding: 16px;
         }
         
-        .bento-card:hover .bento-card-overlay {
+        .photo-card:hover .photo-overlay {
             opacity: 1;
         }
         
-        .bento-card-info {
+        .photo-info {
             color: white;
         }
         
-        .bento-card-info span {
+        .photo-info-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .photo-info-meta {
             font-size: 12px;
-            opacity: 0.9;
+            opacity: 0.8;
         }
-        
-        /* Shimmer Loading Effect */
-        .shimmer {
-            position: relative;
-            overflow: hidden;
-            background: var(--bg-tertiary);
-        }
-        
-        .shimmer::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255,255,255,0.08) 50%,
-                transparent 100%
-            );
-            animation: shimmer 1.5s infinite;
-        }
-        
-        [data-theme="dark"] .shimmer::after {
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255,255,255,0.04) 50%,
-                transparent 100%
-            );
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        /* ============================================
-           LOAD MORE SECTION
-        ============================================ */
+
+        /* Load More Button */
         .load-more-container {
             text-align: center;
             margin-top: 48px;
-            padding-top: 32px;
-            border-top: 1px solid var(--border-light);
-        }
-        
-        .load-more-stats {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-        
-        .load-more-stats strong {
-            color: var(--accent-color);
-            font-weight: 700;
         }
         
         .load-more-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 36px;
+            padding: 16px 40px;
             background: var(--accent-color);
             color: white;
+            border-radius: 50px;
             font-size: 15px;
             font-weight: 600;
-            border-radius: 50px;
-            transition: all var(--transition-normal);
-            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
         }
         
         .load-more-btn:hover {
             background: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+            box-shadow: var(--shadow-lg);
         }
-        
-        .load-more-btn:active {
-            transform: translateY(0);
-        }
-        
-        .load-more-btn svg {
-            transition: transform var(--transition-fast);
-        }
-        
-        .load-more-btn:hover svg {
-            transform: translateY(3px);
-        }
-        
-        .all-loaded .load-more-btn {
-            background: var(--bg-tertiary);
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
             color: var(--text-muted);
-            box-shadow: none;
-            cursor: default;
-            pointer-events: none;
         }
         
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+        
+        .empty-state-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state-text {
+            font-size: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
         /* ============================================
-           PREMIUM LIGHTBOX
+           LIGHTBOX
         ============================================ */
-        .lightbox-overlay {
+        .lightbox {
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: rgba(0, 0, 0, 0.97);
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        
-        .lightbox-active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* Lightbox Header */
-        .lightbox-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            flex-shrink: 0;
-        }
-        
-        .lightbox-info {
-            color: white;
-        }
-        
-        .lightbox-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        
-        .lightbox-counter {
-            font-size: 13px;
-            color: rgba(255,255,255,0.6);
-        }
-        
-        .lightbox-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .lightbox-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            display: flex;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-fast);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
         }
         
-        .lightbox-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.08);
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
         }
         
         .lightbox-close {
-            background: rgba(255,255,255,0.15);
-        }
-        
-        .lightbox-close:hover {
-            background: #EF4444;
-        }
-        
-        /* Lightbox Main Area */
-        .lightbox-main {
-            flex: 1;
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-            touch-action: pinch-zoom;
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            z-index: 10;
+            border: none;
+            font-size: 24px;
         }
         
-        .lightbox-image-container {
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            z-index: 10;
+            border: none;
+            font-size: 24px;
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .lightbox-prev { left: 24px; }
+        .lightbox-next { right: 24px; }
+        
+        .lightbox-content {
             position: relative;
             max-width: 90vw;
-            max-height: calc(100vh - 200px);
+            max-height: 85vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -873,1332 +853,979 @@
         
         .lightbox-image {
             max-width: 100%;
-            max-height: calc(100vh - 200px);
+            max-height: 85vh;
             object-fit: contain;
             border-radius: var(--radius-md);
-            transition: transform 0.2s ease;
-            user-select: none;
-            -webkit-user-drag: none;
-            will-change: transform;
+            transition: transform var(--transition-fast);
+            cursor: grab;
         }
         
-        .lightbox-image.dragging {
-            transition: none;
+        .lightbox-image.zoomed {
+            cursor: grabbing;
+            transform: scale(var(--zoom-level, 1));
         }
         
-        /* Navigation Arrows */
-        .lightbox-nav {
+        .lightbox-info {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.12);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-            z-index: 10;
+            text-align: center;
         }
         
-        .lightbox-nav:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-50%) scale(1.1);
+        .lightbox-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
         
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
-        
+        .lightbox-counter {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
         /* Zoom Controls */
         .zoom-controls {
             position: absolute;
-            bottom: 20px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
+            gap: 12px;
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
+            padding: 8px 16px;
             border-radius: 50px;
+            z-index: 10;
         }
         
         .zoom-btn {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border: none;
             border-radius: 50%;
-            background: rgba(255,255,255,0.15);
             color: white;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            font-weight: 600;
             transition: all var(--transition-fast);
         }
         
         .zoom-btn:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
         }
-        
-        .zoom-level {
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            min-width: 50px;
-            text-align: center;
-        }
-        
+
         /* Thumbnail Strip */
-        .lightbox-thumbnails {
-            padding: 16px 24px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            flex-shrink: 0;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .lightbox-thumbnails::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .lightbox-thumbnails::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-        }
-        
-        .lightbox-thumbnails::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
-            border-radius: 3px;
-        }
-        
-        .thumbnail-list {
+        .thumbnail-strip {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            gap: 10px;
-            justify-content: center;
+            gap: 8px;
+            max-width: 80vw;
+            overflow-x: auto;
+            padding: 8px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
+            z-index: 10;
         }
         
-        .thumbnail-item {
-            width: 72px;
-            height: 52px;
+        .thumbnail-strip::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .thumbnail-strip::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .thumb {
+            width: 60px;
+            height: 60px;
             border-radius: var(--radius-sm);
             overflow: hidden;
             cursor: pointer;
             opacity: 0.5;
             transition: all var(--transition-fast);
-            border: 2px solid transparent;
             flex-shrink: 0;
+            border: 2px solid transparent;
         }
         
-        .thumbnail-item:hover {
-            opacity: 0.75;
-        }
-        
-        .thumbnail-item.active {
+        .thumb:hover,
+        .thumb.active {
             opacity: 1;
             border-color: var(--accent-color);
         }
         
-        .thumbnail-item img {
+        .thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
-        /* ============================================
-           EMPTY STATE
-        ============================================ */
-        .empty-state {
-            text-align: center;
-            padding: 80px 24px;
-            color: var(--text-muted);
-        }
-        
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            opacity: 0.4;
-        }
-        
-        .empty-state h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-        
+
         /* ============================================
            FOOTER
         ============================================ */
         .gallery-footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-light);
-            padding: 32px 24px;
+            padding: 40px 24px;
             text-align: center;
         }
         
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
         .footer-text {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-muted);
         }
         
-        .footer-text strong {
-            color: var(--text-secondary);
+        .footer-link {
+            color: var(--accent-color);
+            font-weight: 500;
         }
-        
-        /* ============================================
-           RESPONSIVE DESIGN
-        ============================================ */
-        @media (max-width: 1024px) {
-            .featured-bento {
-                grid-template-columns: 1fr;
-                grid-template-rows: 300px 200px 200px;
-            }
-            
-            .featured-main {
-                grid-row: 1;
-            }
-            
-            .bento-layout-a,
-            .bento-layout-b,
-            .bento-layout-c {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: auto;
-            }
-            
-            .bento-layout-a .bento-large {
-                grid-row: auto;
-            }
-            
-            .bento-layout-b .bento-wide {
-                grid-column: auto;
-                grid-row: auto;
-            }
-            
-            .bento-layout-c .bento-tall {
-                grid-row: auto;
-            }
-            
-            .bento-layout-c .bento-wide-2 {
-                grid-column: span 1;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            :root {
-                --header-height: auto;
-            }
-            
-            .header-inner {
-                flex-wrap: wrap;
-                padding: 12px 16px;
-                height: auto;
-                gap: 12px;
-            }
-            
-            .header-brand {
-                flex: 1;
-            }
-            
-            .header-controls {
-                order: 3;
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .search-input {
-                width: 100%;
-                max-width: 200px;
-            }
-            
-            .search-input:focus {
-                width: 100%;
-                max-width: 100%;
-            }
-            
-            .filter-select {
-                flex: 1;
-                min-width: 120px;
-            }
-            
-            .stats-inner {
-                gap: 20px;
-            }
-            
-            .stat-number {
-                font-size: 20px;
-            }
-            
-            .section-title {
-                font-size: 22px;
-            }
-            
-            .featured-bento {
-                grid-template-rows: 250px 160px 160px;
-                gap: 12px;
-            }
-            
-            .bento-layout-a,
-            .bento-layout-b,
-            .bento-layout-c {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .bento-card {
-                aspect-ratio: 16/10;
-            }
-            
-            .event-header {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .lightbox-nav {
-                width: 44px;
-                height: 44px;
-            }
-            
-            .lightbox-prev { left: 10px; }
-            .lightbox-next { right: 10px; }
-            
-            .thumbnail-item {
-                width: 56px;
-                height: 42px;
-            }
-            
-            .main-content {
-                padding: 24px 16px 60px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .brand-text h1 {
-                font-size: 14px;
-            }
-            
-            .brand-text span {
-                font-size: 10px;
-            }
-            
-            .section-title {
-                font-size: 19px;
-            }
-            
-            .featured-event-title {
-                font-size: 17px;
-            }
-            
-            .featured-overlay {
-                padding: 18px;
-            }
-            
-            .filters-inner {
-                padding: 0 16px;
-            }
-            
-            .filter-pill {
-                padding: 7px 14px;
-                font-size: 12px;
-            }
-            
-            .lightbox-title {
-                font-size: 14px;
-            }
-            
-            .zoom-controls {
-                bottom: 10px;
-            }
-        }
-        
+
         /* ============================================
            ANIMATIONS
         ============================================ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
-        .animate-in {
-            animation: fadeInUp 0.5s ease forwards;
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
-        /* Hide sections when filtering */
-        .event-section.hidden {
-            display: none;
-        }
-        
-        /* Photo protection (subtle) */
-        .photo-protected {
-            -webkit-touch-callout: none;
+        /* Photo protection */
+        .photo-card img,
+        .featured-img,
+        .lightbox-image {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
             user-select: none;
+            pointer-events: none;
+        }
+        
+        .photo-card,
+        .featured-card {
+            pointer-events: auto;
+        }
+
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
 </head>
-<body class="photo-protected">
-    
-    <!-- ============================================
-         HEADER / NAVIGATION
-    ============================================ -->
-    <header class="gallery-header" id="galleryHeader">
-        <div class="header-inner">
-            <div class="header-brand">
-                <div class="brand-icon">DK</div>
-                <div class="brand-text">
-                    <h1>Galeri Foto Kegiatan</h1>
-                    <span>Dinkes Kutai Kartanegara</span>
-                </div>
+<body>
+
+<!-- ============================================
+     HEADER
+=========================================== -->
+<header class="gallery-header" id="header">
+    <div class="header-inner">
+        <div class="header-brand">
+            <div class="brand-icon">📸</div>
+            <div class="brand-text">
+                <h1>Galeri Foto SDMK</h1>
+                <span>Dinas Kesehatan Kab. Kutai Kartanegara</span>
+            </div>
+        </div>
+        
+        <div class="header-controls">
+            <div class="search-wrapper">
+                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" placeholder="Cari kegiatan atau foto..." id="searchInput">
             </div>
             
-            <div class="header-controls">
-                <div class="search-wrapper">
-                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Cari kegiatan...">
-                </div>
-                
-                <select class="filter-select" id="yearFilter">
-                    <option value="all">Semua Tahun</option>
-                </select>
-                
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </button>
-                
-                <button class="mobile-menu-btn" aria-label="Menu">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                </button>
-            </div>
-        </div>
-    </header>
-    
-    <!-- STATS BAR -->
-    <div class="stats-bar">
-        <div class="stats-inner">
-            <div class="stat-item">
-                <span class="stat-number" id="totalActivities">2</span>
-                <span class="stat-label">Kegiatan</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="totalPhotos">8</span>
-                <span class="stat-label">Foto</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="totalCategories">2</span>
-                <span class="stat-label">Kategori</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- CATEGORY FILTERS -->
-    <div class="category-filters">
-        <div class="filters-inner" id="categoryFilters">
-            <button class="filter-pill active" data-category="all">Semua Kegiatan</button>
-            <button class="filter-pill" data-category="Pelatihan">Pelatihan</button>
-            <button class="filter-pill" data-category="Sosialisasi">Sosialisasi</button>
-            <button class="filter-pill" data-category="Bimtek">Bimtek</button>
-            <button class="filter-pill" data-category="Rapat">Rapat</button>
-            <button class="filter-pill" data-category="Kunjungan">Kunjungan</button>
-            <button class="filter-pill" data-category="Lainnya">Lainnya</button>
-        </div>
-    </div>
-    
-    <!-- ============================================
-         MAIN CONTENT
-    ============================================ -->
-    <main class="main-content" id="mainContent">
-        
-        
-    <!-- FEATURED EVENT SECTION -->
-    <section class="featured-section event-section animate-in" data-event-id="pelatihan-tata-bahasa-indonesia-140826" data-category="Pelatihan">
-        <div class="section-header">
-            <div class="section-title-group">
-                <span class="section-badge">⭐ Unggulan</span>
-                <h2 class="section-title">Kegiatan Terbaru</h2>
-            </div>
-            <span class="event-category-tag">Pelatihan</span>
-        </div>
-        
-        <div class="featured-bento">
-            <!-- Main Featured Photo -->
-            <div class="featured-main shimmer photo-protected" 
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]' 
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="0">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg" 
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar" 
-                     loading="eager"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="featured-overlay">
-                    <span class="featured-label">Kegiatan Terbaru</span>
-                    <h3 class="featured-event-title">Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar</h3>
-                    <div class="featured-meta">
-                        <span>📅 13-14 Agustus 2026</span>
-                        <span>📍 RSUD AM Parikesit, Tenggarong</span>
-                    </div>
-                </div>
-                <span class="photo-count-badge">
-                    📷 5 foto
-                </span>
-            </div>
-
-            <!-- Secondary Photo 1 -->
-            <div class="featured-sub shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="1">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - Foto 2"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="featured-overlay">
-                    <span class="featured-label">Pelatihan</span>
-                    <h4 class="featured-event-title">Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar</h4>
-                </div>
-            </div>
-
-            <!-- Secondary Photo 2 -->
-            <div class="featured-sub shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="2">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - Foto 3"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="featured-overlay">
-                    <span class="featured-label">Pelatihan</span>
-                    <h4 class="featured-event-title">Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar</h4>
-                </div>
-            </div>
-</div></section>
-        
-        
-    <!-- Event Section: Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar -->
-    <section class="event-section" data-event-id="pelatihan-tata-bahasa-indonesia-140826" data-category="Pelatihan">
-        <div class="event-header">
-            <div class="event-info">
-                <h2>Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar</h2>
-                <div class="event-meta">
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                        13-14 Agustus 2026
-                    </span>
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        RSUD AM Parikesit, Tenggarong
-                    </span>
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                        5 foto
-                    </span>
-                </div>
-            </div>
-            <span class="event-category-tag">Pelatihan</span>
-        </div>
-        
-        <div class="bento-layout-a">
-<div class="bento-card bento-large shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="0">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>5 foto tersedia</span>
-                    </div>
-                </div>
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="1">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - 2"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>Foto 2</span>
-                    </div>
-                </div>
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="2">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - 3"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>Foto 3</span>
-                    </div>
-                </div>
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="3">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - 4"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>Foto 4</span>
-                    </div>
-                </div>
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]'
-                 data-event-title="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar"
-                 data-photo-index="4">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg"
-                     alt="Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar - 5"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>Foto 5</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Event Section: Kegiatan 2026-08-13 -->
-    <section class="event-section" data-event-id="kegiatan-2026-08-13" data-category="Lainnya">
-        <div class="event-header">
-            <div class="event-info">
-                <h2>Kegiatan 2026-08-13</h2>
-                <div class="event-meta">
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                        2026-08-13
-                    </span>
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Dokumentasi Kegiatan
-                    </span>
-                    <span class="event-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                        3 foto
-                    </span>
-                </div>
-            </div>
-            <span class="event-category-tag">Lainnya</span>
-        </div>
-        
-        <div class="bento-layout-b">
-<div class="bento-card bento-wide shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260813_152459", "filename": "IMG_20260813_152459", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152509", "filename": "IMG_20260813_152509", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152526", "filename": "IMG_20260813_152526", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526.jpg", "created_at": "2026-08-27T21:37:20Z"}]'
-                 data-event-title="Kegiatan 2026-08-13"
-                 data-photo-index="0">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg"
-                     alt="Kegiatan 2026-08-13"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-                <div class="bento-card-overlay">
-                    <div class="bento-card-info">
-                        <span>Kegiatan 2026-08-13</span>
-                    </div>
-                </div>
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260813_152459", "filename": "IMG_20260813_152459", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152509", "filename": "IMG_20260813_152509", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152526", "filename": "IMG_20260813_152526", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526.jpg", "created_at": "2026-08-27T21:37:20Z"}]'
-                 data-event-title="Kegiatan 2026-08-13"
-                 data-photo-index="1">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg"
-                     alt="Kegiatan 2026-08-13 - 2"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-            </div>
-<div class="bento-card shimmer photo-protected"
-                 data-photos='[{"public_id": "IMG_20260813_152459", "filename": "IMG_20260813_152459", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152509", "filename": "IMG_20260813_152509", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152526", "filename": "IMG_20260813_152526", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526.jpg", "created_at": "2026-08-27T21:37:20Z"}]'
-                 data-event-title="Kegiatan 2026-08-13"
-                 data-photo-index="2">
-                <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg"
-                     alt="Kegiatan 2026-08-13 - 3"
-                     loading="lazy"
-                     onerror="this.style.background='#f1f3f5'">
-            </div>
-
-        </div>
-    </section>
-
-        
-        <!-- LOAD MORE -->
-        <div class="load-more-container" id="loadMoreContainer">
-            <p class="load-more-stats">
-                Menampilkan <strong id="shownCount">0</strong> dari <strong id="totalCount">0</strong> kegiatan
-            </p>
-            <button class="load-more-btn" id="loadMoreBtn">
-                Muat Lebih Banyak
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <span class="icon-moon">🌙</span>
+                <span class="icon-sun">☀️</span>
             </button>
         </div>
-        
-        <!-- EMPTY STATE (hidden by default) -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-            <h3>Tidak Ada Kegiatan Ditemukan</h3>
-            <p>Coba ubah filter atau kata kunci pencarian</p>
-        </div>
-        
-    </main>
+    </div>
+</header>
+
+<!-- ============================================
+     HERO SECTION
+=========================================== -->
+<section class="hero-section">
+    <div class="hero-badge">
+        <span>📷</span>
+        <span>Dokumentasi Kegiatan</span>
+    </div>
+    <h2 class="hero-title">Galeri Foto Kegiatan SDMK</h2>
+    <p class="hero-subtitle">Dokumentasi lengkap kegiatan Sumber Daya Manusia Kesehatan Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
     
-    <!-- FOOTER -->
-    <footer class="gallery-footer">
-        <p class="footer-text">
-            <strong>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara</strong><br>
-            Galeri Foto Dokumentasi Kegiatan SDMK
-        </p>
-    </footer>
-    
-    <!-- ============================================
-         PREMIUM LIGHTBOX
-    ============================================ -->
-    <div class="lightbox-overlay" id="lightbox">
-        <div class="lightbox-header">
-            <div class="lightbox-info">
-                <h3 class="lightbox-title" id="lightboxTitle">Foto Kegiatan</h3>
-                <span class="lightbox-counter" id="lightboxCounter">1 / 10</span>
-            </div>
-            <div class="lightbox-actions">
-                <button class="lightbox-btn" id="zoomOutBtn" title="Perkecil (−)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/></svg>
-                </button>
-                <button class="lightbox-btn" id="zoomInBtn" title="Perbesar (+)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>
-                </button>
-                <button class="lightbox-btn" id="resetZoomBtn" title="Reset Zoom">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                </button>
-                <button class="lightbox-btn lightbox-close" id="lightboxClose" title="Tutup (ESC)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-                </button>
-            </div>
+    <div class="hero-stats">
+        <div class="stat-item">
+            <div class="stat-number" id="totalPhotos">0</div>
+            <div class="stat-label">Foto</div>
         </div>
-        
-        <div class="lightbox-main" id="lightboxMain">
-            <button class="lightbox-nav lightbox-prev" id="lightboxPrev" title="Sebelumnya (←)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            
-            <div class="lightbox-image-container" id="imageContainer">
-                <img src="" alt="" class="lightbox-image" id="lightboxImage" draggable="false">
-            </div>
-            
-            <button class="lightbox-nav lightbox-next" id="lightboxNext" title="Selanjutnya (→)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-            
-            <div class="zoom-controls">
-                <button class="zoom-btn" id="zoomMinus">−</button>
-                <span class="zoom-level" id="zoomLevel">100%</span>
-                <button class="zoom-btn" id="zoomPlus">+</button>
-            </div>
+        <div class="stat-item">
+            <div class="stat-number" id="totalActivities">0</div>
+            <div class="stat-label">Kegiatan</div>
         </div>
-        
-        <div class="lightbox-thumbnails" id="lightboxThumbnails">
-            <div class="thumbnail-list" id="thumbnailList"></div>
+        <div class="stat-item">
+            <div class="stat-number" id="totalCategories">0</div>
+            <div class="stat-label">Kategori</div>
         </div>
     </div>
+</section>
 
-    <script>
-        // ============================================
-        // GALLERY DATA
-        // ============================================
-        const GALLERY_DATA = [{"id": "pelatihan-tata-bahasa-indonesia-140826", "judul": "Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar", "tanggal": "13-14 Agustus 2026", "tempat": "RSUD AM Parikesit, Tenggarong", "tahun": "2026", "deskripsi": "Pelatihan penggunaan tata bahasa Indonesia yang baik dan benar bagi tenaga kesehatan", "kategori": "Pelatihan", "folder": "pelatihan-tata-bahasa-indonesia-140826", "photos": [{"public_id": "IMG_20260814_162203", "filename": "IMG_20260814_162203", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162217", "filename": "IMG_20260814_162217", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg", "created_at": "2026-08-27T21:37:20Z"}, {"public_id": "IMG_20260814_162224", "filename": "IMG_20260814_162224", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg", "created_at": "2026-08-27T21:37:21Z"}, {"public_id": "IMG_20260814_162246", "filename": "IMG_20260814_162246", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg", "created_at": "2026-08-27T21:37:23Z"}, {"public_id": "IMG_20260814_162303", "filename": "IMG_20260814_162303", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg", "created_at": "2026-08-27T21:37:27Z"}]}, {"id": "kegiatan-2026-08-13", "judul": "Kegiatan 2026-08-13", "tanggal": "2026-08-13", "tempat": "Dokumentasi Kegiatan", "tahun": "2026", "deskripsi": "", "kategori": "Lainnya", "folder": "", "photos": [{"public_id": "IMG_20260813_152459", "filename": "IMG_20260813_152459", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152509", "filename": "IMG_20260813_152509", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509.jpg", "created_at": "2026-08-27T21:37:19Z"}, {"public_id": "IMG_20260813_152526", "filename": "IMG_20260813_152526", "format": "jpg", "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg", "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526.jpg", "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526.jpg", "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526.jpg", "created_at": "2026-08-27T21:37:20Z"}]}];
+<!-- ============================================
+     CATEGORY FILTERS
+=========================================== -->
+<section class="filters-section">
+    <div class="filters-container" id="filtersContainer">
+        <!-- Filters will be generated by JS -->
+    </div>
+</section>
+
+<!-- ============================================
+     FEATURED EVENT SECTION
+=========================================== -->
+<section class="featured-section" id="featuredSection">
+    <div class="section-header">
+        <h2 class="section-title">
+            <span class="section-title-icon">⭐</span>
+            Kegiatan Terbaru
+        </h2>
+    </div>
+    <div id="featuredContent">
+        <!-- Featured content will be generated by JS -->
+    </div>
+</section>
+
+<!-- ============================================
+     GALLERY GRID
+=========================================== -->
+<section class="gallery-section" id="gallerySection">
+    <div id="galleryContent">
+        <!-- Gallery content will be generated by JS -->
+    </div>
+    
+    <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+        <button class="load-more-btn" id="loadMoreBtn">
+            <span>Muat Lebih Banyak</span>
+            <span>↓</span>
+        </button>
+    </div>
+</section>
+
+<!-- ============================================
+     EMPTY STATE
+=========================================== -->
+<div class="empty-state" id="emptyState" style="display: none;">
+    <div class="empty-state-icon">📭</div>
+    <h3 class="empty-state-title">Tidak Ada Foto Ditemukan</h3>
+    <p class="empty-state-text">Tidak ada foto yang cocok dengan filter yang dipilih. Coba ganti kategori atau kata kunci pencarian.</p>
+</div>
+
+<!-- ============================================
+     LIGHTBOX
+=========================================== -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+    
+    <div class="lightbox-content">
+        <img src="" alt="" class="lightbox-image" id="lightboxImage">
         
-        // State
-        let currentCategory = 'all';
-        let currentSearch = '';
-        let currentYear = 'all';
-        let visibleCount = 6; // Initial visible events
-        let filteredEvents = [];
+        <div class="thumbnail-strip" id="thumbnailStrip"></div>
         
-        // Lightbox state
-        let lightboxOpen = false;
-        let currentLightboxIndex = 0;
-        let currentLightboxPhotos = [];
-        let zoomLevel = 1;
-        let panX = 0;
-        let panY = 0;
-        let isDragging = false;
-        let dragStartX = 0;
-        let dragStartY = 0;
-        let lastPanX = 0;
-        let lastPanY = 0;
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOut" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoomIn" title="Zoom in">+</button>
+            <button class="zoom-btn" id="zoomReset" title="Reset zoom">↺</button>
+        </div>
         
-        // DOM Elements
-        const header = document.getElementById('galleryHeader');
-        const searchInput = document.getElementById('searchInput');
-        const yearFilter = document.getElementById('yearFilter');
-        const themeToggle = document.getElementById('themeToggle');
-        const categoryFilters = document.getElementById('categoryFilters');
-        const mainContent = document.getElementById('mainContent');
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        const loadMoreContainer = document.getElementById('loadMoreContainer');
-        const shownCountEl = document.getElementById('shownCount');
-        const totalCountEl = document.getElementById('totalCount');
-        
-        // Lightbox elements
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.getElementById('lightboxImage');
-        const lightboxTitle = document.getElementById('lightboxTitle');
-        const lightboxCounter = document.getElementById('lightboxCounter');
-        const lightboxClose = document.getElementById('lightboxClose');
-        const lightboxPrev = document.getElementById('lightboxPrev');
-        const lightboxNext = document.getElementById('lightboxNext');
-        const thumbnailList = document.getElementById('thumbnailList');
-        const imageContainer = document.getElementById('imageContainer');
-        const zoomLevelEl = document.getElementById('zoomLevel');
-        
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        function init() {
-            populateYearFilter();
-            applySavedTheme();
-            setupEventListeners();
-            filterAndRenderEvents();
-            setupScrollAnimations();
-            updateStats();
+        <div class="lightbox-info">
+            <div class="lightbox-title" id="lightboxTitle"></div>
+            <div class="lightbox-counter" id="lightboxCounter"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     FOOTER
+=========================================== -->
+<footer class="gallery-footer">
+    <div class="footer-brand">
+        <div class="brand-icon" style="width: 36px; height: 36px; font-size: 14px;">🏥</div>
+    </div>
+    <p class="footer-text">
+        © 2026 <strong>Dinas Kesehatan Kabupaten Kutai Kartanegara</strong><br>
+        <span style="font-size: 12px;">Galeri Foto otomatis di-update dari Cloudinary</span>
+    </p>
+</footer>
+
+<!-- ============================================
+     JAVASCRIPT
+=========================================== -->
+<script>
+// Gallery Data (auto-generated)
+const GALLERY_DATA = [
+  {
+    "id": "kegiatan-2026-08-28",
+    "judul": "Foto Dokumentasi (2026-08-28)",
+    "tanggal": "2026-08-28",
+    "tempat": "Dokumentasi Kegiatan",
+    "tahun": "2026",
+    "deskripsi": "Kumpulan foto dokumentasi tanggal 2026-08-28",
+    "kategori": "Pelatihan",
+    "folder_original": "Root Level (Auto-detected)",
+    "photos": [
+      {
+        "public_id": "Foto_dari_mukminnasri",
+        "filename": "Foto_dari_mukminnasri",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/Foto_dari_mukminnasri.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/Foto_dari_mukminnasri.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/Foto_dari_mukminnasri.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/Foto_dari_mukminnasri.jpg",
+        "created_at": "2026-08-28T03:30:33Z"
+      }
+    ]
+  },
+  {
+    "id": "pelatihan-tata-bahasa-indonesia-140826",
+    "judul": "Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar",
+    "tanggal": "13-14 Agustus 2026",
+    "tempat": "RSUD AM Parikesit, Tenggarong",
+    "tahun": "2026",
+    "deskripsi": "Pelatihan penggunaan tata bahasa Indonesia yang baik dan benar bagi tenaga kesehatan",
+    "kategori": "Pelatihan",
+    "folder_original": "Root Level (Auto-detected)",
+    "photos": [
+      {
+        "public_id": "IMG_20260814_162303",
+        "filename": "IMG_20260814_162303",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303.jpg",
+        "created_at": "2026-08-27T21:37:27Z"
+      },
+      {
+        "public_id": "IMG_20260814_162246",
+        "filename": "IMG_20260814_162246",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246.jpg",
+        "created_at": "2026-08-27T21:37:23Z"
+      },
+      {
+        "public_id": "IMG_20260814_162224",
+        "filename": "IMG_20260814_162224",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224.jpg",
+        "created_at": "2026-08-27T21:37:21Z"
+      },
+      {
+        "public_id": "IMG_20260814_162217",
+        "filename": "IMG_20260814_162217",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217.jpg",
+        "created_at": "2026-08-27T21:37:20Z"
+      },
+      {
+        "public_id": "IMG_20260814_162203",
+        "filename": "IMG_20260814_162203",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203.jpg",
+        "created_at": "2026-08-27T21:37:20Z"
+      }
+    ]
+  },
+  {
+    "id": "kegiatan-2026-08-13",
+    "judul": "Foto Dokumentasi (2026-08-13)",
+    "tanggal": "2026-08-13",
+    "tempat": "Dokumentasi Kegiatan",
+    "tahun": "2026",
+    "deskripsi": "Kumpulan foto dokumentasi tanggal 2026-08-13",
+    "kategori": "Pelatihan",
+    "folder_original": "Root Level (Auto-detected)",
+    "photos": [
+      {
+        "public_id": "IMG_20260813_152526",
+        "filename": "IMG_20260813_152526",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526.jpg",
+        "created_at": "2026-08-27T21:37:20Z"
+      },
+      {
+        "public_id": "IMG_20260813_152509",
+        "filename": "IMG_20260813_152509",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509.jpg",
+        "created_at": "2026-08-27T21:37:19Z"
+      },
+      {
+        "public_id": "IMG_20260813_152459",
+        "filename": "IMG_20260813_152459",
+        "format": "jpg",
+        "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459.jpg",
+        "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459.jpg",
+        "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459.jpg",
+        "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459.jpg",
+        "created_at": "2026-08-27T21:37:19Z"
+      }
+    ]
+  }
+];
+
+// State
+let currentFilter = 'all';
+let displayedActivities = 0;
+const ACTIVITIES_PER_PAGE = 3;
+let currentLightboxIndex = 0;
+let currentZoomLevel = 1;
+let isDragging = false;
+let dragStart = { x: 0, y: 0 };
+let imageTranslate = { x: 0, y: 0 };
+
+// DOM Elements
+const header = document.getElementById('header');
+const themeToggle = document.getElementById('themeToggle');
+const searchInput = document.getElementById('searchInput');
+const filtersContainer = document.getElementById('filtersContainer');
+const featuredContent = document.getElementById('featuredContent');
+const galleryContent = document.getElementById('galleryContent');
+const loadMoreContainer = document.getElementById('loadMoreContainer');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const emptyState = document.getElementById('emptyState');
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxTitle = document.getElementById('lightboxTitle');
+const lightboxCounter = document.getElementById('lightboxCounter');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+const thumbnailStrip = document.getElementById('thumbnailStrip');
+const zoomIn = document.getElementById('zoomIn');
+const zoomOut = document.getElementById('zoomOut');
+const zoomReset = document.getElementById('zoomReset');
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    updateStats();
+    renderFilters();
+    renderFeatured();
+    renderGallery();
+    initScrollEffects();
+    initKeyboardNav();
+    initTouchGestures();
+});
+
+// Theme Management
+function initTheme() {
+    const savedTheme = localStorage.getItem('gallery-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('gallery-theme', next);
+});
+
+// Update Statistics
+function updateStats() {
+    let totalPhotos = 0;
+    const categories = new Set();
+    
+    GALLERY_DATA.forEach(activity => {
+        totalPhotos += activity.photos.length;
+        categories.add(activity.kategori);
+    });
+    
+    animateNumber('totalPhotos', totalPhotos);
+    animateNumber('totalActivities', GALLERY_DATA.length);
+    animateNumber('totalCategories', categories.size);
+}
+
+function animateNumber(elementId, target) {
+    const el = document.getElementById(elementId);
+    let current = 0;
+    const increment = target / 30;
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            el.textContent = target;
+            clearInterval(timer);
+        } else {
+            el.textContent = Math.floor(current);
         }
-        
-        function populateYearFilter() {
-            const years = [...new Set(GALLERY_DATA.map(e => e.tahun))].sort((a,b) => b-a);
-            years.forEach(year => {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                yearFilter.appendChild(option);
-            });
-        }
-        
-        function updateStats() {
-            const categories = new Set(GALLERY_DATA.map(e => e.kategori || 'Lainnya'));
-            document.getElementById('totalActivities').textContent = GALLERY_DATA.length;
-            document.getElementById('totalPhotos').textContent = GALLERY_DATA.reduce((sum, e) => sum + e.photos.length, 0);
-            document.getElementById('totalCategories').textContent = categories.size;
-        }
-        
-        // ============================================
-        // THEME (DARK MODE)
-        // ============================================
-        function applySavedTheme() {
-            const savedTheme = localStorage.getItem('gallery-theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-        
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('gallery-theme', next);
-            updateThemeIcon(next);
-        }
-        
-        function updateThemeIcon(theme) {
-            const sunIcon = themeToggle.querySelector('.sun-icon');
-            const moonIcon = themeToggle.querySelector('.moon-icon');
-            if (theme === 'dark') {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-            } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            }
-        }
-        
-        // ============================================
-        // HEADER SCROLL EFFECT
-        // ============================================
-        function handleScroll() {
-            if (window.scrollY > 20) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-        }
-        
-        // ============================================
-        // FILTERING & RENDERING
-        // ============================================
-        function filterAndRenderEvents() {
-            // Filter events
-            filteredEvents = GALLERY_DATA.filter(event => {
-                const matchCategory = currentCategory === 'all' || (event.kategori || 'Lainnya') === currentCategory;
-                const matchYear = currentYear === 'all' || event.tahun === currentYear;
-                const matchSearch = currentSearch === '' || 
-                    event.judul.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                    (event.tempat || '').toLowerCase().includes(currentSearch.toLowerCase());
-                return matchCategory && matchYear && matchSearch;
-            });
-            
-            // Update counts
-            totalCountEl.textContent = filteredEvents.length;
-            
-            // Get DOM elements
-            const emptyState = document.getElementById('emptyState');
-            const eventSections = document.querySelectorAll('.event-section');
-            
-            // Show/hide empty state
-            if (filteredEvents.length === 0) {
-                emptyState.style.display = 'block';
-                loadMoreContainer.style.display = 'none';
-                eventSections.forEach(section => section.classList.add('hidden'));
-            } else {
-                emptyState.style.display = 'none';
-                loadMoreContainer.style.display = 'block';
-                
-                // Show/hide events based on visible count
-                eventSections.forEach((section) => {
-                    const eventId = section.dataset.eventId;
-                    const eventIndex = filteredEvents.findIndex(e => e.id === eventId);
-                    
-                    if (eventIndex === -1) {
-                        section.classList.add('hidden');
-                    } else if (eventIndex < visibleCount) {
-                        section.classList.remove('hidden');
-                    } else {
-                        section.classList.add('hidden');
-                    }
-                });
-                
-                // Update shown count
-                const visibleSections = document.querySelectorAll('.event-section:not(.hidden)');
-                shownCountEl.textContent = Math.min(visibleSections.length, filteredEvents.length);
-                
-                // Update load more button state
-                if (visibleCount >= filteredEvents.length) {
-                    loadMoreContainer.classList.add('all-loaded');
-                } else {
-                    loadMoreContainer.classList.remove('all-loaded');
-                }
-            }
-        }
-        
-        function loadMore() {
-            visibleCount += 3;
-            filterAndRenderEvents();
-        }
-        
-        // ============================================
-        // SCROLL ANIMATIONS (Intersection Observer)
-        // ============================================
-        function setupScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            document.querySelectorAll('.event-section').forEach(section => {
-                observer.observe(section);
-            });
-        }
-        
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
-        function setupEventListeners() {
-            // Scroll
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            
-            // Search
-            searchInput.addEventListener('debounce', () => {
-                currentSearch = searchInput.value;
-                visibleCount = 6;
-                filterAndRenderEvents();
-            });
-            
-            let searchTimeout;
-            searchInput.addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    currentSearch = searchInput.value;
-                    visibleCount = 6;
-                    filterAndRenderEvents();
-                }, 300);
-            });
-            
-            // Year filter
-            yearFilter.addEventListener('change', () => {
-                currentYear = yearFilter.value;
-                visibleCount = 6;
-                filterAndRenderEvents();
-            });
-            
-            // Theme toggle
-            themeToggle.addEventListener('click', toggleTheme);
-            
-            // Category filters
-            categoryFilters.addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-pill')) {
-                    categoryFilters.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentCategory = e.target.dataset.category;
-                    visibleCount = 6;
-                    filterAndRenderEvents();
-                }
-            });
-            
-            // Load more
-            loadMoreBtn.addEventListener('click', loadMore);
-            
-            // Lightbox controls
-            lightboxClose.addEventListener('click', closeLightbox);
-            lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
-            lightboxNext.addEventListener('click', () => navigateLightbox(1));
-            
-            document.getElementById('zoomInBtn').addEventListener('click', () => adjustZoom(0.25));
-            document.getElementById('zoomOutBtn').addEventListener('click', () => adjustZoom(-0.25));
-            document.getElementById('resetZoomBtn').addEventListener('click', resetZoom);
-            document.getElementById('zoomPlus').addEventListener('click', () => adjustZoom(0.25));
-            document.getElementById('zoomMinus').addEventListener('click', () => adjustZoom(-0.25));
-            
-            // Click outside image to close
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox || e.target.closest('.lightbox-main') && !e.target.closest('.lightbox-image-container')) {
-                    closeLightbox();
-                }
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', handleKeyboard);
-            
-            // Mouse wheel zoom
-            lightbox.addEventListener('wheel', handleWheel, { passive: false });
-            
-            // Touch/drag for zoomed image
-            lightboxImage.addEventListener('mousedown', startDrag);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', endDrag);
-            
-            // Touch events for mobile
-            lightboxImage.addEventListener('touchstart', startTouchDrag, { passive: false });
-            document.addEventListener('touchmove', touchDrag, { passive: false });
-            document.addEventListener('touchend', endDrag);
-            
-            // Double click to zoom
-            lightboxImage.addEventListener('dblclick', handleDoubleClick);
-            
-            // Prevent context menu on images
-            lightboxImage.addEventListener('contextmenu', (e) => e.preventDefault());
-        }
-        
-        // ============================================
-        // LIGHTBOX FUNCTIONS
-        // ============================================
-        function openLightbox(photoUrl, photos, index, eventTitle) {
-            currentLightboxPhotos = photos;
-            currentLightboxIndex = index;
-            lightboxOpen = true;
-            
-            lightbox.classList.add('lightbox-active');
-            document.body.style.overflow = 'hidden';
-            
-            showLightboxPhoto(eventTitle);
-            renderThumbnails();
-        }
-        
-        function closeLightbox() {
-            lightboxOpen = false;
-            lightbox.classList.remove('lightbox-active');
-            document.body.style.overflow = '';
-            resetZoom();
-        }
-        
-        function showLightboxPhoto(eventTitle) {
-            const photo = currentLightboxPhotos[currentLightboxIndex];
-            if (!photo) return;
-            
-            // Use high quality version for lightbox
-            const highResUrl = photo.highResUrl || photo.originalUrl || photo.url;
-            
-            lightboxImage.src = highResUrl;
-            lightboxImage.alt = photo.filename || 'Foto kegiatan';
-            lightboxTitle.textContent = eventTitle || 'Foto Kegiatan';
-            lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxPhotos.length}`;
-            
-            resetZoom();
-            updateThumbnailActive();
-        }
-        
-        function navigateLightbox(direction) {
-            currentLightboxIndex += direction;
-            if (currentLightboxIndex < 0) currentLightboxIndex = currentLightboxPhotos.length - 1;
-            if (currentLightboxIndex >= currentLightboxPhotos.length) currentLightboxIndex = 0;
-            showLightboxPhoto(lightboxTitle.textContent);
-        }
-        
-        function goToPhoto(index) {
-            currentLightboxIndex = index;
-            showLightboxPhoto(lightboxTitle.textContent);
-        }
-        
-        // ============================================
-        // THUMBNAILS
-        // ============================================
-        function renderThumbnails() {
-            thumbnailList.innerHTML = '';
-            currentLightboxPhotos.forEach((photo, index) => {
-                const thumb = document.createElement('div');
-                thumb.className = `thumbnail-item${index === currentLightboxIndex ? ' active' : ''}`;
-                thumb.innerHTML = `<img src="${photo.thumbUrl}" alt="Thumbnail ${index + 1}" loading="lazy">`;
-                thumb.addEventListener('click', () => goToPhoto(index));
-                thumbnailList.appendChild(thumb);
-            });
-            
-            // Scroll active thumbnail into view
-            setTimeout(() => {
-                const activeThumb = thumbnailList.querySelector('.active');
-                if (activeThumb) {
-                    activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-                }
-            }, 100);
-        }
-        
-        function updateThumbnailActive() {
-            thumbnailList.querySelectorAll('.thumbnail-item').forEach((thumb, index) => {
-                thumb.classList.toggle('active', index === currentLightboxIndex);
-            });
-            
-            const activeThumb = thumbnailList.querySelector('.active');
-            if (activeThumb) {
-                activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-            }
-        }
-        
-        // ============================================
-        // ZOOM FUNCTIONS
-        // ============================================
-        function adjustZoom(delta) {
-            zoomLevel = Math.max(0.5, Math.min(5, zoomLevel + delta));
-            applyZoom();
-        }
-        
-        function setZoom(level) {
-            zoomLevel = Math.max(0.5, Math.min(5, level));
-            applyZoom();
-        }
-        
-        function resetZoom() {
-            zoomLevel = 1;
-            panX = 0;
-            panY = 0;
-            applyZoom();
-        }
-        
-        function applyZoom() {
-            lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
-            zoomLevelEl.textContent = `${Math.round(zoomLevel * 100)}%`;
-            
-            // Show/hide reset button
-            document.getElementById('resetZoomBtn').style.opacity = zoomLevel !== 1 ? '1' : '0.5';
-        }
-        
-        function handleWheel(e) {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? -0.15 : 0.15;
-            adjustZoom(delta);
-        }
-        
-        function handleDoubleClick(e) {
-            if (zoomLevel === 1) {
-                // Zoom to click position
-                const rect = lightboxImage.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
-                
-                zoomLevel = 2.5;
-                panX = -(x - 0.5) * rect.width * 1.5;
-                panY = -(y - 0.5) * rect.height * 1.5;
-                applyZoom();
-            } else {
-                resetZoom();
-            }
-        }
-        
-        // Drag functions (for panning when zoomed)
-        function startDrag(e) {
-            if (zoomLevel <= 1) return;
-            isDragging = true;
-            dragStartX = e.clientX;
-            dragStartY = e.clientY;
-            lastPanX = panX;
-            lastPanY = panY;
-            lightboxImage.classList.add('dragging');
-        }
-        
-        function drag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            panX = lastPanX + (e.clientX - dragStartX);
-            panY = lastPanY + (e.clientY - dragStartY);
-            applyZoom();
-        }
-        
-        function endDrag() {
-            isDragging = false;
-            lightboxImage.classList.remove('dragging');
-        }
-        
-        // Touch drag
-        let touchStartDist = 0;
-        let touchStartZoom = 1;
-        
-        function startTouchDrag(e) {
-            if (e.touches.length === 1 && zoomLevel > 1) {
-                // Single touch - pan
-                const touch = e.touches[0];
-                isDragging = true;
-                dragStartX = touch.clientX;
-                dragStartY = touch.clientY;
-                lastPanX = panX;
-                lastPanY = panY;
-                lightboxImage.classList.add('dragging');
-            } else if (e.touches.length === 2) {
-                // Pinch zoom
-                e.preventDefault();
-                const dx = e.touches[0].clientX - e.touches[1].clientX;
-                const dy = e.touches[0].clientY - e.touches[1].clientY;
-                touchStartDist = Math.sqrt(dx * dx + dy * dy);
-                touchStartZoom = zoomLevel;
-            }
-        }
-        
-        function touchDrag(e) {
-            if (!isDragging && e.touches.length !== 2) return;
-            
-            if (e.touches.length === 1 && isDragging) {
-                // Pan
-                const touch = e.touches[0];
-                panX = lastPanX + (touch.clientX - dragStartX);
-                panY = lastPanY + (touch.clientY - dragStartY);
-                applyZoom();
-            } else if (e.touches.length === 2) {
-                // Pinch zoom
-                e.preventDefault();
-                const dx = e.touches[0].clientX - e.touches[1].clientX;
-                const dy = e.touches[0].clientY - e.touches[1].clientY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                const scale = dist / touchStartDist;
-                zoomLevel = Math.max(0.5, Math.min(5, touchStartZoom * scale));
-                applyZoom();
-            }
-        }
-        
-        // Swipe navigation
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        lightboxImage.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        
-        lightboxImage.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, { passive: true });
-        
-        function handleSwipe() {
-            const diff = touchStartX - touchEndX;
-            const threshold = 80;
-            
-            if (Math.abs(diff) > threshold && zoomLevel <= 1.2) {
-                if (diff > 0) {
-                    navigateLightbox(1); // Swipe left = next
-                } else {
-                    navigateLightbox(-1); // Swipe right = prev
-                }
-            }
-        }
-        
-        // Keyboard navigation
-        function handleKeyboard(e) {
-            if (!lightboxOpen) return;
-            
-            switch(e.key) {
-                case 'Escape':
-                    closeLightbox();
-                    break;
-                case 'ArrowLeft':
-                    navigateLightbox(-1);
-                    break;
-                case 'ArrowRight':
-                    navigateLightbox(1);
-                    break;
-                case '+':
-                case '=':
-                    adjustZoom(0.25);
-                    break;
-                case '-':
-                    adjustZoom(-0.25);
-                    break;
-                case '0':
-                    resetZoom();
-                    break;
-            }
-        }
-        
-        // ============================================
-        // PHOTO CLICK HANDLERS (attached to cards)
-        // ============================================
-        function attachPhotoHandlers() {
-            document.querySelectorAll('[data-photos]').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const photosJson = card.dataset.photos;
-                    const eventTitle = card.dataset.eventTitle || 'Foto Kegiatan';
-                    const photoIndex = parseInt(card.dataset.photoIndex) || 0;
-                    
-                    try {
-                        const photos = JSON.parse(photosJson);
-                        openLightbox(photos[photoIndex]?.url, photos, photoIndex, eventTitle);
-                    } catch(err) {
-                        console.error('Error parsing photos:', err);
-                    }
-                });
-            });
-        }
-        
-        // Initialize handlers after DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-            attachPhotoHandlers();
+    }, 30);
+}
+
+// Render Category Filters
+function renderFilters() {
+    const categoryCount = {};
+    GALLERY_DATA.forEach(activity => {
+        const cat = activity.kategori;
+        categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+    });
+    
+    let html = `<button class="filter-btn active" data-category="all">
+        <span>Semua</span>
+        <span class="filter-count">${GALLERY_DATA.length}</span>
+    </button>`;
+    
+    Object.keys(categoryCount).sort().forEach(cat => {
+        html += `<button class="filter-btn" data-category="${cat}">
+            <span>${cat}</span>
+            <span class="filter-count">${categoryCount[cat]}</span>
+        </button>`;
+    });
+    
+    filtersContainer.innerHTML = html;
+    
+    // Add click handlers
+    filtersContainer.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.category;
+            displayedActivities = 0;
+            renderGallery();
         });
-        
-        // Also run immediately in case DOM already loaded
-        if (document.readyState !== 'loading') {
-            init();
-            attachPhotoHandlers();
+    });
+}
+
+// Render Featured Section
+function renderFeatured() {
+    if (!GALLERY_DATA.length) return;
+    
+    const featured = GALLERY_DATA[0];
+    const photos = featured.photos.slice(0, 4);
+    
+    if (!photos.length) return;
+    
+    let html = `
+    <div class="featured-grid" data-event-id="${featured.id}" data-category="${featured.kategori}">
+        <div class="featured-main featured-card" onclick='openLightbox("${featured.id}", 0)'>
+            <img src="${photos[0].highResUrl || photos[0].url}" 
+                 alt="${featured.judul}" 
+                 class="featured-img"
+                 loading="lazy">
+            <div class="featured-photo-count">
+                <span>📷</span>
+                <span>${featured.photos.length} foto</span>
+            </div>
+            <div class="featured-overlay">
+                <span class="featured-badge">${featured.kategori}</span>
+                <h3 class="featured-title">${featured.judul}</h3>
+                <div class="featured-meta">
+                    <span>📅 ${featured.tanggal}</span>
+                    <span>📍 ${featured.tempat}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (photos[1]) {
+        html += `
+        <div class="featured-secondary featured-card" onclick='openLightbox("${featured.id}", 1)'>
+            <img src="${photos[1].highResUrl || photos[1].url}" 
+                 alt="${featured.judul}" 
+                 class="featured-img"
+                 loading="lazy">
+        </div>`;
+    }
+    
+    if (photos[2]) {
+        html += `
+        <div class="featured-secondary featured-card" onclick='openLightbox("${featured.id}", 2)'>
+            <img src="${photos[2].highResUrl || photos[2].url}" 
+                 alt="${featured.judul}" 
+                 class="featured-img"
+                 loading="lazy">
+        </div>`;
+    }
+    
+    html += '</div>';
+    featuredContent.innerHTML = html;
+}
+
+// Render Gallery Grid
+function renderGallery() {
+    const filtered = currentFilter === 'all' 
+        ? GALLERY_DATA 
+        : GALLERY_DATA.filter(a => a.kategori === currentFilter);
+    
+    // Search filter
+    const searchTerm = searchInput.value.toLowerCase();
+    const searched = searchTerm 
+        ? filtered.filter(a => 
+            a.judul.toLowerCase().includes(searchTerm) ||
+            a.deskripsi.toLowerCase().includes(searchTerm) ||
+            a.tanggal.toLowerCase().includes(searchTerm)
+          )
+        : filtered;
+    
+    if (!searched.length) {
+        galleryContent.innerHTML = '';
+        emptyState.style.display = 'block';
+        loadMoreContainer.style.display = 'none';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    
+    const toShow = searched.slice(0, displayedActivities + ACTIVITIES_PER_PAGE);
+    
+    let html = '';
+    const layouts = ['layout-a', 'layout-b', 'layout-c'];
+    
+    toShow.forEach((activity, idx) => {
+        const layout = layouts[idx % 3];
+        html += generateActivityHTML(activity, layout);
+    });
+    
+    galleryContent.innerHTML = html;
+    displayedActivities = toShow.length;
+    
+    // Show/hide load more
+    if (displayedActivities < searched.length) {
+        loadMoreContainer.style.display = 'block';
+    } else {
+        loadMoreContainer.style.display = 'none';
+    }
+    
+    // Re-init scroll animations for new elements
+    initScrollAnimations();
+}
+
+function generateActivityHTML(activity, layoutClass) {
+    const photos = activity.photos;
+    
+    let photosHTML = photos.map((photo, idx) => `
+        <div class="photo-card fade-in" onclick='openLightbox("${activity.id}", ${idx})' data-public-id="${photo.public_id}">
+            <img src="${photo.url}" alt="${photo.filename}" loading="lazy">
+            <div class="photo-overlay">
+                <div class="photo-info">
+                    <div class="photo-info-title">${activity.judul}</div>
+                    <div class="photo-info-meta">${photo.format.toUpperCase()} • ${getFileSize(photo.url)}</div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    return `
+    <div class="activity-group fade-in" data-event-id="${activity.id}" data-category="${activity.kategori}">
+        <div class="activity-header">
+            <div class="activity-info">
+                <h2>${activity.judul}</h2>
+                <div class="activity-meta">
+                    <span class="activity-meta-item">📅 ${activity.tanggal}</span>
+                    <span class="activity-meta-item">📍 ${activity.tempat}</span>
+                    <span class="activity-meta-item">📷 ${photos.length} foto</span>
+                </div>
+            </div>
+            <span class="activity-category-badge">${activity.kategori}</span>
+        </div>
+        <div class="gallery-grid ${layoutClass}">
+            ${photosHTML}
+        </div>
+    </div>
+    `;
+}
+
+// Lightbox Functions
+function openLightbox(activityId, photoIndex) {
+    const activity = GALLERY_DATA.find(a => a.id === activityId);
+    if (!activity || !activity.photos.length) return;
+    
+    currentLightboxIndex = photoIndex;
+    currentZoomLevel = 1;
+    imageTranslate = { x: 0, y: 0 };
+    
+    updateLightboxContent(activity);
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    renderThumbnails(activity.photos);
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    resetZoom();
+}
+
+function updateLightboxContent(activity) {
+    const photo = activity.photos[currentLightboxIndex];
+    lightboxImage.src = photo.highResUrl || photo.originalUrl || photo.url;
+    lightboxImage.alt = photo.filename;
+    lightboxTitle.textContent = activity.judul;
+    lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${activity.photos.length}`;
+    
+    updateThumbnailActive();
+}
+
+function navigateLightbox(direction) {
+    const activity = getCurrentActivity();
+    if (!activity) return;
+    
+    currentLightboxIndex += direction;
+    
+    if (currentLightboxIndex < 0) currentLightboxIndex = activity.photos.length - 1;
+    if (currentLightboxIndex >= activity.photos.length) currentLightboxIndex = 0;
+    
+    resetZoom();
+    updateLightboxContent(activity);
+}
+
+function getCurrentActivity() {
+    // Find activity from current context (simplified)
+    for (const activity of GALLERY_DATA) {
+        if (currentLightboxIndex < activity.photos.length) {
+            return activity;
         }
-    </script>
+    }
+    return GALLERY_DATA[0];
+}
+
+// Zoom Functions
+function setZoom(level) {
+    currentZoomLevel = Math.max(1, Math.min(5, level));
+    lightboxImage.style.transform = `translate(${imageTranslate.x}px, ${imageTranslate.y}px) scale(${currentZoomLevel})`;
+    lightboxImage.classList.toggle('zoomed', currentZoomLevel > 1);
+}
+
+function resetZoom() {
+    currentZoomLevel = 1;
+    imageTranslate = { x: 0, y: 0 };
+    lightboxImage.style.transform = '';
+    lightboxImage.classList.remove('zoomed');
+}
+
+zoomIn.addEventListener('click', () => setZoom(currentZoomLevel + 0.5));
+zoomOut.addEventListener('click', () => setZoom(currentZoomLevel - 0.5));
+zoomReset.addEventListener('click', resetZoom);
+
+// Mouse wheel zoom
+lightbox.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.5 : 0.5;
+    setZoom(currentZoomLevel + delta);
+}, { passive: false });
+
+// Double-click zoom
+lightboxImage.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (currentZoomLevel === 1) {
+        setZoom(2.5);
+    } else {
+        resetZoom();
+    }
+});
+
+// Drag when zoomed
+lightboxImage.addEventListener('mousedown', (e) => {
+    if (currentZoomLevel > 1) {
+        isDragging = true;
+        dragStart = { x: e.clientX - imageTranslate.x, y: e.clientY - imageTranslate.y };
+        lightboxImage.style.cursor = 'grabbing';
+    }
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (isDragging && currentZoomLevel > 1) {
+        imageTranslate.x = e.clientX - dragStart.x;
+        imageTranslate.y = e.clientY - dragStart.y;
+        lightboxImage.style.transform = `translate(${imageTranslate.x}px, ${imageTranslate.y}px) scale(${currentZoomLevel})`;
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+    if (lightboxImage) lightboxImage.style.cursor = 'grab';
+});
+
+// Thumbnail Strip
+function renderThumbnails(photos) {
+    thumbnailStrip.innerHTML = photos.map((photo, idx) => `
+        <div class="thumb ${idx === currentLightboxIndex ? 'active' : ''}" onclick="goToThumbnail(${idx})">
+            <img src="${photo.thumbUrl}" alt="" loading="lazy">
+        </div>
+    `).join('');
+}
+
+function goToThumbnail(index) {
+    currentLightboxIndex = index;
+    resetZoom();
+    updateLightboxContent(getCurrentActivity());
+}
+
+function updateThumbnailActive() {
+    const thumbs = thumbnailStrip.querySelectorAll('.thumb');
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === currentLightboxIndex));
+    
+    // Scroll active thumb into view
+    const activeThumb = thumbnailStrip.querySelector('.thumb.active');
+    if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+}
+
+// Event Listeners
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+lightboxNext.addEventListener('click', () => navigateLightbox(1));
+
+lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+});
+
+loadMoreBtn.addEventListener('click', () => {
+    renderGallery();
+});
+
+searchInput.addEventListener('input', () => {
+    displayedActivities = 0;
+    renderGallery();
+});
+
+// Keyboard Navigation
+function initKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        
+        switch(e.key) {
+            case 'Escape':
+                closeLightbox();
+                break;
+            case 'ArrowLeft':
+                navigateLightbox(-1);
+                break;
+            case 'ArrowRight':
+                navigateLightbox(1);
+                break;
+            case '+':
+            case '=':
+                setZoom(currentZoomLevel + 0.5);
+                break;
+            case '-':
+                setZoom(currentZoomLevel - 0.5);
+                break;
+            case '0':
+                resetZoom();
+                break;
+        }
+    });
+}
+
+// Touch Gestures
+function initTouchGestures() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    
+    lightbox.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        
+        // Swipe detection
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            if (diffX > 0) navigateLightbox(-1);
+            else navigateLightbox(1);
+        }
+        
+        // Pinch zoom (basic)
+        if (e.touches.length < 2 && Math.abs(diffY) < 10 && Math.abs(diffX) < 10) {
+            if (currentZoomLevel === 1) setZoom(2);
+            else resetZoom();
+        }
+    }, { passive: true });
+}
+
+// Scroll Effects
+function initScrollEffects() {
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('window.scrollY > 50', 'header-scrolled');
+    });
+}
+
+function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// Utility Functions
+function getFileSize(url) {
+    // Estimate file size from URL parameters (simplified)
+    if (url.includes('w_1920')) return '~500 KB';
+    if (url.includes('w_800')) return '~200 KB';
+    if (url.includes('w_150')) return '~30 KB';
+    return '~100 KB';
+}
+</script>
+
 </body>
 </html>

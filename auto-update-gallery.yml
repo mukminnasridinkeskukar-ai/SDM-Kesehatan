@@ -1,0 +1,117 @@
+# ============================================
+# GITHUB ACTIONS - AUTO UPDATE GALERI FOTO
+# ============================================
+# Jadwal: Setiap 6 jam (00:00, 06:00, 12:00, 18:00 UTC+8)
+# Trigger: Bisa juga manual dari GitHub Actions tab
+
+name: 🎨 Auto-Update Galeri Foto SDMK
+
+on:
+  # Schedule: Every 6 hours
+  schedule:
+    - cron: '0 */6 * * *'  # UTC time (adjust for your timezone)
+  
+  # Manual trigger (dari GitHub Actions tab → Run workflow)
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Alasan trigger manual'
+        required: false
+        default: 'Test manual update'
+
+# Permissions untuk auto-commit
+permissions:
+  contents: write
+
+jobs:
+  update-gallery:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout repository
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      # Step 2: Setup Python
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install dependencies
+      - name: 📦 Install Cloudinary Library
+        run: |
+          pip install cloudinary
+
+      # Step 4: Run Gallery Generator Script
+      - name: 🔄 Fetch from Cloudinary & Generate HTML
+        run: |
+          python scripts/bento-masonry-gallery-v4.py
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+      # Step 5: Check for changes
+      - name: 🔍 Check for Changes
+        id: check_changes
+        run: |
+          if git diff --quiet download/galeri-foto-standalone.html; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected in HTML file"
+            # Count stats for commit message
+            PHOTO_COUNT=$(grep -o '"publicId"' download/galeri-foto-standalone.html | wc -l || echo "0")
+            ACTIVITY_COUNT=$(grep -o '"judul":' download/galeri-foto-standalone.html | wc -l || echo "0")
+            echo "photo_count=$PHOTO_COUNT" >> $GITHUB_OUTPUT
+            echo "activity_count=$ACTIVITY_COUNT" >> $GITHUB_OUTPUT
+          fi
+
+      # Step 6: Commit & Push (jika ada perubahan)
+      - name: 🚀 Commit & Push Changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Auto Update"
+          
+          git add download/galeri-foto-standalone.html
+          
+          DATE=$(date "+%Y-%m-%d %H:%M:%S")
+          PHOTOS="${{ steps.check_changes.outputs.photo_count }}"
+          ACTIVITIES="${{ steps.check_changes.outputs.activity_count }}"
+          
+          git commit -m "🎨 Auto-update Galeri Foto ($DATE)
+
+📊 Statistik:
+• $ACTIVITIES kegiatan
+• $PHOTOS foto
+🔄 Auto-update by GitHub Actions
+⏰ Scheduled: Every 6 hours
+
+[skip ci]"
+          
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 7: Summary
+      - name: 📋 Job Summary
+        if: always()
+        run: |
+          echo "## 📊 Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_changes.outputs.changed }}" = "true" ]; then
+            echo "✅ **Gallery updated successfully!**" >> $GITHUB_STEP_SUMMARY
+            echo "- **Photos:** ${{ steps.check_changes.outputs.photo_count }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Activities:** ${{ steps.check_changes.outputs.activity_count }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No changes detected** - Gallery is up to date" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Triggered: $(date)*" >> $GITHUB_STEP_SUMMARY
