@@ -1276,6 +1276,39 @@
                 </div>
             </div>
             
+            <!-- AUTO-UPDATE STATUS SECTION -->
+            <div id="autoUpdateStatus"></div>
+            
+            <!-- AUTO-UPDATE CONTROL BUTTONS -->
+            <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+                <button onclick="toggleAutoUpdate()" style="
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    background: var(--accent-light);
+                    color: var(--accent-color);
+                    border: 1px solid var(--border-color);
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.background='var(--accent-color)'; this.style.color='white'" onmouseout="this.style.background='var(--accent-light)'; this.style.color='var(--accent-color)'">
+                    ⚡ Toggle Auto-Update
+                </button>
+                <button onclick="forceAutoUpdateNow()" style="
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    background: var(--accent-success);
+                    color: white;
+                    border: none;
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    🔄 Update Sekarang
+                </button>
+            </div>
+            
             <div class="refresh-log" id="refreshLog">
                 <div class="log-entry">
                     <span class="log-time">--:--:--</span>
@@ -1409,6 +1442,21 @@ const CONFIG = {
     cloudName: 'cla7jrww',
     adminPassword: '@dinkes2026', // Change this!
     cacheExpiry: 30 * 60 * 1000, // 30 minutes
+    autoRefreshInterval: 5 * 60 * 1000, // 5 menit - Auto refresh otomatis
+    enableAutoRefresh: true, // Aktifkan auto-update
+};
+
+// ============================================
+// AUTO-UPDATE STATE
+// ============================================
+let autoUpdateState = {
+    isEnabled: true,
+    intervalId: null,
+    lastAutoUpdate: null,
+    nextUpdateIn: null,
+    isUpdating: false,
+    newPhotosFound: 0,
+    totalAutoUpdates: 0
 };
 
 // ============================================
@@ -1421,7 +1469,8 @@ let state = {
     galleryData: [],
     filteredData: [],
     currentLightbox: { activityId: null, photoIndex: 0 },
-    lastRefresh: null
+    lastRefresh: null,
+    lastKnownPhotoCount: 0
 };
 
 // ============================================
@@ -1484,6 +1533,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     loadGallery();
     initScrollEffects();
+    initAutoUpdate(); // ⚡ START AUTO-UPDATE
 });
 
 function initTheme() {
@@ -1634,6 +1684,51 @@ function updateAdminStatus() {
     document.getElementById('lastUpdate').textContent = state.lastRefresh 
         ? formatTime(state.lastRefresh) 
         : '-';
+    
+    // Update auto-update status
+    updateAutoUpdateStatus();
+}
+
+// ============================================
+// AUTO-UPDATE STATUS DISPLAY
+// ============================================
+function updateAutoUpdateStatus() {
+    const el = document.getElementById('autoUpdateStatus');
+    if (!el) return;
+    
+    if (autoUpdateState.isEnabled && autoUpdateState.intervalId) {
+        const nextIn = autoUpdateState.nextUpdateIn;
+        const lastAuto = autoUpdateState.lastAutoUpdate 
+            ? formatTime(autoUpdateState.lastAutoUpdate) 
+            : 'Belum pernah';
+        
+        el.innerHTML = `
+            <div style="margin-top: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="color: var(--accent-success);">●</span>
+                    <strong>Auto-Update AKTIF</strong>
+                </div>
+                <div style="color: var(--text-secondary); line-height: 1.6;">
+                    <div>⏱️ Refresh setiap: ${CONFIG.autoRefreshInterval / 60000} menit</div>
+                    <div>🔄 Terakhir auto-update: ${lastAuto}</div>
+                    <div>📊 Total auto-update: ${autoUpdateState.totalAutoUpdates}x</div>
+                    ${autoUpdateState.newPhotosFound > 0 
+                        ? `<div style="color: var(--accent-success); margin-top: 4px;">✨ Foto baru ditemukan: +${autoUpdateState.newPhotosFound}</div>` 
+                        : ''}
+                    ${nextIn !== null ? `<div>⏳ Update berikutnya: ${nextIn} detik</div>` : ''}
+                </div>
+            </div>
+        `;
+    } else {
+        el.innerHTML = `
+            <div style="margin-top: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted);">○</span>
+                    <span style="color: var(--text-muted);">Auto-Update NONAKTIF</span>
+                </div>
+            </div>
+        `;
+    }
 }
 
 function addLog(type, message) {
@@ -2039,6 +2134,257 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// ============================================
+// 🔄 AUTO-UPDATE SYSTEM (OTOMATIS TANPA REFRESH)
+// ============================================
+function initAutoUpdate() {
+    if (!CONFIG.enableAutoRefresh) {
+        console.log('⏸️ Auto-update disabled in config');
+        return;
+    }
+    
+    console.log(`⚡ Auto-update initialized: every ${CONFIG.autoRefreshInterval / 60000} minutes`);
+    
+    // Store initial photo count for comparison
+    state.lastKnownPhotoCount = getTotalPhotos();
+    
+    // Start the interval
+    startAutoUpdateInterval();
+    
+    // Listen for visibility changes (tab focus/blur)
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Also check when window gains focus
+    window.addEventListener('focus', handleWindowFocus);
+    
+    // Start countdown timer display
+    startCountdownTimer();
+}
+
+function startAutoUpdateInterval() {
+    // Clear existing interval if any
+    if (autoUpdateState.intervalId) {
+        clearInterval(autoUpdateState.intervalId);
+    }
+    
+    autoUpdateState.isEnabled = true;
+    autoUpdateState.nextUpdateIn = Math.floor(CONFIG.autoRefreshInterval / 1000);
+    
+    autoUpdateState.intervalId = setInterval(async () => {
+        await performAutoUpdate();
+    }, CONFIG.autoRefreshInterval);
+    
+    console.log('✅ Auto-update interval started');
+}
+
+async function performAutoUpdate() {
+    // Skip if already updating
+    if (autoUpdateState.isUpdating) {
+        console.log('⏳ Auto-update already in progress, skipping...');
+        return;
+    }
+    
+    autoUpdateState.isUpdating = true;
+    console.log('🔄 Performing automatic gallery update...');
+    
+    try {
+        // Get current photo count before update
+        const photoCountBefore = getTotalPhotos();
+        
+        // Fetch fresh data (same logic as manual refresh)
+        const newData = await fetchFreshData();
+        
+        if (newData && newData.length > 0) {
+            // Calculate new photos
+            const photoCountAfter = newData.reduce((sum, a) => sum + (a.photos?.length || 0), 0);
+            const newPhotos = Math.max(0, photoCountAfter - photoCountBefore);
+            
+            // Update state
+            GALLERY_DATA = newData;
+            state.galleryData = newData;
+            state.filteredData = [...newData];
+            state.lastRefresh = new Date();
+            autoUpdateState.lastAutoUpdate = new Date();
+            autoUpdateState.totalAutoUpdates++;
+            autoUpdateState.newPhotosFound += newPhotos;
+            
+            // Save to cache
+            saveToCache(newData);
+            
+            // Re-render gallery
+            renderGallery();
+            updateStats();
+            renderFilters();
+            updateAdminStatus();
+            
+            // Log the update
+            addLog('success', `🔄 Auto-update: ${photoCountAfter} foto dari ${newData.length} kegiatan`);
+            
+            // Show notification if NEW photos found
+            if (newPhotos > 0) {
+                showAutoUpdateNotification(newPhotos, photoCountAfter);
+            }
+            
+            console.log(`✅ Auto-update complete! Found ${newPhotos} new photos`);
+        }
+        
+        // Reset countdown
+        autoUpdateState.nextUpdateIn = Math.floor(CONFIG.autoRefreshInterval / 1000);
+        
+    } catch (error) {
+        console.error('❌ Auto-update error:', error);
+        addLog('warning', `⚠️ Auto-update gagal: ${error.message}`);
+    } finally {
+        autoUpdateState.isUpdating = false;
+    }
+}
+
+async function fetchFreshData() {
+    // Simulate fetching fresh data from Cloudinary
+    // In production, this would call your backend API or Cloudinary Admin API
+    
+    // For demo: we use DEFAULT_DATA with slight modifications to simulate updates
+    // In REAL implementation, replace this with actual API call:
+    //
+    // const response = await fetch(`/api/gallery/photos?cloud_name=${CONFIG.cloudName}`);
+    // return await response.json();
+    
+    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+    
+    const newData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    
+    // Add timestamps
+    newData.forEach((activity) => {
+        activity.lastUpdated = new Date().toISOString();
+        activity.lastUpdatedBy = 'auto-update';
+    });
+    
+    return newData;
+}
+
+function handleVisibilityChange() {
+    if (document.visibilityState === 'visible') {
+        console.log('👀 Tab became visible - checking for updates...');
+        
+        // Check if cache has expired while tab was hidden
+        const cached = localStorage.getItem('galleryCache');
+        if (cached) {
+            const parsed = JSON.parse(cached);
+            const age = Date.now() - parsed.timestamp;
+            
+            // If cache is old (> 5 min), trigger immediate update
+            if (age > 5 * 60 * 1000) {
+                addLog('info', '👀 Tab visible & cache stale - triggering quick update...');
+                performAutoUpdate();
+            }
+        }
+        
+        // Restart countdown display
+        autoUpdateState.nextUpdateIn = Math.floor(CONFIG.autoRefreshInterval / 1000);
+    }
+}
+
+function handleWindowFocus() {
+    // Additional check when window gains focus
+    if (document.visibilityState === 'visible') {
+        updateAutoUpdateStatus();
+    }
+}
+
+let countdownInterval = null;
+
+function startCountdownTimer() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    countdownInterval = setInterval(() => {
+        if (autoUpdateState.nextUpdateIn > 0) {
+            autoUpdateState.nextUpdateIn--;
+        }
+        
+        // Update display every 10 seconds to avoid excessive DOM updates
+        if (autoUpdateState.nextUpdateIn % 10 === 0 || autoUpdateState.nextUpdateIn <= 5) {
+            updateAutoUpdateStatus();
+        }
+    }, 1000);
+}
+
+function showAutoUpdateNotification(newPhotoCount, totalPhotos) {
+    // Create a special toast for auto-updates
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        top: 90px;
+        right: 20px;
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+        border-radius: 14px;
+        font-weight: 600;
+        z-index: 100000;
+        animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+        max-width: 350px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    `;
+    
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5em;">✨</span>
+            <div>
+                <div style="font-weight: 700;">Foto Baru Tersedia!</div>
+                <div style="font-size: 0.85em; opacity: 0.9;">+${newPhotoCount} foto baru • Total: ${totalPhotos}</div>
+            </div>
+        </div>
+        <div style="font-size: 0.75em; margin-top: 8px; opacity: 0.8;">Klik untuk tutup</div>
+    `;
+    
+    // Click to dismiss
+    toast.addEventListener('click', () => {
+        toast.style.animation = 'slideInRight 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    });
+    
+    document.body.appendChild(toast);
+    
+    // Auto-dismiss after 8 seconds (longer than normal toasts)
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.style.animation = 'slideInRight 0.3s ease reverse';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 8000);
+    
+    // Also log it
+    addLog('success', `✨ ${newPhotoCount} foto baru ditemukan via auto-update!`);
+}
+
+// Manual toggle for auto-update (for admin)
+function toggleAutoUpdate() {
+    autoUpdateState.isEnabled = !autoUpdateState.isEnabled;
+    
+    if (autoUpdateState.isEnabled) {
+        startAutoUpdateInterval();
+        addLog('success', '✅ Auto-update diaktifkan');
+        showNotification('Auto-update diaktifkan', 'success');
+    } else {
+        if (autoUpdateState.intervalId) {
+            clearInterval(autoUpdateState.intervalId);
+            autoUpdateState.intervalId = null;
+        }
+        addLog('info', '⏸️ Auto-update dinonaktifkan');
+        showNotification('Auto-update dinonaktifkan', 'info');
+    }
+    
+    updateAutoUpdateStatus();
+}
+
+// Force immediate auto-update (for admin)
+function forceAutoUpdateNow() {
+    addLog('info', '⚡ Memaksa update sekarang...');
+    performAutoUpdate();
+}
+
 console.log(`
 ╔══════════════════════════════════════════════════╗
 ║   🖼️ GALERI FOTO DINKES KUKAR - STANDALONE      ║
@@ -2050,11 +2396,29 @@ console.log(`
 ║   ✅ Search & Filter                             ║
 ║   ✅ Lightbox Gallery                            ║
 ║   ✅ Local Storage Cache                         ║
+║   ✅ AUTO-UPDATE OTOMATIS ⚡                     ║
 ║                                                  ║
 ║   Admin Password: dinkes2026                     ║
+║   Cloudinary: cla7jrww                           ║
 ║                                                  ║
 ╚══════════════════════════════════════════════════╝
 `);
+
+// Add CSS animation for auto-update notification
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
 
 </body>
