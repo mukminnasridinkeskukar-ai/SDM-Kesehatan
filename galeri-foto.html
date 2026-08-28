@@ -2617,7 +2617,9 @@
         const CLOUDINARY_CONFIG = {
             cloudName: 'cla7jrww',
             uploadPreset: 'galeri_kegiatan',
-            baseFolder: 'galeri-kegiatan'
+            baseFolder: 'galeri-kegiatan',
+            // API untuk fetch resources (menggunakan search endpoint)
+            searchApi: `https://api.cloudinary.com/v1_1/cla7jrww/resources/search`
         };
 
         // Generate Cloudinary URL with transformations
@@ -2643,6 +2645,25 @@
             return getCloudinaryUrl(publicId, { width: 1920, height: 1080, quality: 'auto:good' });
         }
 
+        // Get gallery size URL (medium)
+        function getGalleryUrl(publicId) {
+            return getCloudinaryUrl(publicId, { width: 550, height: 370, quality: 'auto:good' });
+        }
+
+        // Get featured/hero URL (large)
+        function getFeaturedUrl(publicId) {
+            return getCloudinaryUrl(publicId, { width: 1600, height: 900, quality: 'auto:good' });
+        }
+
+        // ============================================
+        // LOCAL STORAGE KEYS
+        // ============================================
+        const STORAGE_KEYS = {
+            events: 'gallery_events_data',
+            photos: 'gallery_photos_data',
+            lastSync: 'gallery_last_sync'
+        };
+
         // ============================================
         // APPLICATION STATE
         // ============================================
@@ -2658,103 +2679,191 @@
             zoomLevel: 1,
             isDragging: false,
             startX: 0,
-            scrollLeft: 0
+            scrollLeft: 0,
+            isLoading: true
         };
 
         // ============================================
-        // SAMPLE DATA (Will be replaced with Cloudinary API)
+        // DATA MANAGEMENT - LOCAL STORAGE + CLOUDINARY
         // ============================================
-        const sampleEvents = [
-            {
-                id: 'evt-001',
-                title: 'Sosialisasi Platform Digital Pengelolaan SDM Kesehatan',
-                subtitle: 'Peningkatan Kompetensi Digital',
-                date: '25 Agustus 2026',
-                location: 'Tenggarong',
-                year: '2026',
-                category: 'sosialisasi',
-                description: 'Kegiatan sosialisasi platform digital untuk pengelolaan sumber daya manusia kesehatan di wilayah Kutai Kartanegara. Acara ini dihadiri oleh para tenaga kesehatan dari berbagai puskesmas dan rumah sakit se-Kaltim.',
-                photoCount: 38,
-                featuredPhoto: 'galeri-kegiatan/2026/sosialisasi-sdmk/featured',
-                folder: 'galeri-kegiatan/2026/sosialisasi-sdmk'
-            },
-            {
-                id: 'evt-002',
-                title: 'Bimtek Implementasi Standar Akreditasi',
-                subtitle: 'Peningkatan Mutu Pelayanan',
-                date: '18 Agustus 2026',
-                location: 'Balikpapan',
-                year: '2026',
-                category: 'bimtek',
-                description: 'Bimbingan teknis implementasi standar akreditasi fasilitas kesehatan tingkat pertama. Peserta berasal dari berbagai FKTP se-Provinsi Kalimantan Timur.',
-                photoCount: 52,
-                featuredPhoto: 'galeri-kegiatan/2026/bimtek/featured',
-                folder: 'galeri-kegiatan/2026/bimtek'
-            },
-            {
-                id: 'evt-003',
-                title: 'Pelatihan Penanganan Darurat Medis',
-                subtitle: 'Emergency Response Training',
-                date: '10 Agustus 2026',
-                location: 'Samarinda',
-                year: '2026',
-                category: 'pelatihan',
-                description: 'Pelatihan penanganan darurat medis untuk tim penanggulangan bencana daerah. Meliputi simulasi evakuasi, P3K lanjutan, dan koordinasi dengan rumah sakit rujukan.',
-                photoCount: 45,
-                featuredPhoto: 'galeri-kegiatan/2026/pelatihan/featured',
-                folder: 'galeri-kegiatan/2026/pelatihan'
-            },
-            {
-                id: 'evt-004',
-                title: 'Rapat Koordinasi Program Prioritas',
-                subtitle: 'Evaluasi Semester I Tahun 2026',
-                date: '5 Juli 2026',
-                location: 'Samarinda',
-                year: '2026',
-                category: 'rapat',
-                description: 'Rapat koordinasi evaluasi program prioritas Dinas Kesehatan semester I tahun 2026. Membahas capaian, kendala, dan strategi percepatan program.',
-                photoCount: 24,
-                featuredPhoto: 'galeri-kegiatan/2026/rapat/featured',
-                folder: 'galeri-kegiatan/2026/rapat'
-            },
-            {
-                id: 'evt-005',
-                title: 'Kunjungan Kerja ke Puskesmas Terpencil',
-                subtitle: 'Supervisi dan Pembinaan',
-                date: '28 Juni 2026',
-                location: 'Mahakam Ulu',
-                year: '2026',
-                category: 'kunjungan',
-                description: 'Kunjungan kerja kepala dinas ke puskesmas terpencil di wilayah Mahakam Ulu untuk melakukan supervisi dan pembinaan pelayanan kesehatan dasar.',
-                photoCount: 33,
-                featuredPhoto: 'galeri-kegiatan/2026/kunjungan/featured',
-                folder: 'galeri-kegiatan/2026/kunjungan'
+        
+        // Load events from localStorage or create default structure
+        function loadEventsFromStorage() {
+            const stored = localStorage.getItem(STORAGE_KEYS.events);
+            if (stored) {
+                try {
+                    state.events = JSON.parse(stored);
+                    console.log('✓ Events loaded from localStorage:', state.events.length, 'events');
+                    return true;
+                } catch (e) {
+                    console.error('Failed to parse stored events:', e);
+                }
             }
-        ];
-
-        // Sample photos for demo (using placeholder)
-        function generateSamplePhotos(eventFolder, count) {
-            const photos = [];
-            for (let i = 1; i <= count; i++) {
-                photos.push({
-                    id: `photo-${i}`,
-                    publicId: `${eventFolder}/photo-${String(i).padStart(3, '0')}`,
-                    caption: `Dokumentasi kegiatan - Foto ${i}`,
-                    sortOrder: i,
-                    width: 1920,
-                    height: 1280,
-                    format: 'jpg'
-                });
-            }
-            return photos;
+            return false;
         }
 
-        // Initialize events with sample data
-        state.events = sampleEvents.map(event => ({
-            ...event,
-            photos: generateSamplePhotos(event.folder, event.photoCount)
-        }));
-        state.filteredEvents = [...state.events];
+        // Save events to localStorage
+        function saveEventsToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.events, JSON.stringify(state.events));
+                localStorage.setItem(STORAGE_KEYS.lastSync, new Date().toISOString());
+                console.log('✓ Events saved to localStorage');
+            } catch (e) {
+                console.error('Failed to save events:', e);
+            }
+        }
+
+        // Create default event structure if none exists
+        function initializeDefaultEvents() {
+            const defaultEvents = [
+                {
+                    id: 'evt-001',
+                    title: 'Sosialisasi Platform Digital Pengelolaan SDM Kesehatan',
+                    subtitle: 'Peningkatan Kompetensi Digital',
+                    date: '25 Agustus 2026',
+                    location: 'Tenggarong',
+                    year: '2026',
+                    category: 'sosialisasi',
+                    description: 'Kegiatan sosialisasi platform digital untuk pengelolaan sumber daya manusia kesehatan.',
+                    folder: 'galeri-kegiatan/2026/sosialisasi-sdmk',
+                    photos: [],
+                    photoCount: 0,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'evt-002',
+                    title: 'Bimtek Implementasi Standar Akreditasi',
+                    subtitle: 'Peningkatan Mutu Pelayanan',
+                    date: '18 Agustus 2026',
+                    location: 'Balikpapan',
+                    year: '2026',
+                    category: 'bimtek',
+                    description: 'Bimbingan teknis implementasi standar akreditasi fasilitas kesehatan tingkat pertama.',
+                    folder: 'galeri-kegiatan/2026/bimtek',
+                    photos: [],
+                    photoCount: 0,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'evt-003',
+                    title: 'Pelatihan Penanganan Darurat Medis',
+                    subtitle: 'Emergency Response Training',
+                    date: '10 Agustus 2026',
+                    location: 'Samarinda',
+                    year: '2026',
+                    category: 'pelatihan',
+                    description: 'Pelatihan penanganan darurat medis untuk tim penanggulangan bencana daerah.',
+                    folder: 'galeri-kegiatan/2026/pelatihan',
+                    photos: [],
+                    photoCount: 0,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'evt-004',
+                    title: 'Rapat Koordinasi Program Prioritas',
+                    subtitle: 'Evaluasi Semester I Tahun 2026',
+                    date: '5 Juli 2026',
+                    location: 'Samarinda',
+                    year: '2026',
+                    category: 'rapat',
+                    description: 'Rapat koordinasi evaluasi program prioritas Dinas Kesehatan semester I tahun 2026.',
+                    folder: 'galeri-kegiatan/2026/rapat',
+                    photos: [],
+                    photoCount: 0,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'evt-005',
+                    title: 'Kunjungan Kerja ke Puskesmas Terpencil',
+                    subtitle: 'Supervisi dan Pembinaan',
+                    date: '28 Juni 2026',
+                    location: 'Mahakam Ulu',
+                    year: '2026',
+                    category: 'kunjungan',
+                    description: 'Kunjungan kerja kepala dinas ke puskesmas terpencil di wilayah Mahakam Ulu.',
+                    folder: 'galeri-kegiatan/2026/kunjungan',
+                    photos: [],
+                    photoCount: 0,
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            state.events = defaultEvents;
+            saveEventsToStorage();
+            console.log('✓ Default events initialized');
+        }
+
+        // Add photo to event after successful upload
+        function addPhotoToEvent(eventId, photoData) {
+            const event = state.events.find(e => e.id === eventId);
+            if (!event) return;
+
+            const newPhoto = {
+                id: `photo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                publicId: photoData.public_id,
+                secureUrl: photoData.secure_url,
+                caption: photoData.original_filename || 'Dokumentasi kegiatan',
+                sortOrder: event.photos.length + 1,
+                width: photoData.width || 1920,
+                height: photoData.height || 1280,
+                format: photoData.format || 'jpg',
+                uploadedAt: new Date().toISOString()
+            };
+
+            event.photos.push(newPhoto);
+            event.photoCount = event.photos.length;
+            
+            // Update featured photo jika belum ada
+            if (!event.featuredPhoto || event.photos.length === 1) {
+                event.featuredPhoto = newPhoto.publicId;
+            }
+
+            saveEventsToStorage();
+            console.log(`✓ Photo added to event ${eventId}:`, newPhoto.publicId);
+            
+            return newPhoto;
+        }
+
+        // Initialize data system
+        async function initializeData() {
+            state.isLoading = true;
+            showLoadingState();
+            
+            // Try to load from storage first
+            const loaded = loadEventsFromStorage();
+            
+            if (!loaded) {
+                initializeDefaultEvents();
+            }
+            
+            // Update filtered events
+            state.filteredEvents = [...state.events];
+            
+            // Check if we have any photos
+            const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
+            console.log(`📊 Data loaded: ${state.events.length} events, ${totalPhotos} photos`);
+            
+            state.isLoading = false;
+            hideLoadingState();
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.style.opacity = '0.5';
+                mainContent.style.pointerEvents = 'none';
+            }
+        }
+
+        // Hide loading state
+        function hideLoadingState() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.style.opacity = '1';
+                mainContent.style.pointerEvents = 'auto';
+            }
+        }
 
         // ============================================
         // DOM ELEMENTS
@@ -2878,32 +2987,72 @@
             const event = state.filteredEvents[state.currentEventIndex];
             if (!event) return;
 
-            // Update hero image (use placeholder or actual Cloudinary image)
-            const heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
+            // Update hero image - gunakan foto featured dari Cloudinary atau fallback
+            let heroUrl;
+            if (event.featuredPhoto && event.photos.length > 0) {
+                // Gunakan foto pertama atau featured photo
+                const featuredPhotoId = event.featuredPhoto || (event.photos[0]?.publicId);
+                if (featuredPhotoId) {
+                    heroUrl = getFeaturedUrl(featuredPhotoId);
+                } else {
+                    heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
+                }
+            } else {
+                heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
+            }
+            
             elements.heroImage.src = heroUrl;
             elements.heroImage.alt = event.title;
+            
+            // Handle image load error
+            elements.heroImage.onerror = () => {
+                elements.heroImage.src = `https://picsum.photos/seed/${event.id}/1920/1080`;
+            };
 
             // Update featured section
             elements.eventNumber.textContent = String(state.currentEventIndex + 1).padStart(2, '0');
             elements.eventTitle.textContent = event.title;
             elements.eventSubtitle.textContent = event.subtitle || '';
             
-            const featuredUrl = `https://picsum.photos/seed/${event.featuredPhoto}/1600/900`;
+            // Featured image - gunakan foto asli dari Cloudinary
+            let featuredUrl;
+            if (event.featuredPhoto) {
+                featuredUrl = getFeaturedUrl(event.featuredPhoto);
+            } else if (event.photos.length > 0 && event.photos[0].publicId) {
+                featuredUrl = getFeaturedUrl(event.photos[0].publicId);
+            } else {
+                featuredUrl = `https://picsum.photos/seed/${event.id}-featured/1600/900`;
+            }
+            
             elements.featuredImage.src = featuredUrl;
             elements.featuredImage.alt = event.title;
+            elements.featuredImage.onerror = () => {
+                elements.featuredImage.src = `https://picsum.photos/seed/${event.id}-featured/1600/900`;
+            };
+            
             elements.featuredDate.textContent = event.date;
             elements.featuredLocation.textContent = event.location;
-            elements.featuredPhotoCount.textContent = event.photoCount;
+            elements.featuredPhotoCount.textContent = event.photoCount || event.photos?.length || 0;
 
             // Update story section
             elements.storyNumber.textContent = String(state.currentEventIndex + 1).padStart(2, '0');
             elements.storyTitle.textContent = event.title;
             elements.storyDate.textContent = event.date;
             elements.storyLocation.textContent = event.location;
-            elements.statPhotos.textContent = event.photoCount;
+            elements.statPhotos.textContent = event.photoCount || event.photos?.length || 0;
             elements.statCategory.textContent = event.category.charAt(0).toUpperCase() + event.category.slice(1);
             elements.statYear.textContent = event.year;
             elements.storyDescription.innerHTML = `<p>${event.description}</p>`;
+
+            // Tampilkan info jika belum ada foto
+            if ((!event.photos || event.photos.length === 0)) {
+                elements.storyDescription.innerHTML += `
+                    <p style="margin-top: 1rem; padding: 1rem; background: rgba(37, 99, 235, 0.1); border-radius: 8px; font-size: 0.9rem; color: var(--accent-color);">
+                        💡 <strong>Belum ada foto</strong><br>
+                        Upload foto melalui Panel Admin → Upload Foto
+                    </p>
+                `;
+            }
 
             // Update next event link
             const nextIndex = state.currentEventIndex + 1;
@@ -2921,13 +3070,36 @@
                 elements.nextEventLink.style.display = 'none';
             }
 
-            // Render gallery
-            renderGallery(event.photos);
-            renderFilmstrip(event.photos);
-
+            // Render gallery dengan foto asli dari Cloudinary
+            const photos = event.photos || [];
+            if (photos.length > 0) {
+                renderGallery(photos);
+                renderFilmstrip(photos);
+            } else {
+                // Tampilkan empty state di gallery
+                showEmptyGallery();
+            }
+            
             // Reset current photo index
             state.currentPhotoIndex = 0;
             updateGalleryState();
+        }
+        
+        // Show empty gallery state
+        function showEmptyGallery() {
+            elements.galleryTrack.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin: 0 auto 1rem; opacity: 0.5;">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Belum Ada Foto</p>
+                    <p style="font-size: 0.9rem;">Upload foto melalui Panel Admin</p>
+                </div>
+            `;
+            elements.filmstripTrack.innerHTML = '';
+            elements.totalPhotos.textContent = '── 00';
         }
 
         function goToEvent(index) {
@@ -2956,22 +3128,39 @@
         function renderGallery(photos) {
             elements.galleryTrack.innerHTML = '';
             
+            if (!photos || photos.length === 0) {
+                showEmptyGallery();
+                return;
+            }
+            
             photos.forEach((photo, index) => {
                 const slide = document.createElement('div');
                 slide.className = `gallery-slide ${index === 0 ? 'active' : ''}`;
                 slide.dataset.index = index;
                 
-                // Use placeholder images for demo
-                const imageUrl = `https://picsum.photos/seed/${photo.publicId}/550/370`;
+                // Gunakan foto asli dari Cloudinary
+                let imageUrl;
+                if (photo.secureUrl) {
+                    // Gunakan secure_url langsung dengan transformasi
+                    imageUrl = getGalleryUrl(photo.publicId);
+                } else if (photo.publicId) {
+                    // Generate URL dari publicId
+                    imageUrl = getGalleryUrl(photo.publicId);
+                } else {
+                    // Fallback ke placeholder
+                    imageUrl = `https://picsum.photos/seed/${photo.id || index}/550/370`;
+                }
                 
                 slide.innerHTML = `
                     <div class="gallery-photo-wrapper">
                         <img 
                             src="${imageUrl}" 
-                            alt="${photo.caption}" 
+                            alt="${photo.caption || 'Dokumentasi kegiatan'}" 
                             class="gallery-photo"
                             loading="${index < 3 ? 'eager' : 'lazy'}"
                             data-public-id="${photo.publicId}"
+                            data-secure-url="${photo.secureUrl || ''}"
+                            onerror="this.src='https://picsum.photos/seed/${photo.id || index}/550/370'"
                         >
                     </div>
                 `;
@@ -3107,17 +3296,26 @@
         // ============================================
         function renderFilmstrip(photos) {
             elements.filmstripTrack.innerHTML = '';
+            
+            if (!photos || photos.length === 0) return;
 
             photos.forEach((photo, index) => {
                 const item = document.createElement('div');
                 item.className = `filmstrip-item ${index === 0 ? 'active' : ''}`;
                 item.dataset.index = index;
 
-                const thumbUrl = `https://picsum.photos/seed/${photo.publicId}-thumb/80/60`;
+                // Gunakan thumbnail asli dari Cloudinary
+                let thumbUrl;
+                if (photo.publicId) {
+                    thumbUrl = getThumbnailUrl(photo.publicId);
+                } else {
+                    thumbUrl = `https://picsum.photos/seed/${photo.id || index}/80/60`;
+                }
 
                 item.innerHTML = `
                     <div class="filmstrip-thumb">
-                        <img src="${thumbUrl}" alt="Foto ${index + 1}" loading="lazy">
+                        <img src="${thumbUrl}" alt="${photo.caption || 'Foto ' + (index + 1)}" loading="lazy"
+                             onerror="this.src='https://picsum.photos/seed/${photo.id || index}/80/60'">
                     </div>
                     <p class="filmstrip-number">${String(index + 1).padStart(2, '0')}</p>
                 `;
@@ -3171,10 +3369,20 @@
             const photo = event.photos[state.currentPhotoIndex];
             if (!photo) return;
 
-            const fullSizeUrl = `https://picsum.photos/seed/${photo.publicId}-full/1920/1080`;
+            // Gunakan foto full resolution asli dari Cloudinary
+            let fullSizeUrl;
+            if (photo.publicId) {
+                fullSizeUrl = getFullSizeUrl(photo.publicId);
+            } else {
+                fullSizeUrl = `https://picsum.photos/seed/${photo.id || state.currentPhotoIndex}/1920/1080`;
+            }
 
             elements.lightboxImage.src = fullSizeUrl;
-            elements.lightboxImage.alt = photo.caption;
+            elements.lightboxImage.alt = photo.caption || 'Dokumentasi kegiatan';
+            elements.lightboxImage.onerror = () => {
+                elements.lightboxImage.src = `https://picsum.photos/seed/${photo.id || state.currentPhotoIndex}/1920/1080`;
+            };
+            
             elements.lightboxCounter.textContent = `${String(state.currentPhotoIndex + 1).padStart(2, '0')} / ${String(event.photos.length).padStart(2, '0')}`;
             elements.lightboxEventTitle.textContent = event.title;
             elements.lightboxEventMeta.textContent = `${event.location} · ${event.date}`;
@@ -3708,6 +3916,16 @@
                     if (response.ok && data.secure_url) {
                         successCount++;
                         console.log(`✓ Upload berhasil: ${data.public_id}`);
+                        
+                        // SIMPAN DATA FOTO KE LOCAL STORAGE & STATE
+                        const selectedEventId = elements.eventSelect.value;
+                        if (selectedEventId) {
+                            addPhotoToEvent(selectedEventId, data);
+                            
+                            // Update UI secara real-time
+                            event.photoCount = (event.photos?.length || 0);
+                            elements.featuredPhotoCount.textContent = event.photoCount;
+                        }
                     } else {
                         failCount++;
                         const errorMsg = data.error?.message || 'Unknown error';
@@ -3744,7 +3962,13 @@
 
             // Show result dengan detail error jika ada
             if (failCount === 0) {
-                showToast(`🎉 ${successCount} foto berhasil diunggah ke Cloudinary!`, 'success');
+                showToast(`🎉 ${successCount} foto berhasil diunggah! Gallery akan diperbarui.`, 'success');
+                
+                // AUTO-REFRESH: Render ulang gallery dengan foto baru
+                setTimeout(() => {
+                    renderCurrentEvent();
+                    showToast('✅ Gallery telah diperbarui dengan foto terbaru!', 'success');
+                }, 1000);
             } else if (successCount > 0) {
                 showToast(`⚠️ ${successCount} berhasil, ${failCount} gagal. Cek console untuk detail.`, 'error');
                 console.error('Upload errors:', errors);
@@ -4030,9 +4254,14 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        function init() {
+        async function init() {
             initTheme();
             initEventListeners();
+            
+            // Initialize data dari localStorage/Cloudinary
+            await initializeData();
+            
+            // Render gallery dengan data yang sudah dimuat
             renderCurrentEvent();
             setupIntersectionObserver();
 
@@ -4041,6 +4270,8 @@
                 'color: #2563eb; font-size: 16px; font-weight: bold;');
             console.log('%cPowered by Cloudinary', 
                 'color: #666; font-size: 12px;');
+            console.log('%c💾 Data loaded from: localStorage + Cloudinary CDN', 
+                'color: #16a34a; font-size: 11px;');
         }
 
         // Start the application
