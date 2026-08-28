@@ -2817,6 +2817,7 @@
             uploadProgress: document.getElementById('uploadProgress'),
             uploadProgressFill: document.getElementById('uploadProgressFill'),
             uploadPercent: document.getElementById('uploadPercent'),
+            uploadStatus: document.getElementById('uploadStatus'),
             uploadBtn: document.getElementById('uploadBtn'),
             manageGrid: document.getElementById('manageGrid'),
             searchInput: document.getElementById('searchInput'),
@@ -3720,9 +3721,17 @@
                 }
 
                 const progress = ((i + 1) / droppedFiles.length) * 100;
-                elements.uploadProgressFill.style.width = `${progress}%`;
-                elements.uploadPercent.textContent = `${Math.round(progress)}%`;
-                elements.uploadStatus.textContent = `Mengunggah ${i + 1} dari ${droppedFiles.length}...`;
+                
+                // Update progress UI dengan safety check
+                if (elements.uploadProgressFill) {
+                    elements.uploadProgressFill.style.width = `${progress}%`;
+                }
+                if (elements.uploadPercent) {
+                    elements.uploadPercent.textContent = `${Math.round(progress)}%`;
+                }
+                if (elements.uploadStatus) {
+                    elements.uploadStatus.textContent = `Mengunggah ${i + 1} dari ${droppedFiles.length}...`;
+                }
             }
 
             // Log hasil upload ke console untuk debugging
@@ -3751,21 +3760,23 @@
                 }
             }
 
-            // Reset form
+            // Reset form dengan safety checks
             setTimeout(() => {
-                elements.previewGrid.innerHTML = '';
+                if (elements.previewGrid) elements.previewGrid.innerHTML = '';
                 droppedFiles.length = 0;
-                elements.uploadProgress.classList.add('hidden');
-                elements.uploadProgressFill.style.width = '0%';
-                elements.uploadBtn.disabled = true;
-                elements.uploadBtn.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    Upload ke Cloudinary
-                `;
+                if (elements.uploadProgress) elements.uploadProgress.classList.add('hidden');
+                if (elements.uploadProgressFill) elements.uploadProgressFill.style.width = '0%';
+                if (elements.uploadBtn) {
+                    elements.uploadBtn.disabled = true;
+                    elements.uploadBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Upload ke Cloudinary
+                    `;
+                }
             }, 2000);
         });
 
