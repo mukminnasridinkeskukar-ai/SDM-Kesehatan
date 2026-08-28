@@ -2808,6 +2808,8 @@
             adminClose: document.getElementById('adminClose'),
             uploadForm: document.getElementById('uploadForm'),
             eventSelect: document.getElementById('eventSelect'),
+            yearSelect: document.getElementById('yearSelect'),
+            categorySelect: document.getElementById('categorySelect'),
             manageEventSelect: document.getElementById('manageEventSelect'),
             dropzone: document.getElementById('dropzone'),
             fileInput: document.getElementById('fileInput'),
@@ -3638,30 +3640,63 @@
         elements.uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (droppedFiles.length === 0 || !elements.eventSelect.value) {
-                showToast('Pilih kegiatan dan tambahkan foto', 'error');
+            // Validasi elemen form
+            if (!elements.eventSelect || !elements.yearSelect || !elements.categorySelect) {
+                console.error('Form elements not found!');
+                showToast('Error: Form tidak ditemukan. Silakan refresh halaman.', 'error');
+                return;
+            }
+
+            if (droppedFiles.length === 0) {
+                showToast('Silakan tambahkan foto terlebih dahulu', 'error');
+                return;
+            }
+
+            if (!elements.eventSelect.value) {
+                showToast('Silakan pilih kegiatan terlebih dahulu', 'error');
                 return;
             }
 
             const event = state.events.find(ev => ev.id === elements.eventSelect.value);
             const year = elements.yearSelect.value;
             const category = elements.categorySelect.value;
+            
+            console.log('Upload config:', { event: event?.title, year, category, fileCount: droppedFiles.length });
 
             elements.uploadProgress.classList.remove('hidden');
             elements.uploadBtn.disabled = true;
 
             let successCount = 0;
             let failCount = 0;
+            const errors = [];
 
             for (let i = 0; i < droppedFiles.length; i++) {
                 const file = droppedFiles[i];
                 const formData = new FormData();
+                
+                // Validasi file
+                if (!file.type.startsWith('image/')) {
+                    console.warn(`Skipping non-image file: ${file.name}`);
+                    failCount++;
+                    errors.push(`${file.name}: Bukan file gambar`);
+                    continue;
+                }
+
+                // Batas ukuran file (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    console.warn(`File too large: ${file.name}`);
+                    failCount++;
+                    errors.push(`${file.name}: Ukuran file > 10MB`);
+                    continue;
+                }
                 
                 formData.append('file', file);
                 formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
                 formData.append('folder', `${CLOUDINARY_CONFIG.baseFolder}/${year}/${category}/${event.title.toLowerCase().replace(/\s+/g, '-')}`);
 
                 try {
+                    console.log(`Uploading file ${i + 1}/${droppedFiles.length}: ${file.name}`);
+                    
                     const response = await fetch(
                         `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
                         { method: 'POST', body: formData }
@@ -3669,14 +3704,19 @@
 
                     const data = await response.json();
 
-                    if (data.secure_url) {
+                    if (response.ok && data.secure_url) {
                         successCount++;
+                        console.log(`✓ Upload berhasil: ${data.public_id}`);
                     } else {
                         failCount++;
+                        const errorMsg = data.error?.message || 'Unknown error';
+                        errors.push(`${file.name}: ${errorMsg}`);
+                        console.error(`✗ Upload gagal: ${file.name}`, data.error);
                     }
                 } catch (error) {
                     console.error('Upload error:', error);
                     failCount++;
+                    errors.push(`${file.name}: ${error.message || 'Network error'}`);
                 }
 
                 const progress = ((i + 1) / droppedFiles.length) * 100;
@@ -3685,11 +3725,30 @@
                 elements.uploadStatus.textContent = `Mengunggah ${i + 1} dari ${droppedFiles.length}...`;
             }
 
-            // Show result
+            // Log hasil upload ke console untuk debugging
+            console.log('Upload complete:', { 
+                total: droppedFiles.length, 
+                success: successCount, 
+                failed: failCount,
+                errors: errors 
+            });
+
+            // Show result dengan detail error jika ada
             if (failCount === 0) {
-                showToast(`${successCount} foto berhasil diunggah!`, 'success');
+                showToast(`🎉 ${successCount} foto berhasil diunggah ke Cloudinary!`, 'success');
+            } else if (successCount > 0) {
+                showToast(`⚠️ ${successCount} berhasil, ${failCount} gagal. Cek console untuk detail.`, 'error');
+                console.error('Upload errors:', errors);
             } else {
-                showToast(`${successCount} berhasil, ${failCount} gagal`, 'error');
+                showToast(`❌ Semua upload gagal. Cek console (F12) untuk detail error.`, 'error');
+                console.error('All uploads failed:', errors);
+                
+                // Tampilkan pesan error spesifik untuk troubleshooting
+                if (errors.some(e => e.includes('Upload preset'))) {
+                    setTimeout(() => {
+                        showToast('💡 Tips: Pastikan Upload Preset "galeri_kegiatan" sudah di-set di Cloudinary Dashboard', 'error');
+                    }, 2000);
+                }
             }
 
             // Reset form
