@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Foto Kegiatan - Dinas Kesehatan Kab. Kutai Kartanegara</title>
+    
+    <!-- Cloudinary JavaScript SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/cloudinary-core@2.13.0/cloudinary-core-shrinkwrap.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================
+           CONFIGURATION SECTION
+           Edit values below to customize your gallery
+           ============================================ */
+        :root {
+            --cloud-name: 'cla7jrww';
+            --folder: 'galeri-kegiatan';
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --accent-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-radius: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        /* Filter Tabs */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Gallery Container */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            grid-auto-flow: dense;
+        }
+
+        /* Grid Pattern Variations */
+        .bento-grid.pattern-a .gallery-item:nth-child(6n+1) { grid-column: span 2; grid-row: span 2; }
+        .bento-grid.pattern-a .gallery-item:nth-child(6n+4) { grid-column: span 2; }
+        
+        .bento-grid.pattern-b .gallery-item:nth-child(5n+1) { grid-column: span 2; grid-row: span 2; }
+        .bento-grid.pattern-b .gallery-item:nth-child(5n+3) { grid-row: span 2; }
+        
+        .bento-grid.pattern-c .gallery-item:nth-child(7n+1) { grid-column: span 2; grid-row: span 2; }
+        .bento-grid.pattern-c .gallery-item:nth-child(7n+5) { grid-column: span 2; }
+
+        @media (max-width: 768px) {
+            .bento-grid .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+            .bento-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+
+        /* Gallery Item Card */
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            transition: var(--transition);
+            aspect-ratio: 1;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            z-index: 10;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+            color: white;
+            transform: translateY(60%);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .item-overlay {
+            transform: translateY(0);
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .item-meta {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e2e8f0;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            margin: 20px;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .retry-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        /* ============================================
+           LIGHTBOX STYLES
+           Premium Fullscreen Lightbox
+           ============================================ */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lightbox-image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .lightbox-image.zoomed {
+            cursor: grab;
+        }
+
+        .lightbox-image.zooming {
+            cursor: grabbing;
+        }
+
+        /* Lightbox Header */
+        .lightbox-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+            z-index: 10;
+        }
+
+        .lightbox-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .lightbox-close {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Lightbox Navigation Arrows */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        /* Thumbnail Strip */
+        .lightbox-thumbnails {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+
+        .lightbox-thumbnails::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .lightbox-thumbnails::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .lightbox-thumbnails::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .thumb-item {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: var(--transition);
+            flex-shrink: 0;
+            border: 2px solid transparent;
+        }
+
+        .thumb-item:hover {
+            opacity: 0.8;
+        }
+
+        .thumb-item.active {
+            opacity: 1;
+            border-color: var(--accent-color);
+        }
+
+        .thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Lightbox Info Panel */
+        .lightbox-info {
+            position: absolute;
+            bottom: 110px;
+            left: 30px;
+            color: white;
+            z-index: 10;
+        }
+
+        .lightbox-counter {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .lightbox-description {
+            font-size: 1rem;
+            max-width: 500px;
+        }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            right: 80px;
+            bottom: 110px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .zoom-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Keyboard Hint */
+        .keyboard-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 20px;
+        }
+
+        .key-hint {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        kbd {
+            background: rgba(255,255,255,0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.75rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header { padding: 40px 15px; }
+            .stats-bar { gap: 20px; }
+            .stat-number { font-size: 1.8rem; }
+            .filter-btn { padding: 8px 16px; font-size: 0.85rem; }
+            .lightbox-nav { width: 44px; height: 44px; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-info, .zoom-controls { bottom: 100px; left: 15px; }
+            .zoom-controls { right: 15px; }
+            .keyboard-hint { display: none; }
+            .thumb-item { width: 55px; height: 55px; }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .filter-section, .lightbox-overlay, .footer { display: none; }
+            .gallery-item { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>📸 Galeri Foto Kegiatan</h1>
+            <p>Dinas Kesehatan Kabupaten Kutai Kartanegara</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalPhotos">0</span>
+                    <span class="stat-label">Total Foto</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalActivities">0</span>
+                    <span class="stat-label">Kegiatan</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalCategories">0</span>
+                    <span class="stat-label">Kategori</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="filter-container" id="filterContainer">
+            <button class="filter-btn active" data-filter="all">🎯 Semua</button>
+            <!-- Dynamic filters will be inserted here -->
+        </div>
+    </section>
+
+    <!-- Main Gallery -->
+    <main class="gallery-container">
+        <div id="loadingState" class="loading-container">
+            <div class="loader"></div>
+            <p class="loading-text">Memuat galeri foto dari Cloudinary...</p>
+        </div>
+        
+        <div id="errorState" class="error-container" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title">Gagal Memuat Galeri</h2>
+            <p class="error-message" id="errorMessage">Terjadi kesalahan saat mengambil data foto.</p>
+            <button class="retry-btn" onclick="loadGallery()">🔄 Coba Lagi</button>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">📁</div>
+            <h2>Belum Ada Foto</h2>
+            <p>Galeri foto masih kosong. Silakan upload foto melalui Cloudinary.</p>
+        </div>
+
+        <div id="galleryGrid" class="bento-grid pattern-a" style="display: none;"></div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox">
+        <div class="lightbox-content">
+            <div class="lightbox-header">
+                <h3 class="lightbox-title" id="lightboxTitle">Foto Title</h3>
+                <button class="lightbox-close" onclick="closeLightbox()" aria-label="Tutup">✕</button>
+            </div>
+
+            <div class="lightbox-image-container">
+                <img src="" alt="" class="lightbox-image" id="lightboxImage" draggable="false">
+            </div>
+
+            <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Sebelumnya">❮</button>
+            <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)" aria-label="Selanjutnya">❯</button>
+
+            <div class="lightbox-info">
+                <div class="lightbox-counter" id="lightboxCounter">1 / 10</div>
+                <div class="lightbox-description" id="lightboxDescription"></div>
+            </div>
+
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()" title="Perbesar (+)">🔍+</button>
+                <button class="zoom-btn" onclick="zoomOut()" title="Perkecil (-)">🔍-</button>
+                <button class="zoom-btn" onclick="resetZoom()" title="Reset (0)">↺</button>
+            </div>
+
+            <div class="lightbox-thumbnails" id="thumbnailStrip"></div>
+
+            <div class="keyboard-hint">
+                <span class="key-hint"><kbd>←</kbd><kbd>→</kbd> Navigasi</span>
+                <span class="key-hint"><kbd>+</kbd><kbd>-</kbd> Zoom</span>
+                <span class="key-hint"><kbd>Esc</kbd> Tutup</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Dinas Kesehatan Kabupaten Kutai Kartanegara. Powered by <a href="https://cloudinary.com" target="_blank">Cloudinary</a></p>
+    </footer>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // Edit these values to match your Cloudinary setup
+        // ============================================
+        const CONFIG = {
+            cloudName: getComputedStyle(document.documentElement).getPropertyValue('--cloud-name').replace(/'/g, ''),
+            folder: getComputedStyle(document.documentElement).getPropertyValue('--folder').replace(/'/g, ''),
+            
+            // Alternative: Hardcode values here (uncomment to use)
+            // cloudName: 'cla7jrww',
+            // folder: 'galeri-kegiatan',
+            
+            // Image transformations
+            thumbnailTransform: { width: 400, height: 400, crop: 'fill', quality: 'auto:good' },
+            lightboxTransform: { width: 1920, height: 1080, crop: 'limit', quality: 'auto:good' },
+            thumbSmallTransform: { width: 100, height: 100, crop: 'fill', quality: 'auto:low' },
+            
+            // UI Settings
+            itemsPerPage: 50,
+            enableZoom: true,
+            maxZoom: 5,
+            zoomStep: 0.3
+        };
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let state = {
+            photos: [],
+            filteredPhotos: [],
+            categories: [],
+            currentIndex: 0,
+            zoomLevel: 1,
+            isLightboxOpen: false,
+            isLoading: true,
+            error: null
+        };
+
+        // Initialize Cloudinary
+        let cloudinary = null;
+        try {
+            cloudinary = new Cloudinary({ cloud_name: CONFIG.cloudName, secure: true });
+        } catch (e) {
+            console.warn('Cloudinary SDK not loaded, using manual URL construction');
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        
+        /**
+         * Generate Cloudinary image URL
+         */
+        function getImageUrl(publicId, transforms = {}) {
+            if (cloudinary) {
+                return cloudinary.url(publicId, { ...transforms, secure: true });
+            }
+            // Fallback manual URL construction
+            const params = [];
+            if (transforms.width) params.push(`w_${transforms.width}`);
+            if (transforms.height) params.push(`h_${transforms.height}`);
+            if (transforms.crop) params.push(`c_${transforms.crop}`);
+            if (transforms.quality) params.push(`q_${transforms.quality}`);
+            return `https://res.cloudinary.com/${CONFIG.cloudName}/image/upload/${params.join(',')}/${publicId}`;
+        }
+
+        /**
+         * Validate image URL by checking if it loads
+         */
+        async function validateImageUrl(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+                // Timeout after 10 seconds
+                setTimeout(() => resolve(false), 10000);
+            });
+        }
+
+        /**
+         * Categorize activity based on keywords
+         */
+        function categorizeActivity(title) {
+            const titleLower = title.toLowerCase();
+            
+            const categories = [
+                { keywords: ['pelatihan', 'workshop', 'training', 'diklat'], category: 'Pelatihan', icon: '📚', color: '#3b82f6' },
+                { keywords: ['rapat', 'koordinasi', 'meeting', 'musyawarah'], category: 'Rapat Koordinasi', icon: '🤝', color: '#10b981' },
+                { keywords: ['seminar', 'webinar', 'symposium', 'lokakarya'], category: 'Seminar', icon: '🎤', color: '#8b5cf6' },
+                { keywords: ['sosialisasi', 'edukasi', 'penyuluhan'], category: 'Sosialisasi', icon: '📢', color: '#f59e0b' },
+                { keywords: ['bakti', 'kerja bakti', 'gotong royong'], category: 'Bakti Sosial', icon: '❤️', color: '#ef4444' },
+                { keywords: ['audit', 'inspeksi', 'survey', 'verifikasi'], category: 'Audit & Survey', icon: '🔍', color: '#06b6d4' },
+                { keywords: ['peresmian', 'launching', 'peluncuran'], category: 'Peresmian', icon: '🎉', color: '#ec4899' },
+                { keywords: ['upacara', 'peringatan', 'hari kesehatan', 'hari besar'], category: 'Upacara/Acara', icon: '🏛️', color: '#84cc16' },
+                { keywords: ['kunjungan', 'monitoring', 'evaluasi', 'monev'], category: 'Monitoring', icon: '👁️', color: '#6366f1' },
+                { keywords: ['pemeriksaan', 'tes', 'skrining', 'deteksi dini'], category: 'Pemeriksaan', icon: '🏥', color: '#14b8a6' }
+            ];
+
+            for (const cat of categories) {
+                if (cat.keywords.some(kw => titleLower.includes(kw))) {
+                    return cat;
+                }
+            }
+
+            return { category: 'Kegiatan Lainnya', icon: '📋', color: '#64748b' };
+        }
+
+        /**
+         * Extract activity info from public ID or context
+         */
+        function extractActivityInfo(photo) {
+            const publicId = photo.public_id || photo.publicId || '';
+            const filename = publicId.split('/').pop().replace(/\.[^/.]+$/, '');
+            
+            // Try to extract date and title from filename or metadata
+            let title = photo.context?.custom?.caption || 
+                       photo.context?.custom?.title ||
+                       photo.display_name ||
+                       filename.replace(/[-_]/g, ' ').replace(/\d+/g, '').trim() || 
+                       'Foto Kegiatan';
+            
+            let date = photo.created_at || 
+                      photo.context?.custom?.date ||
+                      new Date().toISOString();
+            
+            // Try to parse Indonesian date format from string
+            const dateMatch = title.match(/(\d{1,2})\s*(s\.?d\.?)\s*(\d{1,2})\s*(\w+)\s*(\d{4})/i);
+            if (dateMatch) {
+                // Keep original date string in title, don't modify
+            }
+
+            const categoryInfo = categorizeActivity(title);
+
+            return {
+                ...photo,
+                title,
+                date,
+                category: categoryInfo.category,
+                categoryIcon: categoryInfo.icon,
+                categoryColor: categoryInfo.color,
+                publicId: publicId,
+                filename
+            };
+        }
+
+        // ============================================
+        // DATA FETCHING
+        // ============================================
+
+        /**
+         * Fetch photos from Cloudinary using Admin API (requires server-side proxy)
+         * For client-only solution, we use a workaround
+         */
+        async function fetchPhotosFromCloudinary() {
+            // Method 1: Try to use Cloudinary Admin Search API (if CORS enabled)
+            // Method 2: Use a JSON manifest file
+            // Method 3: Use resource listing via search widget
+            
+            // For this standalone version, we'll try multiple methods
+            
+            let photos = [];
+
+            // TRY 1: Direct Admin API call (may fail due to CORS/auth)
+            try {
+                const response = await fetch(
+                    `https://api.cloudinary.com/v1_1/${CONFIG.cloudName}/resources/image/upload?prefix=${CONFIG.folder}&max_results=100`,
+                    {
+                        headers: {
+                            // Note: This won't work without proper auth
+                            // This is just to show the attempt
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    photos = data.resources || [];
+                }
+            } catch (e) {
+                console.log('Direct API failed (expected), trying alternative methods...');
+            }
+
+            // TRY 2: Check for JSON manifest file (recommended for production)
+            if (photos.length === 0) {
+                try {
+                    const manifestUrl = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '/')}gallery-manifest.json`;
+                    const manifestResponse = await fetch(manifestUrl);
+                    
+                    if (manifestResponse.ok) {
+                        const manifest = await manifestResponse.json();
+                        photos = manifest.photos || [];
+                        console.log(`Loaded ${photos.length} photos from manifest`);
+                    }
+                } catch (e) {
+                    console.log('No manifest file found');
+                }
+            }
+
+            // TRY 3: Demo/Sample data for testing (remove in production)
+            if (photos.length === 0 && CONFIG.folder === 'galeri-kegiatan') {
+                console.log('Using sample data for demonstration...');
+                photos = getSampleData();
+            }
+
+            return photos;
+        }
+
+        /**
+         * Sample data for demonstration
+         * REMOVE THIS FUNCTION IN PRODUCTION AND USE MANIFEST OR SERVER-SIDE API
+         */
+        function getSampleData() {
+            // This is example data structure
+            // In production, replace with actual Cloudinary data
+            const sampleFolder = CONFIG.folder || 'galeri-kegiatan';
+            
+            return [
+                {
+                    public_id: `${sampleFolder}/pelatihan-kader-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-14T10:00:00Z',
+                    context: { custom: { caption: 'Pelatihan Kader Kesehatan - Sesi Pembukaan', date: '14 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/rapat-koordinasi-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-13T09:00:00Z',
+                    context: { custom: { caption: 'Rapat Koordinasi Bulanan Dinkes', date: '13 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/sosialisasi-stunting-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-12T14:00:00Z',
+                    context: { custom: { caption: 'Sosialisasi Pencegahan Stunting', date: '12 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/pelatihan-kader-002`,
+                    format: 'jpg',
+                    created_at: '2026-08-14T11:30:00Z',
+                    context: { custom: { caption: 'Pelatihan Kader - Praktik Lapangan', date: '14 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/pemeriksaan-kesehatan-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-11T08:00:00Z',
+                    context: { custom: { caption: 'Pemeriksaan Kesehatan Gratis', date: '11 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/seminar-kesehatan-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-10T09:00:00Z',
+                    context: { custom: { caption: 'Seminar Kesehatan Masyarakat', date: '10 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/bakti-sosial-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-09T07:00:00Z',
+                    context: { custom: { caption: 'Bakti Sosial di Puskesmas', date: '9 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/upacara-hari-kesehatan-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-08T07:30:00Z',
+                    context: { custom: { caption: 'Upacara Hari Kesehatan Nasional', date: '8 Agustus 2026' } }
+                },
+                {
+                    public_id: `${sampleFolder}/monitoring-puskesmas-001`,
+                    format: 'jpg',
+                    created_at: '2026-08-07T10:00:00Z',
+                    context: { custom: { caption: 'Monitoring Puskesmas Wilayah', date: '7 Agustus 2026' } }
+                }
+            ];
+        }
+
+        // ============================================
+        // GALLERY RENDERING
+        // ============================================
+
+        /**
+         * Load and render gallery
+         */
+        async function loadGallery() {
+            showLoading(true);
+            hideError();
+            hideEmpty();
+
+            try {
+                const rawPhotos = await fetchPhotosFromCloudinary();
+                
+                if (rawPhotos.length === 0) {
+                    showEmpty();
+                    updateStats(0, 0, 0);
+                    return;
+                }
+
+                // Process photos with activity info
+                state.photos = rawPhotos.map(extractActivityInfo);
+                
+                // Validate image URLs (filter out broken images)
+                const validPhotos = [];
+                for (const photo of state.photos) {
+                    const url = getImageUrl(photo.publicId, CONFIG.thumbnailTransform);
+                    const isValid = await validateImageUrl(url);
+                    if (isValid) {
+                        validPhotos.push(photo);
+                    }
+                }
+                
+                state.photos = validPhotos;
+                state.filteredPhotos = [...state.photos];
+                
+                // Extract unique categories
+                const categoryMap = new Map();
+                state.photos.forEach(photo => {
+                    if (!categoryMap.has(photo.category)) {
+                        categoryMap.set(photo.category, {
+                            name: photo.category,
+                            icon: photo.categoryIcon,
+                            color: photo.categoryColor,
+                            count: 1
+                        });
+                    } else {
+                        categoryMap.get(photo.category).count++;
+                    }
+                });
+                state.categories = Array.from(categoryMap.values());
+
+                // Render UI
+                renderFilters();
+                renderGallery();
+                updateStats(
+                    state.photos.length, 
+                    new Set(state.photos.map(p => p.title.split('-')[0].trim())).size,
+                    state.categories.length
+                );
+
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                showError(error.message || 'Gagal memuat galeri foto.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        /**
+         * Render filter buttons
+         */
+        function renderFilters() {
+            const container = document.getElementById('filterContainer');
+            container.innerHTML = '<button class="filter-btn active" data-filter="all">🎯 Semua</button>';
+            
+            state.categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.filter = cat.name;
+                btn.innerHTML = `${cat.icon} ${cat.name} (${cat.count})`;
+                btn.addEventListener('click', () => filterByCategory(cat.name));
+                container.appendChild(btn);
+            });
+        }
+
+        /**
+         * Render gallery grid
+         */
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            
+            if (state.filteredPhotos.length === 0) {
+                showEmpty();
+                return;
+            }
+
+            grid.style.display = 'grid';
+
+            state.filteredPhotos.forEach((photo, index) => {
+                const item = createGalleryItem(photo, index);
+                grid.appendChild(item);
+            });
+
+            // Alternate between patterns for visual variety
+            const patterns = ['pattern-a', 'pattern-b', 'pattern-c'];
+            grid.className = `bento-grid ${patterns[Math.floor(Math.random() * patterns.length)]}`;
+        }
+
+        /**
+         * Create gallery item element
+         */
+        function createGalleryItem(photo, index) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item fade-in';
+            item.style.animationDelay = `${Math.min(index * 0.05, 0.5)}s`;
+            
+            const imageUrl = getImageUrl(photo.publicId, CONFIG.thumbnailTransform);
+            
+            item.innerHTML = `
+                <img src="${imageUrl}" alt="${photo.title}" loading="lazy" decoding="async">
+                <div class="item-overlay">
+                    <div class="item-title">${photo.title}</div>
+                    <div class="item-meta">
+                        <span class="item-category">${photo.categoryIcon} ${photo.category}</span>
+                    </div>
+                </div>
+            `;
+
+            item.addEventListener('click', () => openLightbox(index));
+            
+            return item;
+        }
+
+        /**
+         * Filter photos by category
+         */
+        function filterByCategory(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === category);
+            });
+
+            if (category === 'all') {
+                state.filteredPhotos = [...state.photos];
+            } else {
+                state.filteredPhotos = state.photos.filter(p => p.category === category);
+            }
+
+            renderGallery();
+        }
+
+        // ============================================
+        // LIGHTBOX FUNCTIONALITY
+        // ============================================
+
+        let zoomLevel = 1;
+        let isDragging = false;
+        let startX, startY, translateX = 0, translateY = 0;
+
+        /**
+         * Open lightbox at specific index
+         */
+        function openLightbox(index) {
+            state.currentIndex = index;
+            state.isLightboxOpen = true;
+            zoomLevel = 1;
+            resetTransform();
+            
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            updateLightboxContent();
+            renderThumbnails();
+        }
+
+        /**
+         * Close lightbox
+         */
+        function closeLightbox() {
+            state.isLightboxOpen = false;
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+            resetZoom();
+        }
+
+        /**
+         * Navigate lightbox
+         */
+        function navigateLightbox(direction) {
+            const newIndex = state.currentIndex + direction;
+            if (newIndex >= 0 && newIndex < state.filteredPhotos.length) {
+                state.currentIndex = newIndex;
+                zoomLevel = 1;
+                resetTransform();
+                updateLightboxContent();
+                updateThumbnailActive();
+            }
+        }
+
+        /**
+         * Update lightbox content
+         */
+        function updateLightboxContent() {
+            const photo = state.filteredPhotos[state.currentIndex];
+            if (!photo) return;
+
+            const imageUrl = getImageUrl(photo.publicId, CONFIG.lightboxTransform);
+            const img = document.getElementById('lightboxImage');
+            
+            img.src = imageUrl;
+            img.alt = photo.title;
+            
+            document.getElementById('lightboxTitle').textContent = photo.title;
+            document.getElementById('lightboxCounter').textContent = `${state.currentIndex + 1} / ${state.filteredPhotos.length}`;
+            document.getElementById('lightboxDescription').innerHTML = `
+                <strong>${photo.categoryIcon} ${photo.category}</strong>
+                ${photo.date ? `<br><small style="opacity:0.7">${new Date(photo.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</small>` : ''}
+            `;
+        }
+
+        /**
+         * Render thumbnail strip
+         */
+        function renderThumbnails() {
+            const strip = document.getElementById('thumbnailStrip');
+            strip.innerHTML = '';
+
+            state.filteredPhotos.forEach((photo, index) => {
+                const thumb = document.createElement('div');
+                thumb.className = `thumb-item ${index === state.currentIndex ? 'active' : ''}`;
+                thumb.innerHTML = `<img src="${getImageUrl(photo.publicId, CONFIG.thumbSmallTransform)}" alt="">`;
+                thumb.addEventListener('click', () => {
+                    state.currentIndex = index;
+                    zoomLevel = 1;
+                    resetTransform();
+                    updateLightboxContent();
+                    updateThumbnailActive();
+                });
+                strip.appendChild(thumb);
+            });
+        }
+
+        /**
+         * Update active thumbnail
+         */
+        function updateThumbnailActive() {
+            const thumbs = document.querySelectorAll('.thumb-item');
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === state.currentIndex);
+            });
+            
+            // Scroll thumbnail into view
+            const activeThumb = thumbs[state.currentIndex];
+            if (activeThumb) {
+                activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        // ============================================
+        // ZOOM & PAN CONTROLS
+        // ============================================
+
+        function zoomIn() {
+            zoomLevel = Math.min(zoomLevel + CONFIG.zoomStep, CONFIG.maxZoom);
+            applyZoom();
+        }
+
+        function zoomOut() {
+            zoomLevel = Math.max(zoomLevel - CONFIG.zoomStep, 1);
+            applyZoom();
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            resetTransform();
+        }
+
+        function applyZoom() {
+            const img = document.getElementById('lightboxImage');
+            img.style.transform = `scale(${zoomLevel}) translate(${translateX}px, ${translateY}px)`;
+        }
+
+        function resetTransform() {
+            translateX = 0;
+            translateY = 0;
+            applyZoom();
+        }
+
+        // Mouse wheel zoom
+        document.getElementById('lightboxImage')?.addEventListener('wheel', (e) => {
+            if (!state.isLightboxOpen) return;
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -CONFIG.zoomStep : CONFIG.zoomStep;
+            zoomLevel = Math.max(1, Math.min(CONFIG.maxZoom, zoomLevel + delta));
+            applyZoom();
+        }, { passive: false });
+
+        // Double-click to zoom
+        document.getElementById('lightboxImage')?.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            zoomLevel = zoomLevel > 1 ? 1 : 2.5;
+            applyZoom();
+        });
+
+        // Drag to pan (when zoomed)
+        const lightboxImg = document.getElementById('lightboxImage');
+        if (lightboxImg) {
+            lightboxImg.addEventListener('mousedown', (e) => {
+                if (zoomLevel > 1) {
+                    isDragging = true;
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    lightboxImg.classList.add('zooming');
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                translateX = (e.clientX - startX) / zoomLevel;
+                translateY = (e.clientY - startY) / zoomLevel;
+                applyZoom();
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                lightboxImg.classList.remove('zooming');
+            });
+        }
+
+        // Touch support for pinch-to-zoom
+        let initialPinchDistance = 0;
+        let initialZoom = 1;
+
+        document.getElementById('lightbox')?.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                initialZoom = zoomLevel;
+            }
+        }, { passive: true });
+
+        document.getElementById('lightbox')?.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const currentDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                const scale = currentDistance / initialPinchDistance;
+                zoomLevel = Math.max(1, Math.min(CONFIG.maxZoom, initialZoom * scale));
+                applyZoom();
+            }
+        }, { passive: false });
+
+        // Swipe navigation for touch
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox')?.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.getElementById('lightbox')?.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold && zoomLevel <= 1) {
+                if (diff > 0) {
+                    navigateLightbox(1); // Swipe left = next
+                } else {
+                    navigateLightbox(-1); // Swipe right = prev
+                }
+            }
+        }
+
+        // ============================================
+        // KEYBOARD NAVIGATION
+        // ============================================
+
+        document.addEventListener('keydown', (e) => {
+            if (!state.isLightboxOpen) return;
+
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    navigateLightbox(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateLightbox(1);
+                    break;
+                case '+':
+                case '=':
+                    zoomIn();
+                    break;
+                case '-':
+                    zoomOut();
+                    break;
+                case '0':
+                    resetZoom();
+                    break;
+            }
+        });
+
+        // ============================================
+        // UI STATE HELPERS
+        // ============================================
+
+        function showLoading(show) {
+            state.isLoading = show;
+            document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            state.error = message;
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        function hideError() {
+            state.error = null;
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showEmpty() {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('galleryGrid').style.display = 'none';
+        }
+
+        function hideEmpty() {
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        function updateStats(photos, activities, categories) {
+            animateNumber('totalPhotos', photos);
+            animateNumber('totalActivities', activities);
+            animateNumber('totalCategories', categories);
+        }
+
+        function animateNumber(elementId, target) {
+            const el = document.getElementById(elementId);
+            const duration = 1000;
+            const start = parseInt(el.textContent) || 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(start + (target - start) * easeOut);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        // Load gallery when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🖼️ Photo Gallery initialized');
+            console.log(`☁️ Cloud: ${CONFIG.cloudName}`);
+            console.log(`📁 Folder: ${CONFIG.folder}`);
+            loadGallery();
+        });
+
+        // Also support dynamic loading
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            loadGallery();
+        }
+
+        // ============================================
+        // MANIFEST GENERATOR HELPER
+        // This function helps generate the manifest file
+        // Run this in browser console to export current photos
+        // ============================================
+        window.generateManifest = function() {
+            const manifest = {
+                generated: new Date().toISOString(),
+                cloudName: CONFIG.cloudName,
+                folder: CONFIG.folder,
+                photos: state.photos.map(p => ({
+                    public_id: p.publicId,
+                    format: p.format || 'jpg',
+                    title: p.title,
+                    category: p.category,
+                    date: p.date,
+                    context: p.context
+                }))
+            };
+            
+            console.log('=== COPY THIS TO gallery-manifest.json ===');
+            console.log(JSON.stringify(manifest, null, 2));
+            console.log('========================================');
+            
+            return manifest;
+        };
+
+        // Log setup instructions
+        console.log(`
+╔══════════════════════════════════════════════════════╗
+║     📸 GALERI FOTO CLOUDINARY - STANDALONE          ║
+╠══════════════════════════════════════════════════════╣
+║                                                      ║
+║  Untuk menggunakan galeri ini dengan data asli:      ║
+║                                                      ║
+║  1. Buat file gallery-manifest.json di folder        ║
+║     yang sama dengan file HTML ini                   ║
+║                                                      ║
+║  2. Format JSON:                                     ║
+║  {                                                   ║
+║    "generated": "2026-01-01T00:00:00Z",              ║
+║    "cloudName": "${CONFIG.cloudName}",                  ║
+║    "folder": "${CONFIG.folder}",                          ║
+║    "photos": [                                        ║
+║      {                                               ║
+║        "public_id": "folder/nama-file",               ║
+║        "format": "jpg",                               ║
+║        "title": "Judul Foto",                        ║
+║        "context": { "custom": { "caption": "..." }}  ║
+║      }                                                ║
+║    ]                                                 ║
+║  }                                                   ║
+║                                                      ║
+║  3. Atau gunakan Python script untuk auto-generate   ║
+║     manifest dari Cloudinary Admin API               ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝
+        `);
+    </script>
+</body>
+</html>
