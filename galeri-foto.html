@@ -1804,6 +1804,296 @@
             border: 0;
         }
         
+        /* ============================================
+           LOGIN MODAL
+        ============================================ */
+        .login-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            padding: 1rem;
+        }
+
+        .login-modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.95) translateY(20px);
+            transition: all var(--transition-base);
+        }
+
+        .login-modal.open .login-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .login-header {
+            padding: 2rem 2rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-color), #1d4ed8);
+            color: white;
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%
+        }
+
+        .login-icon svg {
+            width: 32px;
+            height: 32px;
+            margin: 1rem auto 0;
+            display: block;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 2rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .login-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .login-form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .login-input-wrapper {
+            position: relative;
+        }
+
+        .login-input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+
+        .login-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .login-input.error {
+            border-color: #ef4444;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color var(--transition-fast);
+        }
+
+        .password-toggle:hover {
+            color: var(--text-primary);
+        }
+
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .login-error-msg {
+            display: none;
+            padding: 0.75rem 1rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            color: #dc2626;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .login-error-msg.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        [data-theme="dark"] .login-error-msg {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent-color), #1d4ed8);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 12px;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .login-footer {
+            padding: 1.5rem 2rem;
+            background: var(--bg-tertiary);
+            text-align: center;
+        }
+
+        .login-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .admin-session-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-session-info.logged-in {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .session-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #16a34a;
+        }
+
+        .session-user svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 38, 38, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                max-width: 100%;
+                margin: 0.5rem;
+            }
+
+            .login-header {
+                padding: 1.5rem 1.25rem 1.25rem;
+            }
+
+            .login-body {
+                padding: 1.5rem;
+            }
+        }
+
+        /* ============================================
+           ADMIN PANEL - WITH SESSION
+        ============================================ */
+        .admin-modal.has-session .admin-header {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+        }
+
+        .admin-modal.has-session .admin-title::before {
+            content: '🔓 ';
+        }
+
         .hidden {
             display: none !important;
         }
@@ -2111,18 +2401,114 @@
     </div>
 
     <!-- ============================================
+         LOGIN MODAL
+    ============================================ -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h2 class="login-title">Admin Login</h2>
+                <p class="login-subtitle">Masukkan kredensial untuk mengakses panel</p>
+            </div>
+            
+            <div class="login-body">
+                <form class="login-form" id="loginForm">
+                    <div class="login-form-group">
+                        <label class="login-form-label" for="loginUsername">Username</label>
+                        <div class="login-input-wrapper">
+                            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input 
+                                type="text" 
+                                class="login-input" 
+                                id="loginUsername" 
+                                placeholder="Masukkan username"
+                                autocomplete="username"
+                                required
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="login-form-group">
+                        <label class="login-form-label" for="loginPassword">Password</label>
+                        <div class="login-input-wrapper">
+                            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input 
+                                type="password" 
+                                class="login-input" 
+                                id="loginPassword" 
+                                placeholder="Masukkan password"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg class="eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="login-error-msg" id="loginErrorMsg">
+                        Username atau password salah!
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        Masuk ke Panel Admin
+                    </button>
+                </form>
+            </div>
+            
+            <div class="login-footer">
+                <p class="login-hint">🔒 Hanya administrator yang berwenang yang dapat mengakses panel ini</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
          ADMIN MODAL
     ============================================ -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-panel">
             <div class="admin-header">
-                <h2 class="admin-title">Panel Admin</h2>
-                <button class="admin-close" id="adminClose">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <h2 class="admin-title">Panel Admin</h2>
+                    <button class="admin-close" id="adminClose">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="admin-session-info" id="adminSessionInfo">
+                    <span class="session-user">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span id="sessionUsername">Admin</span>
+                    </span>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
             </div>
             
             <div class="admin-body">
@@ -2376,6 +2762,7 @@
         const elements = {
             navbar: document.getElementById('navbar'),
             navbarNav: document.getElementById('navbarNav'),
+            loginModal: document.getElementById('loginModal'),
             mobileMenuToggle: document.getElementById('mobileMenuToggle'),
             themeToggle: document.getElementById('themeToggle'),
             adminToggle: document.getElementById('adminToggle'),
@@ -2937,12 +3324,185 @@
         });
 
         // ============================================
-        // ADMIN PANEL
+        // ADMIN AUTHENTICATION CONFIGURATION
+        // ============================================
+        const ADMIN_CONFIG = {
+            // ⚠️ GANTI USERNAME & PASSWORD DI SINI ⚠️
+            username: 'adminkes',      // Username default - ubah sesuai kebutuhan
+            password: 'Dinkes2026!',   // Password default - ubah sesuai kebutuhan
+            sessionKey: 'gallery_admin_session',
+            sessionExpiry: 24 * 60 * 60 * 1000 // 24 jam dalam milidetik
+        };
+
+        // ============================================
+        // ADMIN AUTHENTICATION FUNCTIONS
+        // ============================================
+        function isAdminLoggedIn() {
+            const session = localStorage.getItem(ADMIN_CONFIG.sessionKey);
+            if (!session) return false;
+            
+            try {
+                const data = JSON.parse(session);
+                const now = new Date().getTime();
+                return data.isLoggedIn === true && data.expiry > now;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function createAdminSession(username) {
+            const sessionData = {
+                isLoggedIn: true,
+                username: username,
+                loginTime: new Date().getTime(),
+                expiry: new Date().getTime() + ADMIN_CONFIG.sessionExpiry
+            };
+            localStorage.setItem(ADMIN_CONFIG.sessionKey, JSON.stringify(sessionData));
+        }
+
+        function destroyAdminSession() {
+            localStorage.removeItem(ADMIN_CONFIG.sessionKey);
+        }
+
+        function getAdminUsername() {
+            const session = localStorage.getItem(ADMIN_CONFIG.sessionKey);
+            if (!session) return 'Admin';
+            
+            try {
+                const data = JSON.parse(session);
+                return data.username || 'Admin';
+            } catch (e) {
+                return 'Admin';
+            }
+        }
+
+        function updateAdminSessionUI() {
+            const sessionInfo = document.getElementById('adminSessionInfo');
+            const sessionUsername = document.getElementById('sessionUsername');
+            const adminModal = elements.adminModal;
+            
+            if (isAdminLoggedIn()) {
+                sessionInfo.classList.add('logged-in', 'show');
+                sessionUsername.textContent = getAdminUsername();
+                adminModal.classList.add('has-session');
+            } else {
+                sessionInfo.classList.remove('logged-in', 'show');
+                adminModal.classList.remove('has-session');
+            }
+        }
+
+        // ============================================
+        // LOGIN MODAL FUNCTIONS
+        // ============================================
+        function openLoginModal() {
+            elements.loginModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            // Focus on username input
+            setTimeout(() => document.getElementById('loginUsername').focus(), 300);
+        }
+
+        function closeLoginModal() {
+            elements.loginModal.classList.remove('open');
+            document.body.style.overflow = '';
+            // Clear form
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginErrorMsg').classList.remove('show');
+            document.querySelectorAll('.login-input').forEach(input => input.classList.remove('error'));
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorMsg = document.getElementById('loginErrorMsg');
+            const inputs = document.querySelectorAll('.login-input');
+            
+            // Reset error states
+            errorMsg.classList.remove('show');
+            inputs.forEach(input => input.classList.remove('error'));
+            
+            // Validate credentials
+            if (username === ADMIN_CONFIG.username && password === ADMIN_CONFIG.password) {
+                // Success
+                createAdminSession(username);
+                closeLoginModal();
+                showToast(`Selamat datang, ${username}!`, 'success');
+                updateAdminSessionUI();
+                
+                // Open admin panel after successful login
+                setTimeout(() => {
+                    openAdminPanelInternal();
+                }, 300);
+            } else {
+                // Failed
+                errorMsg.classList.add('show');
+                inputs.forEach(input => {
+                    input.classList.add('error');
+                    setTimeout(() => input.classList.remove('error'), 500);
+                });
+                
+                // Shake animation on button
+                const btn = document.getElementById('loginBtn');
+                btn.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => btn.style.animation = '', 500);
+            }
+        }
+
+        function handleLogout() {
+            destroyAdminSession();
+            closeAdminPanel();
+            updateAdminSessionUI();
+            showToast('Anda telah logout dari panel admin', 'success');
+        }
+
+        // Password toggle functionality
+        function setupPasswordToggle() {
+            const passwordInput = document.getElementById('loginPassword');
+            const toggleBtn = document.getElementById('passwordToggle');
+            const eyeOpen = toggleBtn.querySelector('.eye-open');
+            const eyeClosed = toggleBtn.querySelector('.eye-closed');
+            
+            toggleBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                eyeOpen.classList.toggle('hidden', !isPassword);
+                eyeClosed.classList.toggle('hidden', isPassword);
+            });
+        }
+
+        // Close login modal on background click
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target.id === 'loginModal') {
+                closeLoginModal();
+            }
+        });
+
+        // Login form submit
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        
+        // Setup password toggle
+        setupPasswordToggle();
+        
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+        // ============================================
+        // ADMIN PANEL (WITH AUTH)
         // ============================================
         function openAdminPanel() {
+            if (isAdminLoggedIn()) {
+                openAdminPanelInternal();
+            } else {
+                openLoginModal();
+            }
+        }
+
+        function openAdminPanelInternal() {
             elements.adminModal.classList.add('open');
             document.body.style.overflow = 'hidden';
             populateEventSelects();
+            updateAdminSessionUI();
         }
 
         function closeAdminPanel() {
@@ -3387,8 +3947,14 @@
                     if (elements.adminModal.classList.contains('open')) {
                         closeAdminPanel();
                     }
+                    if (elements.loginModal && elements.loginModal.classList.contains('open')) {
+                        closeLoginModal();
+                    }
                 }
             });
+
+            // Initialize admin session UI on page load
+            updateAdminSessionUI();
         }
 
         // ============================================
