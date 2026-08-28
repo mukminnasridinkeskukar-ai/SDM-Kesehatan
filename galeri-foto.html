@@ -1186,7 +1186,7 @@
         </form>
         
         <p style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">
-            
+            Default password: <strong>dinkes2026</strong>
         </p>
     </div>
 </div>
@@ -1440,10 +1440,17 @@
 // ============================================
 const CONFIG = {
     cloudName: 'cla7jrww',
-    adminPassword: '@dinkes2026', // Change this!
+    adminPassword: 'dinkes2026', // Change this!
     cacheExpiry: 30 * 60 * 1000, // 30 minutes
     autoRefreshInterval: 5 * 60 * 1000, // 5 menit - Auto refresh otomatis
     enableAutoRefresh: true, // Aktifkan auto-update
+    
+    // ⚡ API Configuration (untuk auto-update penuh)
+    apiBaseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3001'
+        : '', // Kosongkan jika same origin
+    apiEndpoint: '/api/gallery/photos',
+    useApi: true // Set false untuk pakai data embedded saja
 };
 
 // ============================================
@@ -1479,50 +1486,122 @@ let state = {
 // ============================================
 let GALLERY_DATA = [];
 
-// Default data for first load (will be replaced)
+// Generated on 2026-08-28 11:42:24 - Auto-generated from Cloudinary
 const DEFAULT_DATA = [
-    {
-        id: 'kegiatan-20260814',
-        judul: 'Pelatihan Penggunaan Tata Bahasa Indonesia yang Benar',
-        tanggal: '13-14 Agustus 2026',
-        tempat: 'RSUD AM Parikesit, Tenggarong',
-        tahun: '2026',
-        deskripsi: 'Pelatihan penggunaan tata bahasa Indonesia yang baik dan benar bagi tenaga kesehatan',
-        kategori: 'Pelatihan',
-        photos: [
-            { public_id: 'IMG_20260814_162303', filename: 'IMG_20260814_162303.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303' },
-            { public_id: 'IMG_20260814_162246', filename: 'IMG_20260814_162246.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246' },
-            { public_id: 'IMG_20260814_162224', filename: 'IMG_20260814_162224.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224' },
-            { public_id: 'IMG_20260814_162217', filename: 'IMG_20260814_162217.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217' },
-            { public_id: 'IMG_20260814_162203', filename: 'IMG_20260814_162203.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203' }
-        ]
-    },
-    {
-        id: 'kegiatan-20260813',
-        judul: 'Dokumentasi Kegiatan SDMK - 2026-08-13',
-        tanggal: '2026-08-13',
-        tempat: 'Dokumentasi Kegiatan',
-        tahun: '2026',
-        deskripsi: 'Kumpulan foto dokumentasi tanggal 2026-08-13',
-        kategori: 'Pelatihan',
-        photos: [
-            { public_id: 'IMG_20260813_152526', filename: 'IMG_20260813_152526.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526' },
-            { public_id: 'IMG_20260813_152509', filename: 'IMG_20260813_152509.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509' },
-            { public_id: 'IMG_20260813_152459', filename: 'IMG_20260813_152459.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459' }
-        ]
-    },
-    {
-        id: 'kegiatan-20260828',
-        judul: 'Foto Dokumentasi (2026-08-28)',
-        tanggal: '2026-08-28',
-        tempat: 'Dokumentasi Kegiatan',
-        tahun: '2026',
-        deskripsi: 'Kumpulan foto dokumentasi tanggal 2026-08-28',
-        kategori: 'Lainnya',
-        photos: [
-            { public_id: 'Foto_dari_mukminnasri', filename: 'Foto_dari_mukminnasri.jpg', format: 'jpg', url: 'https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/Foto_dari_mukminnasri', thumbUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/Foto_dari_mukminnasri', originalUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/Foto_dari_mukminnasri', highResUrl: 'https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/Foto_dari_mukminnasri' }
-        ]
-    }
+        {
+                "id": "kegiatan-20260828",
+                "judul": "Dokumentasi Kegiatan SDMK - 28 Agustus 2026",
+                "tanggal": "28-08-2026",
+                "tempat": "Dokumentasi Kegiatan",
+                "tahun": "2026",
+                "deskripsi": "Kumpulan foto dokumentasi tanggal 28-08-2026",
+                "kategori": "Lainnya",
+                "photos": [
+                        {
+                                "public_id": "Foto_dari_mukminnasri",
+                                "filename": "Foto_dari_mukminnasri.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/Foto_dari_mukminnasri",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/Foto_dari_mukminnasri",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/Foto_dari_mukminnasri",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/Foto_dari_mukminnasri"
+                        }
+                ]
+        },
+        {
+                "id": "kegiatan-20260814",
+                "judul": "Dokumentasi Kegiatan SDMK - 14 Agustus 2026",
+                "tanggal": "14-08-2026",
+                "tempat": "Dokumentasi Kegiatan",
+                "tahun": "2026",
+                "deskripsi": "Kumpulan foto dokumentasi tanggal 14-08-2026",
+                "kategori": "Lainnya",
+                "photos": [
+                        {
+                                "public_id": "IMG_20260814_162303",
+                                "filename": "IMG_20260814_162303.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162303",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162303",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162303",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162303"
+                        },
+                        {
+                                "public_id": "IMG_20260814_162246",
+                                "filename": "IMG_20260814_162246.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162246",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162246",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162246",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162246"
+                        },
+                        {
+                                "public_id": "IMG_20260814_162224",
+                                "filename": "IMG_20260814_162224.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162224",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162224",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162224",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162224"
+                        },
+                        {
+                                "public_id": "IMG_20260814_162217",
+                                "filename": "IMG_20260814_162217.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162217",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162217",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162217",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162217"
+                        },
+                        {
+                                "public_id": "IMG_20260814_162203",
+                                "filename": "IMG_20260814_162203.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260814_162203",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260814_162203",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260814_162203",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260814_162203"
+                        }
+                ]
+        },
+        {
+                "id": "kegiatan-20260813",
+                "judul": "Dokumentasi Kegiatan SDMK - 13 Agustus 2026",
+                "tanggal": "13-08-2026",
+                "tempat": "Dokumentasi Kegiatan",
+                "tahun": "2026",
+                "deskripsi": "Kumpulan foto dokumentasi tanggal 13-08-2026",
+                "kategori": "Lainnya",
+                "photos": [
+                        {
+                                "public_id": "IMG_20260813_152526",
+                                "filename": "IMG_20260813_152526.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152526",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152526",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152526",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152526"
+                        },
+                        {
+                                "public_id": "IMG_20260813_152509",
+                                "filename": "IMG_20260813_152509.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152509",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152509",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152509",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152509"
+                        },
+                        {
+                                "public_id": "IMG_20260813_152459",
+                                "filename": "IMG_20260813_152459.jpg",
+                                "format": "jpg",
+                                "url": "https://res.cloudinary.com/cla7jrww/image/upload/w_800,q_auto/IMG_20260813_152459",
+                                "thumbUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_150,q_auto/IMG_20260813_152459",
+                                "originalUrl": "https://res.cloudinary.com/cla7jrww/image/upload/q_auto:eco/IMG_20260813_152459",
+                                "highResUrl": "https://res.cloudinary.com/cla7jrww/image/upload/w_1920,q_auto/IMG_20260813_152459"
+                        }
+                ]
+        }
 ];
 
 // ============================================
@@ -2240,23 +2319,61 @@ async function performAutoUpdate() {
 }
 
 async function fetchFreshData() {
-    // Simulate fetching fresh data from Cloudinary
-    // In production, this would call your backend API or Cloudinary Admin API
+    console.log('🔄 Fetching fresh data...');
     
-    // For demo: we use DEFAULT_DATA with slight modifications to simulate updates
-    // In REAL implementation, replace this with actual API call:
-    //
-    // const response = await fetch(`/api/gallery/photos?cloud_name=${CONFIG.cloudName}`);
-    // return await response.json();
+    // ============================================
+    // Coba ambil dari API (jika enabled)
+    // ============================================
+    if (CONFIG.useApi && CONFIG.apiBaseUrl) {
+        try {
+            const apiUrl = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoint}?refresh=true&t=${Date.now()}`;
+            console.log(`📡 Calling API: ${apiUrl}`);
+            
+            const response = await fetch(apiUrl);
+            
+            if (response.ok) {
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    console.log(`✅ API Response: ${result.data.length} activities, ${result.statistics?.total_photos || 0} photos`);
+                    
+                    // Add metadata
+                    result.data.forEach((activity) => {
+                        activity.lastUpdated = new Date().toISOString();
+                        activity.lastUpdatedBy = 'cloudinary-api';
+                    });
+                    
+                    // Log ke admin panel
+                    addLog('success', `📡 API: ${result.data.length} kegiatan, ${result.statistics?.total_photos || 0} foto`);
+                    
+                    return result.data;
+                }
+            } else {
+                console.warn(`⚠️ API returned status: ${response.status}`);
+                addLog('warning', `⚠️ API error: HTTP ${response.status}`);
+            }
+        } catch (error) {
+            console.warn('⚠️ API fetch failed:', error.message);
+            addLog('warning', `⚠️ API tidak terjangkau: ${error.message}`);
+            
+            // Jika API gagal, fallback ke DEFAULT_DATA
+            console.log('🔄 Falling back to default data...');
+        }
+    }
     
-    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+    // ============================================
+    // FALLBACK: Gunakan data embedded (DEFAULT_DATA)
+    // ============================================
+    console.log('📦 Using embedded DEFAULT_DATA as fallback');
+    
+    await new Promise(resolve => setTimeout(resolve, 800)); // Simulate processing
     
     const newData = JSON.parse(JSON.stringify(DEFAULT_DATA));
     
     // Add timestamps
     newData.forEach((activity) => {
         activity.lastUpdated = new Date().toISOString();
-        activity.lastUpdatedBy = 'auto-update';
+        activity.lastUpdatedBy = 'embedded-data';
     });
     
     return newData;
@@ -2397,9 +2514,11 @@ console.log(`
 ║   ✅ Lightbox Gallery                            ║
 ║   ✅ Local Storage Cache                         ║
 ║   ✅ AUTO-UPDATE OTOMATIS ⚡                     ║
+║   ✅ CLOUDINARY API INTEGRATION                 ║
 ║                                                  ║
 ║   Admin Password: dinkes2026                     ║
 ║   Cloudinary: cla7jrww                           ║
+║   API: ${CONFIG.useApi ? CONFIG.apiBaseUrl + CONFIG.apiEndpoint : 'Disabled'}  ║
 ║                                                  ║
 ╚══════════════════════════════════════════════════╝
 `);
