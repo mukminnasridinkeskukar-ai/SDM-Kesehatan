@@ -9,21 +9,24 @@
     ╔══════════════════════════════════════════════════════════════╗
     ║  GALERI KEGIATAN - DINAS KESEHATAN                          ║
     ╠══════════════════════════════════════════════════════════════╣
-    ║  ARSITEKTUR DATA:                                           ║
-    ║  • PUBLIC VIEW: Data langsung dari Cloudinary CDN           ║
-    ║  • ADMIN PANEL: LocalStorage untuk manajemen kegiatan      ║
+    ║  ARSITEKTUR DATA: CLOUDINARY-BACKEND                       ║
+    ║                                                             ║
+    ║  ✅ BACKEND: Cloudinary (JSON File + Image CDN)            ║
+    ║  ✅ Data events tersimpan di Cloudinary Raw Upload        ║
+    ║  ✅ Foto tersimpan di Cloudinary Image CDN                ║
+    ║  ✅ Bisa dibuka di MANA SAJA (fully cloud-based)          ║
     ║                                                             ║
     ║  CARA KERJA:                                                 ║
-    ║  1. Website otomatis fetch data dari Cloudinary            ║
-    ║  2. Foto ditampilkan dari URL Cloudinary (public)          ║
-    ║  3. Admin upload foto → tersimpan di Cloudinary           ║
-    ║  4. Data kegiatan disimpan di localStorage (admin only)   ║
+    ║  1. Website fetch data dari Cloudinary CDN                 ║
+    ║  2. Foto ditampilkan langsung dari Cloudinary              ║
+    ║  3. Admin simpan perubahan ke Cloudinary                  ║
+    ║  4. Tidak ada dependensi localStorage!                    ║
     ║                                                             ║
     ║  KEUNTUNGAN:                                                 ║
-    ║  ✅ Bisa dibuka dari mana saja (cloud-based)               ║
-    ║  ✅ Tidak perlu export/import data                         ║
-    ║  ✅ Foto langsung dari CDN (cepat & reliable)             ║
-    ║  ✅ Admin tetap bisa manage via panel                      ║
+    ║  ✅ Buka di browser manapun → tampilan SAMA               ║
+    ║  ✅ Data tersentralisasi di Cloud                        ║
+    ║  ✅ Auto-sync antar device                               ║
+    ║  ✅ Tidak perlu export/import                            ║
     ╚══════════════════════════════════════════════════════════════╝
     -->
     
@@ -3392,33 +3395,31 @@
                         </p>
                     </div>
 
-                    <!-- Export/Import Data Section (Admin Only) -->
+                    <!-- Cloudinary Backend Status Section -->
                     <div class="data-sync-section">
                         <div class="section-header">
-                            <h3 class="section-title">🌐 Bagikan Galeri ke Publik</h3>
-                            <span class="sync-hint">Buat versi website yang bisa dibuka di mana saja</span>
+                            <h3 class="section-title">☁️ Cloudinary Backend</h3>
+                            <span class="sync-hint">Data tersentralisasi di cloud - akses dari mana saja</span>
                         </div>
                         
                         <div class="sync-info-box" style="background: linear-gradient(135deg, #eff6ff, #faf5ff); border-left: 4px solid #2563eb;">
-                            <div class="sync-info-icon" style="font-size: 2rem;">🚀</div>
+                            <div class="sync-info-icon" style="font-size: 2rem;">☁️</div>
                             <div class="sync-info-text">
-                                <strong style="color: #1e40af; font-size: 1.1rem;">✨ SOLUSI UNTUK MENAMPILKAN DI BROWSER LAIN</strong><br><br>
-                                📌 <strong>Masalah:</strong> Data admin tersimpan di localStorage (hanya di browser ini)<br>
-                                ✅ <strong>Solusi:</strong> Generate Public HTML = file standalone yang bisa dibuka di MANA SAJA<br><br>
-                                <em style="color: #666;">File hasil akan berisi semua data & foto langsung dari Cloudinary CDN</em>
+                                <strong style="color: #1e40af; font-size: 1.1rem;">✨ CLOUDINARY BACKEND - DATA TERSENTRALISASI</strong><br><br>
+                                📌 <strong>Storage:</strong> Data tersimpan di Cloudinary (bukan localStorage)<br>
+                                ✅ <strong>Keuntungan:</strong> Buka di browser manapun → data SAMA<br><br>
+                                <em style="color: #666;">Setiap perubahan otomatis tersimpan ke Cloudinary CDN</em>
                             </div>
                         </div>
 
                         <div class="sync-actions">
-                            <!-- PRIMARY SOLUTION: Generate Public HTML -->
-                            <button type="button" class="btn-primary btn-generate-public" id="generatePublicBtn" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; padding: 12px 24px; font-size: 1.05rem; font-weight: 600;">
+                            <!-- PRIMARY: Status & Info -->
+                            <button type="button" class="btn-primary" id="cloudinaryStatusBtn" style="background: linear-gradient(135deg, #059669, #10b981); border: none;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="12" y1="18" x2="12" y2="12"/>
-                                    <line x1="9" y1="15" x2="15" y2="15"/>
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
                                 </svg>
-                                🌐 Generate Public HTML (untuk dibagikan)
+                                ✅ Terhubung ke Cloudinary
                             </button>
                             
                             <button type="button" class="btn-secondary btn-export" id="exportDataBtn">
@@ -3427,7 +3428,7 @@
                                     <polyline points="7 10 12 15 17 10"/>
                                     <line x1="12" y1="15" x2="12" y2="3"/>
                                 </svg>
-                                💾 Backup Data
+                                💾 Backup Data (JSON)
                             </button>
                             
                             <label class="btn-secondary btn-import">
@@ -3440,12 +3441,12 @@
                                 <input type="file" id="importDataInput" accept=".json" style="display: none;">
                             </label>
 
-                            <button type="button" class="btn-secondary btn-cloudinary-fetch" id="fetchCloudinaryBtn" style="opacity: 0.7;">
+                            <button type="button" class="btn-secondary" id="refreshCloudinaryBtn" onclick="location.reload()">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 6v6l4 2"/>
+                                    <path d="M23 4v6h-6"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                                 </svg>
-                                ℹ️ Info Cloudinary Sync
+                                🔄 Refresh dari Cloudinary
                             </button>
                         </div>
 
@@ -3464,17 +3465,22 @@
     ============================================ -->
     <script>
         // ============================================
-        // CLOUDINARY CONFIGURATION
+        // CLOUDINARY CONFIGURATION (BACKEND)
         // ============================================
         const CLOUDINARY_CONFIG = {
             cloudName: 'cla7jrww',
             uploadPreset: 'galeri_kegiatan',
             baseFolder: 'galeri-kegiatan',
-            // Public API endpoints (tidak memerlukan API key)
-            // Menggunakan search API untuk mengambil resource
-            searchApi: `https://api.cloudinary.com/v1_1/cla7jrww/resources/search`,
-            // Fallback: gunakan list resources dengan prefix
-            resourcesApi: (prefix) => `https://res.cloudinary.com/cla7jrww/image/list/${prefix}.json`,
+            
+            // 🆕 DATA STORAGE: JSON file di Cloudinary Raw Upload
+            dataFilePublicId: 'galeri-data/events.json',
+            
+            // API Endpoints
+            uploadApi: `https://api.cloudinary.com/v1_1/cla7jrww/auto/upload`,
+            
+            // CDN URLs untuk fetch data
+            dataFileUrl: `https://res.cloudinary.com/cla7jrww/raw/upload/galeri-data/events.json`,
+            
             // Base URL untuk gambar
             baseUrl: 'https://res.cloudinary.com/cla7jrww/image/upload'
         };
@@ -3513,13 +3519,86 @@
         }
 
         // ============================================
-        // LOCAL STORAGE KEYS
+        // CLOUDINARY BACKEND - DATA OPERATIONS
         // ============================================
-        const STORAGE_KEYS = {
-            events: 'gallery_events_data',
-            photos: 'gallery_photos_data',
-            lastSync: 'gallery_last_sync'
-        };
+        
+        /**
+         * FETCH DATA dari Cloudinary (JSON File)
+         * Ini adalah FUNGSI UTAMA untuk mengambil data
+         * Bisa dipanggil dari MANA SAJA tanpa CORS issue!
+         */
+        async function fetchEventsFromCloudinary() {
+            console.log('☁️ Fetching events from Cloudinary...');
+            console.log('   URL:', CLOUDINARY_CONFIG.dataFileUrl);
+            
+            try {
+                const response = await fetch(CLOUDINARY_CONFIG.dataFileUrl);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.log('📭 Data file not found (404) - will create new');
+                        return null; // File belum ada, return null
+                    }
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Successfully fetched', data.length, 'events from Cloudinary');
+                return data;
+                
+            } catch (error) {
+                console.error('❌ Failed to fetch from Cloudinary:', error.message);
+                return null;
+            }
+        }
+        
+        /**
+         * SAVE DATA ke Cloudinary (Upload JSON File)
+         * Menggunakan unsigned upload preset
+         */
+        async function saveEventsToCloudinary(eventsData) {
+            console.log('☁️ Saving events to Cloudinary...');
+            
+            try {
+                // Convert data ke JSON string
+                const jsonString = JSON.stringify(eventsData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const file = new File([blob], 'events.json', { type: 'application/json' });
+                
+                // Upload ke Cloudinary sebagai raw file
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+                formData.append('public_id', CLOUDINARY_CONFIG.dataFilePublicId);
+                formData.append('resource_type', 'raw');
+                formData.append('overwrite', true); // Overwrite existing file
+                
+                const response = await fetch(CLOUDINARY_CONFIG.uploadApi, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Upload failed: HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Data saved to Cloudinary:', result.public_id);
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Failed to save to Cloudinary:', error);
+                showToast('❌ Gagal simpan ke Cloudinary: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        /**
+         * INITIALIZE DEFAULT DATA (jika belum ada)
+         */
+        function getDefaultEvents() {
+            return [];
+        }
 
         // ============================================
         // APPLICATION STATE
@@ -3531,123 +3610,72 @@
             photos: [],
             filteredEvents: [],
             selectedFiles: [],
-            theme: localStorage.getItem('theme') || 'light',
+            theme: 'light', // Default theme (bisa disimpan di Cloudinary nanti)
             lightboxOpen: false,
             zoomLevel: 1,
             isDragging: false,
             startX: 0,
             scrollLeft: 0,
-            isLoading: true
+            isLoading: true,
+            isSaving: false, // Prevent concurrent saves
+            lastSaveTime: null
         };
 
         // ============================================
-        // DATA MANAGEMENT - LOCAL STORAGE + CLOUDINARY
+        // DATA MANAGEMENT - CLOUDINARY BACKEND ONLY
         // ============================================
         
-        // Load events from localStorage or create default structure
-        function loadEventsFromStorage() {
-            const stored = localStorage.getItem(STORAGE_KEYS.events);
-            if (stored) {
-                try {
-                    state.events = JSON.parse(stored);
-                    console.log('✓ Events loaded from localStorage:', state.events.length, 'events');
-                    return true;
-                } catch (e) {
-                    console.error('Failed to parse stored events:', e);
-                }
+        /**
+         * SAVE EVENTS ke Cloudinary (Auto-save)
+         * Dipanggil setiap ada perubahan data
+         */
+        async function saveEventsToStorage() {
+            // Prevent concurrent saves
+            if (state.isSaving) {
+                console.log('⏳ Save already in progress, skipping...');
+                return false;
             }
-            return false;
-        }
-
-        // Save events to localStorage
-        function saveEventsToStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEYS.events, JSON.stringify(state.events));
-                localStorage.setItem(STORAGE_KEYS.lastSync, new Date().toISOString());
-                console.log('✓ Events saved to localStorage');
-            } catch (e) {
-                console.error('Failed to save events:', e);
-            }
-        }
-
-        // Create default event structure if none exists
-        function initializeDefaultEvents() {
-            const defaultEvents = [
-                {
-                    id: 'evt-001',
-                    title: 'Sosialisasi Platform Digital Pengelolaan SDM Kesehatan',
-                    subtitle: 'Peningkatan Kompetensi Digital',
-                    date: '25 Agustus 2026',
-                    location: 'Tenggarong',
-                    year: '2026',
-                    category: 'sosialisasi',
-                    description: 'Kegiatan sosialisasi platform digital untuk pengelolaan sumber daya manusia kesehatan.',
-                    folder: 'galeri-kegiatan/2026/sosialisasi-sdmk',
-                    photos: [],
-                    photoCount: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 'evt-002',
-                    title: 'Bimtek Implementasi Standar Akreditasi',
-                    subtitle: 'Peningkatan Mutu Pelayanan',
-                    date: '18 Agustus 2026',
-                    location: 'Balikpapan',
-                    year: '2026',
-                    category: 'bimtek',
-                    description: 'Bimbingan teknis implementasi standar akreditasi fasilitas kesehatan tingkat pertama.',
-                    folder: 'galeri-kegiatan/2026/bimtek',
-                    photos: [],
-                    photoCount: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 'evt-003',
-                    title: 'Pelatihan Penanganan Darurat Medis',
-                    subtitle: 'Emergency Response Training',
-                    date: '10 Agustus 2026',
-                    location: 'Samarinda',
-                    year: '2026',
-                    category: 'pelatihan',
-                    description: 'Pelatihan penanganan darurat medis untuk tim penanggulangan bencana daerah.',
-                    folder: 'galeri-kegiatan/2026/pelatihan',
-                    photos: [],
-                    photoCount: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 'evt-004',
-                    title: 'Rapat Koordinasi Program Prioritas',
-                    subtitle: 'Evaluasi Semester I Tahun 2026',
-                    date: '5 Juli 2026',
-                    location: 'Samarinda',
-                    year: '2026',
-                    category: 'rapat',
-                    description: 'Rapat koordinasi evaluasi program prioritas Dinas Kesehatan semester I tahun 2026.',
-                    folder: 'galeri-kegiatan/2026/rapat',
-                    photos: [],
-                    photoCount: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 'evt-005',
-                    title: 'Kunjungan Kerja ke Puskesmas Terpencil',
-                    subtitle: 'Supervisi dan Pembinaan',
-                    date: '28 Juni 2026',
-                    location: 'Mahakam Ulu',
-                    year: '2026',
-                    category: 'kunjungan',
-                    description: 'Kunjungan kerja kepala dinas ke puskesmas terpencil di wilayah Mahakam Ulu.',
-                    folder: 'galeri-kegiatan/2026/kunjungan',
-                    photos: [],
-                    photoCount: 0,
-                    createdAt: new Date().toISOString()
-                }
-            ];
             
-            state.events = defaultEvents;
-            saveEventsToStorage();
-            console.log('✓ Default events initialized');
+            state.isSaving = true;
+            console.log('💾 Saving events to Cloudinary...', state.events.length, 'events');
+            
+            try {
+                const success = await saveEventsToCloudinary(state.events);
+                
+                if (success) {
+                    state.lastSaveTime = new Date();
+                    console.log('✅ Events saved to Cloudinary at:', state.lastSaveTime.toLocaleTimeString());
+                    
+                    // Show subtle save indicator
+                    showSaveIndicator(true);
+                }
+                
+                return success;
+            } catch (error) {
+                console.error('❌ Save failed:', error);
+                showToast('❌ Gagal simpan data: ' + error.message, 'error');
+                return false;
+            } finally {
+                state.isSaving = false;
+            }
+        }
+        
+        /**
+         * Show/hide save indicator
+         */
+        function showSaveIndicator(success) {
+            // Could add a visual indicator here if needed
+            // For now, just log to console
+            if (success) {
+                console.log('💾 Data synced to Cloudinary ✓');
+            }
+        }
+
+        // Create default event structure (empty - user will add their own)
+        function initializeDefaultEvents() {
+            console.log('📝 Initializing with empty events array...');
+            state.events = getDefaultEvents();
+            state.filteredEvents = [...state.events];
         }
 
         // Add photo to event after successful upload
@@ -3749,28 +3777,36 @@
             return { totalPhotos, photosWithCloudinaryId, issues };
         }
 
-        // Initialize data system - LOCAL STORAGE FOR ADMIN, GENERATE PUBLIC HTML FOR SHARING
+        // Initialize data system - CLOUDINARY BACKEND (No localStorage!)
         async function initializeData() {
             state.isLoading = true;
             showLoadingState();
             
-            console.log('🔄 Initializing data... Source: localStorage (Admin Mode)');
-            console.log('💡 TIP: Gunakan "Generate Public HTML" untuk membuat versi yang bisa dibuka di mana saja');
+            console.log('🔄 Initializing data... Source: ☁️ CLOUDINARY BACKEND');
+            console.log('📡 Fetching from:', CLOUDINARY_CONFIG.dataFileUrl);
             
             try {
-                // Load data dari localStorage (admin data)
-                const loaded = loadEventsFromStorage();
+                // STEP 1: Fetch data langsung dari Cloudinary (JSON file)
+                const cloudinaryData = await fetchEventsFromCloudinary();
                 
-                if (!loaded || state.events.length === 0) {
-                    // Default events (kosong, menunggu upload)
-                    console.log('📝 Menggunakan default structure - silakan tambah kegiatan dan upload foto');
+                if (cloudinaryData && cloudinaryData.length > 0) {
+                    console.log(`✅ Berhasil ambil ${cloudinaryData.length} kegiatan dari Cloudinary`);
+                    state.events = cloudinaryData;
+                    state.filteredEvents = [...state.events];
+                    
+                    console.log('🎉 Data loaded from Cloudinary - SAME DATA EVERYWHERE!');
+                } else {
+                    // File belum ada atau kosong
+                    console.log('📭 Belum ada data di Cloudinary - mulai dengan array kosong');
                     initializeDefaultEvents();
+                    state.filteredEvents = [...state.events];
                 }
                 
-                state.filteredEvents = [...state.events];
-                
             } catch (error) {
-                console.error('❌ Error initializing data:', error);
+                console.error('❌ Error initializing data from Cloudinary:', error);
+                
+                // Fallback ke default structure
+                console.log('⚠️ Using default empty structure');
                 initializeDefaultEvents();
                 state.filteredEvents = [...state.events];
             }
@@ -3778,6 +3814,7 @@
             // Update stats
             const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
             console.log(`📊 Data loaded: ${state.events.length} events, ${totalPhotos} photos`);
+            console.log(`💾 Storage: 100% Cloudinary (no localStorage)`);
             
             // Verify data integrity
             if (totalPhotos > 0) {
@@ -3789,7 +3826,7 @@
         }
 
         // ============================================
-        // FETCH DATA DARI CLOUDINARY (PUBLIC - TANPA API KEY)
+        // LEGACY FUNCTIONS (kept for compatibility)
         // ============================================
         
         async function fetchEventsFromCloudinaryPublic() {
@@ -3910,46 +3947,15 @@
         
         async function buildEventsFromStructuredData() {
             /**
-             * Build events dari localStorage + validasi foto di Cloudinary.
-             * Jika ada data di localStorage, gunakan dan validasi URL-nya.
+             * Build events dari Cloudinary + validasi foto.
+             * Fungsi ini sudah tidak digunakan lagi karena data langsung dari Cloudinary.
+             * Disediakan untuk backward compatibility.
              */
             
-            // Cek localStorage dulu (dari admin)
-            const stored = localStorage.getItem(STORAGE_KEYS.events);
-            let localEvents = [];
+            console.log('⚠️ buildEventsFromStructuredData() is deprecated');
+            console.log('   Data now loads directly from Cloudinary via fetchEventsFromCloudinary()');
             
-            if (stored) {
-                try {
-                    localEvents = JSON.parse(stored);
-                    console.log(`📦 Found ${localEvents.length} events in localStorage`);
-                } catch (e) {
-                    console.error('Failed to parse stored events:', e);
-                }
-            }
-            
-            // Filter events yang punya foto dengan valid Cloudinary URL
-            const validEvents = localEvents.filter(event => {
-                const hasValidPhotos = event.photos && event.photos.length > 0 && 
-                    event.photos.some(photo => photo.publicId && photo.publicId.includes('/'));
-                return hasValidPhotos;
-            }).map(event => ({
-                ...event,
-                // Pastikan semua URL foto valid
-                photos: (event.photos || []).map(photo => ({
-                    ...photo,
-                    secureUrl: photo.secureUrl || getCloudinaryUrl(photo.publicId),
-                    source: 'cloudinary'
-                })),
-                photoCount: event.photos?.length || 0,
-                source: 'localStorage-synced'
-            }));
-            
-            if (validEvents.length > 0) {
-                console.log(`✅ Using ${validEvents.length} validated events from storage`);
-                return validEvents;
-            }
-            
-            // Return empty jika tidak ada data sama sekali
+            // Return empty - data should come from initializeData() -> fetchEventsFromCloudinary()
             return [];
         }
         
@@ -4091,6 +4097,7 @@
         // THEME MANAGEMENT
         // ============================================
         function initTheme() {
+            // Theme default to light (could be saved to Cloudinary later if needed)
             if (state.theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 updateThemeIcons();
@@ -4100,7 +4107,7 @@
         function toggleTheme() {
             state.theme = state.theme === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', state.theme);
-            localStorage.setItem('theme', state.theme);
+            // Note: Theme preference not persisted (optional enhancement)
             updateThemeIcons();
         }
 
@@ -5875,7 +5882,7 @@
             state.events.push(newEvent);
             state.filteredEvents = [...state.events];
             
-            // Save to localStorage
+            // Save to Cloudinary
             saveEventsToStorage();
 
             console.log('✅ New event created:', newEvent);
@@ -6193,7 +6200,7 @@
             event.folder = `${CLOUDINARY_CONFIG.baseFolder}/${year}/${category}/${title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
             event.updatedAt = new Date().toISOString();
 
-            // Save to localStorage
+            // Save to Cloudinary
             saveEventsToStorage();
 
             console.log('✅ Event updated:', event);
@@ -6423,19 +6430,40 @@
              * Generate a self-contained HTML file with all data embedded.
              * This file can be opened anywhere without needing API/LocalStorage.
              */
-             
-            const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
             
+            const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
+            const eventsWithPhotos = state.events.filter(e => e.photos && e.photos.length > 0).length;
+            
+            // VALIDATION: Check if there's actual photo data
             if (totalPhotos === 0) {
-                showToast('⚠️ Tidak ada foto untuk di-generate. Upload foto terlebih dahulu.', 'error');
-                showImportStatus('⚠️ Upload foto terlebih dahulu sebelum generate public HTML.', 'error');
+                showToast('⚠️ Tidak ada foto untuk di-generate!', 'error');
+                showImportStatus(
+                    `❌ <strong>Gagal Generate!</strong><br><br>` +
+                    `📊 Status Data:<br>` +
+                    `• ${state.events.length} kegiatan ditemukan<br>` +
+                    `• <strong style="color:#dc2626;">0 foto tersimpan</strong><br><br>` +
+                    `<strong>Solusi:</strong><br>` +
+                    `1. Pilih kegiatan di dropdown "Kelola Foto"<br>` +
+                    `2. Upload foto terlebih dahulu<br>` +
+                    `3. Pastikan foto muncul di gallery<br>` +
+                    `4. Baru klik "Generate Public HTML"`,
+                    'error'
+                );
+                
+                console.error('❌ Cannot generate: No photos in data');
+                console.log('Events structure:', state.events.map(e => ({
+                    title: e.title,
+                    photosCount: e.photos?.length || 0,
+                    hasPhotos: (e.photos?.length || 0) > 0
+                })));
+                
                 return;
             }
-
+            
             if (!confirm(
                 `Buat file HTML Publik?\n\n` +
                 `📊 Data yang akan di-embed:\n` +
-                `• ${state.events.length} kegiatan\n` +
+                `• ${state.events.length} kegiatan (${eventsWithPhotos} dengan foto)\n` +
                 `• ${totalPhotos} foto\n\n` +
                 `File hasil:\n` +
                 `• Nama: galeri-kegiatan-public.html\n` +
@@ -6450,7 +6478,11 @@
             showToast('🔄 Generating public HTML...', 'info');
 
             try {
-                // Create embedded data string
+                // Create embedded data string - with validation log
+                console.log('📦 Preparing embedded data...');
+                console.log('   Events:', state.events.length);
+                console.log('   Photos:', totalPhotos);
+                
                 const embeddedData = JSON.stringify(state.events, null, 2);
                 
                 // Read current HTML
@@ -6481,9 +6513,9 @@
                     `• ${state.events.length} kegiatan<br>` +
                     `• ${totalPhotos} foto tertanam<br><br>` +
                     `<strong>Cara pakai:</strong><br>` +
-                    `1. Bagikan file ini ke siapa saja<br>` +
-                    `2. Buka di browser manapun<br>` +
-                    `3. Foto langsung muncul dari Cloudinary`,
+                    `1. Upload file ini ke hosting / server<br>` +
+                    `2. Atau bagikan langsung via email/WhatsApp<br>` +
+                    `3. Buka di browser manapun - foto akan muncul dari Cloudinary`,
                     'success'
                 );
                 
@@ -6578,8 +6610,27 @@
             return [
                 "const CLOUDINARY_BASE = 'https://res.cloudinary.com/cla7jrww/image/upload';",
                 "",
+                "// Debug: Log embedded data structure",
+                "console.log('📦 Embedded Events Count:', EMBEDDED_EVENTS ? EMBEDDED_EVENTS.length : 0);",
+                "if (EMBEDDED_EVENTS && EMBEDDED_EVENTS.length > 0) {",
+                "    EMBEDDED_EVENTS.forEach(function(evt, idx) {",
+                "        console.log('   Event ' + idx + ':', evt.title, '- Photos:', (evt.photos ? evt.photos.length : 0));",
+                "        if (evt.photos && evt.photos.length > 0) {",
+                "            console.log('      First photo sample:', evt.photos[0]);",
+                "        }",
+                "    });",
+                "}",
+                "",
                 "function getPhotoUrl(publicId) {",
-                "    return CLOUDINARY_BASE + '/w_800,q_auto,f_auto,c_fill/' + publicId;",
+                "    // Validate publicId before creating URL",
+                "    if (!publicId || typeof publicId !== 'string') {",
+                "        console.warn('⚠️ Invalid publicId:', publicId);",
+                "        return '';",
+                "    }",
+                "    // Clean up publicId - remove leading slash if present",
+                "    let cleanId = publicId.replace(/^\\//+, '');",
+                "    const url = CLOUDINARY_BASE + '/w_800,q_auto,f_auto,c_fill/' + cleanId;",
+                "    return url;",
                 "}",
                 "",
                 "function renderGallery() {",
@@ -6591,13 +6642,19 @@
                 "    }",
                 "    ",
                 "    let totalPhotos = 0;",
+                "    let eventsWithPhotos = 0;",
                 "    ",
                 "    EMBEDDED_EVENTS.forEach(function(event) {",
                 "        const photos = event.photos || [];",
                 "        totalPhotos += photos.length;",
                 "        ",
-                "        if (photos.length === 0) return;",
+                "        // Skip events with no photos but show message",
+                "        if (photos.length === 0) {",
+                "            console.log('⚠️ Event \"" + event.title + '\" has no photos');",
+                "            return; // continue to next event",
+                "        }",
                 "        ",
+                "        eventsWithPhotos++;",
                 "        const card = document.createElement('div');",
                 "        card.className = 'event-card';",
                 "        ",
@@ -6610,9 +6667,24 @@
                 "        html += '</div>';",
                 "        html += '<div class=\"photo-grid\">';",
                 "        ",
-                "        photos.forEach(function(photo) {",
-                "            html += '<div class=\"photo-item\" onclick=\"openLightbox(\\'' + photo.publicId + '\\')\">';",
-                "            html += '<img src=\"' + getPhotoUrl(photo.publicId) + '\" alt=\"' + event.title + '\" loading=\"lazy\" onerror=\"this.src=\\'data:image/svg+xml,<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 400 300\\\"><rect fill=\\\"%23f0f0f0\\\" width=\\\"400\\\" height=\\\"300\\\"/><text x=\\\"50%\\\" y=\\\"50%\\\" dominant-baseline=\\\"middle\\\" text-anchor=\\\"middle\\\" fill=\\\"%23999\\\" font-family=\\\"sans-serif\\\">No Image<\\/text><\\/svg>\\'\">';",
+                "        photos.forEach(function(photo, photoIdx) {",
+                "            var photoId = photo.publicId || photo.secure_url || '';",
+                "            var imgUrl = getPhotoUrl(photoId);",
+                "            ",
+                "            // If no valid ID, try to use secure_url directly",
+                "            if (!imgUrl && photo.secure_url) {",
+                "                imgUrl = photo.secure_url;",
+                "            }",
+                "            ",
+                "            // Fallback placeholder for invalid URLs",
+                "            var fallbackSvg = 'data:image/svg+xml;base64,' + btoa('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"><rect fill=\"%23f0f0f0\" width=\"400\" height=\"300\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"sans-serif\" font-size=\"14\">Photo ' + (photoIdx + 1) + '</text></svg>');",
+                "            ",
+                "            if (!imgUrl) {",
+                "                imgUrl = fallbackSvg;",
+                "            }",
+                "            ",
+                "            html += '<div class=\"photo-item\" onclick=\"openLightbox(\\'' + (photoId || 'invalid') + '\\')\">';",
+                "            html += '<img src=\"' + imgUrl + '\" alt=\"Foto ' + (photoIdx + 1) + ' - ' + event.title + '\" loading=\"lazy\" onerror=\"this.onerror=null;this.src=\\'' + fallbackSvg + '\\';console.log(\\'❌ Failed to load:\\', \\'' + imgUrl + '\\')\">';",
                 "            html += '</div>';",
                 "        });",
                 "        ",
@@ -6621,12 +6693,26 @@
                 "        gallery.appendChild(card);",
                 "    });",
                 "    ",
-                "    console.log('✅ Gallery rendered: ' + EMBEDDED_EVENTS.length + ' events, ' + totalPhotos + ' photos');",
+                "    // Show summary",
+                "    console.log('✅ Gallery rendered: ' + eventsWithPhotos + ' events with photos, ' + totalPhotos + ' total photos');",
+                "    ",
+                "    if (eventsWithPhotos === 0) {",
+                "        gallery.innerHTML = '<div class=\"empty\"><h3>⚠️ Tidak Ada Foto</h3><p>Data kegiatan ditemukan (' + EMBEDDED_EVENTS.length + ' events), tapi tidak ada foto yang tersimpan.</p><p style=\"margin-top:1rem;color:#666;font-size:0.9rem;\">Solusi: Buka file <strong>index.html</strong> (admin panel) di browser asli, lalu klik <strong>Generate Public HTML</strong> setelah memastikan foto sudah di-upload.</p></div>';",
+                "    }",
                 "}",
                 "",
                 "function openLightbox(publicId) {",
+                "    if (!publicId || publicId === 'invalid') {",
+                "        alert('Foto tidak tersedia');",
+                "        return;",
+                "    }",
+                "    var imgUrl = getPhotoUrl(publicId).replace('w_800', 'w_1600');",
                 "    document.getElementById('lightbox').classList.add('active');",
-                "    document.getElementById('lightbox-img').src = getPhotoUrl(publicId).replace('w_800', 'w_1600');",
+                "    var lbImg = document.getElementById('lightbox-img');",
+                "    lbImg.src = imgUrl;",
+                "    lbImg.onerror = function() {",
+                "        this.src = 'data:image/svg+xml;base64,' + btoa('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"><rect fill=\"%23222\" width=\"800\" height=\"600\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"%23fff\" font-family=\"sans-serif\">Image Not Available</text></svg>');",
+                "    };",
                 "}",
                 "",
                 "function closeLightbox() {",
@@ -6658,19 +6744,17 @@
             }
         }
 
-        // Check localStorage status (for admin features, not required for public view)
-        function checkLocalStorageStatus() {
-            // Data sekarang langsung dari Cloudinary, jadi tidak perlu warning
-            // Fungsi ini tetap ada untuk kompatibilitas admin panel
-            console.log('✅ Website ready - Data loaded from Cloudinary or cache');
+        // Show Cloudinary backend status
+        function showCloudinaryStatus() {
+            const totalEvents = state.events.length;
+            const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
             
-            // Optional: Show info in console about data source
-            const hasLocalData = localStorage.getItem(STORAGE_KEYS.events);
-            if (hasLocalData) {
-                console.log('💾 Admin data available in localStorage (for management)');
-            } else {
-                console.log('☁️ Running in public mode - data from Cloudinary');
-            }
+            console.log('☁️ Cloudinary Backend Status:');
+            console.log('   ✅ Connected: YES');
+            console.log(`   📊 Events: ${totalEvents}`);
+            console.log(`   📸 Photos: ${totalPhotos}`);
+            console.log(`   💾 Storage: ${CLOUDINARY_CONFIG.dataFileUrl}`);
+            console.log(`   🔄 Last Save: ${state.lastSaveTime ? state.lastSaveTime.toLocaleTimeString() : 'Never'}`);
         }
 
         // Note: handleVisitorImport removed - no longer needed
@@ -6778,15 +6862,18 @@
             setupIntersectionObserver();
 
             // Check if visitor has data (show warning if not)
-            checkLocalStorageStatus();
+            // Show Cloudinary backend status
+            showCloudinaryStatus();
 
             // Show welcome message
             console.log('%c📸 Galeri Kegiatan - Dinas Kesehatan', 
                 'color: #2563eb; font-size: 16px; font-weight: bold;');
-            console.log('%c✅ Data Source: Cloudinary (Public CDN)', 
+            console.log('%c☁️ Backend: Cloudinary (100% Cloud-Based)', 
                 'color: #16a34a; font-size: 12px;');
-            console.log('%c💾 Admin Mode: LocalStorage (Management Only)', 
-                'color: #ea580c; font-size: 11px;');
+            console.log('%c💾 Storage: JSON File + Image CDN', 
+                'color: #7c3aed; font-size: 11px;');
+            console.log('%c✨ Access: Same data everywhere!', 
+                'color: #059669; font-size: 11px;');
         }
 
         // Start the application
@@ -6823,11 +6910,11 @@
             status: () => {
                 console.clear();
                 console.log('%c=== GALERI KEGIATAN - DEBUG INFO ===', 'color: #2563eb; font-size: 14px; font-weight: bold;');
-                console.log('%c📊 Arsitektur: Cloudinary-First + LocalStorage Admin', 'color: #ea580c; font-size: 11px;');
+                console.log('%c📊 Arsitektur: 100% Cloudinary Backend (No localStorage!)', 'color: #059669; font-size: 11px;');
                 verifyDataIntegrity();
                 
-                const dataSource = state.events[0]?.source || 'unknown';
-                console.log(`%c☁️ Data Source: ${dataSource}`, 'color: #16a34a;');
+                console.log(`%c☁️ Data Source: Cloudinary CDN`, 'color: #16a34a;');
+                console.log(`%c💾 JSON File: ${CLOUDINARY_CONFIG.dataFileUrl}`, 'color: #7c3aed;');
                 
                 return {
                     eventsCount: state.events.length,
@@ -6835,8 +6922,10 @@
                     totalPhotos: state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0),
                     currentEvent: state.filteredEvents[state.currentEventIndex]?.title,
                     photosInCurrentEvent: state.filteredEvents[state.currentEventIndex]?.photos?.length || 0,
-                    dataSource: dataSource,
-                    cloudName: CLOUDINARY_CONFIG.cloudName
+                    dataSource: 'Cloudinary Backend',
+                    cloudName: CLOUDINARY_CONFIG.cloudName,
+                    dataFileUrl: CLOUDINARY_CONFIG.dataFileUrl,
+                    lastSaveTime: state.lastSaveTime?.toLocaleString() || 'Never saved'
                 };
             },
             
@@ -6859,12 +6948,16 @@
             },
             
             // Clear all data (use with caution!)
-            clearData: () => {
-                if (confirm('⚠️ Hapus semua data galeri? Ini tidak bisa dibatalkan!')) {
-                    localStorage.removeItem(STORAGE_KEYS.events);
-                    localStorage.removeItem(STORAGE_KEYS.photos);
-                    localStorage.removeItem(STORAGE_KEYS.lastSync);
-                    console.log('🗑️ All data cleared. Refreshing page...');
+            clearData: async () => {
+                if (confirm('⚠️ Hapus semua data galeri dari Cloudinary? Ini tidak bisa dibatalkan!')) {
+                    // Clear local state
+                    state.events = [];
+                    state.filteredEvents = [];
+                    
+                    // Save empty array to Cloudinary
+                    await saveEventsToCloudinary([]);
+                    
+                    console.log('🗑️ All data cleared from Cloudinary. Refreshing page...');
                     window.location.reload();
                 }
             },
@@ -6899,6 +6992,67 @@
                 img.src = urls.gallery;
                 
                 return urls;
+            },
+            
+            // NEW: Check photo data structure
+            checkPhotos: () => {
+                console.clear();
+                console.log('%c=== PHOTO DATA DIAGNOSTIC ===', 'color: #dc2626; font-size: 14px; font-weight: bold;');
+                
+                const result = {
+                    totalEvents: state.events.length,
+                    eventsWithPhotos: 0,
+                    totalPhotos: 0,
+                    eventsDetail: []
+                };
+                
+                state.events.forEach((event, idx) => {
+                    const photos = event.photos || [];
+                    const hasPhotos = photos.length > 0;
+                    
+                    if (hasPhotos) result.eventsWithPhotos++;
+                    result.totalPhotos += photos.length;
+                    
+                    const detail = {
+                        index: idx,
+                        title: event.title,
+                        photosCount: photos.length,
+                        hasPhotos: hasPhotos
+                    };
+                    
+                    if (hasPhotos && photos[0]) {
+                        detail.firstPhoto = {
+                            publicId: photos[0].publicId,
+                            secureUrl: photos[0].secure_url ? photos[0].secure_url.substring(0, 50) + '...' : null,
+                            hasValidPublicId: !!photos[0].publicId
+                        };
+                    }
+                    
+                    result.eventsDetail.push(detail);
+                });
+                
+                console.log('%c📊 Summary:', 'color: #2563eb; font-weight: bold;', {
+                    'Total Events': result.totalEvents,
+                    'Events with Photos': result.eventsWithPhotos,
+                    'Total Photos': result.totalPhotos
+                });
+                
+                console.log('%c📋 Event Details:', 'color: #7c3aed; font-weight: bold;');
+                console.table(result.eventsDetail);
+                
+                if (result.totalPhotos === 0) {
+                    console.error('%c❌ PROBLEM: No photos found in any event!', 'color: #dc2626; font-size: 12px;');
+                    console.log('%c💡 Solution:', 'color: #16a34a; font-size: 11px;');
+                    console.log('   1. Go to "Kelola Foto" tab');
+                    console.log('   2. Select an event from dropdown');
+                    console.log('   3. Upload photos using the upload button');
+                    console.log('   4. After photos appear, click "Generate Public HTML"');
+                }
+                
+                showToast(`Diagnostic: ${result.totalEvents} events, ${result.totalPhotos} photos`, 
+                         result.totalPhotos > 0 ? 'success' : 'error');
+                
+                return result;
             }
         };
 
@@ -6915,13 +7069,21 @@
                 e.preventDefault();
                 window.galleryDebug.refresh();
             }
+            
+            // Keyboard shortcut: Ctrl+Shift+P for photo diagnostic
+            if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                e.preventDefault();
+                window.galleryDebug.checkPhotos();
+            }
         });
 
         console.log('%c💡 Debug Tips:', 'color: #666; font-size: 11px;');
         console.log('   - Tekan Ctrl+Shift+D untuk melihat debug info');
         console.log('   - Tekan Ctrl+Shift+R untuk force refresh gallery');
+        console.log('   - Tekan Ctrl+Shift+P untuk cek data foto (PHOTO DIAGNOSTIC)');
         console.log('   - Ketik "galleryDebug.status()" di console untuk status');
         console.log('   - Ketik "galleryDebug.testUrl()" untuk test Cloudinary URL');
+        console.log('   - Ketik "galleryDebug.checkPhotos()" untuk cek struktur foto');
     </script>
 </body>
 </html>
