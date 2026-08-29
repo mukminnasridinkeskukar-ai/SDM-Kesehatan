@@ -1008,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ===== CONFIG =====
   var API_URL = 'api/visitors.php';
-  var GEO_API = 'https://ip-api.com/json/?fields=status,country_code,country_name,city,regionName';
+  var GEO_API = 'https://ipwho.is/';
   var FLAG_CDN = 'https://flagcdn.com/w40/';
   var sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
 
@@ -1019,12 +1019,12 @@ document.addEventListener('DOMContentLoaded', function(){
     return fetch(GEO_API)
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        if (data.status === 'success') {
+        if (data.success !== false && data.country_code) {
           visitorCountry = {
             code: (data.country_code || 'XX').toLowerCase(),
-            name: data.country_name || 'Unknown',
+            name: data.country || 'Unknown',
             city: data.city || '',
-            region: data.regionName || ''
+            region: data.region || ''
           };
           var el = document.getElementById('v-your-location');
           if (el) el.textContent = visitorCountry.city + ', ' + visitorCountry.region + ', ' + visitorCountry.name;
@@ -1134,10 +1134,9 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   // ===== HEARTBEAT (update online setiap 60 detik) =====
-  var heartbeatTimer = null;
   function startHeartbeat() {
-    heartbeatTimer = setInterval(function() {
-      fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ sessionId: sessionId, countryCode: visitorCountry ? visitorCountry.code : 'id' }) })
+    setInterval(function() {
+      fetch(API_URL + '?s=' + sessionId + '&c=' + (visitorCountry ? visitorCountry.code : 'id'))
         .then(function(r) { return r.json(); })
         .then(function(d) {
           if (d.success) {
@@ -1155,30 +1154,25 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var countryCode = visitorCountry ? visitorCountry.code : 'id';
 
-    // Kirim kunjungan ke server
-    fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sessionId, countryCode: countryCode })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.success) {
-        animateNumber(document.getElementById('v-online'), d.onlineCount);
-        animateNumber(document.getElementById('v-today'), d.todayCount);
-        animateNumber(document.getElementById('v-month'), d.monthCount);
-        animateNumber(document.getElementById('v-total'), d.totalCount);
-        renderCountries(d.countries || {});
-        startHeartbeat();
-      }
-    })
-    .catch(function() {
-      // Jika API gagal, tampilkan 0
-      animateNumber(document.getElementById('v-online'), 0);
-      animateNumber(document.getElementById('v-today'), 0);
-      animateNumber(document.getElementById('v-month'), 0);
-      animateNumber(document.getElementById('v-total'), 0);
-    });
+    // Kirim kunjungan via GET (tidak ada CORS preflight)
+    fetch(API_URL + '?visit=1&s=' + sessionId + '&c=' + countryCode)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.success) {
+          animateNumber(document.getElementById('v-online'), d.onlineCount);
+          animateNumber(document.getElementById('v-today'), d.todayCount);
+          animateNumber(document.getElementById('v-month'), d.monthCount);
+          animateNumber(document.getElementById('v-total'), d.totalCount);
+          renderCountries(d.countries || {});
+          startHeartbeat();
+        }
+      })
+      .catch(function() {
+        animateNumber(document.getElementById('v-online'), 0);
+        animateNumber(document.getElementById('v-today'), 0);
+        animateNumber(document.getElementById('v-month'), 0);
+        animateNumber(document.getElementById('v-total'), 0);
+      });
   }
 
   // Start: deteksi lokasi dulu, lalu init
