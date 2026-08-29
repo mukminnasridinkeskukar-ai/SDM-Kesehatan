@@ -2820,8 +2820,76 @@
 
             saveEventsToStorage();
             console.log(`✓ Photo added to event ${eventId}:`, newPhoto.publicId);
+            console.log('📸 Photo details:', {
+                publicId: newPhoto.publicId,
+                secureUrl: newPhoto.secureUrl,
+                eventPhotosCount: event.photos.length
+            });
             
             return newPhoto;
+        }
+
+        // Verify data integrity and log photo status
+        function verifyDataIntegrity() {
+            console.log('%c🔍 Verifying Data Integrity...', 'color: #2563eb; font-weight: bold;');
+            
+            let issues = [];
+            let totalPhotos = 0;
+            let photosWithCloudinaryId = 0;
+            
+            state.events.forEach((event, eventIndex) => {
+                if (!event.photos || event.photos.length === 0) {
+                    return; // Skip events without photos
+                }
+                
+                event.photos.forEach((photo, photoIndex) => {
+                    totalPhotos++;
+                    
+                    // Check if photo has required Cloudinary data
+                    if (photo.publicId && photo.publicId.includes('galeri-kegiatan')) {
+                        photosWithCloudinaryId++;
+                    } else if (!photo.publicId) {
+                        issues.push({
+                            event: event.title,
+                            photoIndex: photoIndex,
+                            issue: 'Missing publicId',
+                            photoData: photo
+                        });
+                    }
+                    
+                    // Log each photo's URL status
+                    const testUrl = photo.publicId ? getGalleryUrl(photo.publicId) : null;
+                    if (testUrl) {
+                        console.log(`✅ Event ${eventIndex + 1}, Photo ${photoIndex + 1}: ${photo.publicId}`);
+                    }
+                });
+                
+                // Update photo count if out of sync
+                if (event.photoCount !== event.photos.length) {
+                    event.photoCount = event.photos.length;
+                    console.log(`⚠️ Fixed photo count for event "${event.title}": ${event.photoCount}`);
+                }
+            });
+            
+            console.log('%c📊 Data Verification Complete:', 'color: #16a34a; font-weight: bold;');
+            console.log(`   Total events: ${state.events.length}`);
+            console.log(`   Total photos: ${totalPhotos}`);
+            console.log(`   Photos with Cloudinary ID: ${photosWithCloudinaryId}`);
+            
+            if (issues.length > 0) {
+                console.warn('%c⚠️ Issues found:', 'color: #f59e0b;', issues);
+            } else if (totalPhotos > 0) {
+                console.log('%c✅ All photos have valid Cloudinary IDs!', 'color: #16a34a;');
+            } else {
+                console.log('%cℹ️ No photos uploaded yet. Upload via Admin Panel.', 'color: #666;');
+            }
+            
+            // Save fixes if any
+            if (issues.some(i => i.issue === 'Sync error')) {
+                saveEventsToStorage();
+            }
+            
+            return { totalPhotos, photosWithCloudinaryId, issues };
         }
 
         // Initialize data system
@@ -2842,6 +2910,11 @@
             // Check if we have any photos
             const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
             console.log(`📊 Data loaded: ${state.events.length} events, ${totalPhotos} photos`);
+            
+            // Verify data integrity and log photo status for debugging
+            if (totalPhotos > 0) {
+                verifyDataIntegrity();
+            }
             
             state.isLoading = false;
             hideLoadingState();
@@ -3133,6 +3206,8 @@
                 return;
             }
             
+            console.log(`🖼️ Rendering gallery with ${photos.length} photos`);
+            
             photos.forEach((photo, index) => {
                 const slide = document.createElement('div');
                 slide.className = `gallery-slide ${index === 0 ? 'active' : ''}`;
@@ -3140,15 +3215,24 @@
                 
                 // Gunakan foto asli dari Cloudinary
                 let imageUrl;
-                if (photo.secureUrl) {
+                let usingCloudinary = false;
+                
+                if (photo.publicId && photo.publicId.includes('/')) {
+                    // Generate URL dari publicId Cloudinary
+                    imageUrl = getGalleryUrl(photo.publicId);
+                    usingCloudinary = true;
+                } else if (photo.secureUrl && photo.secureUrl.includes('cloudinary')) {
                     // Gunakan secure_url langsung dengan transformasi
-                    imageUrl = getGalleryUrl(photo.publicId);
-                } else if (photo.publicId) {
-                    // Generate URL dari publicId
-                    imageUrl = getGalleryUrl(photo.publicId);
+                    imageUrl = photo.secureUrl.replace('/upload/', '/upload/w_550,h_370,q_auto:good,c_fill/');
+                    usingCloudinary = true;
                 } else {
                     // Fallback ke placeholder
                     imageUrl = `https://picsum.photos/seed/${photo.id || index}/550/370`;
+                    console.warn(`⚠️ Photo ${index} missing Cloudinary data, using placeholder`);
+                }
+                
+                if (usingCloudinary) {
+                    console.log(`✅ Gallery photo ${index + 1}: ${photo.publicId || 'from secure_url'}`);
                 }
                 
                 slide.innerHTML = `
@@ -3158,9 +3242,10 @@
                             alt="${photo.caption || 'Dokumentasi kegiatan'}" 
                             class="gallery-photo"
                             loading="${index < 3 ? 'eager' : 'lazy'}"
-                            data-public-id="${photo.publicId}"
+                            data-public-id="${photo.publicId || ''}"
                             data-secure-url="${photo.secureUrl || ''}"
-                            onerror="this.src='https://picsum.photos/seed/${photo.id || index}/550/370'"
+                            data-using-cloudinary="${usingCloudinary}"
+                            onerror="this.onerror=null; this.src='https://picsum.photos/seed/error-${Date.now()}/550/370'; console.error('❌ Failed to load:', this.src);"
                         >
                     </div>
                 `;
@@ -3299,6 +3384,8 @@
             
             if (!photos || photos.length === 0) return;
 
+            console.log(`🎞️ Rendering filmstrip with ${photos.length} thumbnails`);
+
             photos.forEach((photo, index) => {
                 const item = document.createElement('div');
                 item.className = `filmstrip-item ${index === 0 ? 'active' : ''}`;
@@ -3306,8 +3393,10 @@
 
                 // Gunakan thumbnail asli dari Cloudinary
                 let thumbUrl;
-                if (photo.publicId) {
+                if (photo.publicId && photo.publicId.includes('/')) {
                     thumbUrl = getThumbnailUrl(photo.publicId);
+                } else if (photo.secureUrl && photo.secureUrl.includes('cloudinary')) {
+                    thumbUrl = photo.secureUrl.replace('/upload/', '/upload/w_160,h_120,q_auto:good,c_fill/');
                 } else {
                     thumbUrl = `https://picsum.photos/seed/${photo.id || index}/80/60`;
                 }
@@ -3315,7 +3404,7 @@
                 item.innerHTML = `
                     <div class="filmstrip-thumb">
                         <img src="${thumbUrl}" alt="${photo.caption || 'Foto ' + (index + 1)}" loading="lazy"
-                             onerror="this.src='https://picsum.photos/seed/${photo.id || index}/80/60'">
+                             onerror="this.onerror=null; this.src='https://picsum.photos/seed/filmstrip-error-${Date.now()}/80/60';">
                     </div>
                     <p class="filmstrip-number">${String(index + 1).padStart(2, '0')}</p>
                 `;
@@ -3371,16 +3460,23 @@
 
             // Gunakan foto full resolution asli dari Cloudinary
             let fullSizeUrl;
-            if (photo.publicId) {
+            if (photo.publicId && photo.publicId.includes('/')) {
                 fullSizeUrl = getFullSizeUrl(photo.publicId);
+                console.log(`🔍 Lightbox: Loading full size from Cloudinary - ${photo.publicId}`);
+            } else if (photo.secureUrl && photo.secureUrl.includes('cloudinary')) {
+                fullSizeUrl = photo.secureUrl.replace('/upload/', '/upload/w_1920,h_1080,q_auto:good/');
+                console.log(`🔍 Lightbox: Loading full size from secure_url`);
             } else {
                 fullSizeUrl = `https://picsum.photos/seed/${photo.id || state.currentPhotoIndex}/1920/1080`;
+                console.warn(`⚠️ Lightbox: Photo missing Cloudinary data, using placeholder`);
             }
 
             elements.lightboxImage.src = fullSizeUrl;
             elements.lightboxImage.alt = photo.caption || 'Dokumentasi kegiatan';
             elements.lightboxImage.onerror = () => {
-                elements.lightboxImage.src = `https://picsum.photos/seed/${photo.id || state.currentPhotoIndex}/1920/1080`;
+                elements.lightboxImage.onerror = null;
+                elements.lightboxImage.src = `https://picsum.photos/seed/lightbox-error-${Date.now()}/1920/1080`;
+                console.error('❌ Lightbox: Failed to load image');
             };
             
             elements.lightboxCounter.textContent = `${String(state.currentPhotoIndex + 1).padStart(2, '0')} / ${String(event.photos.length).padStart(2, '0')}`;
@@ -4029,7 +4125,16 @@
                 item.dataset.index = index;
                 item.dataset.photoId = photo.id;
 
-                const thumbUrl = `https://picsum.photos/seed/${photo.publicId}-manage/150/150`;
+                // Gunakan thumbnail asli dari Cloudinary
+                let thumbUrl;
+                if (photo.publicId) {
+                    thumbUrl = getThumbnailUrl(photo.publicId);
+                } else if (photo.secureUrl) {
+                    // Jika hanya ada secureUrl, gunakan langsung
+                    thumbUrl = photo.secureUrl.replace('/upload/', '/upload/w_150,h_150,q_auto:good,c_fill/');
+                } else {
+                    thumbUrl = `https://picsum.photos/seed/${photo.id || index}/150/150`;
+                }
 
                 item.innerHTML = `
                     <div class="drag-handle">↕</div>
@@ -4297,6 +4402,105 @@
 
         // Run sync check
         syncWithCloudinary();
+
+        // ============================================
+        // DEBUG UTILITIES (Access via Console)
+        // ============================================
+        
+        // Global debug function - accessible from browser console
+        window.galleryDebug = {
+            // Show current data status
+            status: () => {
+                console.clear();
+                console.log('%c=== GALERI KEGIATAN DEBUG INFO ===', 'color: #2563eb; font-size: 14px; font-weight: bold;');
+                verifyDataIntegrity();
+                
+                return {
+                    eventsCount: state.events.length,
+                    currentEventIndex: state.currentEventIndex,
+                    totalPhotos: state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0),
+                    currentEvent: state.filteredEvents[state.currentEventIndex]?.title,
+                    photosInCurrentEvent: state.filteredEvents[state.currentEventIndex]?.photos?.length || 0
+                };
+            },
+            
+            // Force re-render gallery
+            refresh: () => {
+                console.log('🔄 Force refreshing gallery...');
+                renderCurrentEvent();
+                showToast('Gallery telah di-refresh!', 'success');
+            },
+            
+            // Show all stored data
+            showData: () => {
+                console.log('%c📦 Stored Events Data:', 'color: #16a34a; font-weight: bold;', state.events);
+                return state.events;
+            },
+            
+            // Clear all data (use with caution!)
+            clearData: () => {
+                if (confirm('⚠️ Hapus semua data galeri? Ini tidak bisa dibatalkan!')) {
+                    localStorage.removeItem(STORAGE_KEYS.events);
+                    localStorage.removeItem(STORAGE_KEYS.photos);
+                    localStorage.removeItem(STORAGE_KEYS.lastSync);
+                    console.log('🗑️ All data cleared. Refreshing page...');
+                    window.location.reload();
+                }
+            },
+            
+            // Test Cloudinary URL generation
+            testUrl: (publicId) => {
+                if (!publicId) {
+                    // Use first available photo
+                    const event = state.events.find(e => e.photos?.length > 0);
+                    if (event?.photos[0]?.publicId) {
+                        publicId = event.photos[0].publicId;
+                    } else {
+                        console.error('No photos found to test URL');
+                        return null;
+                    }
+                }
+                
+                const urls = {
+                    gallery: getGalleryUrl(publicId),
+                    thumbnail: getThumbnailUrl(publicId),
+                    fullSize: getFullSizeUrl(publicId),
+                    featured: getFeaturedUrl(publicId)
+                };
+                
+                console.log('%c🔗 Cloudinary URLs for:', 'color: #2563eb; font-weight: bold;', publicId);
+                console.table(urls);
+                
+                // Test if URL is valid by creating an image
+                const img = new Image();
+                img.onload = () => console.log('✅ URL is valid!');
+                img.onerror = () => console.error('❌ URL failed to load');
+                img.src = urls.gallery;
+                
+                return urls;
+            }
+        };
+
+        // Keyboard shortcut: Ctrl+Shift+D for debug info
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                e.preventDefault();
+                window.galleryDebug.status();
+                showToast('Debug info ditampilkan di console (F12)', 'info');
+            }
+            
+            // Keyboard shortcut: Ctrl+Shift+R for force refresh
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                window.galleryDebug.refresh();
+            }
+        });
+
+        console.log('%c💡 Debug Tips:', 'color: #666; font-size: 11px;');
+        console.log('   - Tekan Ctrl+Shift+D untuk melihat debug info');
+        console.log('   - Tekan Ctrl+Shift+R untuk force refresh gallery');
+        console.log('   - Ketik "galleryDebug.status()" di console untuk status');
+        console.log('   - Ketik "galleryDebug.testUrl()" untuk test Cloudinary URL');
     </script>
 </body>
 </html>
