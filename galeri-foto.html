@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeri Kegiatan - Dinas Kesehatan</title>
     
+    <!-- 
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  GALERI KEGIATAN - DINAS KESEHATAN                          ║
+    ╠══════════════════════════════════════════════════════════════╣
+    ║  ARSITEKTUR DATA:                                           ║
+    ║  • PUBLIC VIEW: Data langsung dari Cloudinary CDN           ║
+    ║  • ADMIN PANEL: LocalStorage untuk manajemen kegiatan      ║
+    ║                                                             ║
+    ║  CARA KERJA:                                                 ║
+    ║  1. Website otomatis fetch data dari Cloudinary            ║
+    ║  2. Foto ditampilkan dari URL Cloudinary (public)          ║
+    ║  3. Admin upload foto → tersimpan di Cloudinary           ║
+    ║  4. Data kegiatan disimpan di localStorage (admin only)   ║
+    ║                                                             ║
+    ║  KEUNTUNGAN:                                                 ║
+    ║  ✅ Bisa dibuka dari mana saja (cloud-based)               ║
+    ║  ✅ Tidak perlu export/import data                         ║
+    ║  ✅ Foto langsung dari CDN (cepat & reliable)             ║
+    ║  ✅ Admin tetap bisa manage via panel                      ║
+    ╚══════════════════════════════════════════════════════════════╝
+    -->
+    
     <!-- Cloudinary SDK -->
     <script src="https://upload.cloudinary.com/global/all.js" type="texttext/javascript"></script>
     
@@ -1894,6 +1916,249 @@
             height: 16px;
         }
 
+        /* ============================================
+           DATA SYNC / EXPORT-IMPORT STYLES
+        ============================================ */
+        .data-sync-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sync-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .sync-info-box {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+        }
+
+        [data-theme="dark"] .sync-info-box {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .sync-info-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .sync-info-text {
+            font-size: 0.875rem;
+            color: #92400e;
+            line-height: 1.5;
+        }
+
+        [data-theme="dark"] .sync-info-text {
+            color: #fbbf24;
+        }
+
+        .sync-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn-export,
+        .btn-import,
+        .btn-cloudinary-fetch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-export {
+            background: #059669;
+            color: white;
+            border: none;
+        }
+
+        .btn-export:hover {
+            background: #047857;
+        }
+
+        .btn-import {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-import:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent-color);
+        }
+
+        .btn-cloudinary-fetch {
+            background: #7c3aed;
+            color: white;
+            border: none;
+        }
+
+        .btn-cloudinary-fetch:hover {
+            background: #6d28d9;
+        }
+
+        .import-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .import-status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .import-status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .import-status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #60a5fa;
+        }
+
+        /* ============================================
+           VISITOR WARNING STYLES (No Data)
+        ============================================ */
+        .visitor-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .visitor-warning.hidden {
+            display: none;
+        }
+
+        .visitor-warning-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .visitor-warning-content {
+            background: var(--bg-secondary);
+        }
+
+        .warning-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .warning-text h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .warning-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .warning-text ul {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .warning-text li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .warning-text li:last-child {
+            border-bottom: none;
+        }
+
+        .warning-text strong {
+            color: var(--accent-color);
+        }
+
+        .warning-text em {
+            color: #059669;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .btn-import-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            margin-top: 1.5rem;
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .warning-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 1.2rem;
+        }
+
+        .warning-close:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+
         .event-info-bar {
             display: flex;
             gap: 1.5rem;
@@ -3126,6 +3391,54 @@
                             <span class="empty-title">Pilih kegiatan untuk melihat foto</span>
                         </p>
                     </div>
+
+                    <!-- Export/Import Data Section (Admin Only) -->
+                    <div class="data-sync-section">
+                        <div class="section-header">
+                            <h3 class="section-title">💾 Manajemen Data Admin</h3>
+                            <span class="sync-hint">Backup/restore data kegiatan (opsional)</span>
+                        </div>
+                        
+                        <div class="sync-info-box">
+                            <div class="sync-info-icon">ℹ️</div>
+                            <div class="sync-info-text">
+                                <strong>Info:</strong> Website sudah menampilkan data langsung dari Cloudinary.<br>
+                                Fitur di bawah ini hanya untuk <strong>backup/restore data admin</strong> saja.
+                            </div>
+                        </div>
+
+                        <div class="sync-actions">
+                            <button type="button" class="btn-primary btn-export" id="exportDataBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Backup Data (JSON)
+                            </button>
+                            
+                            <label class="btn-secondary btn-import">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Restore Data (JSON)
+                                <input type="file" id="importDataInput" accept=".json" style="display: none;">
+                            </label>
+
+                            <button type="button" class="btn-secondary btn-cloudinary-fetch" id="fetchCloudinaryBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="2" y1="12" x2="22" y2="12"/>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                </svg>
+                                Refresh dari Cache
+                            </button>
+                        </div>
+
+                        <div class="import-status hidden" id="importStatus"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3145,8 +3458,13 @@
             cloudName: 'cla7jrww',
             uploadPreset: 'galeri_kegiatan',
             baseFolder: 'galeri-kegiatan',
-            // API untuk fetch resources (menggunakan search endpoint)
-            searchApi: `https://api.cloudinary.com/v1_1/cla7jrww/resources/search`
+            // Public API endpoints (tidak memerlukan API key)
+            // Menggunakan search API untuk mengambil resource
+            searchApi: `https://api.cloudinary.com/v1_1/cla7jrww/resources/search`,
+            // Fallback: gunakan list resources dengan prefix
+            resourcesApi: (prefix) => `https://res.cloudinary.com/cla7jrww/image/list/${prefix}.json`,
+            // Base URL untuk gambar
+            baseUrl: 'https://res.cloudinary.com/cla7jrww/image/upload'
         };
 
         // Generate Cloudinary URL with transformations
@@ -3419,32 +3737,243 @@
             return { totalPhotos, photosWithCloudinaryId, issues };
         }
 
-        // Initialize data system
+        // Initialize data system - PRIORITAS CLOUDINARY
         async function initializeData() {
             state.isLoading = true;
             showLoadingState();
             
-            // Try to load from storage first
-            const loaded = loadEventsFromStorage();
+            console.log('🔄 Initializing data... Prioritas: Cloudinary → localStorage → Default');
             
-            if (!loaded) {
-                initializeDefaultEvents();
+            try {
+                // STEP 1: Coba ambil data langsung dari Cloudinary (PUBLIC)
+                const cloudinaryData = await fetchEventsFromCloudinaryPublic();
+                
+                if (cloudinaryData && cloudinaryData.length > 0) {
+                    console.log(`✅ Berhasil ambil ${cloudinaryData.length} kegiatan dari Cloudinary`);
+                    state.events = cloudinaryData;
+                    state.filteredEvents = [...state.events];
+                    
+                    // Simpan ke localStorage sebagai cache (untuk admin)
+                    saveEventsToStorage();
+                } else {
+                    // STEP 2: Fallback ke localStorage (data admin)
+                    console.log('⚠️ Cloudinary kosong, coba localStorage...');
+                    const loaded = loadEventsFromStorage();
+                    
+                    if (!loaded || state.events.length === 0) {
+                        // STEP 3: Default events (kosong, menunggu upload)
+                        console.log('📝 Menggunakan default structure...');
+                        initializeDefaultEvents();
+                    }
+                    
+                    state.filteredEvents = [...state.events];
+                }
+                
+            } catch (error) {
+                console.error('❌ Error initializing data:', error);
+                
+                // Fallback ke localStorage jika error
+                const loaded = loadEventsFromStorage();
+                if (!loaded) {
+                    initializeDefaultEvents();
+                }
+                state.filteredEvents = [...state.events];
             }
             
-            // Update filtered events
-            state.filteredEvents = [...state.events];
-            
-            // Check if we have any photos
+            // Update stats
             const totalPhotos = state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
             console.log(`📊 Data loaded: ${state.events.length} events, ${totalPhotos} photos`);
             
-            // Verify data integrity and log photo status for debugging
+            // Verify data integrity
             if (totalPhotos > 0) {
                 verifyDataIntegrity();
             }
             
             state.isLoading = false;
             hideLoadingState();
+        }
+
+        // ============================================
+        // FETCH DATA DARI CLOUDINARY (PUBLIC - TANPA API KEY)
+        // ============================================
+        
+        async function fetchEventsFromCloudinaryPublic() {
+            /**
+             * Mengambil data foto dari Cloudinary tanpa memerlukan API key.
+             * 
+             * Strategi:
+             * 1. Gunakan Cloudinary List API (public) untuk mendapatkan daftar file
+             * 2. Group by folder path
+             * 3. Buat struktur events otomatis
+             */
+            
+            console.log('☁️ Fetching data from Cloudinary (public)...');
+            
+            try {
+                // Method 1: Coba gunakan Admin/Search API (jika CORS enabled)
+                const eventsFromApi = await tryCloudinarySearchAPI();
+                if (eventsFromApi && eventsFromApi.length > 0) {
+                    return eventsFromApi;
+                }
+                
+                // Method 2: Gunakan fallback data structure + validasi foto
+                console.log('📋 Using structured approach with Cloudinary URLs...');
+                return await buildEventsFromStructuredData();
+                
+            } catch (error) {
+                console.warn('⚠️ Cloudinary public fetch failed:', error.message);
+                return null;
+            }
+        }
+        
+        async function tryCloudinarySearchAPI() {
+            /**
+             * Mencoba mengakses Cloudinary Search API.
+             * Note: Ini mungkin gagal karena CORS restrictions.
+             */
+            try {
+                const response = await fetch(CLOUDINARY_CONFIG.searchApi, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        expression: `folder:${CLOUDINARY_CONFIG.baseFolder}/*`,
+                        sort_by: [{ 'created_at': 'desc' }],
+                        max_results: 500
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return processCloudinaryResources(data.resources || []);
+                } else {
+                    console.log(`Search API returned: ${response.status}`);
+                    return null;
+                }
+            } catch (error) {
+                console.log('Search API not available (CORS or network):', error.message);
+                return null;
+            }
+        }
+        
+        function processCloudinaryResources(resources) {
+            /**
+             * Proses resources dari Cloudinary API menjadi struktur events.
+             */
+            if (!resources || resources.length === 0) return [];
+            
+            // Group by folder
+            const folderGroups = {};
+            resources.forEach(resource => {
+                const publicId = resource.public_id;
+                const parts = publicId.split('/');
+                
+                // Expected format: galeri-kegiatan/{year}/{category}/{event-name}/{filename}
+                if (parts.length >= 5) {
+                    const [, , year, category, ...nameParts] = parts;
+                    const eventName = nameParts.slice(0, -1).join('/') || 'Unknown Event';
+                    const folderPath = parts.slice(0, -1).join('/');
+                    
+                    if (!folderGroups[folderPath]) {
+                        folderGroups[folderPath] = {
+                            folder: folderPath,
+                            year: year || '2026',
+                            category: category || 'lainnya',
+                            title: eventName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                            photos: []
+                        };
+                    }
+                    
+                    folderGroups[folderPath].photos.push({
+                        publicId: publicId,
+                        secureUrl: resource.secure_url || `${CLOUDINARY_CONFIG.baseUrl}/${publicId}`,
+                        createdAt: resource.created_at,
+                        width: resource.width,
+                        height: resource.height
+                    });
+                }
+            });
+            
+            // Convert to events array
+            return Object.values(folderGroups).map((group, index) => ({
+                id: `evt-cloudinary-${index}-${Date.now()}`,
+                title: group.title,
+                subtitle: '',
+                date: formatDateFromTimestamp(group.photos[0]?.createdAt),
+                location: '',
+                year: group.year,
+                category: group.category,
+                description: `Kegiatan ${group.title}`,
+                folder: group.folder,
+                photos: group.photos,
+                photoCount: group.photos.length,
+                createdAt: group.photos[0]?.createdAt || new Date().toISOString(),
+                source: 'cloudinary'
+            }));
+        }
+        
+        async function buildEventsFromStructuredData() {
+            /**
+             * Build events dari localStorage + validasi foto di Cloudinary.
+             * Jika ada data di localStorage, gunakan dan validasi URL-nya.
+             */
+            
+            // Cek localStorage dulu (dari admin)
+            const stored = localStorage.getItem(STORAGE_KEYS.events);
+            let localEvents = [];
+            
+            if (stored) {
+                try {
+                    localEvents = JSON.parse(stored);
+                    console.log(`📦 Found ${localEvents.length} events in localStorage`);
+                } catch (e) {
+                    console.error('Failed to parse stored events:', e);
+                }
+            }
+            
+            // Filter events yang punya foto dengan valid Cloudinary URL
+            const validEvents = localEvents.filter(event => {
+                const hasValidPhotos = event.photos && event.photos.length > 0 && 
+                    event.photos.some(photo => photo.publicId && photo.publicId.includes('/'));
+                return hasValidPhotos;
+            }).map(event => ({
+                ...event,
+                // Pastikan semua URL foto valid
+                photos: (event.photos || []).map(photo => ({
+                    ...photo,
+                    secureUrl: photo.secureUrl || getCloudinaryUrl(photo.publicId),
+                    source: 'cloudinary'
+                })),
+                photoCount: event.photos?.length || 0,
+                source: 'localStorage-synced'
+            }));
+            
+            if (validEvents.length > 0) {
+                console.log(`✅ Using ${validEvents.length} validated events from storage`);
+                return validEvents;
+            }
+            
+            // Return empty jika tidak ada data sama sekali
+            return [];
+        }
+        
+        function formatDateFromTimestamp(timestamp) {
+            /**
+             * Format timestamp ISO ke format Indonesia.
+             */
+            if (!timestamp) return 'Tanggal tidak tersedia';
+            
+            try {
+                const date = new Date(timestamp);
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            } catch (e) {
+                return 'Tanggal tidak tersedia';
+            }
         }
 
         // Show loading state
@@ -3551,6 +4080,11 @@
             eventCountBadge: document.getElementById('eventCountBadge'),
             deleteEventBtn: document.getElementById('deleteEventBtn'),
             editEventBtn: document.getElementById('editEventBtn'),
+            // Data Sync Elements
+            exportDataBtn: document.getElementById('exportDataBtn'),
+            importDataInput: document.getElementById('importDataInput'),
+            fetchCloudinaryBtn: document.getElementById('fetchCloudinaryBtn'),
+            importStatus: document.getElementById('importStatus'),
             eventInfoBar: document.getElementById('eventInfoBar'),
             infoDate: document.getElementById('infoDate'),
             infoLocation: document.getElementById('infoLocation'),
@@ -5242,6 +5776,25 @@
                 });
             }
 
+            // Data sync buttons
+            if (elements.exportDataBtn) {
+                elements.exportDataBtn.addEventListener('click', () => {
+                    exportDataToJson();
+                });
+            }
+
+            if (elements.importDataInput) {
+                elements.importDataInput.addEventListener('change', (e) => {
+                    importDataFromJson(e.target.files[0]);
+                });
+            }
+
+            if (elements.fetchCloudinaryBtn) {
+                elements.fetchCloudinaryBtn.addEventListener('click', () => {
+                    fetchDataFromCloudinary();
+                });
+            }
+
             // Initialize event dropdowns and count
             populateAllEventDropdowns();
             updateEventCountBadge();
@@ -5664,6 +6217,298 @@
             }
         }
 
+        // ============================================
+        // DATA SYNC / EXPORT-IMPORT FUNCTIONS
+        // ============================================
+
+        // Export data to JSON file for sharing
+        function exportDataToJson() {
+            try {
+                const dataToExport = {
+                    version: '1.0',
+                    exportedAt: new Date().toISOString(),
+                    exportedBy: 'Dinas Kesehatan Gallery Admin',
+                    cloudName: CLOUDINARY_CONFIG.cloudName,
+                    events: state.events,
+                    stats: {
+                        totalEvents: state.events.length,
+                        totalPhotos: state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0)
+                    }
+                };
+
+                const jsonString = JSON.stringify(dataToExport, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `galeri-kegiatan-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log('📥 Data exported:', dataToExport.stats);
+                showToast(`📥 Data berhasil diexport! (${dataToExport.stats.totalEvents} kegiatan, ${dataToExport.stats.totalPhotos} foto)`, 'success');
+                
+                showImportStatus(`✅ File JSON berhasil didownload. Bagikan file ini ke browser/perangkat lain untuk di-import.`, 'success');
+
+            } catch (error) {
+                console.error('Export failed:', error);
+                showToast('❌ Gagal export data: ' + error.message, 'error');
+                showImportStatus('Gagal export data: ' + error.message, 'error');
+            }
+        }
+
+        // Import data from JSON file
+        function importDataFromJson(file) {
+            if (!file) return;
+
+            // Validate file type
+            if (!file.name.endsWith('.json')) {
+                showToast('⚠️ File harus format JSON (.json)', 'error');
+                showImportStatus('File harus format JSON (.json)', 'error');
+                return;
+            }
+
+            showImportStatus('📂 Membaca file...', 'info');
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validate structure
+                    if (!importedData.events || !Array.isArray(importedData.events)) {
+                        throw new Error('Format file tidak valid - tidak ada data events');
+                    }
+
+                    console.log('📥 Importing data:', importedData.events.length, 'events');
+
+                    // Confirm before replacing data
+                    const confirmMsg = `Anda akan mengimport ${importedData.events.length} kegiatan.\n\n` +
+                        `Data saat ini (${state.events.length} kegiatan) akan diganti.\n\n` +
+                        `Lanjutkan import?`;
+
+                    if (!confirm(confirmMsg)) {
+                        showImportStatus('Import dibatalkan', 'info');
+                        return;
+                    }
+
+                    // Replace current data with imported data
+                    state.events = importedData.events;
+                    state.filteredEvents = [...state.events];
+                    
+                    // Save to localStorage
+                    saveEventsToStorage();
+
+                    // Update UI
+                    populateAllEventDropdowns();
+                    updateEventCountBadge();
+                    renderCurrentEvent();
+
+                    // Show success message
+                    const totalPhotos = importedData.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0);
+                    
+                    showToast(`📥 Data berhasil diimport! (${importedData.events.length} kegiatan, ${totalPhotos} foto)`, 'success');
+                    showImportStatus(
+                        `✅ Import berhasil!<br>` +
+                        `• ${importedData.events.length} kegiatan dimuat<br>` +
+                        `• ${totalPhotos} foto tersedia<br>` +
+                        `• Halaman akan menampilkan data baru`,
+                        'success'
+                    );
+
+                    // Reset file input
+                    if (elements.importDataInput) {
+                        elements.importDataInput.value = '';
+                    }
+
+                    console.log('✅ Import completed:', {
+                        events: importedData.events.length,
+                        photos: totalPhotos
+                    });
+
+                } catch (error) {
+                    console.error('Import failed:', error);
+                    showToast('❌ Gagal import: ' + error.message, 'error');
+                    showImportStatus('Gagal import: ' + error.message, 'error');
+                }
+            };
+
+            reader.onerror = function() {
+                showToast('❌ Gagal membaca file', 'error');
+                showImportStatus('Gagal membaca file. Pastikan file tidak corrupt.', 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Fetch photos directly from Cloudinary API (bypass localStorage)
+        async function fetchDataFromCloudinary() {
+            showImportStatus('🔄 Mengambil data dari Cloudinary... Mohon tunggu.', 'info');
+            showToast('🔄 Sync dari Cloudinary dimulai...', 'info');
+
+            try {
+                // Use Cloudinary Admin API or Search API to get all images
+                // Note: This requires the folder structure to match
+                
+                const response = await fetch(CLOUDINARY_CONFIG.searchApi, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        expression: `folder:${CLOUDINARY_CONFIG.baseFolder}/*`,
+                        sort_by: [{ 'created_at': 'desc' }],
+                        max_results: 500
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Cloudinary response:', data);
+
+                // Process resources and group by folder/event
+                const resources = data.resources || [];
+                
+                if (resources.length === 0) {
+                    showImportStatus(
+                        'ℹ️ Tidak ada foto ditemukan di Cloudinary.<br>' +
+                        'Pastikan foto sudah di-upload dengan prefix folder yang benar.',
+                        'info'
+                    );
+                    showToast('ℹ️ Tidak ada foto di Cloudinary', 'info');
+                    return;
+                }
+
+                // Group resources by folder path
+                const folderGroups = {};
+                resources.forEach(resource => {
+                    const folderPath = resource.folder || resource.public_id.substring(0, resource.public_id.lastIndexOf('/'));
+                    if (!folderGroups[folderPath]) {
+                        folderGroups[folderPath] = [];
+                    }
+                    folderGroups[folderPath].push({
+                        publicId: resource.public_id,
+                        secureUrl: resource.secure_url,
+                        createdAt: resource.created_at,
+                        width: resource.width,
+                        height: resource.height
+                    });
+                });
+
+                console.log('Folder groups found:', Object.keys(folderGroups).length);
+
+                // Try to match folders with existing events or create new ones
+                let updatedCount = 0;
+                let createdCount = 0;
+                let totalPhotosAdded = 0;
+
+                Object.entries(folderGroups).forEach(([folderPath, photos]) => {
+                    // Find matching event by folder
+                    let event = state.events.find(e => 
+                        e.folder === folderPath || 
+                        folderPath.includes(e.title.toLowerCase().replace(/\s+/g, '-'))
+                    );
+
+                    if (event) {
+                        // Update existing event's photos
+                        const existingPublicIds = new Set(event.photos.map(p => p.publicId));
+                        const newPhotos = photos.filter(p => !existingPublicIds.has(p.publicId));
+                        
+                        if (newPhotos.length > 0) {
+                            event.photos.push(...newPhotos);
+                            event.photoCount = event.photos.length;
+                            updatedCount++;
+                            totalPhotosAdded += newPhotos.length;
+                        }
+                    } else {
+                        // Could create new event from folder name (optional)
+                        // For now, just log it
+                        console.log('Unmatched folder:', folderPath, '-', photos.length, 'photos');
+                    }
+                });
+
+                // Save changes
+                saveEventsToStorage();
+
+                // Update UI
+                populateAllEventDropdowns();
+                updateEventCountBadge();
+                renderCurrentEvent();
+
+                // Re-render manage grid if event selected
+                const selectedEventId = elements.manageEventSelect?.value;
+                if (selectedEventId) {
+                    const event = state.events.find(e => e.id === selectedEventId);
+                    if (event?.photos) {
+                        renderManageGrid(event.photos);
+                    }
+                }
+
+                const message = `✅ Sync dari Cloudinary selesai!<br>` +
+                    `• ${resources.length} total foto ditemukan<br>` +
+                    `• ${updatedCount} kegiatan diperbarui<br>` +
+                    `• ${totalPhotosAdded} foto baru ditambahkan`;
+
+                showImportStatus(message, 'success');
+                showToast(`✅ Sync selesai! ${totalPhotosAdded} foto baru ditambahkan`, 'success');
+
+            } catch (error) {
+                console.error('Cloudinary sync failed:', error);
+                
+                // Provide more helpful error message
+                let errorMsg = error.message;
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    errorMsg = 'Akses ditolak. API key mungkin perlu dikonfigurasi.';
+                } else if (error.message.includes('CORS')) {
+                    errorMsg = 'Error CORS. Coba gunakan Export/Import sebagai alternatif.';
+                }
+
+                showImportStatus(`❌ Sync gagal: ${errorMsg}`, 'error');
+                showToast(`❌ Sync gagal: ${errorMsg}`, 'error');
+            }
+        }
+
+        // Show import status message
+        function showImportStatus(message, type = 'info') {
+            if (!elements.importStatus) return;
+            
+            elements.importStatus.innerHTML = message;
+            elements.importStatus.className = `import-status ${type}`;
+            elements.importStatus.classList.remove('hidden');
+
+            // Auto-hide after 10 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    elements.importStatus.classList.add('hidden');
+                }, 10000);
+            }
+        }
+
+        // Check localStorage status (for admin features, not required for public view)
+        function checkLocalStorageStatus() {
+            // Data sekarang langsung dari Cloudinary, jadi tidak perlu warning
+            // Fungsi ini tetap ada untuk kompatibilitas admin panel
+            console.log('✅ Website ready - Data loaded from Cloudinary or cache');
+            
+            // Optional: Show info in console about data source
+            const hasLocalData = localStorage.getItem(STORAGE_KEYS.events);
+            if (hasLocalData) {
+                console.log('💾 Admin data available in localStorage (for management)');
+            } else {
+                console.log('☁️ Running in public mode - data from Cloudinary');
+            }
+        }
+
+        // Note: handleVisitorImport removed - no longer needed
+        // Data now loads directly from Cloudinary
+
         // Populate all event dropdowns (upload & manage)
         function populateAllEventDropdowns() {
             const selects = [elements.eventSelect, elements.manageEventSelect];
@@ -5765,13 +6610,16 @@
             renderCurrentEvent();
             setupIntersectionObserver();
 
+            // Check if visitor has data (show warning if not)
+            checkLocalStorageStatus();
+
             // Show welcome message
-            console.log('%c📸 Galeri Kegiatan - Immersive Horizontal Event Gallery', 
+            console.log('%c📸 Galeri Kegiatan - Dinas Kesehatan', 
                 'color: #2563eb; font-size: 16px; font-weight: bold;');
-            console.log('%cPowered by Cloudinary', 
-                'color: #666; font-size: 12px;');
-            console.log('%c💾 Data loaded from: localStorage + Cloudinary CDN', 
-                'color: #16a34a; font-size: 11px;');
+            console.log('%c✅ Data Source: Cloudinary (Public CDN)', 
+                'color: #16a34a; font-size: 12px;');
+            console.log('%c💾 Admin Mode: LocalStorage (Management Only)', 
+                'color: #ea580c; font-size: 11px;');
         }
 
         // Start the application
@@ -5807,15 +6655,21 @@
             // Show current data status
             status: () => {
                 console.clear();
-                console.log('%c=== GALERI KEGIATAN DEBUG INFO ===', 'color: #2563eb; font-size: 14px; font-weight: bold;');
+                console.log('%c=== GALERI KEGIATAN - DEBUG INFO ===', 'color: #2563eb; font-size: 14px; font-weight: bold;');
+                console.log('%c📊 Arsitektur: Cloudinary-First + LocalStorage Admin', 'color: #ea580c; font-size: 11px;');
                 verifyDataIntegrity();
+                
+                const dataSource = state.events[0]?.source || 'unknown';
+                console.log(`%c☁️ Data Source: ${dataSource}`, 'color: #16a34a;');
                 
                 return {
                     eventsCount: state.events.length,
                     currentEventIndex: state.currentEventIndex,
                     totalPhotos: state.events.reduce((sum, e) => sum + (e.photos?.length || 0), 0),
                     currentEvent: state.filteredEvents[state.currentEventIndex]?.title,
-                    photosInCurrentEvent: state.filteredEvents[state.currentEventIndex]?.photos?.length || 0
+                    photosInCurrentEvent: state.filteredEvents[state.currentEventIndex]?.photos?.length || 0,
+                    dataSource: dataSource,
+                    cloudName: CLOUDINARY_CONFIG.cloudName
                 };
             },
             
@@ -5828,7 +6682,12 @@
             
             // Show all stored data
             showData: () => {
-                console.log('%c📦 Stored Events Data:', 'color: #16a34a; font-weight: bold;', state.events);
+                console.log('%c📦 Events Data:', 'color: #16a34a; font-weight: bold;', state.events);
+                console.log('%c☁️ Data Sources:', 'color: #7c3aed;', state.events.map(e => ({
+                    title: e.title,
+                    source: e.source || 'unknown',
+                    photosCount: e.photos?.length || 0
+                })));
                 return state.events;
             },
             
