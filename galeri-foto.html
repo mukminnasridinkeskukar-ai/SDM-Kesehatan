@@ -1686,6 +1686,202 @@
             background: #ef4444;
         }
         
+        /* ============================================
+           ADD EVENT FORM STYLING
+        ============================================ */
+        .add-event-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-add-event {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-add-event:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .add-event-form {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .add-event-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .add-event-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-secondary {
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Manage Events Section */
+        .manage-events-section {
+            /* Container for existing event management */
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .event-count-badge {
+            padding: 0.35rem 0.75rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 20px;
+        }
+
+        .btn-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .btn-icon:hover:not(:disabled) {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .btn-icon:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-delete-event:hover:not(:disabled) {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        .event-info-bar {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.875rem 1rem;
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .info-item strong {
+            color: var(--text-primary);
+        }
+        
         .drag-handle {
             position: absolute;
             top: 0.5rem;
@@ -2319,7 +2515,7 @@
         <div class="hero-content">
             <p class="hero-label">Dokumentasi Visual</p>
             <h1 class="hero-title">Galeri Kegiatan</h1>
-            <p class="hero-subtitle">Dinas Kesehatan Kab. Kutai Kartanegara</p>
+            <p class="hero-subtitle">Dinas Kesehatan Provinsi</p>
             <p class="hero-institution">Mencatat Setiap Momen Berharga</p>
             <a href="#kegiatan" class="hero-cta">
                 Explore Gallery
@@ -2766,20 +2962,130 @@
                 
                 <!-- Manage Tab -->
                 <div class="tab-content hidden" id="manageTab">
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <label class="form-label">Pilih Kegiatan untuk Dikelola</label>
-                        <select class="form-select" id="manageEventSelect">
-                            <option value="">-- Pilih Kegiatan --</option>
-                        </select>
+                    <!-- Add New Event Section -->
+                    <div class="add-event-section">
+                        <button class="btn-add-event" id="toggleAddEventForm">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Tambah Kegiatan Baru
+                        </button>
+                        
+                        <form class="add-event-form hidden" id="addEventForm">
+                            <h3 class="add-event-title">📝 Form Kegiatan Baru</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Judul Kegiatan *</label>
+                                    <input type="text" class="form-input" id="newEventTitle" placeholder="Masukkan judul kegiatan" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Subtitle</label>
+                                    <input type="text" class="form-input" id="newEventSubtitle" placeholder="Subtitle kegiatan (opsional)">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Tanggal Kegiatan *</label>
+                                    <input type="date" class="form-input" id="newEventDate" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Lokasi *</label>
+                                    <input type="text" class="form-input" id="newEventLocation" placeholder="Contoh: Samarinda, Balikpapan" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Tahun *</label>
+                                    <select class="form-select" id="newEventYear" required>
+                                        <option value="">-- Pilih --</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Kategori *</label>
+                                    <select class="form-select" id="newEventCategory" required>
+                                        <option value="">-- Pilih --</option>
+                                        <option value="pelatihan">Pelatihan</option>
+                                        <option value="bimtek">Bimtek</option>
+                                        <option value="sosialisasi">Sosialisasi</option>
+                                        <option value="rapat">Rapat</option>
+                                        <option value="kunjungan">Kunjungan</option>
+                                        <option value="lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Deskripsi Kegiatan</label>
+                                <textarea class="form-textarea" id="newEventDescription" rows="3" placeholder="Jelaskan singkat tentang kegiatan ini..."></textarea>
+                            </div>
+                            
+                            <div class="add-event-actions">
+                                <button type="button" class="btn-secondary" id="cancelAddEvent">
+                                    Batal
+                                </button>
+                                <button type="submit" class="btn-primary">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    Simpan Kegiatan
+                                </button>
+                            </div>
+                        </form>
                     </div>
+
+                    <!-- Manage Existing Events Section -->
+                    <div class="manage-events-section">
+                        <div class="section-header">
+                            <h3 class="section-title">📁 Kelola Foto per Kegiatan</h3>
+                            <span class="event-count-badge" id="eventCountBadge">0 Kegiatan</span>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label">Pilih Kegiatan untuk Dikelola</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <select class="form-select" id="manageEventSelect" style="flex: 1;">
+                                    <option value="">-- Pilih Kegiatan --</option>
+                                </select>
+                                <button class="btn-icon btn-delete-event" id="deleteEventBtn" title="Hapus Kegiatan Ini" disabled>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="event-info-bar hidden" id="eventInfoBar">
+                            <div class="info-item">
+                                <strong>Tanggal:</strong> <span id="infoDate">-</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Lokasi:</strong> <span id="infoLocation">-</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Foto:</strong> <span id="infoPhotoCount">0</span>
+                            </div>
+                        </div>
                     
-                    <div class="manage-grid" id="manageGrid">
-                        <!-- Managed photos will appear here -->
+                        <div class="manage-grid" id="manageGrid">
+                            <!-- Managed photos will appear here -->
+                        </div>
+                        
+                        <p class="empty-state hidden" id="manageEmpty">
+                            <span class="empty-title">Pilih kegiatan untuk melihat foto</span>
+                        </p>
                     </div>
-                    
-                    <p class="empty-state hidden" id="manageEmpty">
-                        <span class="empty-title">Pilih kegiatan untuk melihat foto</span>
-                    </p>
                 </div>
             </div>
         </div>
@@ -2899,28 +3205,28 @@
             const defaultEvents = [
                 {
                     id: 'evt-001',
-                    title: 'Pelatihan Peningkatan Kemahiran Berbahasa Indonesia',
-                    subtitle: 'Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial',
-                    date: '13 Agustus 2026',
-                    location: 'RSUD Aji Muhammad Parikesit, Tenggarong Seberang',
+                    title: 'Sosialisasi Platform Digital Pengelolaan SDM Kesehatan',
+                    subtitle: 'Peningkatan Kompetensi Digital',
+                    date: '25 Agustus 2026',
+                    location: 'Tenggarong',
                     year: '2026',
-                    category: 'Pelatihan',
-                    description: 'Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial.',
-                    folder: 'galeri-kegiatan/2026/pelatihan',
+                    category: 'sosialisasi',
+                    description: 'Kegiatan sosialisasi platform digital untuk pengelolaan sumber daya manusia kesehatan.',
+                    folder: 'galeri-kegiatan/2026/sosialisasi-sdmk',
                     photos: [],
                     photoCount: 0,
                     createdAt: new Date().toISOString()
                 },
                 {
                     id: 'evt-002',
-                    title: 'Pelatihan Pengelolaan Limbah Fasyankes',
-                    subtitle: 'Pelatihan Pengelolaan Limbah Fasyankes',
+                    title: 'Bimtek Implementasi Standar Akreditasi',
+                    subtitle: 'Peningkatan Mutu Pelayanan',
                     date: '18 Agustus 2026',
-                    location: 'UPTD Bapelkes Kaltim, Samarinda',
+                    location: 'Balikpapan',
                     year: '2026',
-                    category: 'pelatihan',
-                    description: 'Pelatihan Pengelolaan Limbah Fasyankes.',
-                    folder: 'galeri-kegiatan/2026/pelatihan',
+                    category: 'bimtek',
+                    description: 'Bimbingan teknis implementasi standar akreditasi fasilitas kesehatan tingkat pertama.',
+                    folder: 'galeri-kegiatan/2026/bimtek',
                     photos: [],
                     photoCount: 0,
                     createdAt: new Date().toISOString()
@@ -3189,7 +3495,25 @@
             toastContainer: document.getElementById('toastContainer'),
             allPhotosGrid: document.getElementById('allPhotosGrid'),
             allPhotosCount: document.getElementById('allPhotosCount'),
-            allPhotosSection: document.getElementById('allPhotosSection')
+            allPhotosSection: document.getElementById('allPhotosSection'),
+            // Add Event Form Elements
+            toggleAddEventForm: document.getElementById('toggleAddEventForm'),
+            addEventForm: document.getElementById('addEventForm'),
+            newEventTitle: document.getElementById('newEventTitle'),
+            newEventSubtitle: document.getElementById('newEventSubtitle'),
+            newEventDate: document.getElementById('newEventDate'),
+            newEventLocation: document.getElementById('newEventLocation'),
+            newEventYear: document.getElementById('newEventYear'),
+            newEventCategory: document.getElementById('newEventCategory'),
+            newEventDescription: document.getElementById('newEventDescription'),
+            cancelAddEvent: document.getElementById('cancelAddEvent'),
+            // Manage Events Elements
+            eventCountBadge: document.getElementById('eventCountBadge'),
+            deleteEventBtn: document.getElementById('deleteEventBtn'),
+            eventInfoBar: document.getElementById('eventInfoBar'),
+            infoDate: document.getElementById('infoDate'),
+            infoLocation: document.getElementById('infoLocation'),
+            infoPhotoCount: document.getElementById('infoPhotoCount')
         };
 
         // ============================================
@@ -4549,11 +4873,15 @@
             
             if (!eventId) {
                 elements.manageGrid.innerHTML = '';
+                hideEventInfo();
                 return;
             }
 
             const event = state.events.find(ev => ev.id === eventId);
             if (!event) return;
+
+            // Show event info bar
+            showEventInfo(eventId);
 
             renderManageGrid(event);
         });
@@ -4797,6 +5125,313 @@
 
             // Initialize admin session UI on page load
             updateAdminSessionUI();
+
+            // ============================================
+            // ADD EVENT FORM LISTENERS
+            // ============================================
+            
+            // Toggle add event form visibility
+            if (elements.toggleAddEventForm) {
+                elements.toggleAddEventForm.addEventListener('click', () => {
+                    const form = elements.addEventForm;
+                    const isHidden = form.classList.contains('hidden');
+                    
+                    if (isHidden) {
+                        form.classList.remove('hidden');
+                        elements.toggleAddEventForm.innerHTML = `
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Tutup Form
+                        `;
+                        elements.toggleAddEventForm.style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
+                        
+                        // Scroll to form
+                        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        form.classList.add('hidden');
+                        elements.toggleAddEventForm.innerHTML = `
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Tambah Kegiatan Baru
+                        `;
+                        elements.toggleAddEventForm.style.background = '';
+                        resetAddEventForm();
+                    }
+                });
+            }
+
+            // Cancel add event
+            if (elements.cancelAddEvent) {
+                elements.cancelAddEvent.addEventListener('click', () => {
+                    elements.addEventForm.classList.add('hidden');
+                    elements.toggleAddEventForm.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Tambah Kegiatan Baru
+                    `;
+                    elements.toggleAddEventForm.style.background = '';
+                    resetAddEventForm();
+                });
+            }
+
+            // Submit add event form
+            if (elements.addEventForm) {
+                elements.addEventForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    handleAddNewEvent();
+                });
+            }
+
+            // Delete event button
+            if (elements.deleteEventBtn) {
+                elements.deleteEventBtn.addEventListener('click', () => {
+                    handleDeleteEvent();
+                });
+            }
+
+            // Initialize event dropdowns and count
+            populateAllEventDropdowns();
+            updateEventCountBadge();
+        }
+
+        // ============================================
+        // EVENT MANAGEMENT FUNCTIONS
+        // ============================================
+
+        // Reset add event form
+        function resetAddEventForm() {
+            if (elements.newEventTitle) elements.newEventTitle.value = '';
+            if (elements.newEventSubtitle) elements.newEventSubtitle.value = '';
+            if (elements.newEventDate) elements.newEventDate.value = '';
+            if (elements.newEventLocation) elements.newEventLocation.value = '';
+            if (elements.newEventYear) elements.newEventYear.value = '';
+            if (elements.newEventCategory) elements.newEventCategory.value = '';
+            if (elements.newEventDescription) elements.newEventDescription.value = '';
+        }
+
+        // Handle adding new event
+        function handleAddNewEvent() {
+            const title = elements.newEventTitle?.value.trim();
+            const subtitle = elements.newEventSubtitle?.value.trim();
+            const date = elements.newEventDate?.value;
+            const location = elements.newEventLocation?.value.trim();
+            const year = elements.newEventYear?.value;
+            const category = elements.newEventCategory?.value;
+            const description = elements.newEventDescription?.value.trim();
+
+            // Validation
+            if (!title || !date || !location || !year || !category) {
+                showToast('⚠️ Mohon lengkapi semua field yang wajib (*)', 'error');
+                
+                // Highlight empty required fields
+                if (!title) elements.newEventTitle.style.borderColor = '#dc2626';
+                if (!date) elements.newEventDate.style.borderColor = '#dc2626';
+                if (!location) elements.newEventLocation.style.borderColor = '#dc2626';
+                if (!year) elements.newEventYear.style.borderColor = '#dc2626';
+                if (!category) elements.newEventCategory.style.borderColor = '#dc2626';
+                
+                return;
+            }
+
+            // Format date to Indonesian format
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // Create new event object
+            const newEvent = {
+                id: `evt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                title: title,
+                subtitle: subtitle || '',
+                date: formattedDate,
+                location: location,
+                year: year,
+                category: category,
+                description: description || `Kegiatan ${title} yang diselenggarakan di ${location}.`,
+                folder: `${CLOUDINARY_CONFIG.baseFolder}/${year}/${category}/${title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`,
+                photos: [],
+                photoCount: 0,
+                createdAt: new Date().toISOString()
+            };
+
+            // Add to state
+            state.events.push(newEvent);
+            state.filteredEvents = [...state.events];
+            
+            // Save to localStorage
+            saveEventsToStorage();
+
+            console.log('✅ New event created:', newEvent);
+
+            // Show success message
+            showToast(`🎉 Kegiatan "${title}" berhasil ditambahkan!`, 'success');
+
+            // Reset and hide form
+            resetAddEventForm();
+            elements.addEventForm.classList.add('hidden');
+            elements.toggleAddEventForm.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Tambah Kegiatan Baru
+            `;
+            elements.toggleAddEventForm.style.background = '';
+
+            // Update all dropdowns
+            populateAllEventDropdowns();
+            updateEventCountBadge();
+
+            // Re-render gallery to show new event
+            renderCurrentEvent();
+
+            // Auto-select the new event in manage dropdown
+            if (elements.manageEventSelect) {
+                elements.manageEventSelect.value = newEvent.id;
+                elements.manageEventSelect.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Handle delete event
+        function handleDeleteEvent() {
+            const eventId = elements.manageEventSelect?.value;
+            
+            if (!eventId) return;
+
+            const event = state.events.find(e => e.id === eventId);
+            if (!event) return;
+
+            // Check if event has photos
+            const photoCount = event.photos?.length || 0;
+            
+            let confirmMessage = `Apakah Anda yakin ingin menghapus kegiatan:\n\n"${event.title}"`;
+            
+            if (photoCount > 0) {
+                confirmMessage += `\n\n⚠️ Kegiatan ini memiliki ${photoCount} foto yang akan ikut dihapus dari tampilan.`;
+            }
+
+            confirmMessage += '\n\nTindakan ini tidak dapat dibatalkan!';
+
+            if (!confirm(confirmMessage)) return;
+
+            // Remove event from state
+            const eventIndex = state.events.findIndex(e => e.id === eventId);
+            if (eventIndex !== -1) {
+                state.events.splice(eventIndex, 1);
+                state.filteredEvents = [...state.events];
+
+                // If deleted event was current, reset to first event
+                if (state.currentEventIndex >= state.filteredEvents.length) {
+                    state.currentEventIndex = Math.max(0, state.filteredEvents.length - 1);
+                }
+
+                // Save changes
+                saveEventsToStorage();
+
+                console.log('🗑️ Event deleted:', event.title);
+
+                showToast(`🗑️ Kegiatan "${event.title}" telah dihapus`, 'info');
+
+                // Update UI
+                populateAllEventDropdowns();
+                updateEventCountBadge();
+                
+                // Clear manage grid
+                if (elements.manageGrid) elements.manageGrid.innerHTML = '';
+                if (elements.eventInfoBar) elements.eventInfoBar.classList.add('hidden');
+                if (elements.deleteEventBtn) elements.deleteEventBtn.disabled = true;
+
+                // Re-render gallery
+                renderCurrentEvent();
+            }
+        }
+
+        // Populate all event dropdowns (upload & manage)
+        function populateAllEventDropdowns() {
+            const selects = [elements.eventSelect, elements.manageEventSelect];
+            
+            selects.forEach(select => {
+                if (!select) return;
+
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
+
+                // Group events by year
+                const eventsByYear = {};
+                state.events.forEach(event => {
+                    if (!eventsByYear[event.year]) {
+                        eventsByYear[event.year] = [];
+                    }
+                    eventsByYear[event.year].push(event);
+                });
+
+                // Sort years descending
+                const sortedYears = Object.keys(eventsByYear).sort((a, b) => b - a);
+
+                sortedYears.forEach(year => {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `Tahun ${year}`;
+
+                    eventsByYear[year].forEach(event => {
+                        const option = document.createElement('option');
+                        option.value = event.id;
+                        option.textContent = `${event.title} (${event.photoCount || 0} foto)`;
+                        optgroup.appendChild(option);
+                    });
+
+                    select.appendChild(optgroup);
+                });
+
+                // Restore selection if still valid
+                if (currentValue && state.events.find(e => e.id === currentValue)) {
+                    select.value = currentValue;
+                }
+            });
+
+            console.log(`📋 Event dropdowns populated with ${state.events.length} events`);
+        }
+
+        // Update event count badge
+        function updateEventCountBadge() {
+            if (elements.eventCountBadge) {
+                const count = state.events.length;
+                elements.eventCountBadge.textContent = `${count} Kegiatan${count !== 1 ? '' : ''}`;
+            }
+        }
+
+        // Show event info bar when event is selected in manage
+        function showEventInfo(eventId) {
+            const event = state.events.find(e => e.id === eventId);
+            
+            if (!event || !elements.eventInfoBar) return;
+
+            elements.eventInfoBar.classList.remove('hidden');
+            if (elements.infoDate) elements.infoDate.textContent = event.date;
+            if (elements.infoLocation) elements.infoLocation.textContent = event.location;
+            if (elements.infoPhotoCount) elements.infoPhotoCount.textContent = event.photoCount || event.photos?.length || 0;
+
+            // Enable delete button
+            if (elements.deleteEventBtn) {
+                elements.deleteEventBtn.disabled = false;
+            }
+        }
+
+        // Hide event info bar
+        function hideEventInfo() {
+            if (elements.eventInfoBar) {
+                elements.eventInfoBar.classList.add('hidden');
+            }
+            if (elements.deleteEventBtn) {
+                elements.deleteEventBtn.disabled = true;
+            }
         }
 
         // ============================================
