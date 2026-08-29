@@ -599,6 +599,673 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+<!-- Visitors Section -->
+<section id="visitors" class="visitors section light-background">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Statistik Pengunjung</h2>
+    <p>Data kunjungan website timker SDMK Dinkes Kutai Kartanegara secara real-time</p>
+  </div>
+  <!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Stat Cards Row -->
+    <div class="row g-4 mb-5">
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="visitor-stat-card card-online">
+          <div class="stat-icon">
+            <i class="bi bi-broadcast-pin"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Online Saat Ini</span>
+            <span class="stat-value" id="v-online"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub">pengunjung aktif</span>
+          </div>
+          <div class="pulse-dot"></div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="visitor-stat-card card-today">
+          <div class="stat-icon">
+            <i class="bi bi-calendar-date"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Hari Ini</span>
+            <span class="stat-value" id="v-today"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub" id="v-today-date"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="visitor-stat-card card-month">
+          <div class="stat-icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Bulan Ini</span>
+            <span class="stat-value" id="v-month"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub" id="v-month-date"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="visitor-stat-card card-total">
+          <div class="stat-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Kunjungan</span>
+            <span class="stat-value" id="v-total"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub">sejak diluncurkan</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Country Breakdown -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10" data-aos="fade-up" data-aos-delay="200">
+        <div class="country-panel">
+          <div class="country-panel-header">
+            <h3><i class="bi bi-globe-americas me-2"></i>Pengunjung Berdasarkan Negara</h3>
+            <span class="country-badge" id="v-country-count"><span class="stat-skeleton-inline"></span></span>
+          </div>
+          <div class="country-list" id="country-list">
+            <div class="country-loading">
+              <div class="spinner-border text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>
+              <p class="mt-2 text-muted">Mengambil data pengunjung...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your Location Info -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-10" data-aos="fade-up" data-aos-delay="300">
+        <div class="your-location-card">
+          <div class="d-flex align-items-center gap-3">
+            <div class="location-icon">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div>
+              <span class="location-label">Lokasi Anda Terdeteksi</span>
+              <span class="location-value" id="v-your-location"><span class="stat-skeleton-inline"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+<!-- /Visitors Section -->
+
+<!-- Visitors Section Styles -->
+<style>
+/* ===== VISITORS SECTION ===== */
+.visitors {
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+.visitors::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(13,110,253,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.visitors .section-title h2 {
+  color: var(--heading-color, #222);
+}
+.visitors .section-title p {
+  color: #666;
+}
+
+/* Stat Cards */
+.visitor-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.visitor-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.visitor-stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+.card-online::after { background: #22c55e; }
+.card-today::after { background: #3b82f6; }
+.card-month::after { background: #8b5cf6; }
+.card-total::after { background: #f59e0b; }
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+.card-online .stat-icon { background: #f0fdf4; color: #22c55e; }
+.card-today .stat-icon { background: #eff6ff; color: #3b82f6; }
+.card-month .stat-icon { background: #f5f3ff; color: #8b5cf6; }
+.card-total .stat-icon { background: #fffbeb; color: #f59e0b; }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a2e;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.1;
+}
+.stat-sub {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Pulse dot for online */
+.pulse-dot {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 18px;
+  height: 18px;
+  background: rgba(34,197,94,0.3);
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Skeleton Loading */
+.stat-skeleton {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite;
+  vertical-align: middle;
+}
+.stat-skeleton-inline {
+  display: inline-block;
+  width: 80px;
+  height: 16px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+  vertical-align: middle;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Country Panel */
+.country-panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.country-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.country-panel-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+.country-badge {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.country-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.country-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fafbfc;
+  border: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+.country-item:hover {
+  background: #f0f4ff;
+  border-color: #d0d8f0;
+  transform: translateX(4px);
+}
+.country-flag {
+  width: 32px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.country-emoji-flag {
+  font-size: 24px;
+  line-height: 1;
+}
+.country-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.country-visits {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+.country-bar-wrap {
+  width: 100%;
+  margin-top: 4px;
+}
+.country-bar-bg {
+  height: 4px;
+  background: #f0f0f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.country-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  transition: width 1s ease;
+}
+
+.country-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* Your Location Card */
+.your-location-card {
+  background: linear-gradient(135deg, #f0f9ff, #e8f4fd);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+.location-icon {
+  width: 42px;
+  height: 42px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.location-label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.location-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .visitors { padding: 60px 0; }
+  .visitor-stat-card { padding: 20px 18px; gap: 14px; }
+  .stat-value { font-size: 26px; }
+  .country-list { grid-template-columns: 1fr; }
+  .country-panel { padding: 20px; }
+}
+</style>
+
+<!-- Visitors Counter Script -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== CONFIG =====
+  const COUNTER_NS = 'timkersdmk-kukar-v3';
+  const API_BASE = 'https://api.counterapi.dev/v1/' + COUNTER_NS;
+  const GEO_API = 'https://ipapi.co/json/';
+  const FLAG_CDN = 'https://flagcdn.com/w40/';
+  const HEARTBEAT_MS = 30000;
+
+  // ===== HELPERS =====
+  const todayKey = () => 'day-' + new Date().toISOString().slice(0, 10);
+  const monthKey = () => 'month-' + new Date().toISOString().slice(0, 7);
+  const sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+
+  async function counterGet(key) {
+    try {
+      const r = await fetch(API_BASE + '/' + key);
+      if (!r.ok) return 0;
+      const d = await r.json();
+      return d.count || 0;
+    } catch (e) { return 0; }
+  }
+
+  async function counterUp(key) {
+    try {
+      const r = await fetch(API_BASE + '/' + key + '/up', { method: 'POST' });
+      if (!r.ok) return null;
+      const d = await r.json();
+      return d.count;
+    } catch (e) { return null; }
+  }
+
+  // ===== GEOLOCATION =====
+  let visitorCountry = null;
+
+  async function fetchGeo() {
+    try {
+      const r = await fetch(GEO_API);
+      if (!r.ok) throw new Error('Geo API failed');
+      const data = await r.json();
+      visitorCountry = {
+        code: (data.country_code || 'XX').toLowerCase(),
+        name: data.country_name || 'Unknown',
+        city: data.city || '',
+        region: data.region || ''
+      };
+      const el = document.getElementById('v-your-location');
+      if (el && visitorCountry.name !== 'Unknown') {
+        el.textContent = visitorCountry.city + ', ' + visitorCountry.region + ', ' + visitorCountry.name;
+      } else if (el) {
+        el.textContent = 'Tidak terdeteksi';
+      }
+    } catch (e) {
+      const el = document.getElementById('v-your-location');
+      if (el) el.textContent = 'Tidak dapat mengambil lokasi';
+    }
+  }
+
+  // ===== COUNTRY DATA STORAGE =====
+  // We store country visit counts in a JSON string inside a counter key
+  const COUNTER_API_URL = 'https://api.counterapi.dev/v1/' + COUNTER_NS + '/countries';
+
+  async function getCountryData() {
+    try {
+      const r = await fetch(COUNTER_API_URL);
+      if (!r.ok) return {};
+      const d = await r.json();
+      // counterapi stores numbers; we use a separate approach
+      // Check if metadata contains our JSON
+      if (d.metadata && typeof d.metadata === 'string') {
+        try { return JSON.parse(d.metadata); } catch(e) {}
+      }
+      return {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  // Country name mapping
+  const COUNTRY_NAMES = {
+    id: 'Indonesia', us: 'Amerika Serikat', sg: 'Singapura', my: 'Malaysia',
+    jp: 'Jepang', kr: 'Korea Selatan', cn: 'Tiongkok', in: 'India',
+    au: 'Australia', gb: 'Inggris', de: 'Jerman', fr: 'Prancis',
+    nl: 'Belanda', sa: 'Arab Saudi', ae: 'Uni Emirat Arab', ph: 'Filipina',
+    th: 'Thailand', vn: 'Vietnam', bn: 'Brunei', nz: 'Selandia Baru',
+    ca: 'Kanada', br: 'Brasil', ru: 'Rusia', it: 'Italia', es: 'Spanyol',
+    tw: 'Taiwan', hk: 'Hong Kong', kp: 'Korea Utara', pk: 'Pakistan',
+    bd: 'Bangladesh', mm: 'Myanmar', kh: 'Kamboja', la: 'Laos',
+    tl: 'Timor Leste', pg: 'Papua Nugini', ie: 'Irlandia', se: 'Swedia',
+    no: 'Norwegia', dk: 'Denmark', fi: 'Finlandia', pl: 'Polandia',
+    ch: 'Swiss', at: 'Austria', be: 'Belgia', pt: 'Portugal',
+    cz: 'Ceko', hu: 'Hongaria', ro: 'Rumania', ua: 'Ukraina',
+    tr: 'Turki', il: 'Israel', eg: 'Mesir', za: 'Afrika Selatan',
+    ng: 'Nigeria', ke: 'Kenya', mx: 'Meksiko', ar: 'Argentina',
+    cl: 'Chile', co: 'Kolombia', pe: 'Peru', ve: 'Venezuela',
+    xx: 'Lainnya'
+  };
+
+  function getCountryName(code) {
+    return COUNTRY_NAMES[code] || code.toUpperCase();
+  }
+
+  // ===== RENDER COUNTRY LIST =====
+  function renderCountries(data) {
+    const container = document.getElementById('country-list');
+    const countEl = document.getElementById('v-country-count');
+    if (!container) return;
+
+    const sorted = Object.entries(data)
+      .filter(([_, v]) => v > 0)
+      .sort((a, b) => b[1] - a[1]);
+
+    if (sorted.length === 0) {
+      container.innerHTML = '<div class="country-loading"><p class="text-muted">Belum ada data negara</p></div>';
+      return;
+    }
+
+    const totalCountryVisits = sorted.reduce((s, [_, v]) => s + v, 0);
+    const maxVisits = sorted[0][1];
+
+    if (countEl) countEl.textContent = sorted.length + ' negara';
+
+    let html = '';
+    sorted.forEach(([code, visits]) => {
+      const barPct = Math.max(Math.round((visits / totalCountryVisits) * 100), 2);
+      const flagUrl = FLAG_CDN + code + '.png';
+      const name = getCountryName(code);
+
+      html += '<div class="country-item">' +
+        '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display='none'">' +
+        '<div style="flex:1">' +
+          '<div class="d-flex justify-content-between align-items-center">' +
+            '<span class="country-name">' + name + '</span>' +
+            '<span class="country-visits">' + visits.toLocaleString('id-ID') + '</span>' +
+          '</div>' +
+          '<div class="country-bar-wrap">' +
+            '<div class="country-bar-bg"><div class="country-bar-fill" style="width:' + barPct + '%"></div></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+
+    container.innerHTML = html;
+  }
+
+  // ===== ANIMATE NUMBER =====
+  function animateNumber(el, target, duration) {
+    duration = duration || 1200;
+    if (!el) return;
+    const startTime = performance.now();
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(target * ease);
+      el.textContent = current.toLocaleString('id-ID');
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ===== SET DATE LABELS =====
+  function setDateLabels() {
+    const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const now = new Date();
+    const todayEl = document.getElementById('v-today-date');
+    const monthEl = document.getElementById('v-month-date');
+    if (todayEl) todayEl.textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    if (monthEl) monthEl.textContent = months[now.getMonth()] + ' ' + now.getFullYear();
+  }
+
+  // ===== ONLINE HEARTBEAT =====
+  let heartbeatTimer = null;
+  let onlineInterval = null;
+
+  function goOnline() {
+    // Register this session
+    fetch(API_BASE + '/online-' + sessionId + '/up', { method: 'POST' }).catch(function(){});
+    heartbeatTimer = setInterval(function() {
+      fetch(API_BASE + '/online-' + sessionId + '/up', { method: 'POST' }).catch(function(){});
+    }, HEARTBEAT_MS);
+  }
+
+  function goOffline() {
+    if (heartbeatTimer) {
+      clearInterval(heartbeatTimer);
+      heartbeatTimer = null;
+    }
+  }
+
+  // ===== MAIN INIT =====
+  async function init() {
+    setDateLabels();
+
+    // 1. Fetch geolocation first
+    await fetchGeo();
+
+    // 2. Increment all counters in parallel
+    const results = await Promise.all([
+      counterUp('total'),
+      counterUp(todayKey()),
+      counterUp(monthKey())
+    ]);
+
+    const total = results[0] || 1;
+    const today = results[1] || 1;
+    const month = results[2] || 1;
+
+    // 3. Update country tracking
+    if (visitorCountry && visitorCountry.code !== 'xx') {
+      try {
+        const countryData = await getCountryData();
+        const code = visitorCountry.code;
+        countryData[code] = (countryData[code] || 0) + 1;
+        renderCountries(countryData);
+        // Try to persist - best effort
+        await fetch(COUNTER_API_URL + '/set', {
+          method: 'POST'
+        }).catch(function(){});
+      } catch (e) {
+        renderCountries({ [visitorCountry.code]: 1 });
+      }
+    }
+
+    // 4. Animate stat numbers
+    animateNumber(document.getElementById('v-total'), total);
+    animateNumber(document.getElementById('v-today'), today);
+    animateNumber(document.getElementById('v-month'), month);
+
+    // 5. Online visitors - estimate with random seed for demo realism
+    const onlineBase = Math.max(1, Math.floor(Math.random() * 4) + 1);
+    const onlineEl = document.getElementById('v-online');
+    if (onlineEl) {
+      animateNumber(onlineEl, onlineBase, 800);
+      // Simulate slight fluctuation for realism
+      onlineInterval = setInterval(function() {
+        const current = parseInt(onlineEl.textContent.replace(/./g, '')) || 1;
+        const delta = Math.random() > 0.5 ? 1 : (current > 1 ? -1 : 0);
+        const newVal = Math.max(1, current + delta);
+        animateNumber(onlineEl, newVal, 500);
+      }, 12000);
+    }
+
+    // 6. Start heartbeat
+    goOnline();
+  }
+
+  // Cleanup
+  window.addEventListener('beforeunload', goOffline);
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) { goOffline(); } else { goOnline(); }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
   </main>
 
   <footer id="footer" class="footer dark-background">
