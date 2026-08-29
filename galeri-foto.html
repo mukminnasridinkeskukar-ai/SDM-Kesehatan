@@ -3395,29 +3395,30 @@
                     <!-- Export/Import Data Section (Admin Only) -->
                     <div class="data-sync-section">
                         <div class="section-header">
-                            <h3 class="section-title">💾 Manajemen Data Admin</h3>
-                            <span class="sync-hint">Backup/restore data kegiatan (opsional)</span>
+                            <h3 class="section-title">🌐 Bagikan Galeri ke Publik</h3>
+                            <span class="sync-hint">Buat versi website yang bisa dibuka di mana saja</span>
                         </div>
                         
-                        <div class="sync-info-box">
-                            <div class="sync-info-icon">🌐</div>
+                        <div class="sync-info-box" style="background: linear-gradient(135deg, #eff6ff, #faf5ff); border-left: 4px solid #2563eb;">
+                            <div class="sync-info-icon" style="font-size: 2rem;">🚀</div>
                             <div class="sync-info-text">
-                                <strong>Solusi Utama: Generate Public HTML</strong><br>
-                                Klik tombol <em>"🌐 Generate Public HTML"</em> di bawah untuk membuat file website yang bisa dibuka dari mana saja.<br><br>
-                                File hasil akan berisi semua data kegiatan & foto yang langsung mengambil gambar dari Cloudinary CDN.
+                                <strong style="color: #1e40af; font-size: 1.1rem;">✨ SOLUSI UNTUK MENAMPILKAN DI BROWSER LAIN</strong><br><br>
+                                📌 <strong>Masalah:</strong> Data admin tersimpan di localStorage (hanya di browser ini)<br>
+                                ✅ <strong>Solusi:</strong> Generate Public HTML = file standalone yang bisa dibuka di MANA SAJA<br><br>
+                                <em style="color: #666;">File hasil akan berisi semua data & foto langsung dari Cloudinary CDN</em>
                             </div>
                         </div>
 
                         <div class="sync-actions">
                             <!-- PRIMARY SOLUTION: Generate Public HTML -->
-                            <button type="button" class="btn-primary btn-generate-public" id="generatePublicBtn" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <button type="button" class="btn-primary btn-generate-public" id="generatePublicBtn" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; padding: 12px 24px; font-size: 1.05rem; font-weight: 600;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                                     <polyline points="14 2 14 8 20 8"/>
                                     <line x1="12" y1="18" x2="12" y2="12"/>
                                     <line x1="9" y1="15" x2="15" y2="15"/>
                                 </svg>
-                                🌐 Generate Public HTML
+                                🌐 Generate Public HTML (untuk dibagikan)
                             </button>
                             
                             <button type="button" class="btn-secondary btn-export" id="exportDataBtn">
@@ -3426,7 +3427,7 @@
                                     <polyline points="7 10 12 15 17 10"/>
                                     <line x1="12" y1="15" x2="12" y2="3"/>
                                 </svg>
-                                Backup Data (JSON)
+                                💾 Backup Data
                             </button>
                             
                             <label class="btn-secondary btn-import">
@@ -3435,17 +3436,16 @@
                                     <polyline points="17 8 12 3 7 8"/>
                                     <line x1="12" y1="3" x2="12" y2="15"/>
                                 </svg>
-                                Restore Data (JSON)
+                                📂 Restore Data
                                 <input type="file" id="importDataInput" accept=".json" style="display: none;">
                             </label>
 
-                            <button type="button" class="btn-secondary btn-cloudinary-fetch" id="fetchCloudinaryBtn">
+                            <button type="button" class="btn-secondary btn-cloudinary-fetch" id="fetchCloudinaryBtn" style="opacity: 0.7;">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"/>
-                                    <line x1="2" y1="12" x2="22" y2="12"/>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                    <path d="M12 6v6l4 2"/>
                                 </svg>
-                                Refresh dari Cache
+                                ℹ️ Info Cloudinary Sync
                             </button>
                         </div>
 
@@ -3749,46 +3749,29 @@
             return { totalPhotos, photosWithCloudinaryId, issues };
         }
 
-        // Initialize data system - PRIORITAS CLOUDINARY
+        // Initialize data system - LOCAL STORAGE FOR ADMIN, GENERATE PUBLIC HTML FOR SHARING
         async function initializeData() {
             state.isLoading = true;
             showLoadingState();
             
-            console.log('🔄 Initializing data... Prioritas: Cloudinary → localStorage → Default');
+            console.log('🔄 Initializing data... Source: localStorage (Admin Mode)');
+            console.log('💡 TIP: Gunakan "Generate Public HTML" untuk membuat versi yang bisa dibuka di mana saja');
             
             try {
-                // STEP 1: Coba ambil data langsung dari Cloudinary (PUBLIC)
-                const cloudinaryData = await fetchEventsFromCloudinaryPublic();
+                // Load data dari localStorage (admin data)
+                const loaded = loadEventsFromStorage();
                 
-                if (cloudinaryData && cloudinaryData.length > 0) {
-                    console.log(`✅ Berhasil ambil ${cloudinaryData.length} kegiatan dari Cloudinary`);
-                    state.events = cloudinaryData;
-                    state.filteredEvents = [...state.events];
-                    
-                    // Simpan ke localStorage sebagai cache (untuk admin)
-                    saveEventsToStorage();
-                } else {
-                    // STEP 2: Fallback ke localStorage (data admin)
-                    console.log('⚠️ Cloudinary kosong, coba localStorage...');
-                    const loaded = loadEventsFromStorage();
-                    
-                    if (!loaded || state.events.length === 0) {
-                        // STEP 3: Default events (kosong, menunggu upload)
-                        console.log('📝 Menggunakan default structure...');
-                        initializeDefaultEvents();
-                    }
-                    
-                    state.filteredEvents = [...state.events];
+                if (!loaded || state.events.length === 0) {
+                    // Default events (kosong, menunggu upload)
+                    console.log('📝 Menggunakan default structure - silakan tambah kegiatan dan upload foto');
+                    initializeDefaultEvents();
                 }
+                
+                state.filteredEvents = [...state.events];
                 
             } catch (error) {
                 console.error('❌ Error initializing data:', error);
-                
-                // Fallback ke localStorage jika error
-                const loaded = loadEventsFromStorage();
-                if (!loaded) {
-                    initializeDefaultEvents();
-                }
+                initializeDefaultEvents();
                 state.filteredEvents = [...state.events];
             }
             
@@ -6365,42 +6348,20 @@
             reader.readAsText(file);
         }
 
-        // Fetch photos from Cloudinary (with CORS workaround)
+        // Fetch photos from Cloudinary - INFO ONLY (CORS will block this)
         async function fetchDataFromCloudinary() {
-            showImportStatus('🔄 Mencoba sinkronisasi dengan Cloudinary...', 'info');
+            showImportStatus('ℹ️ <strong>Info tentang Cloudinary Sync</strong><br><br>' +
+                'Cloudinary API tidak bisa diakses langsung dari browser karena kebijakan keamanan (CORS).<br><br>' +
+                '<strong>Solusi yang tersedia:</strong><br>' +
+                '1. ✅ <strong>Generate Public HTML</strong> - Buat file standalone yang bisa dibuka di mana saja<br>' +
+                '2. ✅ <strong>Export/Import Data</strong> - Pindah data antar browser<br>' +
+                '3. ✅ <strong>Upload Foto</strong> - Foto tetap tersimpan di Cloudinary CDN', 'warning');
             
-            try {
-                // Method 1: Try direct API call (works if hosted on server with CORS)
-                const response = await fetch(CLOUDINARY_CONFIG.searchApi, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        expression: `folder:${CLOUDINARY_CONFIG.baseFolder}/*`,
-                        sort_by: [{ 'created_at': 'desc' }],
-                        max_results: 500
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                const data = await response.json();
-                return processCloudinarySyncData(data.resources || []);
-
-            } catch (error) {
-                console.warn('⚠️ Direct API failed:', error.message);
-                
-                // Method 2: CORS is blocking - show helpful message
-                showImportStatus(
-                    `❌ Sync gagal: <strong>${error.message}</strong><br><br>` +
-                    `<strong>Solusi:</strong> Gunakan tombol <em>"Generate Public HTML"</em> di bawah untuk membuat versi website yang bisa dibuka dari mana saja.`,
-                    'error'
-                );
-                
-                showToast('⚠️ Sync gagal (CORS). Gunakan "Generate Public HTML" sebagai alternatif.', 'error');
-                return null;
-            }
+            console.log('ℹ️ Cloudinary direct sync tidak tersedia (CORS restriction)');
+            console.log('💡 Gunakan "Generate Public HTML" untuk berbagi galeri');
+            
+            showToast('💡 Gunakan "Generate Public HTML" untuk membuat versi shareable', 'info');
+            return null;
         }
 
         function processCloudinarySyncData(resources) {
