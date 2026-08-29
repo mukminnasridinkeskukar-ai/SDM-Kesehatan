@@ -6537,212 +6537,148 @@
         }
 
         function createPublicVersion(originalHTML, embeddedData) {
-            // Create simplified public version
-            return `<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeri Kegiatan - Dinas Kesehatan (Public)</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-primary: #fafafa;
-            --bg-secondary: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent-color: #2563eb;
-            --border-color: #e5e5e5;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text-primary); }
-        .subtitle { color: var(--text-secondary); margin-bottom: 2rem; }
-        .event-card {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        .event-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--accent-color);
-        }
-        .event-meta {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        .photo-item {
-            border-radius: 8px;
-            overflow: hidden;
-            aspect-ratio: 4/3;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .photo-item:hover { transform: scale(1.02); }
-        .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .lightbox.active { display: flex; }
-        .lightbox img {
-            max-width: 90vw;
-            max-height: 90vh;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 20px; right: 20px;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            background: rgba(255,255,255,0.2);
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .stats {
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-        }
-        .stats h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .stats p { opacity: 0.9; }
-        .empty { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
-        @media (max-width: 768px) {
-            h1 { font-size: 1.75rem; }
-            .photo-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="stats">
-            <h2>📸 Galeri Kegiatan Dinas Kesehatan</h2>
-            <p>Dokumentasi kegiatan dan program kerja</p>
-        </div>
-        <div id="gallery"></div>
-    </div>
-    
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="">
-    </div>
-
-    <script>
-        // Embedded data (generated on ${new Date().toISOString()})
-        const EMBEDDED_EVENTS = ${embeddedData};
-        
-        const CLOUDINARY_BASE = 'https://res.cloudinary.com/cla7jrww/image/upload';
-        
-        function getPhotoUrl(publicId) {
-            return \`\${CLOUDINARY_BASE}/w_800,q_auto,f_auto,c_fill/\${publicId}\`;
-        }
-        
-        function renderGallery() {
-            const gallery = document.getElementById('gallery');
+            // Create simplified public version - avoid complex template literals
+            const publicHTMLParts = [];
             
-            if (!EMBEDDED_EVENTS || EMBEDDED_EVENTS.length === 0) {
-                gallery.innerHTML = '<div class="empty"><h3>Belum ada kegiatan</h3><p>Data galeri belum tersedia.</p></div>';
-                return;
-            }
+            // HTML Start
+            publicHTMLParts.push('<!DOCTYPE html>');
+            publicHTMLParts.push('<html lang="id">');
+            publicHTMLParts.push('<head>');
+            publicHTMLParts.push('    <meta charset="UTF-8">');
+            publicHTMLParts.push('    <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+            publicHTMLParts.push('    <title>Galeri Kegiatan - Dinas Kesehatan (Public)</title>');
+            publicHTMLParts.push('');
+            publicHTMLParts.push('    <!-- Fonts -->');
+            publicHTMLParts.push('    <link rel="preconnect" href="https://fonts.googleapis.com">');
+            publicHTMLParts.push('    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
+            publicHTMLParts.push('    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">');
+            publicHTMLParts.push('');
+            publicHTMLParts.push('    <style>');
+            publicHTMLParts.push(getPublicCSS());
+            publicHTMLParts.push('    </style>');
+            publicHTMLParts.push('</head>');
+            publicHTMLParts.push('<body>');
+            publicHTMLParts.push('    <div class="container">');
+            publicHTMLParts.push('        <div class="stats">');
+            publicHTMLParts.push('            <h2>📸 Galeri Kegiatan Dinas Kesehatan</h2>');
+            publicHTMLParts.push('            <p>Dokumentasi kegiatan dan program kerja</p>');
+            publicHTMLParts.push('        </div>');
+            publicHTMLParts.push('        <div id="gallery"></div>');
+            publicHTMLParts.push('    </div>');
+            publicHTMLParts.push('');
+            publicHTMLParts.push('    <div class="lightbox" id="lightbox" onclick="closeLightbox()">');
+            publicHTMLParts.push('        <span class="lightbox-close">&times;</span>');
+            publicHTMLParts.push('        <img id="lightbox-img" src="" alt="">');
+            publicHTMLParts.push('    </div>');
+            publicHTMLParts.push('');
+            publicHTMLParts.push('    <script>');
+            publicHTMLParts.push('        const EMBEDDED_EVENTS = ' + embeddedData + ';');
+            publicHTMLParts.push(getPublicJS());
+            publicHTMLParts.push('    <\/script>');
+            publicHTMLParts.push('<\/body>');
+            publicHTMLParts.push('<\/html>');
             
-            let totalPhotos = 0;
-            
-            EMBEDDED_EVENTS.forEach((event, idx) => {
-                const photos = event.photos || [];
-                totalPhotos += photos.length;
-                
-                if (photos.length === 0) return;
-                
-                const card = document.createElement('div');
-                card.className = 'event-card';
-                card.innerHTML = \`
-                    <h3 class="event-title">\${event.title}</h3>
-                    \${event.subtitle ? \`<p style="color:#666;margin-bottom:0.5rem;">\${event.subtitle}</p>\` : ''}
-                    <div class="event-meta">
-                        <span>📅 \${event.date || '-'}</span>
-                        <span>📍 \${event.location || '-'}</span>
-                        <span>📷 \${photos.length} foto</span>
-                    </div>
-                    <div class="photo-grid">
-                        \${photos.map(photo => \`
-                            <div class="photo-item" onclick="openLightbox('\${photo.publicId}')">
-                                <img src="\${getPhotoUrl(photo.publicId)}" 
-                                     alt="\${event.title}" 
-                                     loading="lazy"
-                                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23f0f0f0%22 width=%22400%22 height=%22300%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22sans-serif%22>No Image</text></svg>'">
-                            </div>
-                        \`).join('')}
-                    </div>
-                \`;
-                gallery.appendChild(card);
-            });
-            
-            console.log(\`✅ Gallery rendered: \${EMBEDDED_EVENTS.length} events, \${totalPhotos} photos\`);
+            return publicHTMLParts.join('\n');
         }
         
-        function openLightbox(publicId) {
-            const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-            img.src = getPhotoUrl(publicId).replace('w_800', 'w_1600');
-            lightbox.classList.add('active');
+        function getPublicCSS() {
+            return [
+                ':root {',
+                '    --bg-primary: #fafafa;',
+                '    --bg-secondary: #ffffff;',
+                '    --text-primary: #1a1a1a;',
+                '    --text-secondary: #666666;',
+                '    --accent-color: #2563eb;',
+                '    --border-color: #e5e5e5;',
+                '}',
+                '* { margin: 0; padding: 0; box-sizing: border-box; }',
+                'body { font-family: "Inter", -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }',
+                '.container { max-width: 1400px; margin: 0 auto; padding: 2rem; }',
+                '.event-card { background: var(--bg-secondary); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }',
+                '.event-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--accent-color); }',
+                '.event-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary); }',
+                '.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }',
+                '.photo-item { border-radius: 8px; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; transition: transform 0.3s ease; }',
+                '.photo-item:hover { transform: scale(1.02); }',
+                '.photo-item img { width: 100%; height: 100%; object-fit: cover; }',
+                '.lightbox { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; padding: 2rem; }',
+                '.lightbox.active { display: flex; }',
+                '.lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; }',
+                '.lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }',
+                '.stats { text-align: center; padding: 2rem; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; border-radius: 12px; margin-bottom: 2rem; }',
+                '.stats h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }',
+                '.stats p { opacity: 0.9; }',
+                '.empty { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }',
+                '@media (max-width: 768px) { .photo-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }'
+            ].join('\n            ');
         }
         
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-        }
-        
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
-        });
-        
-        // Initialize
-        renderGallery();
-    </script>
-</body>
-</html>`;
+        function getPublicJS() {
+            return [
+                "const CLOUDINARY_BASE = 'https://res.cloudinary.com/cla7jrww/image/upload';",
+                "",
+                "function getPhotoUrl(publicId) {",
+                "    return CLOUDINARY_BASE + '/w_800,q_auto,f_auto,c_fill/' + publicId;",
+                "}",
+                "",
+                "function renderGallery() {",
+                "    const gallery = document.getElementById('gallery');",
+                "    ",
+                "    if (!EMBEDDED_EVENTS || EMBEDDED_EVENTS.length === 0) {",
+                "        gallery.innerHTML = '<div class=\"empty\"><h3>Belum ada kegiatan</h3><p>Data galeri belum tersedia.</p></div>';",
+                "        return;",
+                "    }",
+                "    ",
+                "    let totalPhotos = 0;",
+                "    ",
+                "    EMBEDDED_EVENTS.forEach(function(event) {",
+                "        const photos = event.photos || [];",
+                "        totalPhotos += photos.length;",
+                "        ",
+                "        if (photos.length === 0) return;",
+                "        ",
+                "        const card = document.createElement('div');",
+                "        card.className = 'event-card';",
+                "        ",
+                "        let html = '<h3 class=\"event-title\">' + event.title + '</h3>';",
+                "        if (event.subtitle) html += '<p style=\"color:#666;margin-bottom:0.5rem;\">' + event.subtitle + '</p>';",
+                "        html += '<div class=\"event-meta\">';",
+                "        html += '<span>📅 ' + (event.date || '-') + '</span>';",
+                "        html += '<span>📍 ' + (event.location || '-') + '</span>';",
+                "        html += '<span>📷 ' + photos.length + ' foto</span>';",
+                "        html += '</div>';",
+                "        html += '<div class=\"photo-grid\">';",
+                "        ",
+                "        photos.forEach(function(photo) {",
+                "            html += '<div class=\"photo-item\" onclick=\"openLightbox(\\'' + photo.publicId + '\\')\">';",
+                "            html += '<img src=\"' + getPhotoUrl(photo.publicId) + '\" alt=\"' + event.title + '\" loading=\"lazy\" onerror=\"this.src=\\'data:image/svg+xml,<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" viewBox=\\\"0 0 400 300\\\"><rect fill=\\\"%23f0f0f0\\\" width=\\\"400\\\" height=\\\"300\\\"/><text x=\\\"50%\\\" y=\\\"50%\\\" dominant-baseline=\\\"middle\\\" text-anchor=\\\"middle\\\" fill=\\\"%23999\\\" font-family=\\\"sans-serif\\\">No Image<\\/text><\\/svg>\\'\">';",
+                "            html += '</div>';",
+                "        });",
+                "        ",
+                "        html += '</div>';",
+                "        card.innerHTML = html;",
+                "        gallery.appendChild(card);",
+                "    });",
+                "    ",
+                "    console.log('✅ Gallery rendered: ' + EMBEDDED_EVENTS.length + ' events, ' + totalPhotos + ' photos');",
+                "}",
+                "",
+                "function openLightbox(publicId) {",
+                "    document.getElementById('lightbox').classList.add('active');",
+                "    document.getElementById('lightbox-img').src = getPhotoUrl(publicId).replace('w_800', 'w_1600');",
+                "}",
+                "",
+                "function closeLightbox() {",
+                "    document.getElementById('lightbox').classList.remove('active');",
+                "}",
+                "",
+                "document.addEventListener('keydown', function(e) {",
+                "    if (e.key === 'Escape') closeLightbox();",
+                "});",
+                "",
+                "// Initialize",
+                "renderGallery();"
+            ].join('\n        ');
         }
 
         // Show import status message
