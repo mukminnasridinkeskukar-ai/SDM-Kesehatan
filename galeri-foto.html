@@ -313,6 +313,8 @@
             height: 100%;
             object-fit: cover;
             animation: heroZoom 20s ease-in-out infinite alternate;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 1;
         }
         
         @keyframes heroZoom {
@@ -2097,6 +2099,166 @@
         .hidden {
             display: none !important;
         }
+
+        /* ============================================
+           ALL PHOTOS GRID - HOMEPAGE PREVIEW
+        ============================================ */
+        .all-photos-section {
+            padding: 4rem 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .all-photos-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+        }
+
+        .all-photos-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .all-photos-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .all-photos-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .all-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .all-photo-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            background: var(--bg-tertiary);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .all-photo-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .all-photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+
+        .all-photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .all-photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.2) 50%,
+                transparent 100%
+            );
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+
+        .all-photo-item:hover .all-photo-overlay {
+            opacity: 1;
+        }
+
+        .all-photo-event-title {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+
+        .all-photo-meta {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loading-placeholder {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-gallery-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-gallery-message svg {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .all-photos-section {
+                padding: 3rem 1rem;
+            }
+
+            .all-photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .all-photo-overlay {
+                opacity: 1;
+                background: linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.7) 0%,
+                    transparent 60%
+                );
+            }
+        }
     </style>
 </head>
 <body>
@@ -2168,6 +2330,25 @@
         </div>
         <div class="scroll-indicator">
             <span></span>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ALL PHOTOS PREVIEW GRID (Homepage)
+    ============================================ -->
+    <section class="all-photos-section" id="allPhotosSection">
+        <div class="all-photos-container">
+            <div class="all-photos-header">
+                <h2 class="all-photos-title">📸 Semua Foto Kegiatan</h2>
+                <p class="all-photos-subtitle" id="allPhotosCount">Memuat foto...</p>
+            </div>
+            <div class="all-photos-grid" id="allPhotosGrid">
+                <!-- Photos will be injected here by JavaScript -->
+                <div class="loading-placeholder">
+                    <div class="spinner"></div>
+                    <p>Memuat galeri foto...</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -3005,7 +3186,10 @@
             searchInput: document.getElementById('searchInput'),
             yearFilters: document.getElementById('yearFilters'),
             categoryFilters: document.getElementById('categoryFilters'),
-            toastContainer: document.getElementById('toastContainer')
+            toastContainer: document.getElementById('toastContainer'),
+            allPhotosGrid: document.getElementById('allPhotosGrid'),
+            allPhotosCount: document.getElementById('allPhotosCount'),
+            allPhotosSection: document.getElementById('allPhotosSection')
         };
 
         // ============================================
@@ -3056,31 +3240,284 @@
         // ============================================
         // EVENT RENDERING
         // ============================================
+        
+        // Collect ALL photos from all events for homepage display
+        function collectAllPhotos() {
+            const allPhotos = [];
+            state.events.forEach((event, eventIndex) => {
+                if (event.photos && event.photos.length > 0) {
+                    event.photos.forEach((photo, photoIndex) => {
+                        allPhotos.push({
+                            ...photo,
+                            eventTitle: event.title,
+                            eventDate: event.date,
+                            eventLocation: event.location,
+                            eventCategory: event.category,
+                            globalIndex: allPhotos.length
+                        });
+                    });
+                }
+            });
+            console.log(`📸 Collected ${allPhotos.length} total photos from all events`);
+            return allPhotos;
+        }
+
+        // Hero Slideshow - Show all photos from Cloudinary
+        let heroSlideshowInterval = null;
+        let currentHeroIndex = 0;
+        let allPhotosCollection = [];
+
+        function startHeroSlideshow() {
+            // Stop existing slideshow
+            if (heroSlideshowInterval) {
+                clearInterval(heroSlideshowInterval);
+            }
+
+            // Collect all photos
+            allPhotosCollection = collectAllPhotos();
+
+            if (allPhotosCollection.length === 0) {
+                console.log('ℹ️ No photos for hero slideshow, using default background');
+                // Set a gradient or solid color as fallback
+                elements.heroImage.style.display = 'none';
+                document.querySelector('.hero-background').style.background = 
+                    'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%)';
+                return;
+            }
+
+            // Show hero image
+            elements.heroImage.style.display = 'block';
+            document.querySelector('.hero-background').style.background = '';
+
+            console.log(`🎬 Starting hero slideshow with ${allPhotosCollection.length} photos`);
+
+            // Function to show specific photo in hero
+            function showHeroPhoto(index) {
+                if (!allPhotosCollection || allPhotosCollection.length === 0) return;
+
+                const photo = allPhotosCollection[index];
+                let heroUrl;
+
+                // Use Cloudinary URL
+                if (photo.publicId && photo.publicId.includes('/')) {
+                    heroUrl = getFeaturedUrl(photo.publicId);
+                } else if (photo.secureUrl && photo.secureUrl.includes('cloudinary')) {
+                    heroUrl = photo.secureUrl.replace('/upload/', '/upload/w_1920,h_1080,q_auto:good,c_fill/');
+                } else {
+                    heroUrl = `https://picsum.photos/seed/hero-${index}/1920/1080`;
+                }
+
+                console.log(`🖼️ Hero [${index + 1}/${allPhotosCollection.length}]: ${photo.publicId || 'from secure_url'}`);
+
+                // Fade transition
+                elements.heroImage.style.opacity = '0';
+                
+                setTimeout(() => {
+                    elements.heroImage.src = heroUrl;
+                    elements.heroImage.alt = `${photo.eventTitle} - ${photo.caption || 'Foto'}`;
+                    
+                    elements.heroImage.onload = () => {
+                        elements.heroImage.style.opacity = '1';
+                    };
+                    
+                    elements.heroImage.onerror = () => {
+                        elements.heroImage.onerror = null;
+                        elements.heroImage.src = `https://picsum.photos/seed/hero-error-${Date.now()}/1920/1080`;
+                        elements.heroImage.style.opacity = '1';
+                    };
+                }, 300);
+
+                // Update hero content to show photo info
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent && photo.eventTitle) {
+                    const heroSubtitle = heroContent.querySelector('.hero-subtitle');
+                    const heroInstitution = heroContent.querySelector('.hero-institution');
+                    
+                    if (heroSubtitle) heroSubtitle.textContent = photo.eventTitle;
+                    if (heroInstitution) {
+                        heroInstitution.innerHTML = `
+                            <span style="opacity: 0.9">${photo.eventDate}</span> · 
+                            <span style="opacity: 0.7">${photo.eventLocation}</span> · 
+                            <strong>Foto ${index + 1} dari ${allPhotosCollection.length}</strong>
+                        `;
+                    }
+                }
+            }
+
+            // Show first photo immediately
+            showHeroPhoto(currentHeroIndex);
+
+            // Auto-advance every 5 seconds
+            heroSlideshowInterval = setInterval(() => {
+                currentHeroIndex = (currentHeroIndex + 1) % allPhotosCollection.length;
+                showHeroPhoto(currentHeroIndex);
+            }, 5000);
+
+            // Add keyboard navigation for hero
+            document.addEventListener('keydown', handleHeroKeyboard);
+        }
+
+        function handleHeroKeyboard(e) {
+            if (!allPhotosCollection || allPhotosCollection.length === 0) return;
+
+            if (e.key === 'ArrowLeft') {
+                currentHeroIndex = (currentHeroIndex - 1 + allPhotosCollection.length) % allPhotosCollection.length;
+                showHeroPhoto(currentHeroIndex);
+                // Reset interval
+                clearInterval(heroSlideshowInterval);
+                heroSlideshowInterval = setInterval(() => {
+                    currentHeroIndex = (currentHeroIndex + 1) % allPhotosCollection.length;
+                    showHeroPhoto(currentHeroIndex);
+                }, 5000);
+            } else if (e.key === 'ArrowRight') {
+                currentHeroIndex = (currentHeroIndex + 1) % allPhotosCollection.length;
+                showHeroPhoto(currentHeroIndex);
+                // Reset interval
+                clearInterval(heroSlideshowInterval);
+                heroSlideshowInterval = setInterval(() => {
+                    currentHeroIndex = (currentHeroIndex + 1) % allPhotosCollection.length;
+                    showHeroPhoto(currentHeroIndex);
+                }, 5000);
+            }
+        }
+
+        function stopHeroSlideshow() {
+            if (heroSlideshowInterval) {
+                clearInterval(heroSlideshowInterval);
+                heroSlideshowInterval = null;
+            }
+            document.removeEventListener('keydown', handleHeroKeyboard);
+        }
+
+        // Render ALL photos grid for homepage
+        function renderAllPhotosGrid() {
+            const allPhotos = collectAllPhotos();
+            const gridContainer = elements.allPhotosGrid;
+            const countElement = elements.allPhotosCount;
+
+            if (!gridContainer || !countElement) return;
+
+            // Update count
+            if (allPhotos.length > 0) {
+                countElement.textContent = `Menampilkan ${allPhotos.length} foto dari semua kegiatan`;
+            } else {
+                countElement.textContent = 'Belum ada foto yang diupload';
+            }
+
+            // Clear existing content
+            gridContainer.innerHTML = '';
+
+            if (allPhotos.length === 0) {
+                // Show empty state
+                gridContainer.innerHTML = `
+                    <div class="empty-gallery-message">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Belum Ada Foto</p>
+                        <p style="font-size: 0.9rem;">Upload foto melalui Panel Admin untuk menampilkan di sini</p>
+                    </div>
+                `;
+                
+                // Hide section if empty (optional - comment out if you want to show empty message)
+                // elements.allPhotosSection.style.display = 'none';
+                return;
+            }
+
+            // Show section
+            elements.allPhotosSection.style.display = 'block';
+
+            console.log(`📸 Rendering ${allPhotos.length} photos in homepage grid`);
+
+            // Render each photo
+            allPhotos.forEach((photo, index) => {
+                const item = document.createElement('div');
+                item.className = 'all-photo-item';
+                item.dataset.globalIndex = index;
+                item.dataset.eventTitle = photo.eventTitle;
+
+                // Generate Cloudinary URL
+                let photoUrl;
+                if (photo.publicId && photo.publicId.includes('/')) {
+                    photoUrl = getGalleryUrl(photo.publicId);
+                } else if (photo.secureUrl && photo.secureUrl.includes('cloudinary')) {
+                    photoUrl = photo.secureUrl.replace('/upload/', '/upload/w_400,h_300,q_auto:good,c_fill/');
+                } else {
+                    photoUrl = `https://picsum.photos/seed/grid-${index}/400/300`;
+                }
+
+                item.innerHTML = `
+                    <img 
+                        src="${photoUrl}" 
+                        alt="${photo.eventTitle} - ${photo.caption || 'Foto'}"
+                        loading="${index < 9 ? 'eager' : 'lazy'}"
+                        onerror="this.onerror=null; this.src='https://picsum.photos/seed/grid-error-${Date.now()}/400/300';"
+                    >
+                    <div class="all-photo-overlay">
+                        <p class="all-photo-event-title">${photo.eventTitle}</p>
+                        <p class="all-photo-meta">
+                            <span>📅 ${photo.eventDate}</span>
+                            <span>📍 ${photo.eventLocation}</span>
+                        </p>
+                    </div>
+                `;
+
+                // Click handler - open lightbox or scroll to event
+                item.addEventListener('click', () => {
+                    // Find the event this photo belongs to and navigate to it
+                    const eventIndex = state.events.findIndex(e => e.title === photo.eventTitle);
+                    if (eventIndex !== -1) {
+                        goToEvent(eventIndex);
+                        
+                        // After navigation, try to open this specific photo in lightbox
+                        setTimeout(() => {
+                            const photoIndexInEvent = state.events[eventIndex].photos.findIndex(
+                                p => p.id === photo.id || p.publicId === photo.publicId
+                            );
+                            if (photoIndexInEvent !== -1) {
+                                openLightbox(photoIndexInEvent);
+                            }
+                        }, 500);
+                    }
+                });
+
+                gridContainer.appendChild(item);
+            });
+
+            // Add intersection observer for lazy animation
+            observeAllPhotosItems();
+        }
+
+        // Add entrance animation to photo items
+        function observeAllPhotosItems() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 50); // Staggered animation
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.all-photo-item').forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+                observer.observe(item);
+            });
+        }
+
         function renderCurrentEvent() {
             const event = state.filteredEvents[state.currentEventIndex];
             if (!event) return;
 
-            // Update hero image - gunakan foto featured dari Cloudinary atau fallback
-            let heroUrl;
-            if (event.featuredPhoto && event.photos.length > 0) {
-                // Gunakan foto pertama atau featured photo
-                const featuredPhotoId = event.featuredPhoto || (event.photos[0]?.publicId);
-                if (featuredPhotoId) {
-                    heroUrl = getFeaturedUrl(featuredPhotoId);
-                } else {
-                    heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
-                }
-            } else {
-                heroUrl = `https://picsum.photos/seed/${event.id}/1920/1080`;
-            }
-            
-            elements.heroImage.src = heroUrl;
-            elements.heroImage.alt = event.title;
-            
-            // Handle image load error
-            elements.heroImage.onerror = () => {
-                elements.heroImage.src = `https://picsum.photos/seed/${event.id}/1920/1080`;
-            };
+            // START HERO SLIDESHOW with all photos from all events
+            startHeroSlideshow();
 
             // Update featured section
             elements.eventNumber.textContent = String(state.currentEventIndex + 1).padStart(2, '0');
@@ -3089,10 +3526,12 @@
             
             // Featured image - gunakan foto asli dari Cloudinary
             let featuredUrl;
-            if (event.featuredPhoto) {
+            if (event.featuredPhoto && event.featuredPhoto.includes('/')) {
                 featuredUrl = getFeaturedUrl(event.featuredPhoto);
-            } else if (event.photos.length > 0 && event.photos[0].publicId) {
+            } else if (event.photos.length > 0 && event.photos[0].publicId && event.photos[0].publicId.includes('/')) {
                 featuredUrl = getFeaturedUrl(event.photos[0].publicId);
+            } else if (event.photos.length > 0 && event.photos[0].secureUrl) {
+                featuredUrl = event.photos[0].secureUrl.replace('/upload/', '/upload/w_1600,h_900,q_auto:good,c_fill/');
             } else {
                 featuredUrl = `https://picsum.photos/seed/${event.id}-featured/1600/900`;
             }
@@ -3100,6 +3539,7 @@
             elements.featuredImage.src = featuredUrl;
             elements.featuredImage.alt = event.title;
             elements.featuredImage.onerror = () => {
+                elements.featuredImage.onerror = null;
                 elements.featuredImage.src = `https://picsum.photos/seed/${event.id}-featured/1600/900`;
             };
             
@@ -3156,6 +3596,9 @@
             // Reset current photo index
             state.currentPhotoIndex = 0;
             updateGalleryState();
+
+            // Render ALL photos grid for homepage (shows all photos from all events)
+            renderAllPhotosGrid();
         }
         
         // Show empty gallery state
