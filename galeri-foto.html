@@ -1862,6 +1862,38 @@
             color: white;
         }
 
+        .btn-edit-event:hover:not(:disabled) {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        /* Event Action Buttons Container */
+        .event-action-btns {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Edit Mode Indicator */
+        .edit-mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+
+        .edit-mode-indicator svg {
+            width: 16px;
+            height: 16px;
+        }
+
         .event-info-bar {
             display: flex;
             gap: 1.5rem;
@@ -3057,12 +3089,20 @@
                                 <select class="form-select" id="manageEventSelect" style="flex: 1;">
                                     <option value="">-- Pilih Kegiatan --</option>
                                 </select>
-                                <button class="btn-icon btn-delete-event" id="deleteEventBtn" title="Hapus Kegiatan Ini" disabled>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="3 6 5 6 21 6"/>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                    </svg>
-                                </button>
+                                <div class="event-action-btns">
+                                    <button class="btn-icon btn-edit-event" id="editEventBtn" title="Edit Kegiatan Ini" disabled>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon btn-delete-event" id="deleteEventBtn" title="Hapus Kegiatan Ini" disabled>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
@@ -3510,6 +3550,7 @@
             // Manage Events Elements
             eventCountBadge: document.getElementById('eventCountBadge'),
             deleteEventBtn: document.getElementById('deleteEventBtn'),
+            editEventBtn: document.getElementById('editEventBtn'),
             eventInfoBar: document.getElementById('eventInfoBar'),
             infoDate: document.getElementById('infoDate'),
             infoLocation: document.getElementById('infoLocation'),
@@ -5194,6 +5235,13 @@
                 });
             }
 
+            // Edit event button
+            if (elements.editEventBtn) {
+                elements.editEventBtn.addEventListener('click', () => {
+                    handleEditEvent();
+                });
+            }
+
             // Initialize event dropdowns and count
             populateAllEventDropdowns();
             updateEventCountBadge();
@@ -5214,8 +5262,13 @@
             if (elements.newEventDescription) elements.newEventDescription.value = '';
         }
 
-        // Handle adding new event
+        // Handle adding new event (or updating if in edit mode)
         function handleAddNewEvent() {
+            // Check if we're in edit mode
+            if (state.editingEventId) {
+                handleUpdateEvent();
+                return;
+            }
             const title = elements.newEventTitle?.value.trim();
             const subtitle = elements.newEventSubtitle?.value.trim();
             const date = elements.newEventDate?.value;
@@ -5325,6 +5378,7 @@
             // Remove event from state
             const eventIndex = state.events.findIndex(e => e.id === eventId);
             if (eventIndex !== -1) {
+                const deletedTitle = event.title;
                 state.events.splice(eventIndex, 1);
                 state.filteredEvents = [...state.events];
 
@@ -5336,21 +5390,277 @@
                 // Save changes
                 saveEventsToStorage();
 
-                console.log('🗑️ Event deleted:', event.title);
+                console.log('🗑️ Event deleted:', deletedTitle);
 
-                showToast(`🗑️ Kegiatan "${event.title}" telah dihapus`, 'info');
+                showToast(`🗑️ Kegiatan "${deletedTitle}" telah dihapus permanen`, 'error');
 
                 // Update UI
                 populateAllEventDropdowns();
                 updateEventCountBadge();
                 
-                // Clear manage grid
+                // Clear manage grid and disable buttons
                 if (elements.manageGrid) elements.manageGrid.innerHTML = '';
                 if (elements.eventInfoBar) elements.eventInfoBar.classList.add('hidden');
                 if (elements.deleteEventBtn) elements.deleteEventBtn.disabled = true;
+                if (elements.editEventBtn) elements.editEventBtn.disabled = true;
+
+                // If in edit mode, exit it
+                if (state.editingEventId) {
+                    exitEditMode();
+                }
 
                 // Re-render gallery
                 renderCurrentEvent();
+            }
+        }
+
+        // ============================================
+        // EDIT EVENT FUNCTIONALITY
+        // ============================================
+        
+        // Track if we're in edit mode
+        state.editingEventId = null;
+
+        // Handle edit event - opens form with existing data
+        function handleEditEvent() {
+            const eventId = elements.manageEventSelect?.value;
+            
+            if (!eventId) return;
+
+            const event = state.events.find(e => e.id === eventId);
+            if (!event) return;
+
+            console.log('✏️ Editing event:', event.title);
+
+            // Set editing mode
+            state.editingEventId = eventId;
+
+            // Show the add event form section
+            if (elements.addEventForm) {
+                elements.addEventForm.classList.remove('hidden');
+                
+                // Add edit mode indicator if not exists
+                let indicator = document.getElementById('editModeIndicator');
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.id = 'editModeIndicator';
+                    indicator.className = 'edit-mode-indicator';
+                    indicator.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <span>Mode Edit: Mengubah data kegiatan "<strong id="editingEventName">${event.title}</strong>"</span>
+                        <button onclick="exitEditMode()" style="margin-left: auto; background: none; border: none; cursor: pointer; color: #92400e;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    `;
+                    elements.addEventForm.parentNode.insertBefore(indicator, elements.addEventForm);
+                } else {
+                    indicator.classList.remove('hidden');
+                    document.getElementById('editingEventName').textContent = event.title;
+                }
+            }
+
+            // Pre-fill form with existing event data
+            if (elements.newEventTitle) elements.newEventTitle.value = event.title;
+            if (elements.newEventSubtitle) elements.newEventSubtitle.value = event.subtitle || '';
+            if (elements.newEventLocation) elements.newEventLocation.value = event.location || '';
+            if (elements.newEventYear) elements.newEventYear.value = event.year || '';
+            if (elements.newEventCategory) elements.newEventCategory.value = event.category || '';
+            if (elements.newEventDescription) elements.newEventDescription.value = event.description || '';
+            
+            // Convert formatted date back to input format (YYYY-MM-DD)
+            if (elements.newEventDate && event.date) {
+                try {
+                    // Try to parse Indonesian date format
+                    const dateStr = event.date;
+                    const months = {
+                        'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
+                        'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
+                        'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+                    };
+                    
+                    // Format: "DD Bulan YYYY"
+                    const parts = dateStr.split(' ');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = months[parts[1]] || '01';
+                        const year = parts[2];
+                        elements.newEventDate.value = `${year}-${month}-${day}`;
+                    }
+                } catch (e) {
+                    console.warn('Could not parse date for editing:', e);
+                    elements.newEventDate.value = '';
+                }
+            }
+
+            // Change submit button text
+            if (elements.addEventSubmitBtn) {
+                elements.addEventSubmitBtn.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                        Update Kegiatan
+                `;
+                elements.addEventSubmitBtn.style.background = '#2563eb';
+            }
+
+            // Change toggle button text
+            if (elements.toggleAddEventForm) {
+                elements.toggleAddEventForm.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    Batal Edit
+                `;
+                elements.toggleAddEventForm.style.background = '#fef2f2';
+                elements.toggleAddEventForm.style.color = '#dc2626';
+                elements.toggleAddEventForm.style.borderColor = '#fecaca';
+            }
+
+            // Scroll to form
+            elements.addEventForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            showToast(`✏️ Mode edit aktif untuk "${event.title}". Ubah data yang diinginkan lalu klik "Update Kegiatan"`, 'info');
+        }
+
+        // Exit edit mode
+        function exitEditMode() {
+            state.editingEventId = null;
+
+            // Hide indicator
+            const indicator = document.getElementById('editModeIndicator');
+            if (indicator) {
+                indicator.classList.add('hidden');
+            }
+
+            // Reset form
+            resetAddEventForm();
+
+            // Hide form
+            if (elements.addEventForm) {
+                elements.addEventForm.classList.add('hidden');
+            }
+
+            // Restore buttons
+            if (elements.addEventSubmitBtn) {
+                elements.addEventSubmitBtn.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Simpan Kegiatan
+                `;
+                elements.addEventSubmitBtn.style.background = '';
+            }
+
+            if (elements.toggleAddEventForm) {
+                elements.toggleAddEventForm.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Tambah Kegiatan Baru
+                `;
+                elements.toggleAddEventForm.style.background = '';
+                elements.toggleAddEventForm.style.color = '';
+                elements.toggleAddEventForm.style.borderColor = '';
+            }
+
+            showToast('❌ Mode edit dibatalkan', 'info');
+        }
+
+        // Handle update event (save edited data)
+        function handleUpdateEvent() {
+            if (!state.editingEventId) {
+                showToast('⚠️ Tidak ada kegiatan yang sedang diedit', 'error');
+                return;
+            }
+
+            const eventIndex = state.events.findIndex(e => e.id === state.editingEventId);
+            if (eventIndex === -1) {
+                showToast('⚠️ Kegiatan tidak ditemukan', 'error');
+                return;
+            }
+
+            const event = state.events[eventIndex];
+
+            // Get form values
+            const title = elements.newEventTitle?.value.trim();
+            const subtitle = elements.newEventSubtitle?.value.trim();
+            const date = elements.newEventDate?.value;
+            const location = elements.newEventLocation?.value.trim();
+            const year = elements.newEventYear?.value;
+            const category = elements.newEventCategory?.value;
+            const description = elements.newEventDescription?.value.trim();
+
+            // Validation
+            if (!title || !date || !location || !year || !category) {
+                showToast('⚠️ Mohon lengkapi semua field yang wajib (*)', 'error');
+                
+                // Highlight empty required fields
+                if (!title) elements.newEventTitle.style.borderColor = '#dc2626';
+                if (!date) elements.newEventDate.style.borderColor = '#dc2626';
+                if (!location) elements.newEventLocation.style.borderColor = '#dc2626';
+                if (!year) elements.newEventYear.style.borderColor = '#dc2626';
+                if (!category) elements.newEventCategory.style.borderColor = '#dc2626';
+                
+                return;
+            }
+
+            // Format date to Indonesian format
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // Store old title for toast message
+            const oldTitle = event.title;
+
+            // Update event data
+            event.title = title;
+            event.subtitle = subtitle || '';
+            event.date = formattedDate;
+            event.location = location;
+            event.year = year;
+            event.category = category;
+            event.description = description || `Kegiatan ${title} yang diselenggarakan di ${location}.`;
+            event.folder = `${CLOUDINARY_CONFIG.baseFolder}/${year}/${category}/${title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+            event.updatedAt = new Date().toISOString();
+
+            // Save to localStorage
+            saveEventsToStorage();
+
+            console.log('✅ Event updated:', event);
+
+            showToast(`💾 Kegiatan berhasil diupdate: "${oldTitle}" → "${title}"`, 'success');
+
+            // Exit edit mode
+            exitEditMode();
+
+            // Update all dropdowns and re-render
+            populateAllEventDropdowns();
+            updateEventCountBadge();
+            renderCurrentEvent();
+
+            // Re-select the updated event in manage dropdown
+            if (elements.manageEventSelect) {
+                elements.manageEventSelect.value = event.id;
+                // Refresh the info bar
+                showEventInfo(event.id);
+                // Re-render photos if any
+                if (event.photos && event.photos.length > 0) {
+                    renderManageGrid(event.photos);
+                }
             }
         }
 
@@ -5418,14 +5728,21 @@
             if (elements.infoLocation) elements.infoLocation.textContent = event.location;
             if (elements.infoPhotoCount) elements.infoPhotoCount.textContent = event.photoCount || event.photos?.length || 0;
 
-            // Enable delete button
+            // Enable delete and edit buttons
             if (elements.deleteEventBtn) {
                 elements.deleteEventBtn.disabled = false;
+            }
+            if (elements.editEventBtn) {
+                elements.editEventBtn.disabled = false;
             }
         }
 
         // Hide event info bar
         function hideEventInfo() {
+            // Disable action buttons
+            if (elements.deleteEventBtn) elements.deleteEventBtn.disabled = true;
+            if (elements.editEventBtn) elements.editEventBtn.disabled = true;
+            
             if (elements.eventInfoBar) {
                 elements.eventInfoBar.classList.add('hidden');
             }
