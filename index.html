@@ -1007,83 +1007,42 @@ document.addEventListener('DOMContentLoaded', function(){
   'use strict';
 
   // ===== CONFIG =====
-  const COUNTER_NS = 'timkersdmk-kukar-v3';
-  const API_BASE = 'https://api.counterapi.dev/v1/' + COUNTER_NS;
-  const GEO_API = 'https://ipapi.co/json/';
-  const FLAG_CDN = 'https://flagcdn.com/w40/';
-  const HEARTBEAT_MS = 30000;
-
-  // ===== HELPERS =====
-  const todayKey = () => 'day-' + new Date().toISOString().slice(0, 10);
-  const monthKey = () => 'month-' + new Date().toISOString().slice(0, 7);
-  const sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
-
-  async function counterGet(key) {
-    try {
-      const r = await fetch(API_BASE + '/' + key);
-      if (!r.ok) return 0;
-      const d = await r.json();
-      return d.count || 0;
-    } catch (e) { return 0; }
-  }
-
-  async function counterUp(key) {
-    try {
-      const r = await fetch(API_BASE + '/' + key + '/up', { method: 'POST' });
-      if (!r.ok) return null;
-      const d = await r.json();
-      return d.count;
-    } catch (e) { return null; }
-  }
+  var API_URL = 'api/visitors.php';
+  var GEO_API = 'https://ip-api.com/json/?fields=status,country_code,country_name,city,regionName';
+  var FLAG_CDN = 'https://flagcdn.com/w40/';
+  var sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
 
   // ===== GEOLOCATION =====
-  let visitorCountry = null;
+  var visitorCountry = null;
 
-  async function fetchGeo() {
-    try {
-      const r = await fetch(GEO_API);
-      if (!r.ok) throw new Error('Geo API failed');
-      const data = await r.json();
-      visitorCountry = {
-        code: (data.country_code || 'XX').toLowerCase(),
-        name: data.country_name || 'Unknown',
-        city: data.city || '',
-        region: data.region || ''
-      };
-      const el = document.getElementById('v-your-location');
-      if (el && visitorCountry.name !== 'Unknown') {
-        el.textContent = visitorCountry.city + ', ' + visitorCountry.region + ', ' + visitorCountry.name;
-      } else if (el) {
-        el.textContent = 'Tidak terdeteksi';
-      }
-    } catch (e) {
-      const el = document.getElementById('v-your-location');
-      if (el) el.textContent = 'Tidak dapat mengambil lokasi';
-    }
+  function fetchGeo() {
+    return fetch(GEO_API)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status === 'success') {
+          visitorCountry = {
+            code: (data.country_code || 'XX').toLowerCase(),
+            name: data.country_name || 'Unknown',
+            city: data.city || '',
+            region: data.regionName || ''
+          };
+          var el = document.getElementById('v-your-location');
+          if (el) el.textContent = visitorCountry.city + ', ' + visitorCountry.region + ', ' + visitorCountry.name;
+        } else {
+          setUnknownLocation();
+        }
+      })
+      .catch(function() { setUnknownLocation(); });
   }
 
-  // ===== COUNTRY DATA STORAGE =====
-  // We store country visit counts in a JSON string inside a counter key
-  const COUNTER_API_URL = 'https://api.counterapi.dev/v1/' + COUNTER_NS + '/countries';
-
-  async function getCountryData() {
-    try {
-      const r = await fetch(COUNTER_API_URL);
-      if (!r.ok) return {};
-      const d = await r.json();
-      // counterapi stores numbers; we use a separate approach
-      // Check if metadata contains our JSON
-      if (d.metadata && typeof d.metadata === 'string') {
-        try { return JSON.parse(d.metadata); } catch(e) {}
-      }
-      return {};
-    } catch (e) {
-      return {};
-    }
+  function setUnknownLocation() {
+    visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' };
+    var el = document.getElementById('v-your-location');
+    if (el) el.textContent = 'Tidak dapat mengambil lokasi';
   }
 
-  // Country name mapping
-  const COUNTRY_NAMES = {
+  // ===== COUNTRY NAME MAPPING =====
+  var COUNTRY_NAMES = {
     id: 'Indonesia', us: 'Amerika Serikat', sg: 'Singapura', my: 'Malaysia',
     jp: 'Jepang', kr: 'Korea Selatan', cn: 'Tiongkok', in: 'India',
     au: 'Australia', gb: 'Inggris', de: 'Jerman', fr: 'Prancis',
@@ -1108,29 +1067,29 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ===== RENDER COUNTRY LIST =====
   function renderCountries(data) {
-    const container = document.getElementById('country-list');
-    const countEl = document.getElementById('v-country-count');
+    var container = document.getElementById('country-list');
+    var countEl = document.getElementById('v-country-count');
     if (!container) return;
 
-    const sorted = Object.entries(data)
-      .filter(([_, v]) => v > 0)
-      .sort((a, b) => b[1] - a[1]);
+    var entries = Object.keys(data).map(function(k) { return [k, data[k]]; });
+    var sorted = entries.filter(function(e) { return e[1] > 0; }).sort(function(a, b) { return b[1] - a[1]; });
 
     if (sorted.length === 0) {
       container.innerHTML = '<div class="country-loading"><p class="text-muted">Belum ada data negara</p></div>';
       return;
     }
 
-    const totalCountryVisits = sorted.reduce((s, [_, v]) => s + v, 0);
-    const maxVisits = sorted[0][1];
-
+    var totalVisits = 0;
+    for (var i = 0; i < sorted.length; i++) totalVisits += sorted[i][1];
     if (countEl) countEl.textContent = sorted.length + ' negara';
 
-    let html = '';
-    sorted.forEach(([code, visits]) => {
-      const barPct = Math.max(Math.round((visits / totalCountryVisits) * 100), 2);
-      const flagUrl = FLAG_CDN + code + '.png';
-      const name = getCountryName(code);
+    var html = '';
+    for (var j = 0; j < sorted.length; j++) {
+      var code = sorted[j][0];
+      var visits = sorted[j][1];
+      var barPct = Math.max(Math.round((visits / totalVisits) * 100), 2);
+      var flagUrl = FLAG_CDN + code + '.png';
+      var name = getCountryName(code);
 
       html += '<div class="country-item">' +
         '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display=void 0">' +
@@ -1144,8 +1103,7 @@ document.addEventListener('DOMContentLoaded', function(){
           '</div>' +
         '</div>' +
       '</div>';
-    });
-
+    }
     container.innerHTML = html;
   }
 
@@ -1153,12 +1111,12 @@ document.addEventListener('DOMContentLoaded', function(){
   function animateNumber(el, target, duration) {
     duration = duration || 1200;
     if (!el) return;
-    const startTime = performance.now();
+    var startTime = performance.now();
     function step(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(target * ease);
+      var elapsed = now - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(target * ease);
       el.textContent = current.toLocaleString('id-ID');
       if (progress < 1) requestAnimationFrame(step);
     }
@@ -1167,102 +1125,70 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ===== SET DATE LABELS =====
   function setDateLabels() {
-    const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-    const now = new Date();
-    const todayEl = document.getElementById('v-today-date');
-    const monthEl = document.getElementById('v-month-date');
+    var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    var now = new Date();
+    var todayEl = document.getElementById('v-today-date');
+    var monthEl = document.getElementById('v-month-date');
     if (todayEl) todayEl.textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
     if (monthEl) monthEl.textContent = months[now.getMonth()] + ' ' + now.getFullYear();
   }
 
-  // ===== ONLINE HEARTBEAT =====
-  let heartbeatTimer = null;
-  let onlineInterval = null;
-
-  function goOnline() {
-    // Register this session
-    fetch(API_BASE + '/online-' + sessionId + '/up', { method: 'POST' }).catch(function(){});
+  // ===== HEARTBEAT (update online setiap 60 detik) =====
+  var heartbeatTimer = null;
+  function startHeartbeat() {
     heartbeatTimer = setInterval(function() {
-      fetch(API_BASE + '/online-' + sessionId + '/up', { method: 'POST' }).catch(function(){});
-    }, HEARTBEAT_MS);
-  }
-
-  function goOffline() {
-    if (heartbeatTimer) {
-      clearInterval(heartbeatTimer);
-      heartbeatTimer = null;
-    }
+      fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ sessionId: sessionId, countryCode: visitorCountry ? visitorCountry.code : 'id' }) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success) {
+            var el = document.getElementById('v-online');
+            if (el) el.textContent = d.onlineCount.toLocaleString('id-ID');
+          }
+        })
+        .catch(function() {});
+    }, 60000);
   }
 
   // ===== MAIN INIT =====
-  async function init() {
+  function init() {
     setDateLabels();
 
-    // 1. Fetch geolocation first
-    await fetchGeo();
+    var countryCode = visitorCountry ? visitorCountry.code : 'id';
 
-    // 2. Increment all counters in parallel
-    const results = await Promise.all([
-      counterUp('total'),
-      counterUp(todayKey()),
-      counterUp(monthKey())
-    ]);
-
-    const total = results[0] || 1;
-    const today = results[1] || 1;
-    const month = results[2] || 1;
-
-    // 3. Update country tracking
-    if (visitorCountry && visitorCountry.code !== 'xx') {
-      try {
-        const countryData = await getCountryData();
-        const code = visitorCountry.code;
-        countryData[code] = (countryData[code] || 0) + 1;
-        renderCountries(countryData);
-        // Try to persist - best effort
-        await fetch(COUNTER_API_URL + '/set', {
-          method: 'POST'
-        }).catch(function(){});
-      } catch (e) {
-        renderCountries({ [visitorCountry.code]: 1 });
+    // Kirim kunjungan ke server
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: sessionId, countryCode: countryCode })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) {
+        animateNumber(document.getElementById('v-online'), d.onlineCount);
+        animateNumber(document.getElementById('v-today'), d.todayCount);
+        animateNumber(document.getElementById('v-month'), d.monthCount);
+        animateNumber(document.getElementById('v-total'), d.totalCount);
+        renderCountries(d.countries || {});
+        startHeartbeat();
       }
-    }
-
-    // 4. Animate stat numbers
-    animateNumber(document.getElementById('v-total'), total);
-    animateNumber(document.getElementById('v-today'), today);
-    animateNumber(document.getElementById('v-month'), month);
-
-    // 5. Online visitors - estimate with random seed for demo realism
-    const onlineBase = Math.max(1, Math.floor(Math.random() * 4) + 1);
-    const onlineEl = document.getElementById('v-online');
-    if (onlineEl) {
-      animateNumber(onlineEl, onlineBase, 800);
-      // Simulate slight fluctuation for realism
-      onlineInterval = setInterval(function() {
-        const current = parseInt(onlineEl.textContent.replace(/\./g, '')) || 1;
-        const delta = Math.random() > 0.5 ? 1 : (current > 1 ? -1 : 0);
-        const newVal = Math.max(1, current + delta);
-        animateNumber(onlineEl, newVal, 500);
-      }, 12000);
-    }
-
-    // 6. Start heartbeat
-    goOnline();
+    })
+    .catch(function() {
+      // Jika API gagal, tampilkan 0
+      animateNumber(document.getElementById('v-online'), 0);
+      animateNumber(document.getElementById('v-today'), 0);
+      animateNumber(document.getElementById('v-month'), 0);
+      animateNumber(document.getElementById('v-total'), 0);
+    });
   }
 
-  // Cleanup
-  window.addEventListener('beforeunload', goOffline);
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) { goOffline(); } else { goOnline(); }
+  // Start: deteksi lokasi dulu, lalu init
+  fetchGeo().then(function() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   });
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
 })();
 </script>
 
