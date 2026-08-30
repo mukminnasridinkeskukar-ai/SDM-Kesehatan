@@ -1,4 +1,6 @@
-<html lang="id"><head>
+<!DOCTYPE html>
+<html lang="id">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeri Kegiatan | Dokumentasi Dinas Kesehatan</title>
@@ -22,12 +24,12 @@
     <meta name="twitter:description" content="Dokumentasi Foto Kegiatan Dinas Kesehatan">
     
     <!-- Favicon - Inline SVG -->
-    <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;🏥&lt;/text&gt;&lt;/svg&gt;">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* ============================================
@@ -1270,7 +1272,7 @@
             z-index: 9000;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(8px);
-            display: none;
+            display: none !important;  /* KRITIS: Pastikan tersembunyi default */
             align-items: center;
             justify-content: center;
             padding: 24px;
@@ -1279,8 +1281,17 @@
         }
         
         .modal-overlay.active {
-            display: flex;
+            display: flex !important;  /* Hanya tampil saat ada class active */
             opacity: 1;
+        }
+        
+        /* Extra safety: Admin Modal khusus */
+        #adminModal {
+            display: none !important;
+        }
+        
+        #adminModal.active {
+            display: flex !important;
         }
         
         .modal {
@@ -2069,7 +2080,7 @@
     ============================================ -->
     
     <!-- Header / Navigation -->
-    <header class="header scrolled" id="header" role="banner">
+    <header class="header" id="header" role="banner">
         <div class="header-container">
             <a href="#" class="logo" onclick="showHome(); return false;">
                 <div class="logo-icon">🏥</div>
@@ -2139,15 +2150,15 @@
                     
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statEvents">1</div>
+                            <div class="hero-stat-value" id="statEvents">0</div>
                             <div class="hero-stat-label">Total Kegiatan</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statPhotos">20</div>
+                            <div class="hero-stat-value" id="statPhotos">0</div>
                             <div class="hero-stat-label">Total Foto</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statYears">1</div>
+                            <div class="hero-stat-value" id="statYears">0</div>
                             <div class="hero-stat-label">Tahun Aktif</div>
                         </div>
                     </div>
@@ -2182,30 +2193,9 @@
                     </div>
                     
                     <!-- Gallery Grid -->
-                    <div class="gallery-grid" id="galleryGrid"><div class="event-card" style="animation-delay: 0s;">
-                <div class="card-image-wrapper">
-                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_xq7f6f" alt="Pelatihan Pengelolaan Limbah Fasyankes" class="card-image" loading="lazy">
-                    <span class="card-badge">Pelatihan</span>
-                    <span class="card-photo-count">📸 20 foto</span>
-                    <div class="card-overlay">
-                        <button class="card-btn">Lihat Galeri →</button>
+                    <div class="gallery-grid" id="galleryGrid">
+                        <!-- Cards will be rendered by JavaScript -->
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-category">Pelatihan</div>
-                    <h3 class="card-title">Pelatihan Pengelolaan Limbah Fasyankes</h3>
-                    <div class="card-meta">
-                        <span class="card-meta-item">
-                            <span class="card-meta-icon">📅</span>
-                            18 Agustus 2026
-                        </span>
-                        <span class="card-meta-item">
-                            <span class="card-meta-icon">📍</span>
-                            UPTD Bapelkes Kaltim
-                        </span>
-                    </div>
-                </div>
-            </div></div>
                 </div>
             </section>
             
@@ -2307,7 +2297,7 @@
                     <h4 class="footer-title">Informasi</h4>
                     <ul class="footer-links">
                         <li><a href="#">Kebijakan Privasi</a></li>
-                        <li><a href="#">Syarat &amp; Ketentuan</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
                         <li><a href="#">Hubungi Kami</a></li>
                     </ul>
                 </div>
@@ -2337,19 +2327,19 @@
     </div>
 
     <!-- Admin Modal -->
-    <div class="modal-overlay active" id="adminModal">
+    <div class="modal-overlay" id="adminModal">
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
             <div class="modal-header">
                 <h2 class="modal-title" id="modalTitle">
-                    <span id="modalIcon">👨‍💼</span>
-                    <span id="modalTitleText">Admin Dashboard</span>
+                    <span id="modalIcon">🔐</span>
+                    <span id="modalTitleText">Login Admin</span>
                 </h2>
                 <button class="modal-close" onclick="closeAdminModal()">✕</button>
             </div>
             
             <div class="modal-body">
                 <!-- Login Form -->
-                <div class="login-form" id="loginForm" style="display: none;">
+                <div class="login-form" id="loginForm">
                     <div class="login-logo">
                         <div class="login-logo-icon">🏥</div>
                         <div class="login-logo-text">Panel Admin</div>
@@ -2367,7 +2357,7 @@
                     </div>
                     
                     <p class="form-hint" style="text-align: center; margin-bottom: 24px;">
-                        
+                        💡 Default: admin / admin123
                     </p>
                     
                     <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">
@@ -2376,52 +2366,42 @@
                 </div>
                 
                 <!-- Admin Dashboard -->
-                <div class="admin-dashboard active" id="adminDashboard" style="display: block;">
+                <div class="admin-dashboard" id="adminDashboard">
                     <!-- Stats Row -->
                     <div class="admin-stats">
                         <div class="stat-card">
                             <div class="stat-icon">📊</div>
-                            <div class="stat-value" id="adminStatEvents">1</div>
+                            <div class="stat-value" id="adminStatEvents">0</div>
                             <div class="stat-label">Total Kegiatan</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">📸</div>
-                            <div class="stat-value" id="adminStatPhotos">20</div>
+                            <div class="stat-value" id="adminStatPhotos">0</div>
                             <div class="stat-label">Total Foto</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">📁</div>
-                            <div class="stat-value" id="adminStatCategories">1</div>
+                            <div class="stat-value" id="adminStatCategories">0</div>
                             <div class="stat-label">Kategori</div>
                         </div>
                     </div>
                     
                     <!-- Tabs -->
                     <div class="admin-tabs">
-                        <button class="admin-tab" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+                        <button class="admin-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
                         <button class="admin-tab" data-tab="events" onclick="switchTab('events')">📋 Kegiatan</button>
-                        <button class="admin-tab active" data-tab="upload" onclick="switchTab('upload')">⬆️ Upload</button>
+                        <button class="admin-tab" data-tab="upload" onclick="switchTab('upload')">⬆️ Upload</button>
                         <button class="admin-tab" data-tab="export" onclick="switchTab('export')">📤 Export</button>
                     </div>
                     
                     <!-- Dashboard Tab -->
-                    <div class="tab-content" id="tab-dashboard">
+                    <div class="tab-content active" id="tab-dashboard">
                         <p style="color: var(--text-muted); margin-bottom: 20px;">
                             Selamat datang di panel administrasi. Kelola galeri kegiatan dari sini.
                         </p>
                         <div class="events-list" id="recentEventsList">
-                <div class="event-list-item">
-                    <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
-                    <div class="event-list-info">
-                        <div class="event-list-title">Pelatihan Pengelolaan Limbah Fasyankes</div>
-                        <div class="event-list-date">18 Agustus 2026 • 0 foto</div>
-                    </div>
-                    <div class="event-list-actions">
-                        <button class="action-btn" onclick="editEvent('event-1788070894705')" title="Edit">✏️</button>
-                        <button class="action-btn danger" onclick="deleteEvent('event-1788070894705')" title="Hapus">🗑️</button>
-                    </div>
-                </div>
-            </div>
+                            <!-- Recent events will be listed here -->
+                        </div>
                     </div>
                     
                     <!-- Events Tab -->
@@ -2476,38 +2456,32 @@
                         </div>
                         
                         <div class="events-list" id="allEventsList">
-                <div class="event-list-item">
-                    <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
-                    <div class="event-list-info">
-                        <div class="event-list-title">Pelatihan Pengelolaan Limbah Fasyankes</div>
-                        <div class="event-list-date">18 Agustus 2026 • 0 foto</div>
-                    </div>
-                    <div class="event-list-actions">
-                        <button class="action-btn" onclick="editEvent('event-1788070894705')" title="Edit">✏️</button>
-                        <button class="action-btn danger" onclick="deleteEvent('event-1788070894705')" title="Hapus">🗑️</button>
-                    </div>
-                </div>
-            </div>
+                            <!-- All events will be listed here -->
+                        </div>
                     </div>
                     
                     <!-- Upload Tab -->
-                    <div class="tab-content active" id="tab-upload">
+                    <div class="tab-content" id="tab-upload">
                         <div class="form-group">
                             <label class="form-label">Pilih Kegiatan</label>
-                            <select class="form-input" id="uploadEventSelect"><option value="">-- Pilih kegiatan --</option><option value="event-1788070894705">Pelatihan Pengelolaan Limbah Fasyankes</option></select>
+                            <select class="form-input" id="uploadEventSelect">
+                                <option value="">-- Pilih kegiatan --</option>
+                            </select>
                         </div>
                         
                         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
                             <div class="upload-icon">📁</div>
-                            <div class="upload-text">Drag &amp; drop file di sini</div>
+                            <div class="upload-text">Drag & drop file di sini</div>
                             <div class="upload-hint">atau klik untuk memilih file (JPG, PNG, WEBP - Max 10MB)</div>
-                            <input type="file" class="upload-input" id="fileInput" multiple="" accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect(event)">
+                            <input type="file" class="upload-input" id="fileInput" multiple accept="image/jpeg,image/png,image/webp" onchange="handleFileSelect(event)">
                         </div>
                         
-                        <div class="upload-preview" id="uploadPreview"></div>
+                        <div class="upload-preview" id="uploadPreview">
+                            <!-- Preview thumbnails will appear here -->
+                        </div>
                         
                         <div style="display: flex; gap: 12px; margin-top: 24px;">
-                            <button class="btn btn-primary" onclick="startUpload()" id="uploadBtn" disabled="">
+                            <button class="btn btn-primary" onclick="startUpload()" id="uploadBtn" disabled>
                                 ⬆️ Upload Foto
                             </button>
                             <button class="btn btn-secondary" onclick="clearUploadQueue()">
@@ -2520,10 +2494,10 @@
                             <div style="background: var(--bg-tertiary); border-radius: var(--radius-md); padding: 16px;">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                     <span style="font-size: 14px; font-weight: 500;">Progress Upload</span>
-                                    <span style="font-size: 14px; color: var(--primary);" id="uploadProgressText">100%</span>
+                                    <span style="font-size: 14px; color: var(--primary);" id="uploadProgressText">0%</span>
                                 </div>
                                 <div style="height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden;">
-                                    <div style="height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; width: 100%;" id="uploadProgressBar"></div>
+                                    <div style="height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s;" id="uploadProgressBar" style="width: 0%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -2568,11 +2542,7 @@
     </div>
 
     <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"><div class="toast success">
-                <span class="toast-icon">✅</span>
-                <span class="toast-message">✅ Berhasil upload 20 foto!</span>
-                <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
-            </div></div>
+    <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================
          JAVASCRIPT - MAIN APPLICATION LOGIC
@@ -2631,7 +2601,7 @@
         // Default credentials (ubah sesuai kebutuhan):
         const ADMIN_CREDENTIALS = {
             username: 'admin',
-            password: '@Aida2007'
+            password: 'admin123'
         };
         
         let isAdminLoggedIn = false;
@@ -2660,141 +2630,72 @@
         // - status: published/draft
         
         const EMBEDDED_EVENTS = [
-        {
-                "id": "event-1788070894705",
-                "title": "Pelatihan Pengelolaan Limbah Fasyankes",
-                "description": "Pelatihan Pengelolaan Limbah Fasyankes\nPeserta 30 orang (29 Puskesmas dan 1 RSUD)\nDilaksanakan dari tanggal 18-22 Agustus 2026",
-                "date": "2026-08-18",
-                "year": 2026,
-                "category": "pelatihan",
-                "location": "UPTD Bapelkes Kaltim",
-                "folder": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes",
-                "coverPhoto": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_xq7f6f",
-                "photos": [
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_xq7f6f",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070920/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_xq7f6f.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:01.894Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_2_fbcgfe",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070924/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_2_fbcgfe.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:06.302Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_3_e7xkji",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070927/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_3_e7xkji.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:07.979Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_4_ypn30k",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070928/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_4_ypn30k.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:10.467Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_5_xgmna6",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070931/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_5_xgmna6.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:12.811Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_6_evma7b",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070933/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_6_evma7b.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:14.185Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_7_acq2hk",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070934/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_7_acq2hk.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:15.672Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_8_sxhegf",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070938/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_8_sxhegf.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:19.591Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_9_eujakm",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070940/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_9_eujakm.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:21.246Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_10_ualcdg",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070942/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_10_ualcdg.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:22.441Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_11_m53oei",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070943/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_11_m53oei.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:23.530Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_12_ut1fo8",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070944/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_12_ut1fo8.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:24.980Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_13_xhkfoh",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070945/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_13_xhkfoh.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:26.412Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_14_1_gpevsl",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070947/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_14_1_gpevsl.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:27.884Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_14_amspnd",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070948/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_14_amspnd.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:29.414Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_15_hcu3rj",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070950/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_15_hcu3rj.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:31.207Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_16_eurkgk",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070952/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_16_eurkgk.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:33.443Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_17_kjhvuv",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070954/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_17_kjhvuv.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:34.761Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_18_zt1z5f",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070955/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_18_zt1z5f.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:36.237Z"
-                        },
-                        {
-                                "publicId": "galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_19_pmljbh",
-                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788070957/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_19_pmljbh.jpg",
-                                "caption": "",
-                                "uploadedAt": "2026-08-30T06:22:38.547Z"
-                        }
-                ],
-                "status": "published"
-        }
-];
+            {
+                id: 'event-001',
+                title: 'Pelatihan Tenaga Kesehatan Tingkat Provinsi',
+                description: 'Kegiatan pelatihan peningkatan kapasitas tenaga kesehatan dalam penanganan penyakit menular dan tidak menular. Diikuti oleh 150 peserta dari berbagai puskesmas se-provinsi.',
+                date: '2026-01-15',
+                year: 2026,
+                category: 'pelatihan',
+                location: 'Hotel Grand Permata, Jakarta',
+                folder: 'galeri-kegiatan/2026/pelatihan-kesehatan',
+                coverPhoto: null,
+                photos: [],
+                status: 'published'
+            },
+            {
+                id: 'event-002',
+                title: 'Seminar Nasional Kesehatan Reproduksi',
+                description: 'Seminar nasional membahas isu-isu terkini kesehatan reproduksi remaja dan upaya preventif yang dapat dilakukan oleh tenaga kesehatan.',
+                date: '2026-02-20',
+                year: 2026,
+                category: 'seminar',
+                location: 'Convention Center Dinkes',
+                folder: 'galeri-kegiatan/2026/seminar-kespro',
+                coverPhoto: null,
+                photos: [],
+                status: 'published'
+            },
+            {
+                id: 'event-003',
+                title: 'Sosialisasi Program JKN di Pasar Tradisional',
+                description: 'Kegiatan sosialisasi kepada masyarakat tentang pentingnya memiliki BPJS Kesehatan dan cara mendaftar program Jaminan Kesehatan Nasional.',
+                date: '2026-03-10',
+                year: 2026,
+                category: 'sosialisasi',
+                location: 'Pasar Induk Cibitung',
+                folder: 'galeri-kegiatan/2026/sosialisasi-jkn',
+                coverPhoto: null,
+                photos: [],
+                status: 'published'
+            },
+            {
+                id: 'event-004',
+                title: 'Rapat Koordinasi Bulanan Dinkes',
+                description: 'Rapat koordinasi rutin bulanan untuk evaluasi program kerja dan perencanaan kegiatan bulan berikutnya.',
+                date: '2026-04-05',
+                year: 2026,
+                category: 'rapat',
+                location: 'Ruang Rapat Utama Dinkes',
+                folder: 'galeri-kegiatan/2026/rapat-bulanan',
+                coverPhoto: null,
+                photos: [],
+                status: 'published'
+            },
+            {
+                id: 'event-005',
+                title: 'Workshop Digitalisasi Puskesmas',
+                description: 'Pelaksanaan workshop tentang implementasi sistem informasi kesehatan digital di tingkat puskesmas untuk meningkatkan efisiensi pelayanan.',
+                date: '2026-05-18',
+                year: 2026,
+                category: 'pelatihan',
+                location: 'Aula Teknologi Informasi',
+                folder: 'galeri-kegiatan/2026/workshop-digital',
+                coverPhoto: null,
+                photos: [],
+                status: 'published'
+            }
+        ];
         
         // Working copy of events data (mutable)
         let eventsData = [...EMBEDDED_EVENTS];
@@ -2827,10 +2728,18 @@
         });
         
         function initApp() {
+            // =====================================================
+            // KRITIS: Pastikan Admin Modal TERSEMBUNYI saat load
+            // =====================================================
+            forceHideAdminPanel();
+            
+            // Reset login state - user harus login manual
+            isAdminLoggedIn = false;
+            
             // Check URL hash for shared data
             checkURLForSharedData();
             
-            // Render initial gallery
+            // Render initial gallery (tampilan publik)
             updateStats();
             renderGallery();
             
@@ -2839,6 +2748,51 @@
             
             // Load saved theme
             loadTheme();
+            
+            // Pastikan tampilan publik aktif
+            ensurePublicViewActive();
+        }
+        
+        // Fungsi paksa untuk menyembunyikan admin panel
+        function forceHideAdminPanel() {
+            const adminModal = document.getElementById('adminModal');
+            const loginForm = document.getElementById('loginForm');
+            const adminDashboard = document.getElementById('adminDashboard');
+            
+            // Pastikan modal tersembunyi
+            if (adminModal) {
+                adminModal.classList.remove('active');
+                adminModal.style.display = 'none';
+            }
+            
+            // Pastikan login form tersembunyi saat init
+            if (loginForm) {
+                loginForm.style.display = 'none';
+            }
+            
+            // Pastikan dashboard tersembunyi saat init
+            if (adminDashboard) {
+                adminDashboard.classList.remove('active');
+                adminDashboard.style.display = 'none';
+            }
+            
+            console.log('[Init] Admin Panel disembunyikan - Mode Publik Aktif');
+        }
+        
+        // Pastikan tampilan publik yang aktif
+        function ensurePublicViewActive() {
+            const homeView = document.getElementById('homeView');
+            const mainContent = document.getElementById('main-content');
+            
+            if (homeView) {
+                homeView.style.display = 'block';
+            }
+            
+            if (mainContent) {
+                mainContent.style.display = 'block';
+            }
+            
+            console.log('[Init] Tampilan Publik Galeri ditampilkan');
         }
         
         function setupEventListeners() {
@@ -3223,16 +3177,36 @@
         // =====================================================
         
         function openLoginModal() {
-            document.getElementById('adminModal').classList.add('active');
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('adminDashboard').style.display = 'none';
+            const adminModal = document.getElementById('adminModal');
+            const loginForm = document.getElementById('loginForm');
+            const adminDashboard = document.getElementById('adminDashboard');
+            
+            // Tampilkan modal - override style.display yang mungkin di-set oleh forceHideAdminPanel
+            adminModal.classList.add('active');
+            adminModal.style.display = 'flex';  // Pastikan modal terlihat
+            
+            // Tampilkan form login, sembunyikan dashboard
+            loginForm.style.display = 'block';
+            adminDashboard.classList.remove('active');
+            adminDashboard.style.display = 'none';
+            
+            // Reset form
             document.getElementById('loginError').classList.remove('visible');
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
+            
+            // Update judul modal
+            document.getElementById('modalIcon').textContent = '🔐';
+            document.getElementById('modalTitleText').textContent = 'Login Admin';
+            
+            console.log('[Auth] Login Modal dibuka');
         }
         
         function closeAdminModal() {
-            document.getElementById('adminModal').classList.remove('active');
+            const adminModal = document.getElementById('adminModal');
+            adminModal.classList.remove('active');
+            adminModal.style.display = 'none';
+            console.log('[Auth] Modal ditutup');
         }
         
         function handleLogin() {
@@ -3919,6 +3893,5 @@
         // END OF APPLICATION
         // =====================================================
     </script>
-
-
-</body></html>
+</body>
+</html>
