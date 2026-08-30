@@ -3436,10 +3436,15 @@
             state.isLoading = true;
             showLoadingState();
             
-            // Try to load from storage first
-            const loaded = loadEventsFromStorage();
+            // Try to load from Cloudinary first (cloud-based backend)
+            console.log('🔄 Initializing data from Cloudinary...');
+            const loaded = await fetchEventsFromCloudinary();
             
-            if (!loaded) {
+            if (loaded && Array.isArray(loaded) && loaded.length > 0) {
+                state.events = loaded;
+                console.log('✅ Loaded', loaded.length, 'events from Cloudinary');
+            } else {
+                console.log('📝 No data on Cloudinary, initializing with defaults');
                 initializeDefaultEvents();
             }
             
