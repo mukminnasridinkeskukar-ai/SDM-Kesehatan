@@ -2146,7 +2146,7 @@
                     
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statEvents">2</div>
+                            <div class="hero-stat-value" id="statEvents">3</div>
                             <div class="hero-stat-label">Total Kegiatan</div>
                         </div>
                         <div class="hero-stat">
@@ -2232,6 +2232,34 @@
                         <span class="card-meta-item">
                             <span class="card-meta-icon">📍</span>
                             RSUD Aji Muhammad Parikesit
+                        </span>
+                    </div>
+                </div>
+            </div><div class="event-card" style="animation-delay: 0.2s;">
+                <div class="card-image-wrapper">
+                    
+                    <div class="card-image-placeholder">
+                        📷
+                        <span>Tidak ada foto</span>
+                    </div>
+                
+                    <span class="card-badge">Pelatihan</span>
+                    
+                    <div class="card-overlay">
+                        <button class="card-btn">Lihat Galeri →</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-category">Pelatihan</div>
+                    <h3 class="card-title">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</h3>
+                    <div class="card-meta">
+                        <span class="card-meta-item">
+                            <span class="card-meta-icon">📅</span>
+                            19 Juli 2026
+                        </span>
+                        <span class="card-meta-item">
+                            <span class="card-meta-icon">📍</span>
+                            Hotel Horison Samarinda
                         </span>
                     </div>
                 </div>
@@ -2393,11 +2421,11 @@
                     <div class="form-group">
                         <label class="form-label" for="password">Password</label>
                         <input type="password" class="form-input" id="password" placeholder="Masukkan password" autocomplete="current-password">
-                        <p class="form-error" id="loginError">Username atau password salah!</p>
+                        <p class="form-error visible" id="loginError">Username atau password salah!</p>
                     </div>
                     
                     <p class="form-hint" style="text-align: center; margin-bottom: 24px;">
-                        💡Khusus Admin SDM Kesehatan
+                        💡 
                     </p>
                     
                     <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">
@@ -2411,7 +2439,7 @@
                     <div class="admin-stats">
                         <div class="stat-card">
                             <div class="stat-icon">📊</div>
-                            <div class="stat-value" id="adminStatEvents">2</div>
+                            <div class="stat-value" id="adminStatEvents">3</div>
                             <div class="stat-label">Total Kegiatan</div>
                         </div>
                         <div class="stat-card">
@@ -2430,8 +2458,8 @@
                     <div class="admin-tabs">
                         <button class="admin-tab" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
                         <button class="admin-tab" data-tab="events" onclick="switchTab('events')">📋 Kegiatan</button>
-                        <button class="admin-tab active" data-tab="upload" onclick="switchTab('upload')">⬆️ Upload</button>
-                        <button class="admin-tab" data-tab="export" onclick="switchTab('export')">📤 Export</button>
+                        <button class="admin-tab" data-tab="upload" onclick="switchTab('upload')">⬆️ Upload</button>
+                        <button class="admin-tab active" data-tab="export" onclick="switchTab('export')">📤 Export</button>
                     </div>
                     
                     <!-- Dashboard Tab -->
@@ -2443,8 +2471,20 @@
                 <div class="event-list-item">
                     <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
                     <div class="event-list-info">
+                        <div class="event-list-title">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</div>
+                        <div class="event-list-date">19 Juli 2026 • 0 foto</div>
+                    </div>
+                    <div class="event-list-actions">
+                        <button class="action-btn" onclick="editEvent('event-1788092048133')" title="Edit">✏️</button>
+                        <button class="action-btn danger" onclick="deleteEvent('event-1788092048133')" title="Hapus">🗑️</button>
+                    </div>
+                </div>
+            
+                <div class="event-list-item">
+                    <img src="galeri-kegiatan/2026/pelatihan-peningkatan-kemahiran-berbahasa-indonesia-pada-pelayanan-publik-dan-media-sosial/IMG_20260813_152459_che6ds" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy">
+                    <div class="event-list-info">
                         <div class="event-list-title">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</div>
-                        <div class="event-list-date">13 Agustus 2026 • 0 foto</div>
+                        <div class="event-list-date">13 Agustus 2026 • 8 foto</div>
                     </div>
                     <div class="event-list-actions">
                         <button class="action-btn" onclick="editEvent('event-1788072935025')" title="Edit">✏️</button>
@@ -2521,8 +2561,20 @@
                 <div class="event-list-item">
                     <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
                     <div class="event-list-info">
+                        <div class="event-list-title">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</div>
+                        <div class="event-list-date">19 Juli 2026 • 0 foto</div>
+                    </div>
+                    <div class="event-list-actions">
+                        <button class="action-btn" onclick="editEvent('event-1788092048133')" title="Edit">✏️</button>
+                        <button class="action-btn danger" onclick="deleteEvent('event-1788092048133')" title="Hapus">🗑️</button>
+                    </div>
+                </div>
+            
+                <div class="event-list-item">
+                    <img src="galeri-kegiatan/2026/pelatihan-peningkatan-kemahiran-berbahasa-indonesia-pada-pelayanan-publik-dan-media-sosial/IMG_20260813_152459_che6ds" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
+                    <div class="event-list-info">
                         <div class="event-list-title">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</div>
-                        <div class="event-list-date">13 Agustus 2026 • 0 foto</div>
+                        <div class="event-list-date">13 Agustus 2026 • 8 foto</div>
                     </div>
                     <div class="event-list-actions">
                         <button class="action-btn" onclick="editEvent('event-1788072935025')" title="Edit">✏️</button>
@@ -2545,10 +2597,10 @@
                     </div>
                     
                     <!-- Upload Tab -->
-                    <div class="tab-content active" id="tab-upload">
+                    <div class="tab-content" id="tab-upload">
                         <div class="form-group">
                             <label class="form-label">Pilih Kegiatan</label>
-                            <select class="form-input" id="uploadEventSelect"><option value="">-- Pilih kegiatan --</option><option value="event-1788072935025">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</option><option value="event-1788072384526">Pelatihan Pengelolaan Limbah Fasyankes</option></select>
+                            <select class="form-input" id="uploadEventSelect"><option value="">-- Pilih kegiatan --</option><option value="event-1788092048133">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</option><option value="event-1788072935025">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</option><option value="event-1788072384526">Pelatihan Pengelolaan Limbah Fasyankes</option></select>
                         </div>
                         
                         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -2584,7 +2636,7 @@
                     </div>
                     
                     <!-- Export Tab -->
-                    <div class="tab-content" id="tab-export">
+                    <div class="tab-content active" id="tab-export">
                         <p style="color: var(--text-muted); margin-bottom: 24px;">
                             Export data galeri untuk backup atau berbagi dengan orang lain.
                         </p>
@@ -2622,11 +2674,7 @@
     </div>
 
     <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"><div class="toast success">
-                <span class="toast-icon">✅</span>
-                <span class="toast-message">✅ Berhasil upload 8 foto!</span>
-                <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
-            </div></div>
+    <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================
          JAVASCRIPT - MAIN APPLICATION LOGIC
@@ -2714,6 +2762,19 @@
         // - status: published/draft
         
         const EMBEDDED_EVENTS = [
+        {
+                "id": "event-1788092048133",
+                "title": "Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer",
+                "description": "19-24 Juli 2026",
+                "date": "2026-07-19",
+                "year": 2026,
+                "category": "pelatihan",
+                "location": "Hotel Horison Samarinda",
+                "folder": "galeri-kegiatan/2026/pelatihan-sumber-daya-manusia-sdm-bagi-tenaga-kesehatan-dalam-upaya-berhenti-merokok-ubm-di-fasilitas-pelayanan-kesehatan-primer",
+                "coverPhoto": null,
+                "photos": [],
+                "status": "published"
+        },
         {
                 "id": "event-1788072935025",
                 "title": "Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial",
