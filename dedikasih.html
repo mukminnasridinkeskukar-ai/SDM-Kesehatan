@@ -1,9 +1,39 @@
 <!DOCTYPE html>
+<html lang="id">
 <head>
+
+  <!-- PWA MANIFEST - Inline via Blob URL agar membuka sebagai platform dedicated/standalone -->
+  <script>
+    (function() {
+      var manifest = {
+        name: "DEDIKASIH - Digitalisasi Pengabdian Masyarakat",
+        short_name: "DEDIKASIH",
+        description: "Platform Digitalisasi Kegiatan Pengabdian Masyarakat SDM Kesehatan Dinas Kesehatan Kabupaten Kutai Kartanegara",
+        start_url: ".",
+        display: "standalone",
+        orientation: "any",
+        background_color: "#eae8e4",
+        theme_color: "#3a7070",
+        categories: ["government", "health", "productivity"],
+        icons: [{
+          src: "data:image/svg+xml," + encodeURIComponent('<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><defs><linearGradient id=\'fg\' x1=\'0%\' y1=\'0%\' x2=\'100%\' y2=\'100%\'><stop offset=\'0%\' stop-color=\'%233a7070\'/><stop offset=\'50%\' stop-color=\'%237a9a88\'/><stop offset=\'100%\' stop-color=\'%23a07818\'/></linearGradient></defs><rect width=\'512\' height=\'512\' rx=\'80\' fill=\'url(%23fg)\'/><text x=\'256\' y=\'340\' font-size=\'220\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\' font-weight=\'bold\'>D</text></svg>'),
+          sizes: "512x512",
+          type: "image/svg+xml",
+          purpose: "any maskable"
+        }]
+      };
+      var blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      var link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    })();
+  </script>
+
   <meta charset="UTF-8">
   
   <!-- ============================================ -->
-  <!-- RESPONSIVE META TAGS - Support ALL Devices -->
+  <!-- PWA STANDALONE MODE - Membuka sebagai platform dedicated, bukan browser/website -->
   <!-- ============================================ -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -6728,6 +6758,42 @@ function renderSertifikatTable() {
     window.addEventListener('popstate', function() {
       if(sidebarOpen) toggleSidebar();
     });
+
+    // ============================================
+    // SERVICE WORKER - Standalone/Offline Support
+    // Membuat platform DEDIKASIH berjalan sebagai app dedicated
+    // ============================================
+    if ('serviceWorker' in navigator) {
+      var swCode = `
+        var CACHE_NAME = 'dedikasih-v1';
+        var ASSETS = [self.location.origin + self.location.pathname];
+        self.addEventListener('install', function(e) {
+          e.waitUntil(caches.open(CACHE_NAME).then(function(c) { return c.addAll(ASSETS); }));
+          self.skipWaiting();
+        });
+        self.addEventListener('activate', function(e) {
+          e.waitUntil(caches.keys().then(function(ks) {
+            return Promise.all(ks.filter(function(k){return k!==CACHE_NAME}).map(function(k){return caches.delete(k)}));
+          }));
+          self.clients.claim();
+        });
+        self.addEventListener('fetch', function(e) {
+          e.respondWith(
+            caches.match(e.request).then(function(r) { return r || fetch(e.request).catch(function() { return caches.match(ASSETS[0]); }); })
+          );
+        });
+      `;
+      try {
+        var swBlob = new Blob([swCode], { type: 'application/javascript' });
+        var swUrl = URL.createObjectURL(swBlob);
+        navigator.serviceWorker.register(swUrl, { scope: '/' }).catch(function() {
+          // Blob SW tidak didukung di semua browser, fallback: tetap berjalan tanpa SW
+          console.log('[DEDIKASIH] Service Worker blob not supported, running without SW');
+        });
+      } catch(e) {
+        console.log('[DEDIKASIH] SW registration skipped:', e.message);
+      }
+    }
 
     // Start the app
     document.addEventListener('DOMContentLoaded', function() {
