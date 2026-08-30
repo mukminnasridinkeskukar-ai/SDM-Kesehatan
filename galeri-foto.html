@@ -2336,6 +2336,46 @@
             to { transform: rotate(360deg); }
         }
 
+        .export-btn, .import-btn, .generate-html-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: none;
+        }
+
+        .export-btn {
+            color: #059669;
+            background: rgba(5, 150, 105, 0.1);
+        }
+
+        .export-btn:hover {
+            background: rgba(5, 150, 105, 0.2);
+        }
+
+        .import-btn {
+            color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .import-btn:hover {
+            background: rgba(124, 58, 237, 0.2);
+        }
+
+        .generate-html-btn {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .generate-html-btn:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
         @media (max-width: 480px) {
             .login-container {
                 max-width: 100%;
@@ -2955,12 +2995,18 @@
                         <span id="sessionUsername">Admin</span>
                     </span>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
-                    <button class="sync-cloud-btn" id="syncCloudBtn" title="Sync data ke Cloudinary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
-                        </svg>
-                        Sync Cloud
-                    </button>
+                    <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                        <button class="export-btn" id="exportJSONBtn" title="Export Data JSON">
+                            📥 Export
+                        </button>
+                        <button class="import-btn" id="importJSONBtn" title="Import Data JSON">
+                            📤 Import
+                        </button>
+                        <button class="generate-html-btn" id="generateHTMLBtn" title="Generate HTML Universal">
+                            🌐 Generate HTML
+                        </button>
+                        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                    </div>
                 </div>
             </div>
             
@@ -3179,29 +3225,65 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================
-         JAVASCRIPT
+         JAVASCRIPT - UNIVERSAL GALLERY SYSTEM
+         Works from ANY browser, ANY device, NO backend needed!
     ============================================ -->
     <script>
         // ============================================
-        // CLOUDINARY CONFIGURATION (BACKEND)
+        // 🌍 UNIVERSAL GALLERY CONFIGURATION
+        // Data embedded in HTML - works everywhere!
         // ============================================
+        
         const CLOUDINARY_CONFIG = {
             cloudName: 'cla7jrww',
             uploadPreset: 'galeri_kegiatan',
             baseFolder: 'galeri-kegiatan',
-            
-            // 🆕 DATA STORAGE: TXT file di Cloudinary Raw Upload (JSON tidak diizinkan!)
-            dataFilePublicId: 'galeri-data/events.txt',
-            
-            // API Endpoints
             uploadApi: `https://api.cloudinary.com/v1_1/cla7jrww/auto/upload`,
-            
-            // CDN URLs untuk fetch data
-            dataFileUrl: `https://res.cloudinary.com/cla7jrww/raw/upload/galeri-data/events.txt`,
-            
-            // Base URL untuk gambar
             baseUrl: 'https://res.cloudinary.com/cla7jrww/image/upload'
         };
+        
+        // ============================================
+        // 📦 EMBEDDED EVENT DATA (Universal Access)
+        // This data is IN the HTML file - works offline!
+        // Edit this array to add/change events
+        // ============================================
+        const EMBEDDED_EVENTS = [
+            {
+                id: 'event-universal-1',
+                title: 'Pelatihan Kesehatan Masyarakat',
+                description: 'Kegiatan pelatihan peningkatan kapasitas tenaga kesehatan dalam pelayanan masyarakat',
+                date: '2026-01-15',
+                year: 2026,
+                category: 'pelatihan',
+                location: 'Dinas Kesehatan Provinsi',
+                folder: 'galeri-kegiatan/2026/pelatihan/pelatihan-kesehatan',
+                photos: [
+                    // Add your Cloudinary image public IDs here
+                    // Example: { id: 'photo-1', publicId: 'galeri-kegiatan/2026/pelatihan/foto1', caption: 'Foto kegiatan' }
+                ],
+                photoCount: 0,
+                featuredPhoto: null,
+                status: 'published',
+                createdAt: '2026-01-15T08:00:00Z',
+                updatedAt: '2026-01-15T08:00:00Z'
+            },
+            {
+                id: 'event-universal-2',
+                title: 'Sosialisasi Program Kesehatan',
+                description: 'Kegiatan sosialisasi program kesehatan kepada masyarakat luas',
+                date: '2026-01-10',
+                year: 2026,
+                category: 'sosialisasi',
+                location: 'Puskesmas Pembantu',
+                folder: 'galeri-kegiatan/2026/sosialisasi/sosialisasi-kesehatan',
+                photos: [],
+                photoCount: 0,
+                featuredPhoto: null,
+                status: 'published',
+                createdAt: '2026-01-10T08:00:00Z',
+                updatedAt: '2026-01-10T08:00:00Z'
+            }
+        ];
 
         // Generate Cloudinary URL with transformations
         function getCloudinaryUrl(publicId, options = {}) {
@@ -3237,192 +3319,168 @@
         }
 
         // ============================================
-        // CLOUDINARY BACKEND - DATA OPERATIONS
+        // 🌍 UNIVERSAL DATA MANAGEMENT SYSTEM
+        // Works from ANY browser - NO backend dependency!
         // ============================================
         
         /**
-         * FETCH DATA dari Cloudinary (JSON/TXT File)
-         * FALLBACK: Jika Cloudinary gagal, cek localStorage
+         * LOAD DATA - Universal Loader
+         * Priority: URL params > Embedded data > Default
          */
-        async function fetchEventsFromCloudinary() {
-            console.log('☁️ Fetching events from Cloudinary...');
-            console.log('   URL:', CLOUDINARY_CONFIG.dataFileUrl);
+        async function loadUniversalData() {
+            console.log('🌍 Loading Universal Gallery Data...');
             
-            try {
-                const response = await fetch(CLOUDINARY_CONFIG.dataFileUrl);
-                
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        console.log('📭 Data file not found on Cloudinary (404)');
-                    } else {
-                        console.warn('⚠️ Cloudinary error:', response.status, response.statusText);
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('✅ Successfully fetched', data.length, 'events from Cloudinary');
-                return data;
-                
-            } catch (error) {
-                console.warn('⚠️ Cannot fetch from Cloudinary:', error.message);
-                console.log('💾 Checking localStorage backup...');
-                
-                // FALLBACK: Cek localStorage
-                try {
-                    const backupData = localStorage.getItem('galeri_events_backup');
-                    if (backupData) {
-                        const parsed = JSON.parse(backupData);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            console.log('✅ Found', parsed.length, 'events in localStorage backup');
-                            showToast('ℹ️ Memuat data dari browser (backup)', 'info');
-                            return parsed;
-                        }
-                    }
-                    console.log('📭 No backup data found');
-                    return null;
-                } catch (e) {
-                    console.error('❌ Failed to read backup:', e);
-                    return null;
-                }
+            // Try to load from URL hash/params (for shared links)
+            const urlData = tryLoadFromURL();
+            if (urlData) {
+                console.log('✅ Loaded data from URL');
+                return urlData;
             }
+            
+            // Use embedded data (always works!)
+            console.log('✅ Using embedded data (', EMBEDDED_EVENTS.length, 'events)');
+            return JSON.parse(JSON.stringify(EMBEDDED_EVENTS)); // Deep copy
         }
         
         /**
-         * SAVE DATA ke Cloudinary (Upload JSON/TXT File)
-         * FALLBACK: Jika Cloudinary gagal, gunakan localStorage
+         * Try to load data from URL parameters (for sharing)
          */
-        async function saveEventsToCloudinary(eventsData) {
-            console.log('☁️ Saving events to Cloudinary...');
-            
+        function tryLoadFromURL() {
             try {
-                const jsonString = JSON.stringify(eventsData, null, 2);
-                const blob = new Blob([jsonString], { type: 'text/plain' });
-                const file = new File([blob], 'events.txt', { type: 'text/plain' });
+                const hash = window.location.hash;
+                if (hash && hash.startsWith('#data=')) {
+                    const encoded = hash.substring(6);
+                    const decoded = atob(encoded);
+                    return JSON.parse(decoded);
+                }
                 
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
-                formData.append('public_id', CLOUDINARY_CONFIG.dataFilePublicId);
-                formData.append('resource_type', 'raw');
+                const params = new URLSearchParams(window.location.search);
+                const dataParam = params.get('data');
+                if (dataParam) {
+                    return JSON.parse(atob(dataParam));
+                }
+            } catch (e) {
+                console.warn('⚠️ Failed to load from URL:', e);
+            }
+            return null;
+        }
+        
+        /**
+         * EXPORT DATA - Generate shareable link or file
+         */
+        function exportData(eventsData, format = 'file') {
+            const jsonString = JSON.stringify(eventsData, null, 2);
+            
+            if (format === 'file') {
+                // Download as JSON file
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `galeri-kegiatan-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('📥 Data berhasil di-export!', 'success');
+            } else if (format === 'url') {
+                // Generate shareable URL (limited by URL length)
+                const encoded = btoa(jsonString);
+                const shareUrl = `${window.location.origin}${window.location.pathname}#data=${encoded}`;
                 
-                console.log('📤 Uploading data to Cloudinary...');
-                const response = await fetch(CLOUDINARY_CONFIG.uploadApi, {
-                    method: 'POST',
-                    body: formData
+                // Copy to clipboard
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showToast('🔗 Link disalin ke clipboard! Bagikan ke siapa saja.', 'success');
+                    console.log('Share URL:', shareUrl);
+                }).catch(() => {
+                    prompt('Salin link ini untuk berbagi:', shareUrl);
                 });
-                
-                const result = await response.json();
-                
-                if (!response.ok || result.error) {
-                    console.warn('⚠️ Cloudinary raw upload not supported:', result.error?.message);
-                    console.log('💾 Falling back to localStorage...');
-                    
-                    // FALLBACK: Simpan ke localStorage
-                    localStorage.setItem('galeri_events_backup', jsonString);
-                    console.log('✅ Data saved to localStorage (fallback)');
-                    return true; // Return true agar user tidak panik
-                }
-                
-                console.log('✅ Data saved to Cloudinary:', result.public_id);
-                // Juga backup ke localStorage
-                localStorage.setItem('galeri_events_backup', jsonString);
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Save failed, using localStorage fallback:', error.message);
-                
-                // FORCE FALLBACK ke localStorage
-                try {
-                    const jsonString = JSON.stringify(eventsData, null, 2);
-                    localStorage.setItem('galeri_events_backup', jsonString);
-                    console.log('✅ Data saved to localStorage (emergency fallback)');
-                    showToast('⚠️ Data disimpan di browser (Cloudinary limited)', 'warning');
-                    return true;
-                } catch (e) {
-                    console.error('❌ Emergency fallback also failed:', e);
-                    return false;
-                }
+            } else if (format === 'html') {
+                // Generate complete HTML file with embedded data
+                generateStandaloneHTML(eventsData);
             }
         }
         
         /**
-         * INITIALIZE DEFAULT DATA (jika belum ada di Cloudinary)
-         * Membuat sample events berdasarkan folder yang umum digunakan
+         * IMPORT DATA - Load from JSON file
          */
-        function getDefaultEvents() {
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            
-            // Sample events - bisa diedit lewat Admin Panel nanti
-            const sampleEvents = [
-                {
-                    id: `event-${Date.now()}-1`,
-                    title: 'Pelatihan Kesehatan Masyarakat',
-                    description: 'Kegiatan pelatihan peningkatan kapasitas tenaga kesehatan dalam pelayanan masyarakat',
-                    date: now.toISOString().split('T')[0],
-                    year: currentYear,
-                    category: 'pelatihan',
-                    location: 'Dinas Kesehatan Provinsi',
-                    folder: `${CLOUDINARY_CONFIG.baseFolder}/${currentYear}/pelatihan/pelatihan-kesehatan-masyarakat`,
-                    photos: [],
-                    photoCount: 0,
-                    featuredPhoto: null,
-                    status: 'published',
-                    createdAt: now.toISOString(),
-                    updatedAt: now.toISOString()
-                },
-                {
-                    id: `event-${Date.now()}-2`,
-                    title: 'Sosialisasi Program Kesehatan',
-                    description: 'Kegiatan sosialisasi program kesehatan kepada masyarakat luas',
-                    date: new Date(now.getTime() - 7*24*60*60*1000).toISOString().split('T')[0], // 1 minggu lalu
-                    year: currentYear,
-                    category: 'sosialisasi',
-                    location: 'Puskesmas Pembantu',
-                    folder: `${CLOUDINARY_CONFIG.baseFolder}/${currentYear}/sosialisasi/sosialisasi-program-kesehatan`,
-                    photos: [],
-                    photoCount: 0,
-                    featuredPhoto: null,
-                    status: 'published',
-                    createdAt: now.toISOString(),
-                    updatedAt: now.toISOString()
-                }
-            ];
-            
-            console.log('📝 Created sample events:', sampleEvents.length, 'events');
-            console.log('   Events:', sampleEvents.map(e => e.title));
-            
-            return sampleEvents;
+        function importDataFromFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (Array.isArray(data)) {
+                            resolve(data);
+                        } else {
+                            reject(new Error('Invalid data format'));
+                        }
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsText(file);
+            });
         }
         
         /**
-         * AUTO-INITIALIZE & SAVE to Cloudinary (First Time Setup)
-         * Dipanggil saat file JSON belum ada (404)
+         * GENERATE STANDALONE HTML - Complete gallery in one file!
          */
-        async function initializeAndSaveToCloudinary() {
-            console.log('🚀 First-time setup: Creating initial data...');
+        function generateStandaloneHTML(eventsData) {
+            console.log('📄 Generating standalone HTML...');
             
-            // Buat default events
-            state.events = getDefaultEvents();
-            state.filteredEvents = [...state.events];
+            // Get current page HTML
+            const htmlContent = document.documentElement.outerHTML;
             
-            // Auto-save ke Cloudinary agar data persisten
-            try {
-                const saved = await saveEventsToCloudinary(state.events);
-                if (saved) {
-                    console.log('✅ Initial data saved to Cloudinary!');
-                    showToast('🎉 Data awal berhasil dibuat! Silakan tambahkan foto lewat Admin Panel.', 'success');
-                } else {
-                    console.warn('⚠️ Failed to save initial data');
-                }
-                return saved;
-            } catch (error) {
-                console.error('❌ Error saving initial data:', error);
+            // Create new version with updated EMBEDDED_EVENTS
+            const updatedHtml = htmlContent.replace(
+                /const EMBEDDED_EVENTS = \[[\s\S]*?\];/,
+                `const EMBEDDED_EVENTS = ${JSON.stringify(eventsData, null, 8)};`
+            );
+            
+            // Download the file
+            const blob = new Blob([updatedHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `galeri-kegiatan-universal.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('🎉 File HTML Universal di-download! Buka file ini dimana saja.', 'success');
+        }
+        
+        /**
+         * SAVE DATA (Universal - saves to multiple locations)
+         */
+        async function saveEventsToStorage() {
+            if (state.isSaving) {
+                console.log('⏳ Save already in progress...');
                 return false;
             }
+            
+            state.isSaving = true;
+            console.log('💾 Saving events...', state.events.length, 'events');
+            
+            try {
+                // Save to localStorage (for current session)
+                localStorage.setItem('galeri_events_universal', JSON.stringify(state.events));
+                
+                state.lastSaveTime = new Date();
+                console.log('✅ Data saved at:', state.lastSaveTime.toLocaleTimeString());
+                return true;
+            } catch (error) {
+                console.error('❌ Save error:', error);
+                showToast('❌ Gagal menyimpan: ' + error.message, 'error');
+                return false;
+            } finally {
+                state.isSaving = false;
+            }
         }
-
+        
         // ============================================
         // APPLICATION STATE
         // ============================================
@@ -3584,22 +3642,36 @@
             return { totalPhotos, photosWithCloudinaryId, issues };
         }
 
-        // Initialize data system
+        // Initialize data system (UNIVERSAL - works everywhere!)
         async function initializeData() {
             state.isLoading = true;
             showLoadingState();
             
-            // Try to load from Cloudinary first (cloud-based backend)
-            console.log('🔄 Initializing data from Cloudinary...');
-            const loaded = await fetchEventsFromCloudinary();
+            // Load data using Universal System
+            console.log('🌍 Initializing Universal Gallery...');
+            const loaded = await loadUniversalData();
             
             if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                 state.events = loaded;
-                console.log('✅ Loaded', loaded.length, 'events from Cloudinary');
+                console.log('✅ Loaded', loaded.length, 'events (Universal Mode)');
+                
+                // Check for localStorage updates (admin changes)
+                try {
+                    const localData = localStorage.getItem('galeri_events_universal');
+                    if (localData) {
+                        const parsed = JSON.parse(localData);
+                        if (parsed.length > loaded.length || 
+                            (parsed.length > 0 && parsed[0].updatedAt > loaded[0].updatedAt)) {
+                            console.log('📝 Using updated data from localStorage');
+                            state.events = parsed;
+                        }
+                    }
+                } catch (e) {
+                    console.log('ℹ️ No local updates found');
+                }
             } else {
-                console.log('📝 No data on Cloudinary, creating initial data & saving...');
-                // Create sample events AND auto-save to Cloudinary
-                await initializeAndSaveToCloudinary();
+                console.log('⚠️ No data found, using embedded events');
+                state.events = JSON.parse(JSON.stringify(EMBEDDED_EVENTS));
             }
             
             // Update filtered events
@@ -4773,33 +4845,60 @@
         // Logout button
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
-        // Sync to Cloudinary Button
-        document.getElementById('syncCloudBtn').addEventListener('click', async function() {
-            const btn = this;
-            btn.classList.add('syncing');
-            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Syncing...';
-            
+        // Export JSON Button
+        document.getElementById('exportJSONBtn').addEventListener('click', function() {
+            if (state.events.length === 0) {
+                showToast('⚠️ Tidak ada data untuk di-export', 'warning');
+                return;
+            }
+            exportData(state.events, 'file');
+        });
+
+        // Import JSON Button
+        document.getElementById('importJSONBtn').addEventListener('click', function() {
+            document.getElementById('importFileInput').click();
+        });
+
+        // Import File Handler
+        document.getElementById('importFileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
             try {
-                console.log('🔄 Manual sync triggered...');
+                showToast('📥 Membaca file...', 'info');
+                const importedData = await importDataFromFile(file);
                 
-                if (state.events.length === 0) {
-                    // Jika tidak ada data, buat data awal
-                    await initializeAndSaveToCloudinary();
+                if (importedData && importedData.length > 0) {
+                    state.events = importedData;
+                    state.filteredEvents = [...state.events];
+                    await saveEventsToStorage();
+                    
+                    renderGallery();
+                    updateEventSelect();
+                    showToast(`✅ Berhasil import ${importedData.length} events!`, 'success');
+                    console.log('📥 Imported events:', importedData);
                 } else {
-                    // Jika ada data, save ke Cloudinary
-                    const success = await saveEventsToCloudinary(state.events);
-                    if (success) {
-                        showToast('✅ Data berhasil di-sync ke Cloudinary!', 'success');
-                    } else {
-                        throw new Error('Gagal menyimpan data');
-                    }
+                    throw new Error('Tidak ada data valid dalam file');
                 }
             } catch (error) {
-                console.error('❌ Sync error:', error);
-                showToast('❌ Gagal sync: ' + error.message, 'error');
-            } finally {
-                btn.classList.remove('syncing');
-                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Sync Cloud';
+                console.error('❌ Import error:', error);
+                showToast('❌ Gagal import: ' + error.message, 'error');
+            }
+            
+            // Reset input
+            this.value = '';
+        });
+
+        // Generate Universal HTML Button
+        document.getElementById('generateHTMLBtn').addEventListener('click', function() {
+            if (state.events.length === 0) {
+                showToast('⚠️ Tidak ada data untuk generate HTML', 'warning');
+                return;
+            }
+            
+            // Ask for confirmation
+            if (confirm('🌐 Generate file HTML Universal?\n\nFile ini bisa dibuka dari MANAPUN tanpa internet!\nSemua data dan foto akan tertanam.')) {
+                generateStandaloneHTML(state.events);
             }
         });
 
