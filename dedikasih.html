@@ -9,7 +9,7 @@
         name: "DEDIKASIH - Digitalisasi Pengabdian Masyarakat",
         short_name: "DEDIKASIH",
         description: "Platform Digitalisasi Kegiatan Pengabdian Masyarakat SDM Kesehatan Dinas Kesehatan Kabupaten Kutai Kartanegara",
-        start_url: ".",
+        start_url: window.location.pathname.split('/').pop() || 'DEDIKASIH_v1.0_Platform.html',
         display: "standalone",
         orientation: "any",
         background_color: "#eae8e4",
@@ -307,179 +307,7 @@
           printHtml += ".meta{display:flex;justify-content:space-between;margin-bottom:20px;font-size:12px;color:#666}";
           printHtml += "table{width:100%;border-collapse:collapse;font-size:12px}th{background:#0f766e;color:white;padding:10px 8px;text-align:left}";
           printHtml += "td{padding:8px;border-bottom:1px solid #ddd}tr:nth-child(even){background:#f9f9f9}";
-          printHtml += ".footer{margin-top:30px;text-align:center;font-size:11px;color:#999}
-    /* ============================================ */
-    /* DARK MODE ENHANCEMENT - Vibrant & Clear */
-    /* ============================================ */
-    .dark body, body.dark {
-      background: #0b1120 !important;
-      color: #e2e8f0 !important;
-    }
-    
-    .dark .healthcare-bg {
-      background-image:
-        radial-gradient(circle at 15% 25%, rgba(13, 148, 136, 0.10) 0%, transparent 50%),
-        radial-gradient(circle at 85% 75%, rgba(20, 184, 166, 0.08) 0%, transparent 55%),
-        radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.04) 0%, transparent 60%);
-      background-color: #0b1120 !important;
-    }
-    
-    .dark .section-title,
-    .dark h1, .dark h2, .dark h3 {
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .text-slate-400, .dark .text-slate-500 {
-      color: #94a3b8 !important;
-    }
-    
-    .dark .premium-table td {
-      color: #cbd5e1 !important;
-    }
-    
-    .dark .stat-card .stat-value {
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .stat-card .stat-label {
-      color: #94a3b8 !important;
-    }
-    
-    .dark .empty-state h4 { color: #e2e8f0 !important; }
-    .dark .empty-state p { color: #94a3b8 !important; }
-    
-    .dark .admin-table-title { color: #f1f5f9 !important; }
-    
-    .dark .detail-label { color: #94a3b8 !important; }
-    .dark .detail-value { color: #e2e8f0 !important; }
-    
-    .dark .lightbox-label { color: #94a3b8 !important; }
-    .dark .lightbox-title { color: #f1f5f9 !important; }
-    .dark .lightbox-input,
-    .dark .lightbox-select,
-    .dark .lightbox-textarea {
-      background: rgba(15, 23, 42, 0.85) !important;
-      border-color: rgba(20, 184, 166, 0.25) !important;
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .admin-search-box input {
-      background: rgba(15, 23, 42, 0.8) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
-      color: #e2e8f0 !important;
-    }
-    
-    .dark .admin-panel-container {
-      background: rgba(15, 23, 42, 0.7) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
-    }
-    
-    .dark .admin-tabs {
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom-color: rgba(20, 184, 166, 0.10);
-    }
-    
-    .dark .admin-table-header {
-      border-bottom-color: rgba(20, 184, 166, 0.10);
-    }
-    
-    .dark .file-link-btn {
-      background: rgba(20, 184, 166, 0.12);
-      border-color: rgba(20, 184, 166, 0.25);
-      color: #5eead4;
-    }
-    
-    .dark .file-link-btn:hover {
-      background: rgba(20, 184, 166, 0.22);
-      border-color: rgba(20, 184, 166, 0.40);
-    }
-
-    /* ============================================ */
-    /* DARK MODE ENHANCEMENT - Vibrant & Clear */
-    /* ============================================ */
-    .dark body, body.dark {
-      background: #0b1120 !important;
-      color: #e2e8f0 !important;
-    }
-    
-    .dark .healthcare-bg {
-      background-image:
-        radial-gradient(circle at 15% 25%, rgba(13, 148, 136, 0.10) 0%, transparent 50%),
-        radial-gradient(circle at 85% 75%, rgba(20, 184, 166, 0.08) 0%, transparent 55%),
-        radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.04) 0%, transparent 60%);
-      background-color: #0b1120 !important;
-    }
-    
-    .dark .section-title,
-    .dark h1, .dark h2, .dark h3 {
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .text-slate-400, .dark .text-slate-500 {
-      color: #94a3b8 !important;
-    }
-    
-    .dark .premium-table td {
-      color: #cbd5e1 !important;
-    }
-    
-    .dark .stat-card .stat-value {
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .stat-card .stat-label {
-      color: #94a3b8 !important;
-    }
-    
-    .dark .empty-state h4 { color: #e2e8f0 !important; }
-    .dark .empty-state p { color: #94a3b8 !important; }
-    
-    .dark .admin-table-title { color: #f1f5f9 !important; }
-    
-    .dark .detail-label { color: #94a3b8 !important; }
-    .dark .detail-value { color: #e2e8f0 !important; }
-    
-    .dark .lightbox-label { color: #94a3b8 !important; }
-    .dark .lightbox-title { color: #f1f5f9 !important; }
-    .dark .lightbox-input,
-    .dark .lightbox-select,
-    .dark .lightbox-textarea {
-      background: rgba(15, 23, 42, 0.85) !important;
-      border-color: rgba(20, 184, 166, 0.25) !important;
-      color: #f1f5f9 !important;
-    }
-    
-    .dark .admin-search-box input {
-      background: rgba(15, 23, 42, 0.8) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
-      color: #e2e8f0 !important;
-    }
-    
-    .dark .admin-panel-container {
-      background: rgba(15, 23, 42, 0.7) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
-    }
-    
-    .dark .admin-tabs {
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom-color: rgba(20, 184, 166, 0.10);
-    }
-    
-    .dark .admin-table-header {
-      border-bottom-color: rgba(20, 184, 166, 0.10);
-    }
-    
-    .dark .file-link-btn {
-      background: rgba(20, 184, 166, 0.12);
-      border-color: rgba(20, 184, 166, 0.25);
-      color: #5eead4;
-    }
-    
-    .dark .file-link-btn:hover {
-      background: rgba(20, 184, 166, 0.22);
-      border-color: rgba(20, 184, 166, 0.40);
-    }
-</style></head><body>";
+          printHtml += ".footer{margin-top:30px;text-align:center;font-size:11px;color:#999}</style></head><body>";
           printHtml += '<div class="header"><h1>DEDIKASIH v1.0</h1><p>Digitalisasi Kegiatan Pengabdian Masyarakat SDM Kesehatan</p>';
           printHtml += '<p>Dinas Kesehatan Kabupaten Kutai Kartanegara</p></div>';
           printHtml += "<h2 style=\"margin-bottom:15px\">" + title + "</h2>";
@@ -1144,10 +972,12 @@
       --accent-deep: #0284c7; 
       --emerald: #059669;
       --gold: #f59e0b;
-      --bg-light: #f8fafb;
+      --bg-light: #f0f5f4;
       --bg-white: #FFFFFF;
       --text-dark: #0f172a;
       --text-muted: #475569;
+      --border-light: #d1e7e4;
+      --shadow-light: rgba(13, 148, 136, 0.08);
       --gradient-elegant: linear-gradient(135deg, #0d9488 0%, #14b8a6 40%, #0ea5e9 100%);
       --gradient-hero: linear-gradient(135deg, #0d9488 0%, #0f766e 40%, #134e4a 100%);
     }
@@ -1168,6 +998,8 @@
       overflow-x: hidden;
       min-height: 100vh;
       min-height: 100dvh; /* Dynamic viewport height for mobile */
+      background: linear-gradient(160deg, #f0f5f4 0%, #e8f4f2 30%, #f0f5f4 60%, #eef2f7 100%);
+      background-attachment: fixed;
     }
     
     .font-display { font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; font-weight: 600; }
@@ -1176,18 +1008,18 @@
     /* GLASSMORPHISM EFFECT - ELEGANT TEAL */
     /* ============================================ */
     .glass {
-      background: rgba(255,255,255,0.90);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(13, 148, 136, 0.10);
-      box-shadow: 0 2px 16px rgba(13, 148, 136, 0.05), 0 1px 3px rgba(0,0,0,0.03);
-    }
-    .dark .glass {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(24px) saturate(200%);
       -webkit-backdrop-filter: blur(24px) saturate(200%);
-      border: 1px solid rgba(20, 184, 166, 0.15);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.20), 0 4px 12px rgba(20, 184, 166, 0.06), inset 0 1px 0 rgba(255,255,255,0.03);
+      border: 1px solid rgba(13, 148, 136, 0.15);
+      box-shadow: 0 4px 24px rgba(13, 148, 136, 0.08), 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(28px) saturate(220%);
+      -webkit-backdrop-filter: blur(28px) saturate(220%);
+      border: 1px solid rgba(20, 184, 166, 0.20);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 4px 12px rgba(20, 184, 166, 0.08), inset 0 1px 0 rgba(255,255,255,0.04);
     }
     
     /* ============================================ */
@@ -1198,7 +1030,7 @@
     }
     
     .neon-glow {
-      box-shadow: 0 0 20px rgba(13, 148, 136, 0.30), 0 0 40px rgba(20, 184, 166, 0.20), 0 0 60px rgba(14, 165, 233, 0.10), 0 10px 10px -3px rgba(20, 184, 166, 0.08);
+      box-shadow: 0 0 20px rgba(13, 148, 136, 0.35), 0 0 45px rgba(20, 184, 166, 0.25), 0 0 70px rgba(14, 165, 233, 0.12), 0 10px 10px -3px rgba(20, 184, 166, 0.10);
     }
     
     .gradient-text {
@@ -1238,17 +1070,22 @@
     }
     .nav-item:active { transform: scale(0.97); }
     .nav-item.active {
-      background: linear-gradient(90deg, rgba(13, 148, 136, 0.12), rgba(20, 184, 166, 0.08));
+      background: linear-gradient(90deg, rgba(13, 148, 136, 0.14), rgba(20, 184, 166, 0.10));
       color: #0d9488;
       font-weight: 600;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.10);
     }
     .dark .nav-item.active {
-      background: linear-gradient(90deg, rgba(13, 148, 136, 0.15), rgba(20, 184, 166, 0.10));
+      background: linear-gradient(90deg, rgba(13, 148, 136, 0.18), rgba(20, 184, 166, 0.12));
       color: #2dd4bf;
+      box-shadow: 0 2px 12px rgba(13, 148, 136, 0.15);
     }
     .nav-item:hover {
-      background: rgba(13, 148, 136, 0.06);
+      background: rgba(13, 148, 136, 0.08);
       color: #0d9488;
+    }
+    .dark .nav-item:hover {
+      color: #2dd4bf;
     }
     .nav-item::after {
       content: '';
@@ -1287,7 +1124,7 @@
       min-width: 600px;
     }
     .premium-table th {
-      background: linear-gradient(180deg, #f0fdfa, #e6f7f5);
+      background: linear-gradient(180deg, #f0fdfa, #e0f5f1);
       font-weight: 700;
       color: #0f766e;
       padding: 12px 16px;
@@ -1297,25 +1134,27 @@
       top: 0;
       z-index: 10;
       border-bottom: 2px solid #0d9488;
+      letter-spacing: 0.01em;
     }
     .dark .premium-table th {
       background: linear-gradient(180deg, #0f3d3a, #0d3433);
       color: #99f6e4;
+      border-bottom-color: rgba(20, 184, 166, 0.40);
     }
     .premium-table td {
       padding: 12px 16px;
       font-size: 13px;
-      border-bottom: 1px solid rgba(13, 148, 136, 0.08);
+      border-bottom: 1px solid rgba(13, 148, 136, 0.10);
       color: #1e293b;
     }
     .premium-table tr {
       transition: background 0.15s;
     }
     .premium-table tr:hover {
-      background: rgba(13, 148, 136, 0.05);
+      background: rgba(13, 148, 136, 0.06);
     }
     .dark .premium-table tr:hover {
-      background: rgba(20, 184, 166, 0.08);
+      background: rgba(20, 184, 166, 0.10);
     }
     
     /* Table container for horizontal scrolling */
@@ -2442,8 +2281,13 @@
     
     body:not(.dark) .stat-card {
       background: #FFFFFF !important;
-      border: 1px solid #e2e8f0 !important;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+      border: 1px solid rgba(13, 148, 136, 0.12) !important;
+      box-shadow: 0 4px 16px rgba(13, 148, 136, 0.06), 0 1px 3px rgba(0,0,0,0.04) !important;
+    }
+    
+    body:not(.dark) .stat-card:hover {
+      box-shadow: 0 8px 28px rgba(13, 148, 136, 0.12), 0 2px 6px rgba(0,0,0,0.06) !important;
+      transform: translateY(-3px) !important;
     }
     
     body:not(.dark) .stat-card .stat-value {
@@ -2451,7 +2295,7 @@
     }
     
     body:not(.dark) .stat-card .stat-label {
-      color: #64748b !important;
+      color: #475569 !important;
     }
     
     body:not(.dark) input,
@@ -2628,17 +2472,17 @@
     /* Admin Panel Container */
     .admin-panel-container {
       background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border: 1px solid #e2e8f0;
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(13, 148, 136, 0.12);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.06), 0 1px 4px rgba(0,0,0,0.04);
     }
     
     body:not(.dark) .admin-panel-container {
       background: rgba(255, 255, 255, 0.99);
-      border-color: #e2e8f0;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      border-color: rgba(13, 148, 136, 0.15);
+      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08), 0 1px 4px rgba(0,0,0,0.04);
     }
     
     /* Admin Tabs */
@@ -3125,8 +2969,42 @@
     }
     body:not(.dark) .dashboard-lightbox-content {
       background: linear-gradient(145deg, #ffffff 0%, #f0fdfa 100%);
-      border-color: rgba(13, 148, 136, 0.12);
-      box-shadow: 0 25px 80px rgba(13, 148, 136, 0.12), 0 0 0 1px rgba(13, 148, 136, 0.08);
+      border-color: rgba(13, 148, 136, 0.15);
+      box-shadow: 0 25px 80px rgba(13, 148, 136, 0.15), 0 0 0 1px rgba(13, 148, 136, 0.10);
+    }
+    body:not(.dark) #lightbox-stat-title,
+    body:not(.dark) #lightbox-stat-value {
+      color: #0f172a !important;
+    }
+    body:not(.dark) #lightbox-stat-label {
+      color: #475569 !important;
+    }
+    body:not(.dark) .source-info {
+      background: rgba(13, 148, 136, 0.06);
+      border-color: rgba(13, 148, 136, 0.15);
+    }
+    body:not(.dark) .source-info-title,
+    body:not(.dark) .source-value {
+      color: #0f172a !important;
+    }
+    body:not(.dark) .source-label {
+      color: #475569 !important;
+    }
+    body:not(.dark) .lightbox-stat-icon {
+      background: rgba(13, 148, 136, 0.10) !important;
+    }
+    body:not(.dark) .lightbox-stat-icon i {
+      color: #0d9488 !important;
+    }
+    body:not(.dark) .dashboard-lightbox-content button[class*="bg-slate-800"] {
+      background: rgba(13, 148, 136, 0.08) !important;
+      color: #0f172a !important;
+    }
+    body:not(.dark) .dashboard-lightbox-content button[class*="bg-slate-800"]:hover {
+      background: rgba(13, 148, 136, 0.15) !important;
+    }
+    body:not(.dark) .dashboard-lightbox-content .close-btn-icon {
+      color: #475569 !important;
     }
     
     /* Source Info Section in Lightbox */
@@ -3196,18 +3074,19 @@
 
 
     /* ============================================ */
-    /* DARK MODE ENHANCEMENT - Vibrant & Clear */
+    /* DARK MODE ENHANCEMENT - Vibrant & Elegant */
     /* ============================================ */
     .dark body, body.dark {
-      background: #0b1120 !important;
+      background: linear-gradient(160deg, #0b1120 0%, #0f172a 30%, #0b1120 60%, #0d1525 100%) !important;
+      background-attachment: fixed !important;
       color: #e2e8f0 !important;
     }
     
     .dark .healthcare-bg {
       background-image:
-        radial-gradient(circle at 15% 25%, rgba(13, 148, 136, 0.10) 0%, transparent 50%),
-        radial-gradient(circle at 85% 75%, rgba(20, 184, 166, 0.08) 0%, transparent 55%),
-        radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.04) 0%, transparent 60%);
+        radial-gradient(circle at 15% 25%, rgba(13, 148, 136, 0.14) 0%, transparent 50%),
+        radial-gradient(circle at 85% 75%, rgba(20, 184, 166, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.06) 0%, transparent 60%);
       background-color: #0b1120 !important;
     }
     
@@ -3222,6 +3101,16 @@
     
     .dark .premium-table td {
       color: #cbd5e1 !important;
+    }
+    
+    .dark .stat-card {
+      border-color: rgba(20, 184, 166, 0.18) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.20), 0 0 30px rgba(13, 148, 136, 0.06) !important;
+    }
+    
+    .dark .stat-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.30), 0 0 40px rgba(13, 148, 136, 0.10) !important;
+      border-color: rgba(20, 184, 166, 0.30) !important;
     }
     
     .dark .stat-card .stat-value {
@@ -3245,29 +3134,30 @@
     .dark .lightbox-input,
     .dark .lightbox-select,
     .dark .lightbox-textarea {
-      background: rgba(15, 23, 42, 0.85) !important;
-      border-color: rgba(20, 184, 166, 0.25) !important;
+      background: rgba(15, 23, 42, 0.90) !important;
+      border-color: rgba(20, 184, 166, 0.30) !important;
       color: #f1f5f9 !important;
     }
     
     .dark .admin-search-box input {
-      background: rgba(15, 23, 42, 0.8) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
+      background: rgba(15, 23, 42, 0.85) !important;
+      border-color: rgba(20, 184, 166, 0.20) !important;
       color: #e2e8f0 !important;
     }
     
     .dark .admin-panel-container {
-      background: rgba(15, 23, 42, 0.7) !important;
-      border-color: rgba(20, 184, 166, 0.15) !important;
+      background: rgba(15, 23, 42, 0.75) !important;
+      border-color: rgba(20, 184, 166, 0.20) !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25) !important;
     }
     
     .dark .admin-tabs {
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom-color: rgba(20, 184, 166, 0.10);
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom-color: rgba(20, 184, 166, 0.15);
     }
     
     .dark .admin-table-header {
-      border-bottom-color: rgba(20, 184, 166, 0.10);
+      border-bottom-color: rgba(20, 184, 166, 0.15);
     }
     
     .dark .file-link-btn {
