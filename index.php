@@ -1,0 +1,1396 @@
+<?php
+error_reporting(0);
+ini_set('display_errors', '0');
+ob_start();
+
+// ===== API MODE: jika ada ?visit atau ?s, handle sebagai API =====
+if (isset($_GET['visit']) || isset($_GET['s'])) {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *');
+
+    function fetchUrl($url) {
+        if (function_exists('curl_init')) {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'VisitorCounter/1.0');
+            $result = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            return ($httpCode >= 200 && $httpCode < 300) ? $result : false;
+        }
+        if (ini_get('allow_url_fopen')) {
+            $ctx = stream_context_create(['http' => ['timeout' => 5, 'header' => "User-Agent: VisitorCounter/1.0\r\n"]]);
+            $result = @file_get_contents($url, false, $ctx);
+            return ($result !== false) ? $result : false;
+        }
+        return false;
+    }
+
+    function getVisitorIP() {
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) return $_SERVER['HTTP_CF_CONNECTING_IP'];
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']); return trim($ips[0]); }
+        return $_SERVER['REMOTE_ADDR'];
+    }
+
+    function geoLookup($ip) {
+        $json = fetchUrl('http://ip-api.com/json/' . $ip . '?fields=status,countryCode,country,city,regionName');
+        if ($json) { $d = json_decode($json, true); if (isset($d['status']) && $d['status'] === 'success') return ['code' => strtolower($d['countryCode']), 'name' => $d['country'], 'city' => $d['city'] ?? '', 'region' => $d['regionName'] ?? '']; }
+        $json2 = fetchUrl('https://ipwho.is/' . $ip);
+        if ($json2) { $d2 = json_decode($json2, true); if (isset($d2['country_code'])) return ['code' => strtolower($d2['country_code']), 'name' => $d2['country'] ?? 'Unknown', 'city' => $d2['city'] ?? '', 'region' => $d2['region'] ?? '']; }
+        $json3 = fetchUrl('https://ipapi.co/' . $ip . '/json/');
+        if ($json3) { $d3 = json_decode($json3, true); if (isset($d3['country_code']) && !isset($d3['error'])) return ['code' => strtolower($d3['country_code']), 'name' => $d3['country_name'] ?? 'Unknown', 'city' => $d3['city'] ?? '', 'region' => $d3['region'] ?? '']; }
+        return null;
+    }
+
+    try {
+        $dataFile = __DIR__ . '/visitors_data.json';
+        if (!file_exists($dataFile)) { $initial = ['totalCount' => 0, 'todayCount' => 0, 'todayDate' => date('Y-m-d'), 'monthCount' => 0, 'monthDate' => date('Y-m'), 'countries' => [], 'recentVisitors' => [], 'ipCache' => []]; @file_put_contents($dataFile, json_encode($initial, JSON_PRETTY_PRINT), LOCK_EX); }
+        $fp = @fopen($dataFile, 'c');
+        if (!$fp) { ob_end_clean(); echo json_encode(['success' => false, 'error' => 'Cannot open data file']); exit; }
+        flock($fp, LOCK_EX);
+        $content = stream_get_contents($fp);
+        $data = json_decode($content, true);
+        if (!$data) $data = [];
+        $today = date('Y-m-d'); $month = date('Y-m');
+        if (!isset($data['todayDate']) || $data['todayDate'] !== $today) { $data['todayCount'] = 0; $data['todayDate'] = $today; }
+        if (!isset($data['monthDate']) || $data['monthDate'] !== $month) { $data['monthCount'] = 0; $data['monthDate'] = $month; }
+        $visitorGeo = null; $countryCode = 'id';
+
+        if (isset($_GET['visit'])) {
+            $ip = getVisitorIP();
+            $sid = isset($_GET['s']) ? preg_replace('/[^a-z0-9]/', '', $_GET['s']) : '';
+            if ($sid === '') $sid = md5($ip . microtime());
+            if (!isset($data['ipCache'])) $data['ipCache'] = [];
+            if (isset($data['ipCache'][$ip]) && (time() - $data['ipCache'][$ip]['t']) < 86400) { $visitorGeo = $data['ipCache'][$ip]['geo']; } else { $visitorGeo = geoLookup($ip); if ($visitorGeo) $data['ipCache'][$ip] = ['geo' => $visitorGeo, 't' => time()]; }
+            if (count($data['ipCache']) > 300) { uasort($data['ipCache'], function($a, $b) { return $b['t'] - $a['t']; }); $data['ipCache'] = array_slice($data['ipCache'], 0, 300, true); }
+            if ($visitorGeo && isset($visitorGeo['code'])) $countryCode = $visitorGeo['code'];
+            $data['totalCount'] = ($data['totalCount'] ?? 0) + 1;
+            $data['todayCount'] = ($data['todayCount'] ?? 0) + 1;
+            $data['monthCount'] = ($data['monthCount'] ?? 0) + 1;
+            if (!isset($data['countries'])) $data['countries'] = [];
+            if (!isset($data['countries'][$countryCode])) $data['countries'][$countryCode] = 0;
+            $data['countries'][$countryCode]++;
+            $now = time(); $cutoff = $now - 300;
+            if (!isset($data['recentVisitors'])) $data['recentVisitors'] = [];
+            $data['recentVisitors'] = array_values(array_filter($data['recentVisitors'], function ($v) use ($cutoff, $sid) { return $v['ts'] > $cutoff && $v['sid'] !== $sid; }));
+            $data['recentVisitors'][] = ['sid' => $sid, 'ts' => $now];
+        } else {
+            if (isset($_GET['s'])) {
+                $sid = preg_replace('/[^a-z0-9]/', '', $_GET['s']); $now = time(); $cutoff = $now - 300;
+                if (!isset($data['recentVisitors'])) $data['recentVisitors'] = [];
+                $found = false;
+                foreach ($data['recentVisitors'] as &$v) { if ($v['sid'] === $sid) { $v['ts'] = $now; $found = true; break; } }
+                unset($v);
+                if (!$found) $data['recentVisitors'][] = ['sid' => $sid, 'ts' => $now];
+                $data['recentVisitors'] = array_values(array_filter($data['recentVisitors'], function ($v) use ($cutoff) { return $v['ts'] > $cutoff; }));
+            }
+        }
+        $now = time(); $cutoff = $now - 300;
+        if (isset($data['recentVisitors'])) $data['recentVisitors'] = array_values(array_filter($data['recentVisitors'], function ($v) use ($cutoff) { return $v['ts'] > $cutoff; }));
+        $onlineCount = count($data['recentVisitors'] ?? []);
+        ftruncate($fp, 0); rewind($fp);
+        fwrite($fp, json_encode($data, JSON_PRETTY_PRINT));
+        flock($fp, LOCK_UN); fclose($fp);
+        ob_end_clean();
+        echo json_encode(['success' => true, 'totalCount' => $data['totalCount'] ?? 0, 'todayCount' => $data['todayCount'] ?? 0, 'monthCount' => $data['monthCount'] ?? 0, 'onlineCount' => $onlineCount, 'countries' => $data['countries'] ?? [], 'todayDate' => $data['todayDate'] ?? $today, 'monthDate' => $data['monthDate'] ?? $month, 'visitorGeo' => $visitorGeo]);
+    } catch (Exception $e) { ob_end_clean(); echo json_encode(['success' => false, 'error' => $e->getMessage()]); }
+    exit;
+}
+ob_end_clean();
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>timkerSDMK-Bid.SDK_DinkesKUKAR</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Company
+  * Template URL: https://bootstrapmade.com/company-free-html-bootstrap-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">SDM Kesehatan</h1><span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#hero" class="active">Beranda</a></li>
+          <li><a href="#"><span>Tentang</a></i></li>
+          <li class="dropdown">
+    <a href="#" class="dropdown-toggle">Layanan <span class="arrow">▼</span>
+    </a>
+    <ul class="submenu">
+        <li><a href="https://mukminnasri.com/simandakes.html">simandakes</a></li>
+        <li><a href="https://simantri.mukminnasri.com/">simantri</a></li>
+        <li><a href="https://simbakes.mukminnasri.com/index.html">simbakes</a></li>
+        <li><a href="https://mukminnasri.com/dashboardpakintegrasipns.html">pakti</a></li>
+        <li><a href="https://mukminnasri.com/MandaT.html">mandat</a></li>
+        <li><a href="#">sirek</a></li>
+        <li><a href="#">kredens</a></li>
+        <li><a href="https://mukminnasri.com/mantaF%20v1.0.html">mantaf</a></li>
+    </ul>
+</li>            
+          <li><a href="#">Download</a></li>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="galeri-foto.html">Galeri</a></li>
+          <li><a href="#">Kontak Kami</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <div class="header-social-links">
+        <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="youtube"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="tiktok"><i class="bi bi-tiktok"></i></a>
+        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+        <div class="carousel-item active">
+          <img src="assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
+          <div class="container">
+            <h2>Manajemen Tata Kelola Izin Praktik</h2>
+            <p>Mengelola proses penerbitan izin praktik atau kerja named dan nakes di Kutai Kartanegara.</p>
+            <a href="#" class="btn-get-started">Read More</a>
+          </div>
+        </div><!-- End Carousel Item -->
+
+        <div class="carousel-item">
+          <img src="assets/img/hero-carousel/hero-carousel-2.jpg" alt="">
+          <div class="container">
+            <h2>Manajemen Tata Kelola Perencanaan, pendistribusian dan pendayagunaan SDM Kesehatan</h2>
+            <p>Menyusun renbut, bezetting dan peta jabatan SDM Kesehatan di Fasyankes Primer dan Lanjut.</p>
+            <a href="#" class="btn-get-started">Read More</a>
+          </div>
+        </div><!-- End Carousel Item -->
+
+        <div class="carousel-item">
+          <img src="assets/img/hero-carousel/hero-carousel-3.jpg" alt="">
+          <div class="container">
+            <h2>Manajemen Tata Kelola Pemenuhan Kebutuhan SDM Kesehatan</h2>
+            <p>Mengelola kebutuhan ketenagaan di Puskesmas dan RSUD sesuai standar.</p>
+            <a href="#" class="btn-get-started">Read More</a>
+          </div>
+        </div><!-- End Carousel Item -->
+
+        <div class="carousel-item">
+          <img src="assets/img/hero-carousel/hero-carousel-4.jpg" alt="">
+          <div class="container">
+            <h2>Manajemen Tata Kelola Pembinaan dan Pengawasan SDM Kesehatan</h2>
+            <p>Melaksanakan penerapan etika dan disiplin profesi di setiap lini pelayanan kesehatan.</p>
+            <a href="#" class="btn-get-started">Read More</a>
+          </div>
+        </div><!-- End Carousel Item -->       
+ 
+        <div class="carousel-item">
+          <img src="assets/img/hero-carousel/hero-carousel-5.jpg" alt="">
+          <div class="container">
+            <h2>Manajemen Tata Kelola Mutu dan Kompetensi SDM Kesehatan</h2>
+            <p>Menyusun TNA dan memastikan semua SDM Kesehatan ditingkatkan kompetensinya.</p>
+            <a href="#" class="btn-get-started">Read More</a>
+          </div>
+        </div><!-- End Carousel Item -->
+
+        <a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+        </a>
+
+        <a class="carousel-control-next" href="#hero-carousel" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+        </a>
+
+        <ol class="carousel-indicators"></ol>
+
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+        <div class="row position-relative">
+
+          <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200"><img src="assets/img/about.jpg"></div>
+
+          <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="inner-title">Sumber Daya Manusia Kesehatan</h2>
+            <div class="our-story">
+              <h4>Pelatihan ACLS bagi Dokter Puskesmas</h4>
+              <h3>Our Story</h3>
+              <p>Jujur, awalnya saya gugup banget. Waktu lihat boneka manekin terbaring di atas meja itu, saya pikir gampang. Ternyata begitu disuruh praktik RJP beneran, tangan saya gemetar.</p>
+              <ul>
+                <li><i class="bi bi-check-circle"></i> <span>Saya gugup saat pertama menekan dada manekin, tapi bangga karena akhirnya berani melakukannya.</span></li>
+                <li><i class="bi bi-check-circle"></i> <span>Saya merasa tegang sekaligus terharu melihat teman-teman saling mendukung dengan kompak.</span></li>
+                <li><i class="bi bi-check-circle"></i> <span>Setelah selesai, saya pulang dengan perasaan lega dan lebih siap untuk menolong jika dibutuhkan.</span></li>
+              </ul>
+              <p>Saya kebagian menekan dada manekinnya. Instruktur bilang, "tekan yang dalam, yang mantap, jangan ragu." Teman saya di sebelah kiri dengan sigap memegangi ambu bag di wajah boneka, sementara teman yang lain mencatat dan mengingatkan hitungan. Kami semua pakai hijab, saling menyemangati dengan lirikan mata, karena tegang.</p>
+
+              <div class="watch-video d-flex align-items-center position-relative">
+                <i class="bi bi-play-circle"></i>
+                <a href="https://youtu.be/oFJQ5OluaZk?si=vge6SAE0tlaIl41k" class="glightbox stretched-link">Watch Video</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section light-background">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item item-cyan position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,521.0016835830174C376.1290562159157,517.8887921683347,466.0731472004068,529.7835943286574,510.70327084640275,468.03025145048787C554.3714126377745,407.6079735673963,508.03601936045806,328.9844924480964,491.2728898941984,256.3432110539036C474.5976632858925,184.082847569629,479.9380746630129,96.60480741107993,416.23090153303,58.64404602377083C348.86323505073057,18.502131276798302,261.93793281208167,40.57373210992963,193.5410806939664,78.93577620505333C130.42746243093433,114.334589627462,98.30271207620316,179.96522072025542,76.75703585869454,249.04625023123273C51.97151888228291,328.5150500222984,13.704378332031375,421.85034740162234,66.52175969318436,486.19268352777647C119.04800174914682,550.1803526380478,217.28368757567262,524.383925680826,300,521.0016835830174"></path>
+                </svg>
+                <i class="bi bi-activity"></i>
+              </div>
+              <a href="https://mukminnasri.com/simandakes.html" class="stretched-link">
+                <h3>simandakes</h3>
+              </a>
+              <p>Sistem Informasi dan Manajemen Sumber Daya Manusia Kesehatan.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item item-orange position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426"></path>
+                </svg>
+                <i class="bi bi-broadcast"></i>
+              </div>
+              <a href="https://simantri.mukminnasri.com/" class="stretched-link">
+                <h3>simantri</h3>
+              </a>
+              <p>Sistem Informasi dan Manajemen Praktik Tenaga Medis dan Tenaga Kesehatan di Fasyankes dan Praktik Mandiri.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item item-teal position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,541.5067337569781C382.14930387511276,545.0595476570109,479.8736841581634,548.3450877840088,526.4010558755058,480.5488172755941C571.5218469581645,414.80211281144784,517.5187510058486,332.0715597781072,496.52539010469104,255.14436215662573C477.37192572678356,184.95920475031193,473.57363656557914,105.61284051026155,413.0603344069578,65.22779650032875C343.27470386102294,18.654635553484475,251.2091493199835,5.337323636656869,175.0934190732945,40.62881213300186C97.87086631185822,76.43348514350839,51.98124368387456,156.15599469081315,36.44837278890362,239.84606092416172C21.716077023791087,319.22268207091537,43.775223500013084,401.1760424656574,96.891909868211,461.97329694683043C147.22146801428983,519.5804099606455,223.5754009179313,538.201503339737,300,541.5067337569781"></path>
+                </svg>
+                <i class="bi bi-easel"></i>
+              </div>
+              <a href="#" class="stretched-link">
+                <h3>simbakes</h3>
+              </a>
+              <p>Beasiswa Tematik Bidang Kesehatan.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item item-red position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,503.46388370962813C374.79870501325706,506.71871716319447,464.8034551963731,527.1746412648533,510.4981551193396,467.86667711651364C555.9287308511215,408.9015244558933,512.6030010748507,327.5744911775523,490.211057578863,256.5855673507754C471.097692560561,195.9906835881958,447.69079081568157,138.11976852964426,395.19560036434837,102.3242989838813C329.3053358748298,57.3949838291264,248.02791733380457,8.279543830951368,175.87071277845988,42.242879143198664C103.41431057327972,76.34704239035025,93.79494320519305,170.9812938413882,81.28167332365135,250.07896920659033C70.17666984294237,320.27484674793965,64.84698225790005,396.69656628748305,111.28512138212992,450.4950937839243C156.20124167950087,502.5303643271138,231.32542653798444,500.4755392045468,300,503.46388370962813"></path>
+                </svg>
+                <i class="bi bi-bounding-box-circles"></i>
+              </div>
+              <a href="https://mukminnasri.com/dashboardpakintegrasipns.html" class="stretched-link">
+                <h3>pakti</h3>
+              </a>
+              <p>Penetapan Angka Kredit Integrasi.</p>
+              <a href="https://mukminnasri.com/dashboardpakintegrasipns.html" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,532.3542879108572C369.38199826031484,532.3153073249985,429.10787420159085,491.63046689027357,474.5244479745417,439.17860296908856C522.8885846962883,383.3225815378663,569.1668002868075,314.3205725914397,550.7432151929288,242.7694973846089C532.6665558377875,172.5657663291529,456.2379748765914,142.6223662098291,390.3689995646985,112.34683881706744C326.66090330228417,83.06452184765237,258.84405631176094,53.51806209861945,193.32584062364296,78.48882559362697C121.61183558270385,105.82097193414197,62.805066853699245,167.19869350419734,48.57481801355237,242.6138429142374C34.843463184063346,315.3850353017275,76.69343916112496,383.4422959591041,125.22947124332185,439.3748458443577C170.7312796277747,491.8107796887764,230.57421082200815,532.3932930995766,300,532.3542879108572"></path>
+                </svg>
+                <i class="bi bi-calendar4-week icon"></i>
+              </div>
+              <a href="https://mukminnasri.com/mantaF%20v1.0.html" class="stretched-link">
+                <h3>MantaF</h3>
+              </a>
+              <p>Manajemen Tata Kelola Jabatan Fungsional Kesehatan.</p>
+              <a href="https://mukminnasri.com/mantaF%20v1.0.html" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,532.3542879108572C369.38199826031484,532.3153073249985,429.10787420159085,491.63046689027357,474.5244479745417,439.17860296908856C522.8885846962883,383.3225815378663,569.1668002868075,314.3205725914397,550.7432151929288,242.7694973846089C532.6665558377875,172.5657663291529,456.2379748765914,142.6223662098291,390.3689995646985,112.34683881706744C326.66090330228417,83.06452184765237,258.84405631176094,53.51806209861945,193.32584062364296,78.48882559362697C121.61183558270385,105.82097193414197,62.805066853699245,167.19869350419734,48.57481801355237,242.6138429142374C34.843463184063346,315.3850353017275,76.69343916112496,383.4422959591041,125.22947124332185,439.3748458443577C170.7312796277747,491.8107796887764,230.57421082200815,532.3932930995766,300,532.3542879108572"></path>
+                </svg>
+                <i class="bi bi-calendar4-week icon"></i>
+              </div>
+              <a href="https://dedikasih.mukminnasri.com/" class="stretched-link">
+                <h3>DedikasiH</h3>
+              </a>
+              <p>Digitalisasi Kegiatan Pengabdian Masyarakat Sumber Daya Manusia Kesehatan.</p>
+              <a href="https://dedikasih.mukminnasri.com/" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,532.3542879108572C369.38199826031484,532.3153073249985,429.10787420159085,491.63046689027357,474.5244479745417,439.17860296908856C522.8885846962883,383.3225815378663,569.1668002868075,314.3205725914397,550.7432151929288,242.7694973846089C532.6665558377875,172.5657663291529,456.2379748765914,142.6223662098291,390.3689995646985,112.34683881706744C326.66090330228417,83.06452184765237,258.84405631176094,53.51806209861945,193.32584062364296,78.48882559362697C121.61183558270385,105.82097193414197,62.805066853699245,167.19869350419734,48.57481801355237,242.6138429142374C34.843463184063346,315.3850353017275,76.69343916112496,383.4422959591041,125.22947124332185,439.3748458443577C170.7312796277747,491.8107796887764,230.57421082200815,532.3932930995766,300,532.3542879108572"></path>
+                </svg>
+                <i class="bi bi-calendar4-week icon"></i>
+              </div>
+              <a href="https://pamungkas.mukminnasri.com/" class="stretched-link">
+                <h3>PAMUNGKAS</h3>
+              </a>
+              <p>Pengelolaan Pengembangan Mutu dan Peningkatan Kompetensi Sumber Daya Manusia Kesehatan.</p>
+              <a href="https://pamungkas.mukminnasri.com/" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item item-pink position-relative">
+              <div class="icon">
+                <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke="none" stroke-width="0" fill="#f5f5f5" d="M300,566.797414625762C385.7384707136149,576.1784315230908,478.7894351017131,552.8928747891023,531.9192734346935,484.94944893311C584.6109503024035,417.5663521118492,582.489472248146,322.67544863468447,553.9536738515405,242.03673114598146C529.1557734026468,171.96086150256528,465.24506316201064,127.66468636344209,395.9583748389544,100.7403814666027C334.2173773831606,76.7482773500951,269.4350130405921,84.62216499799875,207.1952322260088,107.2889140133804C132.92018162631612,134.33871894543012,41.79353780512637,160.00259165414826,22.644507872594943,236.69541883565114C3.319112789854554,314.0945973066697,72.72355303640163,379.243833228382,124.04198916343866,440.3218312028393C172.9286146004772,498.5055451809895,224.45579914871206,558.5317968840102,300,566.797414625762"></path>
+                </svg>
+                <i class="bi bi-chat-square-text"></i>
+              </div>
+              <a href="https://mandat.mukminnasri.com/index.html" class="stretched-link">
+                <h3>MandaT</h3>
+              </a>
+              <p>Manajemen Data Sumber Daya Manusia Kesehatan.</p>
+              <a href="https://mandat.mukminnasri.com/index.html" class="stretched-link"></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Keseruan Tim Kami</h2>
+        <p>Timker SDMK, kami bekerja sebagai tim, tapi rasa kami adalah keluarga — saling peduli, saling jaga, dan tumbuh bersama.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+            <li data-filter="*" class="filter-active">versi lengkap</li>
+            <li data-filter=".filter-app">Solidaritas</li>
+            <li data-filter=".filter-product">Dedikasi</li>
+            <li data-filter=".filter-branding">Siaga</li>
+          </ul><!-- End Portfolio Filters -->
+
+          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>App 1</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" title="App 1" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>eta dan ani</h4>
+                <p>tetap fresh, senyum, kerjaan beres</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" title="Product 1" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Branding 1</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" title="Branding 1" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>App 2</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" title="App 2" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Product 2</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" title="Product 2" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Branding 2</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-7.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>App 3</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-7.jpg" title="App 3" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-8.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Product 3</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-8.jpg" title="Product 3" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+              <img src="assets/img/masonry-portfolio/masonry-portfolio-9.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Branding 3</h4>
+                <p>Lorem ipsum, dolor sit</p>
+                <a href="assets/img/masonry-portfolio/masonry-portfolio-9.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="#" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+          </div><!-- End Portfolio Container -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Section -->
+
+<!-- Clients Section -->
+<section id="clients" class="clients section">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Platform SDM Kesehatan</h2>
+    <p>Berbagai Aplikasi atau Platform yang terintegrasi dengan kegiatan tim kerja Sumber Daya Manusia Kesehatan</p>
+  </div>
+  <!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row g-0 clients-wrap">
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="satusehatSDMK" 
+           data-url="https://satusehat.kemkes.go.id/sdmk" 
+           data-desc="Platform Kementerian Kesehatan untuk pengelolaan data dan informasi Sumber Daya Manusia Kesehatan (SDMK) secara terintegrasi.">
+        <img src="assets/img/clients/client-1.png" class="img-fluid" alt="SIMANDAKES">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="SISDMK" 
+           data-url="https://sisdmk.kemkes.go.id" 
+           data-desc="Sistem Informasi SDM Kesehatan Nasional">
+        <img src="assets/img/clients/client-2.png" class="img-fluid" alt="SISDMK">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="SATUSEHAT" 
+           data-url="https://satusehat.kemkes.go.id" 
+           data-desc="Platform Integrasi Data Kesehatan Nasional">
+        <img src="assets/img/clients/client-3.png" class="img-fluid" alt="SATUSEHAT">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="MPP Plongseng" 
+           data-url="https://lawang-mpp.kukarkab.go.id" 
+           data-desc="Pelayanan Online dengan Sistem Elektronik Berbasis Jaringan milik DPMPTSP Kabupaten Kutai Kartanegara dan menjadi bagian dari ekosistem layanan digital MPP Kukar.">
+        <img src="assets/img/clients/client-4.png" class="img-fluid" alt="SIKDA GENERIK">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="Renbut v5.0" 
+           data-url="https://renbut.kemkes.go.id" 
+           data-desc="Rencana Kebutuhan Sumber Daya Manusia Kesehatan (SDMK) Kementerian Kesehatan, yaitu sistem/proses yang digunakan untuk menghitung dan merencanakan kebutuhan tenaga medis dan tenaga kesehatan pada fasilitas pelayanan kesehatan.">
+        <img src="assets/img/clients/client-5.png" class="img-fluid" alt="e-PUSKESMAS">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="PGDS" 
+           data-url="https://pgds.kemkes.go.id/" 
+           data-desc="Pendayagunaan Dokter Spesialis.">
+        <img src="assets/img/clients/client-6.png" class="img-fluid" alt="SIHA">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="SIPD" 
+           data-url="https://sipd.kemendagri.go.id" 
+           data-desc="Sistem Informasi Pemerintahan Daerah">
+        <img src="assets/img/clients/client-7.png" class="img-fluid" alt="SIPD">
+      </div>
+
+      <div class="col-xl-3 col-md-4 client-logo" 
+           data-platform="INM" 
+           data-url="https://inm.kemkes.go.id" 
+           data-desc="Indikator Nasional Mutu Pelayanan Kesehatan">
+        <img src="assets/img/clients/client-8.png" class="img-fluid" alt="INM">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- POP-UP MODAL PLATFORM -->
+  <div id="platformModal" class="platform-modal">
+    <div class="platform-modal-content">
+      <span class="platform-modal-close">&times;</span>
+      <img id="modalLogo" src="" alt="Logo Platform">
+      <h4 id="modalTitle"></h4>
+      <p id="modalDesc"></p>
+      <a id="modalLink" href="#" target="_blank" class="btn btn-primary w-100">
+        Buka Platform <i class="bi bi-box-arrow-up-right ms-1"></i>
+      </a>
+    </div>
+  </div>
+
+</section>
+<!-- /Clients Section -->
+
+<style>
+.client-logo{
+  padding: 30px;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .3s ease;
+  filter: grayscale(100%);
+}
+.client-logo:hover{
+  filter: grayscale(0%);
+  background: #f9fdf9;
+  transform: translateY(-3px);
+}
+.platform-modal{
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+}
+.platform-modal-content{
+  background: #fff;
+  max-width: 420px;
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+}
+#modalLogo{max-height: 80px; margin-bottom: 15px;}
+.platform-modal-close{
+  position: absolute;
+  right: 15px; top: 10px;
+  font-size: 28px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const modal = document.getElementById('platformModal');
+  const mLogo = document.getElementById('modalLogo');
+  const mTitle = document.getElementById('modalTitle');
+  const mDesc = document.getElementById('modalDesc');
+  const mLink = document.getElementById('modalLink');
+  const close = document.querySelector('.platform-modal-close');
+
+  document.querySelectorAll('.client-logo').forEach(item => {
+    item.addEventListener('click', function(){
+      mLogo.src = this.querySelector('img').src;
+      mTitle.textContent = this.dataset.platform;
+      mDesc.textContent = this.dataset.desc;
+      mLink.href = this.dataset.url;
+      modal.style.display = 'block';
+    });
+  });
+
+  close.onclick = () => modal.style.display = 'none';
+  window.onclick = e => { if(e.target == modal) modal.style.display = 'none'; }
+});
+</script>
+
+
+<!-- Visitors Section -->
+<section id="visitors" class="visitors section light-background">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Statistik Pengunjung</h2>
+    <p>Data kunjungan website timker SDMK Dinkes Kutai Kartanegara secara real-time</p>
+  </div>
+  <!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Stat Cards Row -->
+    <div class="row g-4 mb-5">
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="visitor-stat-card card-online">
+          <div class="stat-icon">
+            <i class="bi bi-broadcast-pin"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Online Saat Ini</span>
+            <span class="stat-value" id="v-online"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub">pengunjung aktif</span>
+          </div>
+          <div class="pulse-dot"></div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="visitor-stat-card card-today">
+          <div class="stat-icon">
+            <i class="bi bi-calendar-date"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Hari Ini</span>
+            <span class="stat-value" id="v-today"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub" id="v-today-date"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="visitor-stat-card card-month">
+          <div class="stat-icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Bulan Ini</span>
+            <span class="stat-value" id="v-month"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub" id="v-month-date"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="visitor-stat-card card-total">
+          <div class="stat-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Kunjungan</span>
+            <span class="stat-value" id="v-total"><span class="stat-skeleton"></span></span>
+            <span class="stat-sub">sejak diluncurkan</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Country Breakdown -->
+    <div class="row justify-content-center">
+      <div class="col-lg-10" data-aos="fade-up" data-aos-delay="200">
+        <div class="country-panel">
+          <div class="country-panel-header">
+            <h3><i class="bi bi-globe-americas me-2"></i>Pengunjung Berdasarkan Negara</h3>
+            <span class="country-badge" id="v-country-count"><span class="stat-skeleton-inline"></span></span>
+          </div>
+          <div class="country-list" id="country-list">
+            <div class="country-loading">
+              <div class="spinner-border text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>
+              <p class="mt-2 text-muted">Mengambil data pengunjung...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your Location Info -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-10" data-aos="fade-up" data-aos-delay="300">
+        <div class="your-location-card">
+          <div class="d-flex align-items-center gap-3">
+            <div class="location-icon">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div>
+              <span class="location-label">Lokasi Anda Terdeteksi</span>
+              <span class="location-value" id="v-your-location"><span class="stat-skeleton-inline"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+<!-- /Visitors Section -->
+
+<!-- Visitors Section Styles -->
+<style>
+/* ===== VISITORS SECTION ===== */
+.visitors {
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+.visitors::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(13,110,253,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.visitors .section-title h2 {
+  color: var(--heading-color, #222);
+}
+.visitors .section-title p {
+  color: #666;
+}
+
+/* Stat Cards */
+.visitor-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.visitor-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.visitor-stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+.card-online::after { background: #22c55e; }
+.card-today::after { background: #3b82f6; }
+.card-month::after { background: #8b5cf6; }
+.card-total::after { background: #f59e0b; }
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+.card-online .stat-icon { background: #f0fdf4; color: #22c55e; }
+.card-today .stat-icon { background: #eff6ff; color: #3b82f6; }
+.card-month .stat-icon { background: #f5f3ff; color: #8b5cf6; }
+.card-total .stat-icon { background: #fffbeb; color: #f59e0b; }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a2e;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.1;
+}
+.stat-sub {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Pulse dot for online */
+.pulse-dot {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 18px;
+  height: 18px;
+  background: rgba(34,197,94,0.3);
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Skeleton Loading */
+.stat-skeleton {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: shimmer 1.5s infinite;
+  vertical-align: middle;
+}
+.stat-skeleton-inline {
+  display: inline-block;
+  width: 80px;
+  height: 16px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+  vertical-align: middle;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Country Panel */
+.country-panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.country-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.country-panel-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+.country-badge {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.country-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.country-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fafbfc;
+  border: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+.country-item:hover {
+  background: #f0f4ff;
+  border-color: #d0d8f0;
+  transform: translateX(4px);
+}
+.country-flag {
+  width: 32px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.country-emoji-flag {
+  font-size: 24px;
+  line-height: 1;
+}
+.country-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.country-visits {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+.country-bar-wrap {
+  width: 100%;
+  margin-top: 4px;
+}
+.country-bar-bg {
+  height: 4px;
+  background: #f0f0f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.country-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  transition: width 1s ease;
+}
+
+.country-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* Your Location Card */
+.your-location-card {
+  background: linear-gradient(135deg, #f0f9ff, #e8f4fd);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+.location-icon {
+  width: 42px;
+  height: 42px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.location-label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.location-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .visitors { padding: 60px 0; }
+  .visitor-stat-card { padding: 20px 18px; gap: 14px; }
+  .stat-value { font-size: 26px; }
+  .country-list { grid-template-columns: 1fr; }
+  .country-panel { padding: 20px; }
+}
+</style>
+
+<!-- Visitors Counter Script -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== CONFIG =====
+  var API_URL = window.location.pathname;
+  var FLAG_CDN = 'https://flagcdn.com/w40/';
+  var sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  var visitorGeo = null;
+
+  // ===== COUNTRY NAME MAPPING =====
+  var COUNTRY_NAMES = {
+    id: 'Indonesia', us: 'Amerika Serikat', sg: 'Singapura', my: 'Malaysia',
+    jp: 'Jepang', kr: 'Korea Selatan', cn: 'Tiongkok', in: 'India',
+    au: 'Australia', gb: 'Inggris', de: 'Jerman', fr: 'Prancis',
+    nl: 'Belanda', sa: 'Arab Saudi', ae: 'Uni Emirat Arab', ph: 'Filipina',
+    th: 'Thailand', vn: 'Vietnam', bn: 'Brunei', nz: 'Selandia Baru',
+    ca: 'Kanada', br: 'Brasil', ru: 'Rusia', it: 'Italia', es: 'Spanyol',
+    tw: 'Taiwan', hk: 'Hong Kong', kp: 'Korea Utara', pk: 'Pakistan',
+    bd: 'Bangladesh', mm: 'Myanmar', kh: 'Kamboja', la: 'Laos',
+    tl: 'Timor Leste', pg: 'Papua Nugini', ie: 'Irlandia', se: 'Swedia',
+    no: 'Norwegia', dk: 'Denmark', fi: 'Finlandia', pl: 'Polandia',
+    ch: 'Swiss', at: 'Austria', be: 'Belgia', pt: 'Portugal',
+    cz: 'Ceko', hu: 'Hongaria', ro: 'Rumania', ua: 'Ukraina',
+    tr: 'Turki', il: 'Israel', eg: 'Mesir', za: 'Afrika Selatan',
+    ng: 'Nigeria', ke: 'Kenya', mx: 'Meksiko', ar: 'Argentina',
+    cl: 'Chile', co: 'Kolombia', pe: 'Peru', ve: 'Venezuela',
+    xx: 'Lainnya'
+  };
+
+  function getCountryName(code) {
+    return COUNTRY_NAMES[code] || code.toUpperCase();
+  }
+
+  // ===== RENDER COUNTRY LIST =====
+  function renderCountries(data) {
+    var container = document.getElementById('country-list');
+    var countEl = document.getElementById('v-country-count');
+    if (!container) return;
+
+    var entries = Object.keys(data).map(function(k) { return [k, data[k]]; });
+    var sorted = entries.filter(function(e) { return e[1] > 0; }).sort(function(a, b) { return b[1] - a[1]; });
+
+    if (sorted.length === 0) {
+      container.innerHTML = '<div class="country-loading"><p class="text-muted">Belum ada data negara</p></div>';
+      return;
+    }
+
+    var totalVisits = 0;
+    for (var i = 0; i < sorted.length; i++) totalVisits += sorted[i][1];
+    if (countEl) countEl.textContent = sorted.length + ' negara';
+
+    var html = '';
+    for (var j = 0; j < sorted.length; j++) {
+      var code = sorted[j][0];
+      var visits = sorted[j][1];
+      var barPct = Math.max(Math.round((visits / totalVisits) * 100), 2);
+      var flagUrl = FLAG_CDN + code + '.png';
+      var name = getCountryName(code);
+
+      html += '<div class="country-item">' +
+        '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display=\'none\'">' +
+        '<div style="flex:1">' +
+          '<div class="d-flex justify-content-between align-items-center">' +
+            '<span class="country-name">' + name + '</span>' +
+            '<span class="country-visits">' + visits.toLocaleString('id-ID') + '</span>' +
+          '</div>' +
+          '<div class="country-bar-wrap">' +
+            '<div class="country-bar-bg"><div class="country-bar-fill" style="width:' + barPct + '%"></div></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  // ===== ANIMATE NUMBER =====
+  function animateNumber(el, target, duration) {
+    duration = duration || 1200;
+    if (!el) return;
+    var startTime = performance.now();
+    function step(now) {
+      var elapsed = now - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(target * ease);
+      el.textContent = current.toLocaleString('id-ID');
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ===== SET DATE LABELS =====
+  function setDateLabels() {
+    var months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    var now = new Date();
+    var todayEl = document.getElementById('v-today-date');
+    var monthEl = document.getElementById('v-month-date');
+    if (todayEl) todayEl.textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    if (monthEl) monthEl.textContent = months[now.getMonth()] + ' ' + now.getFullYear();
+  }
+
+  // ===== SHOW ERROR STATE =====
+  function showError(msg) {
+    animateNumber(document.getElementById('v-online'), 0);
+    animateNumber(document.getElementById('v-today'), 0);
+    animateNumber(document.getElementById('v-month'), 0);
+    animateNumber(document.getElementById('v-total'), 0);
+    var cl = document.getElementById('country-list');
+    if (cl) cl.innerHTML = '<div class="country-loading"><p class="text-muted">' + msg + '</p></div>';
+  }
+
+  // ===== HEARTBEAT (update online setiap 60 detik) =====
+  function startHeartbeat() {
+    setInterval(function() {
+      var hbUrl = API_URL + '?s=' + sessionId;
+      fetch(hbUrl)
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(d) {
+          if (d.success) {
+            var el = document.getElementById('v-online');
+            if (el) el.textContent = d.onlineCount.toLocaleString('id-ID');
+          }
+        })
+        .catch(function() {});
+    }, 60000);
+  }
+
+  // ===== MAIN INIT =====
+  function init() {
+    setDateLabels();
+
+    // Kirim kunjungan + terima geo dari server (1 panggilan API saja)
+    var url = API_URL + '?visit=1&s=' + sessionId;
+
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function(text) {
+        var d;
+        try { d = JSON.parse(text); } catch(e) { throw new Error('PHP tidak dieksekusi — buka visitors.php langsung di browser untuk cek'); }
+        if (d.success) {
+          // Tampilkan lokasi pengunjung dari respons server
+          if (d.visitorGeo) {
+            visitorGeo = d.visitorGeo;
+            var locEl = document.getElementById('v-your-location');
+            if (locEl) {
+              var parts = [];
+              if (visitorGeo.city) parts.push(visitorGeo.city);
+              if (visitorGeo.region) parts.push(visitorGeo.region);
+              if (visitorGeo.name) parts.push(visitorGeo.name);
+              locEl.textContent = parts.length > 0 ? parts.join(', ') : 'Lokasi tidak diketahui';
+            }
+          } else {
+            var locEl2 = document.getElementById('v-your-location');
+            if (locEl2) locEl2.textContent = 'Lokasi tidak diketahui';
+          }
+
+          // Animasi counter
+          animateNumber(document.getElementById('v-online'), d.onlineCount);
+          animateNumber(document.getElementById('v-today'), d.todayCount);
+          animateNumber(document.getElementById('v-month'), d.monthCount);
+          animateNumber(document.getElementById('v-total'), d.totalCount);
+
+          // Render daftar negara
+          renderCountries(d.countries || {});
+
+          // Mulai heartbeat
+          startHeartbeat();
+        } else {
+          showError('Gagal memuat data: ' + (d.error || ''));
+        }
+      })
+      .catch(function(e) {
+        var errMsg = 'Tidak dapat terhubung ke server';
+        if (e && e.message) errMsg += ' (' + e.message + ')';
+        showError(errMsg);
+      });
+  }
+
+  // Start
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">timker-SDMK</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Jl. Cut Nyak Dien No.33</p>
+            <p>Tenggarong, Kutai Kartanegara</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+62 82130275800</span></p>
+            <p><strong>Email:</strong> <span>sdmkdinkeskukar2024@gmail.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Tautan Resmi</h4>
+          <ul>
+            <li><a href="#">Beranda</a></li>
+            <li><a href="#">Tentang</a></li>
+            <li><a href="#">Layanan</a></li>
+            <li><a href="#">Download</a></li>
+            <li><a href="#">Kontak Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Layanan Khusus</h4>
+          <ul>
+            <li><a href="#">Desain Website</a></li>
+            <li><a href="#">Pengembangan Website</a></li>
+            <li><a href="#">Pendampingan</a></li>
+            <li><a href="#">Pembuatan Platform Sederhana</a></li>
+            <li><a href="#">Konsultasi</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Our Newsletter</h4>
+          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
+          <form action="forms/newsletter.php" method="post" class="php-email-form">
+            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Company</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Redesigned by <a href="#">mukminasri</a> Distributed by <a href=#>timker-SDMK
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
