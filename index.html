@@ -55,9 +55,13 @@
     <a href="#" class="dropdown-toggle">Layanan <span class="arrow">▼</span>
     </a>
     <ul class="submenu">
+        <li><a href="https://mukminnasri.com/simandakes.html">simandakes</a></li>
         <li><a href="https://simantri.mukminnasri.com/">simantri</a></li>
         <li><a href="https://simbakes.mukminnasri.com/index.html">simbakes</a></li>
         <li><a href="https://mukminnasri.com/dashboardpakintegrasipns.html">pakti</a></li>
+        <li><a href="https://mukminnasri.com/MandaT.html">mandat</a></li>
+        <li><a href="#">sirek</a></li>
+        <li><a href="#">kredens</a></li>
         <li><a href="https://mukminnasri.com/mantaF%20v1.0.html">mantaf</a></li>
     </ul>
 </li>            
@@ -290,11 +294,11 @@
                 </svg>
                 <i class="bi bi-calendar4-week icon"></i>
               </div>
-              <a href="pamungkas.html" class="stretched-link">
+              <a href="https://pamungkas.mukminnasri.com/" class="stretched-link">
                 <h3>PAMUNGKAS</h3>
               </a>
               <p>Pengelolaan Pengembangan Mutu dan Peningkatan Kompetensi Sumber Daya Manusia Kesehatan.</p>
-              <a href="pamungkas.html" class="stretched-link"></a>
+              <a href="https://pamungkas.mukminnasri.com/" class="stretched-link"></a>
             </div>
           </div><!-- End Service Item -->
 
@@ -1002,11 +1006,13 @@ document.addEventListener('DOMContentLoaded', function(){
 (function() {
   'use strict';
 
-  // ===== CONFIG =====
-  var API_URL = 'forms/visitors.php';
+  // ============================================================
+  // CONFIG — Ganti FIREBASE_URL dengan URL database kamu
+  // ============================================================
+  var FIREBASE_URL = 'https://visitors-8d27c-default-rtdb.asia-southeast1.firebasedatabase.app';
   var FLAG_CDN = 'https://flagcdn.com/w40/';
   var sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
-  var visitorGeo = null;
+  var visitorCountry = null;
 
   // ===== COUNTRY NAME MAPPING =====
   var COUNTRY_NAMES = {
@@ -1028,8 +1034,42 @@ document.addEventListener('DOMContentLoaded', function(){
     xx: 'Lainnya'
   };
 
-  function getCountryName(code) {
-    return COUNTRY_NAMES[code] || code.toUpperCase();
+  function getCountryName(code) { return COUNTRY_NAMES[code] || code.toUpperCase(); }
+
+  // ===== FIREBASE HELPERS =====
+  function fbGet(path) {
+    return fetch(FIREBASE_URL + '/' + path + '.json').then(function(r) {
+      if (!r.ok) throw new Error('Firebase GET error ' + r.status);
+      return r.json();
+    });
+  }
+
+  function fbSet(path, data) {
+    return fetch(FIREBASE_URL + '/' + path + '.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r) {
+      if (!r.ok) throw new Error('Firebase SET error ' + r.status);
+      return r.json();
+    });
+  }
+
+  // ===== GEOLOCATION (client-side) =====
+  function fetchGeo() {
+    return fetch('https://ipapi.co/json/')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.country_code && !d.error) {
+          visitorCountry = {
+            code: d.country_code.toLowerCase(),
+            name: d.country_name || 'Unknown',
+            city: d.city || '',
+            region: d.region || ''
+          };
+        } else { visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' }; }
+      })
+      .catch(function() { visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' }; });
   }
 
   // ===== RENDER COUNTRY LIST =====
@@ -1037,41 +1077,28 @@ document.addEventListener('DOMContentLoaded', function(){
     var container = document.getElementById('country-list');
     var countEl = document.getElementById('v-country-count');
     if (!container) return;
-
-    var entries = Object.keys(data).map(function(k) { return [k, data[k]]; });
+    var entries = Object.keys(data || {}).map(function(k) { return [k, data[k]]; });
     var sorted = entries.filter(function(e) { return e[1] > 0; }).sort(function(a, b) { return b[1] - a[1]; });
-
     if (sorted.length === 0) {
       container.innerHTML = '<div class="country-loading"><p class="text-muted">Belum ada data negara</p></div>';
       return;
     }
-
     var totalVisits = 0;
     for (var i = 0; i < sorted.length; i++) totalVisits += sorted[i][1];
     if (countEl) countEl.textContent = sorted.length + ' negara';
-
-    var html = '';
+    var h = '';
     for (var j = 0; j < sorted.length; j++) {
-      var code = sorted[j][0];
-      var visits = sorted[j][1];
+      var code = sorted[j][0], visits = sorted[j][1];
       var barPct = Math.max(Math.round((visits / totalVisits) * 100), 2);
-      var flagUrl = FLAG_CDN + code + '.png';
       var name = getCountryName(code);
-
-      html += '<div class="country-item">' +
-        '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display=\'none\'">' +
-        '<div style="flex:1">' +
-          '<div class="d-flex justify-content-between align-items-center">' +
-            '<span class="country-name">' + name + '</span>' +
-            '<span class="country-visits">' + visits.toLocaleString('id-ID') + '</span>' +
-          '</div>' +
-          '<div class="country-bar-wrap">' +
-            '<div class="country-bar-bg"><div class="country-bar-fill" style="width:' + barPct + '%"></div></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+      h += '<div class="country-item">' +
+        '<img src="' + FLAG_CDN + code + '.png" alt="' + name + '" class="country-flag" onerror="this.style.display=\x27none\x27">' +
+        '<div style="flex:1"><div class="d-flex justify-content-between align-items-center">' +
+        '<span class="country-name">' + name + '</span>' +
+        '<span class="country-visits">' + visits.toLocaleString('id-ID') + '</span></div>' +
+        '<div class="country-bar-wrap"><div class="country-bar-bg"><div class="country-bar-fill" style="width:' + barPct + '%"></div></div></div></div></div>';
     }
-    container.innerHTML = html;
+    container.innerHTML = h;
   }
 
   // ===== ANIMATE NUMBER =====
@@ -1083,8 +1110,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var elapsed = now - startTime;
       var progress = Math.min(elapsed / duration, 1);
       var ease = 1 - Math.pow(1 - progress, 3);
-      var current = Math.round(target * ease);
-      el.textContent = current.toLocaleString('id-ID');
+      el.textContent = Math.round(target * ease).toLocaleString('id-ID');
       if (progress < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -1100,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if (monthEl) monthEl.textContent = months[now.getMonth()] + ' ' + now.getFullYear();
   }
 
-  // ===== SHOW ERROR STATE =====
+  // ===== SHOW ERROR =====
   function showError(msg) {
     animateNumber(document.getElementById('v-online'), 0);
     animateNumber(document.getElementById('v-today'), 0);
@@ -1110,22 +1136,28 @@ document.addEventListener('DOMContentLoaded', function(){
     if (cl) cl.innerHTML = '<div class="country-loading"><p class="text-muted">' + msg + '</p></div>';
   }
 
-  // ===== HEARTBEAT (update online setiap 60 detik) =====
+  // ===== CLEAN OLD ONLINE SESSIONS =====
+  function cleanOnline(onlineData) {
+    var cutoff = Date.now() - 300000;
+    var cleaned = {};
+    for (var k in onlineData) {
+      if (onlineData[k] > cutoff && k !== sessionId) cleaned[k] = onlineData[k];
+    }
+    return cleaned;
+  }
+
+  // ===== HEARTBEAT =====
   function startHeartbeat() {
     setInterval(function() {
-      var hbUrl = API_URL + '?s=' + sessionId;
-      fetch(hbUrl)
-        .then(function(r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(function(d) {
-          if (d.success) {
-            var el = document.getElementById('v-online');
-            if (el) el.textContent = d.onlineCount.toLocaleString('id-ID');
-          }
-        })
-        .catch(function() {});
+      fbSet('online/' + sessionId, Date.now()).then(function() {
+        return fbGet('online');
+      }).then(function(onlineData) {
+        var cleaned = cleanOnline(onlineData || {});
+        cleaned[sessionId] = Date.now();
+        fbSet('online', cleaned);
+        var el = document.getElementById('v-online');
+        if (el) el.textContent = Object.keys(cleaned).length.toLocaleString('id-ID');
+      }).catch(function() {});
     }, 60000);
   }
 
@@ -1133,62 +1165,77 @@ document.addEventListener('DOMContentLoaded', function(){
   function init() {
     setDateLabels();
 
-    // Kirim kunjungan + terima geo dari server (1 panggilan API saja)
-    var url = API_URL + '?visit=1&s=' + sessionId;
+    // Show location
+    var locEl = document.getElementById('v-your-location');
+    if (locEl) {
+      if (visitorCountry && visitorCountry.city) {
+        var parts = [];
+        if (visitorCountry.city) parts.push(visitorCountry.city);
+        if (visitorCountry.region) parts.push(visitorCountry.region);
+        if (visitorCountry.name) parts.push(visitorCountry.name);
+        locEl.textContent = parts.join(', ');
+      } else {
+        locEl.textContent = 'Lokasi tidak diketahui';
+      }
+    }
 
-    fetch(url)
-      .then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(function(text) {
-        var d;
-        try { d = JSON.parse(text); } catch(e) { throw new Error('PHP tidak dieksekusi — buka visitors.php langsung di browser untuk cek'); }
-        if (d.success) {
-          // Tampilkan lokasi pengunjung dari respons server
-          if (d.visitorGeo) {
-            visitorGeo = d.visitorGeo;
-            var locEl = document.getElementById('v-your-location');
-            if (locEl) {
-              var parts = [];
-              if (visitorGeo.city) parts.push(visitorGeo.city);
-              if (visitorGeo.region) parts.push(visitorGeo.region);
-              if (visitorGeo.name) parts.push(visitorGeo.name);
-              locEl.textContent = parts.length > 0 ? parts.join(', ') : 'Lokasi tidak diketahui';
-            }
-          } else {
-            var locEl2 = document.getElementById('v-your-location');
-            if (locEl2) locEl2.textContent = 'Lokasi tidak diketahui';
-          }
+    var today = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+    var monthStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
+    var cc = visitorCountry ? visitorCountry.code : 'id';
 
-          // Animasi counter
-          animateNumber(document.getElementById('v-online'), d.onlineCount);
-          animateNumber(document.getElementById('v-today'), d.todayCount);
-          animateNumber(document.getElementById('v-month'), d.monthCount);
-          animateNumber(document.getElementById('v-total'), d.totalCount);
+    // Read current stats
+    fbGet('stats').then(function(stats) {
+      if (!stats) stats = { total: 0, todayDate: todayStr, todayCount: 0, monthDate: monthStr, monthCount: 0 };
 
-          // Render daftar negara
-          renderCountries(d.countries || {});
+      // Reset if date changed
+      if (stats.todayDate !== todayStr) { stats.todayCount = 0; stats.todayDate = todayStr; }
+      if (stats.monthDate !== monthStr) { stats.monthCount = 0; stats.monthDate = monthStr; }
 
-          // Mulai heartbeat
-          startHeartbeat();
-        } else {
-          showError('Gagal memuat data: ' + (d.error || ''));
-        }
-      })
-      .catch(function(e) {
-        var errMsg = 'Tidak dapat terhubung ke server';
-        if (e && e.message) errMsg += ' (' + e.message + ')';
-        showError(errMsg);
+      // Increment
+      stats.total = (stats.total || 0) + 1;
+      stats.todayCount = (stats.todayCount || 0) + 1;
+      stats.monthCount = (stats.monthCount || 0) + 1;
+
+      return fbSet('stats', stats).then(function() { return stats; });
+    }).then(function(stats) {
+      // Update online
+      return fbGet('online').then(function(onlineData) {
+        var cleaned = cleanOnline(onlineData || {});
+        cleaned[sessionId] = Date.now();
+        return fbSet('online', cleaned).then(function() {
+          return { stats: stats, onlineCount: Object.keys(cleaned).length };
+        });
       });
+    }).then(function(result) {
+      // Update country
+      return fbGet('countries/' + cc).then(function(count) {
+        return fbSet('countries/' + cc, (count || 0) + 1).then(function() {
+          return fbGet('countries');
+        });
+      }).then(function(countries) {
+        result.countries = countries || {};
+        return result;
+      });
+    }).then(function(result) {
+      // Render everything
+      animateNumber(document.getElementById('v-online'), result.onlineCount);
+      animateNumber(document.getElementById('v-today'), result.stats.todayCount);
+      animateNumber(document.getElementById('v-month'), result.stats.monthCount);
+      animateNumber(document.getElementById('v-total'), result.stats.total);
+      renderCountries(result.countries);
+      startHeartbeat();
+    }).catch(function(e) {
+      showError('Gagal terhubung ke database: ' + (e && e.message ? e.message : ''));
+    });
   }
 
-  // Start
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // Start: geo first, then init
+  fetchGeo().then(function() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else { init(); }
+  });
 })();
 </script>
 
