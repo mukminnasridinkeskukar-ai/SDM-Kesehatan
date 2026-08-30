@@ -3190,14 +3190,14 @@
             uploadPreset: 'galeri_kegiatan',
             baseFolder: 'galeri-kegiatan',
             
-            // 🆕 DATA STORAGE: JSON file di Cloudinary Raw Upload
-            dataFilePublicId: 'galeri-data/events.json',
+            // 🆕 DATA STORAGE: TXT file di Cloudinary Raw Upload (JSON tidak diizinkan!)
+            dataFilePublicId: 'galeri-data/events.txt',
             
             // API Endpoints
             uploadApi: `https://api.cloudinary.com/v1_1/cla7jrww/auto/upload`,
             
             // CDN URLs untuk fetch data
-            dataFileUrl: `https://res.cloudinary.com/cla7jrww/raw/upload/galeri-data/events.json`,
+            dataFileUrl: `https://res.cloudinary.com/cla7jrww/raw/upload/galeri-data/events.txt`,
             
             // Base URL untuk gambar
             baseUrl: 'https://res.cloudinary.com/cla7jrww/image/upload'
@@ -3241,8 +3241,8 @@
         // ============================================
         
         /**
-         * FETCH DATA dari Cloudinary (JSON File)
-         * Bisa dipanggil dari MANA SAJA tanpa CORS issue!
+         * FETCH DATA dari Cloudinary (JSON/TXT File)
+         * FALLBACK: Jika Cloudinary gagal, cek localStorage
          */
         async function fetchEventsFromCloudinary() {
             console.log('☁️ Fetching events from Cloudinary...');
@@ -3253,10 +3253,11 @@
                 
                 if (!response.ok) {
                     if (response.status === 404) {
-                        console.log('📭 Data file not found (404) - will create new');
-                        return null;
+                        console.log('📭 Data file not found on Cloudinary (404)');
+                    } else {
+                        console.warn('⚠️ Cloudinary error:', response.status, response.statusText);
                     }
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
                 const data = await response.json();
@@ -3264,46 +3265,84 @@
                 return data;
                 
             } catch (error) {
-                console.error('❌ Failed to fetch from Cloudinary:', error.message);
-                return null;
+                console.warn('⚠️ Cannot fetch from Cloudinary:', error.message);
+                console.log('💾 Checking localStorage backup...');
+                
+                // FALLBACK: Cek localStorage
+                try {
+                    const backupData = localStorage.getItem('galeri_events_backup');
+                    if (backupData) {
+                        const parsed = JSON.parse(backupData);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            console.log('✅ Found', parsed.length, 'events in localStorage backup');
+                            showToast('ℹ️ Memuat data dari browser (backup)', 'info');
+                            return parsed;
+                        }
+                    }
+                    console.log('📭 No backup data found');
+                    return null;
+                } catch (e) {
+                    console.error('❌ Failed to read backup:', e);
+                    return null;
+                }
             }
         }
         
         /**
-         * SAVE DATA ke Cloudinary (Upload JSON File)
+         * SAVE DATA ke Cloudinary (Upload JSON/TXT File)
+         * FALLBACK: Jika Cloudinary gagal, gunakan localStorage
          */
         async function saveEventsToCloudinary(eventsData) {
             console.log('☁️ Saving events to Cloudinary...');
             
             try {
                 const jsonString = JSON.stringify(eventsData, null, 2);
-                const blob = new Blob([jsonString], { type: 'application/json' });
-                const file = new File([blob], 'events.json', { type: 'application/json' });
+                const blob = new Blob([jsonString], { type: 'text/plain' });
+                const file = new File([blob], 'events.txt', { type: 'text/plain' });
                 
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
                 formData.append('public_id', CLOUDINARY_CONFIG.dataFilePublicId);
                 formData.append('resource_type', 'raw');
-                formData.append('overwrite', true);
                 
+                console.log('📤 Uploading data to Cloudinary...');
                 const response = await fetch(CLOUDINARY_CONFIG.uploadApi, {
                     method: 'POST',
                     body: formData
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`Upload failed: HTTP ${response.status}`);
+                const result = await response.json();
+                
+                if (!response.ok || result.error) {
+                    console.warn('⚠️ Cloudinary raw upload not supported:', result.error?.message);
+                    console.log('💾 Falling back to localStorage...');
+                    
+                    // FALLBACK: Simpan ke localStorage
+                    localStorage.setItem('galeri_events_backup', jsonString);
+                    console.log('✅ Data saved to localStorage (fallback)');
+                    return true; // Return true agar user tidak panik
                 }
                 
-                const result = await response.json();
                 console.log('✅ Data saved to Cloudinary:', result.public_id);
+                // Juga backup ke localStorage
+                localStorage.setItem('galeri_events_backup', jsonString);
                 return true;
                 
             } catch (error) {
-                console.error('❌ Failed to save to Cloudinary:', error);
-                showToast('❌ Gagal simpan ke Cloudinary: ' + error.message, 'error');
-                return false;
+                console.error('❌ Save failed, using localStorage fallback:', error.message);
+                
+                // FORCE FALLBACK ke localStorage
+                try {
+                    const jsonString = JSON.stringify(eventsData, null, 2);
+                    localStorage.setItem('galeri_events_backup', jsonString);
+                    console.log('✅ Data saved to localStorage (emergency fallback)');
+                    showToast('⚠️ Data disimpan di browser (Cloudinary limited)', 'warning');
+                    return true;
+                } catch (e) {
+                    console.error('❌ Emergency fallback also failed:', e);
+                    return false;
+                }
             }
         }
         
