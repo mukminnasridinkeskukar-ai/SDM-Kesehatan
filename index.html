@@ -1008,38 +1008,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ===== CONFIG =====
   var API_URL = 'api/visitors.php';
-  var GEO_API = 'https://ipwho.is/';
   var FLAG_CDN = 'https://flagcdn.com/w40/';
   var sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
-
-  // ===== GEOLOCATION =====
-  var visitorCountry = null;
-
-  function fetchGeo() {
-    return fetch(GEO_API)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success !== false && data.country_code) {
-          visitorCountry = {
-            code: (data.country_code || 'XX').toLowerCase(),
-            name: data.country || 'Unknown',
-            city: data.city || '',
-            region: data.region || ''
-          };
-          var el = document.getElementById('v-your-location');
-          if (el) el.textContent = visitorCountry.city + ', ' + visitorCountry.region + ', ' + visitorCountry.name;
-        } else {
-          setUnknownLocation();
-        }
-      })
-      .catch(function() { setUnknownLocation(); });
-  }
-
-  function setUnknownLocation() {
-    visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' };
-    var el = document.getElementById('v-your-location');
-    if (el) el.textContent = 'Tidak dapat mengambil lokasi';
-  }
+  var visitorGeo = null;
 
   // ===== COUNTRY NAME MAPPING =====
   var COUNTRY_NAMES = {
@@ -1092,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var name = getCountryName(code);
 
       html += '<div class="country-item">' +
-        '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display=void 0">' +
+        '<img src="' + flagUrl + '" alt="' + name + '" class="country-flag" onerror="this.style.display=\'none\'">' +
         '<div style="flex:1">' +
           '<div class="d-flex justify-content-between align-items-center">' +
             '<span class="country-name">' + name + '</span>' +
@@ -1133,11 +1104,25 @@ document.addEventListener('DOMContentLoaded', function(){
     if (monthEl) monthEl.textContent = months[now.getMonth()] + ' ' + now.getFullYear();
   }
 
+  // ===== SHOW ERROR STATE =====
+  function showError(msg) {
+    animateNumber(document.getElementById('v-online'), 0);
+    animateNumber(document.getElementById('v-today'), 0);
+    animateNumber(document.getElementById('v-month'), 0);
+    animateNumber(document.getElementById('v-total'), 0);
+    var cl = document.getElementById('country-list');
+    if (cl) cl.innerHTML = '<div class="country-loading"><p class="text-muted">' + msg + '</p></div>';
+  }
+
   // ===== HEARTBEAT (update online setiap 60 detik) =====
   function startHeartbeat() {
     setInterval(function() {
-      fetch(API_URL + '?s=' + sessionId + '&c=' + (visitorCountry ? visitorCountry.code : 'id'))
-        .then(function(r) { return r.json(); })
+      var hbUrl = API_URL + '?s=' + sessionId;
+      fetch(hbUrl)
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
         .then(function(d) {
           if (d.success) {
             var el = document.getElementById('v-online');
@@ -1152,37 +1137,60 @@ document.addEventListener('DOMContentLoaded', function(){
   function init() {
     setDateLabels();
 
-    var countryCode = visitorCountry ? visitorCountry.code : 'id';
+    // Kirim kunjungan + terima geo dari server (1 panggilan API saja)
+    var url = API_URL + '?visit=1&s=' + sessionId;
 
-    // Kirim kunjungan via GET (tidak ada CORS preflight)
-    fetch(API_URL + '?visit=1&s=' + sessionId + '&c=' + countryCode)
-      .then(function(r) { return r.json(); })
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
       .then(function(d) {
         if (d.success) {
+          // Tampilkan lokasi pengunjung dari respons server
+          if (d.visitorGeo) {
+            visitorGeo = d.visitorGeo;
+            var locEl = document.getElementById('v-your-location');
+            if (locEl) {
+              var parts = [];
+              if (visitorGeo.city) parts.push(visitorGeo.city);
+              if (visitorGeo.region) parts.push(visitorGeo.region);
+              if (visitorGeo.name) parts.push(visitorGeo.name);
+              locEl.textContent = parts.length > 0 ? parts.join(', ') : 'Lokasi tidak diketahui';
+            }
+          } else {
+            var locEl2 = document.getElementById('v-your-location');
+            if (locEl2) locEl2.textContent = 'Lokasi tidak diketahui';
+          }
+
+          // Animasi counter
           animateNumber(document.getElementById('v-online'), d.onlineCount);
           animateNumber(document.getElementById('v-today'), d.todayCount);
           animateNumber(document.getElementById('v-month'), d.monthCount);
           animateNumber(document.getElementById('v-total'), d.totalCount);
+
+          // Render daftar negara
           renderCountries(d.countries || {});
+
+          // Mulai heartbeat
           startHeartbeat();
+        } else {
+          showError('Gagal memuat data pengunjung');
         }
       })
-      .catch(function() {
-        animateNumber(document.getElementById('v-online'), 0);
-        animateNumber(document.getElementById('v-today'), 0);
-        animateNumber(document.getElementById('v-month'), 0);
-        animateNumber(document.getElementById('v-total'), 0);
+      .catch(function(e) {
+        var errMsg = 'Tidak dapat terhubung ke server';
+        if (e && e.message) errMsg += ' (' + e.message + ')';
+        showError(errMsg);
       });
   }
 
-  // Start: deteksi lokasi dulu, lalu init
-  fetchGeo().then(function() {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  });
+  // Start
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 
