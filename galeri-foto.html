@@ -2298,6 +2298,44 @@
             background: rgba(220, 38, 38, 0.2);
         }
 
+        .sync-cloud-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: none;
+        }
+
+        .sync-cloud-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .sync-cloud-btn:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .sync-cloud-btn.syncing {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .sync-cloud-btn.syncing svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 480px) {
             .login-container {
                 max-width: 100%;
@@ -2917,6 +2955,12 @@
                         <span id="sessionUsername">Admin</span>
                     </span>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
+                    <button class="sync-cloud-btn" id="syncCloudBtn" title="Sync data ke Cloudinary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                        Sync Cloud
+                    </button>
                 </div>
             </div>
             
@@ -3264,10 +3308,80 @@
         }
         
         /**
-         * INITIALIZE DEFAULT DATA (jika belum ada)
+         * INITIALIZE DEFAULT DATA (jika belum ada di Cloudinary)
+         * Membuat sample events berdasarkan folder yang umum digunakan
          */
         function getDefaultEvents() {
-            return [];
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // Sample events - bisa diedit lewat Admin Panel nanti
+            const sampleEvents = [
+                {
+                    id: `event-${Date.now()}-1`,
+                    title: 'Pelatihan Kesehatan Masyarakat',
+                    description: 'Kegiatan pelatihan peningkatan kapasitas tenaga kesehatan dalam pelayanan masyarakat',
+                    date: now.toISOString().split('T')[0],
+                    year: currentYear,
+                    category: 'pelatihan',
+                    location: 'Dinas Kesehatan Provinsi',
+                    folder: `${CLOUDINARY_CONFIG.baseFolder}/${currentYear}/pelatihan/pelatihan-kesehatan-masyarakat`,
+                    photos: [],
+                    photoCount: 0,
+                    featuredPhoto: null,
+                    status: 'published',
+                    createdAt: now.toISOString(),
+                    updatedAt: now.toISOString()
+                },
+                {
+                    id: `event-${Date.now()}-2`,
+                    title: 'Sosialisasi Program Kesehatan',
+                    description: 'Kegiatan sosialisasi program kesehatan kepada masyarakat luas',
+                    date: new Date(now.getTime() - 7*24*60*60*1000).toISOString().split('T')[0], // 1 minggu lalu
+                    year: currentYear,
+                    category: 'sosialisasi',
+                    location: 'Puskesmas Pembantu',
+                    folder: `${CLOUDINARY_CONFIG.baseFolder}/${currentYear}/sosialisasi/sosialisasi-program-kesehatan`,
+                    photos: [],
+                    photoCount: 0,
+                    featuredPhoto: null,
+                    status: 'published',
+                    createdAt: now.toISOString(),
+                    updatedAt: now.toISOString()
+                }
+            ];
+            
+            console.log('📝 Created sample events:', sampleEvents.length, 'events');
+            console.log('   Events:', sampleEvents.map(e => e.title));
+            
+            return sampleEvents;
+        }
+        
+        /**
+         * AUTO-INITIALIZE & SAVE to Cloudinary (First Time Setup)
+         * Dipanggil saat file JSON belum ada (404)
+         */
+        async function initializeAndSaveToCloudinary() {
+            console.log('🚀 First-time setup: Creating initial data...');
+            
+            // Buat default events
+            state.events = getDefaultEvents();
+            state.filteredEvents = [...state.events];
+            
+            // Auto-save ke Cloudinary agar data persisten
+            try {
+                const saved = await saveEventsToCloudinary(state.events);
+                if (saved) {
+                    console.log('✅ Initial data saved to Cloudinary!');
+                    showToast('🎉 Data awal berhasil dibuat! Silakan tambahkan foto lewat Admin Panel.', 'success');
+                } else {
+                    console.warn('⚠️ Failed to save initial data');
+                }
+                return saved;
+            } catch (error) {
+                console.error('❌ Error saving initial data:', error);
+                return false;
+            }
         }
 
         // ============================================
@@ -3444,8 +3558,9 @@
                 state.events = loaded;
                 console.log('✅ Loaded', loaded.length, 'events from Cloudinary');
             } else {
-                console.log('📝 No data on Cloudinary, initializing with defaults');
-                initializeDefaultEvents();
+                console.log('📝 No data on Cloudinary, creating initial data & saving...');
+                // Create sample events AND auto-save to Cloudinary
+                await initializeAndSaveToCloudinary();
             }
             
             // Update filtered events
@@ -4618,6 +4733,36 @@
         
         // Logout button
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+        // Sync to Cloudinary Button
+        document.getElementById('syncCloudBtn').addEventListener('click', async function() {
+            const btn = this;
+            btn.classList.add('syncing');
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Syncing...';
+            
+            try {
+                console.log('🔄 Manual sync triggered...');
+                
+                if (state.events.length === 0) {
+                    // Jika tidak ada data, buat data awal
+                    await initializeAndSaveToCloudinary();
+                } else {
+                    // Jika ada data, save ke Cloudinary
+                    const success = await saveEventsToCloudinary(state.events);
+                    if (success) {
+                        showToast('✅ Data berhasil di-sync ke Cloudinary!', 'success');
+                    } else {
+                        throw new Error('Gagal menyimpan data');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Sync error:', error);
+                showToast('❌ Gagal sync: ' + error.message, 'error');
+            } finally {
+                btn.classList.remove('syncing');
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Sync Cloud';
+            }
+        });
 
         // ============================================
         // ADMIN PANEL (WITH AUTH)
