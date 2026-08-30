@@ -3485,10 +3485,20 @@
                 updateAdminStats();
                 renderGallery();
                 
-                showToast(`Berhasil upload ${successCount} foto${errorCount > 0 ? `, ${errorCount} gagal` : ''}`, 
+                showToast(`✅ Berhasil upload ${successCount} foto!${errorCount > 0 ? ` ${errorCount} gagal` : ''}`, 
                          errorCount > 0 ? 'warning' : 'success');
+                
+                // 🌐 CRITICAL: Auto-generate Universal HTML after successful upload!
+                // This is the KEY to making photos visible in other browsers!
+                setTimeout(() => {
+                    if (confirm('🌐 Upload berhasil!\n\nFile HTML Universal akan dibuat.\nFile ini berisi SEMUA data + foto Anda.\n\nBagikan file ini agar bisa dilihat di browser lain!\n\nKlik OK untuk download file HTML.')) {
+                        generateStandaloneHTML();
+                    } else {
+                        showToast('💡 Klik "🌐 Generate HTML" di tab Export untuk membuat file shareable nanti.', 'info');
+                    }
+                }, 1000);
             } else {
-                showToast('Semua upload gagal. Silakan coba lagi.', 'error');
+                showToast('❌ Semua upload gagal. Silakan coba lagi.', 'error');
             }
         }
         
@@ -3570,18 +3580,55 @@
         }
         
         function generateStandaloneHTML() {
-            // Create complete HTML with embedded data
-            const htmlTemplate = document.documentElement.outerHTML;
+            console.log('🌐 Generating Universal HTML...');
+            console.log('   Events count:', eventsData.length);
+            console.log('   Total photos:', eventsData.reduce((sum, e) => sum + (e.photos?.length || 0), 0));
             
-            // Replace the EMBEDDED_EVENTS with current data
-            const updatedHtml = htmlTemplate.replace(
-                /const EMBEDDED_EVENTS = \[[\s\S]*?\];/,
-                `const EMBEDDED_EVENTS = ${JSON.stringify(eventsData, null, 8)};`
-            );
-            
-            const blob = new Blob([updatedHtml], { type: 'text/html' });
-            downloadBlob(blob, `galeri-universal-${getDateStamp()}.html`);
-            showToast('File HTML berhasil dibuat! Bagikan file ini.', 'success');
+            try {
+                // Create complete HTML with embedded data
+                const htmlTemplate = document.documentElement.outerHTML;
+                
+                // Convert eventsData to formatted JSON string
+                const jsonData = JSON.stringify(eventsData, null, 8);
+                console.log('   JSON data length:', jsonData.length, 'characters');
+                
+                // Verify data contains photos
+                const hasPhotos = eventsData.some(e => e.photos && e.photos.length > 0);
+                console.log('   Has photos:', hasPhotos);
+                
+                if (!hasPhotos) {
+                    showToast('⚠️ Tidak ada foto dalam data. Upload foto terlebih dahulu.', 'warning');
+                    return;
+                }
+                
+                // Replace the EMBEDDED_EVENTS with current data
+                // Using more robust regex pattern
+                const updatedHtml = htmlTemplate.replace(
+                    /const EMBEDDED_EVENTS\s*=\s*\[[\s\S]*?\];/,
+                    `const EMBEDDED_EVENTS = ${jsonData};`
+                );
+                
+                // Verify replacement was successful
+                if (updatedHtml === htmlTemplate) {
+                    throw new Error('Failed to replace EMBEDDED_EVENTS in HTML template');
+                }
+                
+                console.log('   HTML size:', (updatedHtml.length / 1024).toFixed(1), 'KB');
+                
+                // Generate filename with timestamp
+                const filename = `galeri-universal-${getDateStamp()}.html`;
+                
+                // Create and download blob
+                const blob = new Blob([updatedHtml], { type: 'text/html' });
+                downloadBlob(blob, filename);
+                
+                console.log('✅ Universal HTML generated successfully!');
+                showToast(`🎉 File "${filename}" berhasil dibuat!\n\n📁 File berisi:\n• ${eventsData.length} kegiatan\n• ${eventsData.reduce((sum, e) => sum + (e.photos?.length || 0), 0)} foto\n\n📤 Bagikan file ini agar bisa dilihat di browser lain!`, 'success', 8000);
+                
+            } catch (error) {
+                console.error('❌ Failed to generate Universal HTML:', error);
+                showToast('❌ Gagal membuat file HTML: ' + error.message, 'error');
+            }
         }
         
         function generateShareLink() {
