@@ -3084,9 +3084,14 @@
            onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22mh%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 stop-color=%22%233a7070%22/><stop offset=%2250%%22 stop-color=%22%2314B8A6%22/><stop offset=%22100%%22 stop-color=%22%2310B981%22/></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22url(%23mh)%22/><text x=%2250%22 y=%2265%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22bold%22>D</text></svg>';">
       <span class="font-display text-sm font-semibold gradient-text">DEDIKASIH</span>
     </div>
-    <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center shadow-sm border border-slate-300/50" aria-label="Toggle theme">
-      <i id="themeIconMobile" class="fa-solid fa-sun text-teal-700 text-sm"></i>
-    </button>
+    <div class="flex items-center gap-2">
+      <a href="https://mukminnasri.com/" target="_self" class="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center shadow-sm border border-teal-500/40 hover:bg-teal-50 transition-colors" aria-label="Home Website" title="Kunjungi mukminnasri.com">
+        <i class="fa-solid fa-house text-teal-700 text-sm"></i>
+      </a>
+      <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center shadow-sm border border-slate-300/50" aria-label="Toggle theme">
+        <i id="themeIconMobile" class="fa-solid fa-sun text-teal-700 text-sm"></i>
+      </button>
+    </div>
   </header>
 
   <!-- ===== APP CONTAINER ===== -->
@@ -3178,6 +3183,10 @@
           <p class="text-xs text-slate-500 mt-0.5">Platform Digitalisasi Pengabdian Masyarakat</p>
         </div>
         <div class="flex items-center gap-3">
+          <a href="https://mukminnasri.com/" target="_self" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 border border-teal-200/60 transition-colors text-teal-700 text-sm font-medium" title="Kunjungi mukminnasri.com">
+            <i class="fa-solid fa-house text-xs"></i>
+            <span>Home</span>
+          </a>
           <span id="dbStatusDesktop" class="text-xs text-slate-500 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
             Connecting...
