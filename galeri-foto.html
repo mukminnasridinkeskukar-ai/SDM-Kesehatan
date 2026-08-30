@@ -3516,17 +3516,17 @@
             }
             
             state.isSaving = true;
-            console.log('💾 Saving events to Cloudinary...', state.events.length, 'events');
+            console.log('💾 Saving events...', state.events.length, 'events');
             
             try {
-                const success = await saveEventsToCloudinary(state.events);
+                // Save to localStorage (Universal Storage)
+                const jsonString = JSON.stringify(state.events, null, 2);
+                localStorage.setItem('galeri_events_universal', jsonString);
                 
-                if (success) {
-                    state.lastSaveTime = new Date();
-                    console.log('✅ Events saved to Cloudinary at:', state.lastSaveTime.toLocaleTimeString());
-                }
+                state.lastSaveTime = new Date();
+                console.log('✅ Events saved to localStorage at:', state.lastSaveTime.toLocaleTimeString());
                 
-                return success;
+                return true;
             } catch (error) {
                 console.error('❌ Save failed:', error);
                 showToast('❌ Gagal simpan data: ' + error.message, 'error');
@@ -6165,11 +6165,11 @@
             
             // Clear all data (use with caution!)
             clearData: async () => {
-                if (confirm('⚠️ Hapus semua data galeri dari Cloudinary? Ini tidak bisa dibatalkan!')) {
+                if (confirm('⚠️ Hapus semua data galeri? Ini tidak bisa dibatalkan!')) {
                     state.events = [];
                     state.filteredEvents = [];
-                    await saveEventsToCloudinary([]);
-                    console.log('🗑️ All data cleared from Cloudinary. Refreshing page...');
+                    await saveEventsToStorage();
+                    console.log('🗑️ All data cleared. Refreshing page...');
                     window.location.reload();
                 }
             },
