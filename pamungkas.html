@@ -1502,6 +1502,15 @@
     /* ========== TABLE WORKFLOW ACTIONS ========== */
     .workflow-actions{display:flex;gap:6px;flex-wrap:wrap}
     @media(max-width:768px){.pf-grid{grid-template-columns:1fr}.workflow-modal-box{width:95%;max-height:90vh}.konfirmasi-modal-box{width:95%}}
+    /* ========== LIGHTBOX HOME BUTTON ========== */
+    .btn-home-lightbox{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:linear-gradient(135deg,#1E293B,#0F172A);color:#F8FAFC;border:1.5px solid rgba(30,41,59,.6);border-radius:var(--radius-sm);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:var(--transition);text-decoration:none;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.05) inset}
+    .btn-home-lightbox::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 50%,rgba(255,255,255,.03));opacity:0;transition:opacity .3s ease}
+    .btn-home-lightbox:hover::before{opacity:1}
+    .btn-home-lightbox:hover{background:linear-gradient(135deg,#334155,#1E293B);border-color:rgba(51,65,85,.8);box-shadow:0 4px 20px rgba(0,0,0,.35),0 0 30px rgba(30,41,59,.2),0 0 0 1px rgba(255,255,255,.1) inset;transform:translateY(-1px)}
+    .btn-home-lightbox:active{transform:translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+    .btn-home-lightbox i{font-size:.9rem;color:#38BDF8;transition:var(--transition)}
+    .btn-home-lightbox:hover i{color:#7DD3FC;filter:drop-shadow(0 0 6px rgba(56,189,248,.5))}
+    .btn-home-lightbox span{position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -1565,6 +1574,7 @@
         </div>
       </div>
       <div class="topbar-right" id="topbarRight">
+        <a href="https://mukminnasri.com/" class="btn-home-lightbox" target="_blank" rel="noopener noreferrer"><i class="fas fa-home"></i><span>Home</span></a>
         <button class="btn-admin-login" id="btnAdminLogin" onclick="openLoginModal()"><i class="fas fa-lock"></i><span>Login Admin</span></button>
       </div>
     </header>
@@ -7336,7 +7346,7 @@ function initSidebar() {
 function updateAdminUI(){
   var topbarRight = document.getElementById('topbarRight');
   if (topbarRight) {
-    topbarRight.innerHTML = '<button class="btn-logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i><span>' + levelBadgeHTML() + ' ' + escHTML(adminUsername) + '</span></button>';
+    topbarRight.innerHTML = '<a href="https://mukminnasri.com/" class="btn-home-lightbox" target="_blank" rel="noopener noreferrer"><i class="fas fa-home"></i><span>Home</span></a><button class="btn-logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i><span>' + levelBadgeHTML() + ' ' + escHTML(adminUsername) + '</span></button>';
   } else {
     console.warn('[DOM] updateAdminUI: #topbarRight tidak ditemukan');
   }
@@ -7369,7 +7379,7 @@ function handleLogout(){
   
   var topbarRight = document.getElementById('topbarRight');
   if (topbarRight) {
-    topbarRight.innerHTML = '<button class="btn-admin-login" onclick="openLoginModal()"><i class="fas fa-lock"></i><span>Login Admin</span></button>';
+    topbarRight.innerHTML = '<a href="https://mukminnasri.com/" class="btn-home-lightbox" target="_blank" rel="noopener noreferrer"><i class="fas fa-home"></i><span>Home</span></a><button class="btn-admin-login" onclick="openLoginModal()"><i class="fas fa-lock"></i><span>Login Admin</span></button>';
   }
   
   // Re-render sidebar to show public menu
