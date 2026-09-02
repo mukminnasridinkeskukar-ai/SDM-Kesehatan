@@ -34,7 +34,77 @@
             --background-color: #1a1a2e;
             --secondary-color: #16213e;
             --card-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            color: #e0e0e0;
         }
+
+        [data-theme="dark"] .table-container,
+        [data-theme="dark"] .form-card,
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .chart-container {
+            background: #16213e;
+        }
+        [data-theme="dark"] .table thead th {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-bottom-color: #2a2a4e;
+        }
+        [data-theme="dark"] .table tbody td {
+            color: #c0c0c0;
+            border-top-color: #2a2a4e;
+        }
+        [data-theme="dark"] .table tbody tr:hover {
+            background-color: rgba(30, 136, 229, 0.1);
+        }
+        [data-theme="dark"] .page-title,
+        [data-theme="dark"] .table-title,
+        [data-theme="dark"] .card-title,
+        [data-theme="dark"] .form-title {
+            color: #e0e0e0;
+        }
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #2a2a4e;
+        }
+        [data-theme="dark"] .form-label {
+            color: #b0b0b0;
+        }
+        [data-theme="dark"] .stat-label {
+            color: #a0a0a0;
+        }
+        [data-theme="dark"] .pagination-info {
+            color: #a0a0a0;
+        }
+        [data-theme="dark"] .verification-card {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+        [data-theme="dark"] .content-header {
+            border-bottom-color: #2a2a4e;
+        }
+        [data-theme="dark"] .text-muted {
+            color: #808080 !important;
+        }
+        [data-theme="dark"] .alert {
+            background: #16213e;
+            border-color: #2a2a4e;
+            color: #c0c0c0;
+        }
+        [data-theme="dark"] .admin-tabs .nav-link {
+            color: #a0a0a0;
+            border-bottom-color: transparent;
+        }
+        [data-theme="dark"] .admin-tabs .nav-link.active {
+            color: #42A5F5;
+            border-bottom-color: #42A5F5;
+        }
+        [data-theme="dark"] .bg-gradient-blue { background: linear-gradient(135deg, #1a3a5c 0%, #1a2a4e 100%); }
+        [data-theme="dark"] .bg-gradient-green { background: linear-gradient(135deg, #1a3a2e 0%, #1a2e3e 100%); }
+        [data-theme="dark"] .bg-gradient-purple { background: linear-gradient(135deg, #2a1a3e 0%, #2a1a3e 100%); }
+        [data-theme="dark"] .bg-gradient-orange { background: linear-gradient(135deg, #3a2a1a 0%, #3a2a1e 100%); }
+        [data-theme="dark"] .bg-gradient-teal { background: linear-gradient(135deg, #1a3a3a 0%, #1a2e2e 100%); }
+        [data-theme="dark"] .bg-gradient-red { background: linear-gradient(135deg, #3a1a1a 0%, #3a1a1e 100%); }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -133,6 +203,13 @@
         .badge-open { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
         .badge-closed { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
         .badge-unavailable { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+
+        .quota-info, .registration-timer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
         .badge-admin { background: linear-gradient(135deg, #6610f2 0%, #6f42c1 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
         .form-control, .form-select {
@@ -188,7 +265,7 @@
         .btn-download:hover { background: #218838; }
 
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; animation: fadeInUp 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .dark-mode-toggle { width: 45px; height: 45px; border-radius: 12px; background: white; border: none; box-shadow: var(--card-shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--secondary-color); transition: all var(--transition-speed); }
@@ -272,10 +349,10 @@
         
         .tab-content .tab-pane {
             padding: 20px 0;
-            animation: fadeIn 0.3s ease;
+            animation: fadeInUp 0.3s ease;
         }
         
-        @keyframes fadeIn {
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -530,7 +607,7 @@
                         <i class="fas fa-calendar-alt me-2"></i>Jadwal Kegiatan
                     </h1>
                     <div class="header-actions">
-                        <button class="btn btn-success" onclick="exportToExcel('jadwalTable', 'Jadwal_Kegiatann')">
+                        <button class="btn btn-success" onclick="exportToExcel('jadwalTable', 'Jadwal_Kegiatan')">
                             <i class="fas fa-file-excel me-2"></i>Export Excel
                         </button>
                         <button class="btn btn-primary" onclick="window.print()">
@@ -644,7 +721,7 @@
                         <i class="fas fa-book me-2"></i>Download Materi
                     </h1>
                     <div class="header-actions">
-                        <button class="btn btn-success" onclick="exportToExcel('materiTable', 'Materi_Kegiatann')">
+                        <button class="btn btn-success" onclick="exportToExcel('materiTable', 'Materi_Kegiatan')">
                             <i class="fas fa-file-excel me-2"></i>Export Excel
                         </button>
                         <button class="btn btn-primary" onclick="window.print()">
@@ -1248,7 +1325,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="chart-container">
-                                    <h3 class="chart-title"><i class="fas fa-chart-radar me-2"></i>Perbandingan Kategori Evaluasi</h3>
+                                    <h3 class="chart-title"><i class="fas fa-bullseye me-2"></i>Perbandingan Kategori Evaluasi</h3>
                                     <canvas id="evaluasiRadarChart"></canvas>
                                 </div>
                             </div>
@@ -1322,13 +1399,13 @@
         }
 
         async function getSertifikat() {
-            const { data, error } = await supabase.from('sertifikat').select('*').order('tanggal', { ascending: false });
+            const { data, error } = await supabase.from('sertifikat').select('*').order('tanggalkegiatann', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getMateri() {
-            const { data, error } = await supabase.from('materi').select('*').order('tanggal', { ascending: false });
+            const { data, error } = await supabase.from('materi').select('*').order('tanggalkegiatann', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
@@ -1633,16 +1710,13 @@
             
             if (registrasiResult.success) {
                 allRegistrasi = registrasiResult.data || [];
-                populateAdminFilters();
-                renderAdminRegistrasiTable();
             }
             
             if (absensiResult.success) {
                 allAbsensi = absensiResult.data || [];
-                renderAdminAbsensiTable();
             }
             
-            // Load data for new admin tabs
+            // Load data for admin tabs (each tab has its own loader)
             loadJadwalForAdmin();
         }
 
@@ -1817,66 +1891,9 @@
             renderPagination('materiPagination', totalPages, 'materi');
         }
 
-        function renderAdminRegistrasiTable() {
-            const search = document.getElementById('searchRegistrasiAdmin').value.toLowerCase();
-            const filterTema = document.getElementById('filterTemaAdmin').value;
-            
-            let filteredData = allRegistrasi.filter(item => {
-                const matchSearch = (item.namalengkap && item.namalengkap.toLowerCase().includes(search)) || 
-                                    (item.nip && item.nip.includes(search));
-                const matchTema = !filterTema || item.tema === filterTema;
-                
-                return matchSearch && matchTema;
-            });
-            
-            const tbody = document.getElementById('registrasiAdminBody');
-            
-            if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data</td></tr>';
-            } else {
-                tbody.innerHTML = filteredData.map(item => `
-                    <tr>
-                        <td>${item.id || '-'}</td>
-                        <td>${item.namalengkap || '-'}</td>
-                        <td>${item.nip || '-'}</td>
-                        <td>${item.unitkerja || '-'}</td>
-                        <td><span class="badge-admin">${item.statuspegawai || '-'}</span></td>
-                        <td>${item.whatsapp || '-'}</td>
-                        <td>${item.email || '-'}</td>
-                        <td>${item.tema || '-'}</td>
-                        <td>${formatDate(item.timestamp)}</td>
-                    </tr>
-                `).join('');
-            }
-        }
 
-        function renderAdminAbsensiTable() {
-            const search = document.getElementById('searchAbsensiAdmin').value.toLowerCase();
-            
-            let filteredData = allAbsensi.filter(item => {
-                return item.nip && item.nip.includes(search);
-            });
-            
-            const tbody = document.getElementById('absensiAdminBody');
-            
-            if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data</td></tr>';
-            } else {
-                tbody.innerHTML = filteredData.map(item => `
-                    <tr>
-                        <td>${item.idpendaftaran || '-'}</td>
-                        <td>${item.namalengkap || '-'}</td>
-                        <td>${item.nip || '-'}</td>
-                        <td>${item.unitkerja || '-'}</td>
-                        <td>${formatDate(item.tanggalabsensi)}</td>
-                        <td>${item.jamabsensi || '-'}</td>
-                        <td><span class="badge-open">${item.evalpenyelenggara || '-'}</span></td>
-                        <td><span class="badge-open">${item.evalfasilitator || '-'}</span></td>
-                        <td><span class="badge-open">${item.evalsarana || '-'}</span></td>
-                    </tr>
-                `).join('');
-            }
-        }
+
+
 
         // ============================================
         // FILTER POPULATION
@@ -1911,12 +1928,7 @@
                 narasumbers.map(n => `<option value="${n}">${n}</option>`).join('');
         }
 
-        function populateAdminFilters() {
-            const temas = [...new Set(allRegistrasi.map(item => item.tema).filter(Boolean))];
-            
-            document.getElementById('filterTemaAdmin').innerHTML = '<option value="">Semua Tema</option>' + 
-                temas.map(t => `<option value="${t}">${t}</option>`).join('');
-        }
+
 
         // ============================================
         // PAGINATION
@@ -2181,7 +2193,7 @@
             
             const dateInfo = document.getElementById('absensiDateInfo');
             if (tanggal) {
-                dateInfo.textContent = `📅 ${formatDate(tanggal)}`;
+                dateInfo.textContent = formatDate(tanggal);
             } else {
                 dateInfo.textContent = '';
             }
@@ -2418,7 +2430,7 @@
                 unitKerja: verifiedUser.unitkerja,
                 tema: verifiedUser.tema,
                 platform: verifiedUser.platform,
-                evalPenyelorga: evalPenyelenggara,
+                evalPenyelenggara: evalPenyelenggara,
                 evalFasilitator: evalFasilitator,
                 evalSarana: evalSarana,
                 komentar: document.getElementById('komentar').value
@@ -2534,7 +2546,7 @@
                 let result;
                 if (jadwalId) {
                     // Update existing
-                    jadwalData.no = parseInt(jadwalId);
+                    jadwalData.id = parseInt(jadwalId);
                     result = await updateJadwal(jadwalData);
                 } else {
                     // Add new
@@ -2579,6 +2591,7 @@
             }
         }
         
+        let _jadwalAdminListenerAdded = false;
         function loadJadwalForAdmin() {
             const tbody = document.getElementById('jadwalAdminBody');
             if (!tbody) return;
@@ -2601,17 +2614,20 @@
                 });
             }
             
-            // Setup search
-            const searchInput = document.getElementById('searchJadwalAdmin');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const filtered = allJadwal.filter(j => 
-                        (j.tema || '').toLowerCase().includes(searchTerm) ||
-                        (j.narasumber || '').toLowerCase().includes(searchTerm)
-                    );
-                    renderJadwalAdminTable(filtered);
-                });
+            // Setup search (only once to prevent duplicate listeners)
+            if (!_jadwalAdminListenerAdded) {
+                const searchInput = document.getElementById('searchJadwalAdmin');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const filtered = allJadwal.filter(j => 
+                            (j.tema || '').toLowerCase().includes(searchTerm) ||
+                            (j.narasumber || '').toLowerCase().includes(searchTerm)
+                        );
+                        renderJadwalAdminTable(filtered);
+                    });
+                    _jadwalAdminListenerAdded = true;
+                }
             }
         }
         
@@ -2650,6 +2666,7 @@
         // KELOLA PESERTA FUNCTIONS
         // ============================================
         
+        let _pesertaAdminListenerAdded = false;
         function loadPesertaForAdmin() {
             const tbody = document.getElementById('pesertaAdminBody');
             if (!tbody) return;
@@ -2674,32 +2691,34 @@
                 });
             }
             
-            // Setup search
-            const searchInput = document.getElementById('searchPesertaAdmin');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const filtered = allRegistrasi.filter(p => 
-                        (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
-                        (p.nip || '').toLowerCase().includes(searchTerm) ||
-                        (p.unitkerja || '').toLowerCase().includes(searchTerm)
-                    );
-                    renderPesertaAdminTable(filtered);
-                });
-            }
-            
-            // Setup filter
-            const filterSelect = document.getElementById('filterTemaPeserta');
-            if (filterSelect) {
-                filterSelect.addEventListener('change', function() {
-                    const tema = this.value;
-                    if (tema) {
-                        const filtered = allRegistrasi.filter(p => p.tema === tema);
+            // Setup search & filter (only once to prevent duplicate listeners)
+            if (!_pesertaAdminListenerAdded) {
+                const searchInput = document.getElementById('searchPesertaAdmin');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const filtered = allRegistrasi.filter(p => 
+                            (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                            (p.nip || '').toLowerCase().includes(searchTerm) ||
+                            (p.unitkerja || '').toLowerCase().includes(searchTerm)
+                        );
                         renderPesertaAdminTable(filtered);
-                    } else {
-                        renderPesertaAdminTable(allRegistrasi);
-                    }
-                });
+                    });
+                }
+                
+                const filterSelect = document.getElementById('filterTemaPeserta');
+                if (filterSelect) {
+                    filterSelect.addEventListener('change', function() {
+                        const tema = this.value;
+                        if (tema) {
+                            const filtered = allRegistrasi.filter(p => p.tema === tema);
+                            renderPesertaAdminTable(filtered);
+                        } else {
+                            renderPesertaAdminTable(allRegistrasi);
+                        }
+                    });
+                }
+                _pesertaAdminListenerAdded = true;
             }
         }
         
@@ -2732,6 +2751,7 @@
         // DATA PENDAFTARAN FUNCTIONS
         // ============================================
         
+        let _pendaftaranAdminListenerAdded = false;
         function loadPendaftaranForAdmin() {
             const tbody = document.getElementById('pendaftaranAdminBody');
             if (!tbody) return;
@@ -2754,31 +2774,33 @@
                 });
             }
             
-            // Setup search
-            const searchInput = document.getElementById('searchPendaftaranAdmin');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const filtered = allRegistrasi.filter(p => 
-                        (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
-                        (p.nip || '').toLowerCase().includes(searchTerm)
-                    );
-                    renderPendaftaranAdminTable(filtered);
-                });
-            }
-            
-            // Setup filter
-            const filterSelect = document.getElementById('filterTemaPendaftaran');
-            if (filterSelect) {
-                filterSelect.addEventListener('change', function() {
-                    const tema = this.value;
-                    if (tema) {
-                        const filtered = allRegistrasi.filter(p => p.tema === tema);
+            // Setup search & filter (only once to prevent duplicate listeners)
+            if (!_pendaftaranAdminListenerAdded) {
+                const searchInput = document.getElementById('searchPendaftaranAdmin');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const filtered = allRegistrasi.filter(p => 
+                            (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                            (p.nip || '').toLowerCase().includes(searchTerm)
+                        );
                         renderPendaftaranAdminTable(filtered);
-                    } else {
-                        renderPendaftaranAdminTable(allRegistrasi);
-                    }
-                });
+                    });
+                }
+                
+                const filterSelect = document.getElementById('filterTemaPendaftaran');
+                if (filterSelect) {
+                    filterSelect.addEventListener('change', function() {
+                        const tema = this.value;
+                        if (tema) {
+                            const filtered = allRegistrasi.filter(p => p.tema === tema);
+                            renderPendaftaranAdminTable(filtered);
+                        } else {
+                            renderPendaftaranAdminTable(allRegistrasi);
+                        }
+                    });
+                }
+                _pendaftaranAdminListenerAdded = true;
             }
         }
         
@@ -2810,6 +2832,7 @@
         // DATA ABSENSI FUNCTIONS
         // ============================================
         
+        let _absensiAdminListenerAdded = false;
         function loadAbsensiForAdmin() {
             const tbody = document.getElementById('absensiAdminBody');
             if (!tbody) return;
@@ -2830,17 +2853,20 @@
                 });
             }
             
-            // Setup search
-            const searchInput = document.getElementById('searchAbsensiAdmin');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const filtered = allAbsensi.filter(a => 
-                        (a.namalengkap || '').toLowerCase().includes(searchTerm) ||
-                        (a.nip || '').toLowerCase().includes(searchTerm)
-                    );
-                    renderAbsensiAdminTable(filtered);
-                });
+            // Setup search (only once to prevent duplicate listeners)
+            if (!_absensiAdminListenerAdded) {
+                const searchInput = document.getElementById('searchAbsensiAdmin');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const filtered = allAbsensi.filter(a => 
+                            (a.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                            (a.nip || '').toLowerCase().includes(searchTerm)
+                        );
+                        renderAbsensiAdminTable(filtered);
+                    });
+                    _absensiAdminListenerAdded = true;
+                }
             }
         }
         
@@ -2861,9 +2887,9 @@
                     <td>${item.unitkerja || '-'}</td>
                     <td>${formatDate(item.tanggalabsensi || item.tanggal)}</td>
                     <td>${item.jamabsensi || item.jam || '-'}</td>
-                    <td><span class="badge bg-${getEvalColor(item.evpenyelenggara || item.evalpenyelenggara)}">${item.evpenyelenggara || item.evalpenyelenggara || '-'}</span></td>
-                    <td><span class="badge bg-${getEvalColor(item.evfasilitator || item.evalfasilitator)}">${item.evfasilitator || item.evalfasilitator || '-'}</span></td>
-                    <td><span class="badge bg-${getEvalColor(item.evsarana || item.evalsarana)}">${item.evsarana || item.evalsarana || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evalpenyelenggara || item.evpenyelenggara)}">${item.evalpenyelenggara || item.evpenyelenggara || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evalfasilitator || item.evfasilitator)}">${item.evalfasilitator || item.evfasilitator || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evalsarana || item.evsarana)}">${item.evalsarana || item.evsarana || '-'}</span></td>
                 </tr>
             `).join('');
         }
@@ -2895,7 +2921,7 @@
             const ctx1 = document.getElementById('evaluasiChart')?.getContext('2d');
             if (ctx1) {
                 const temas = absensiData.map(d => d.tema || 'Tidak Diketahui').slice(0, 6);
-                const avgPenyelenggara = absensiData.map(d => d.evpenyelorga || d.evalpenyelorga || d.evpenyelenggara || 0);
+                const avgPenyelenggara = absensiData.map(d => d.evalpenyelenggara || d.evalpenyelenggara || d.evpenyelenggara || 0);
                 const avgFasilitator = absensiData.map(d => d.evfasilitator || d.evalfasilitator || 0);
                 const avgSarana = absensiData.map(d => d.evsarana || d.evalsarana || 0);
                 
@@ -2906,7 +2932,7 @@
                         datasets: [
                             {
                                 label: 'Penyelenggaraan',
-                                data: avgPenyelorga,
+                                data: avgPenyelenggara,
                                 backgroundColor: 'rgba(30, 136, 229, 0.7)',
                                 borderColor: '#1E88E5',
                                 borderWidth: 1
@@ -2941,7 +2967,7 @@
             // Chart 2: Perbandingan Kategori Evaluasi (Radar Chart)
             const ctx2 = document.getElementById('evaluasiRadarChart')?.getContext('2d');
             if (ctx2) {
-                const avgPenyelorga = absensiData.reduce((sum, d) => sum + (d.evpenyelorga || d.evalpenyelorga || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
+                const avgPenyelenggara = absensiData.reduce((sum, d) => sum + (d.evalpenyelenggara || d.evpenyelenggara || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
                 const avgFasilitator = absensiData.reduce((sum, d) => sum + (d.evfasilitator || d.evalfasilitator || 0), 0) / (absensiData.length || 1);
                 const avgSarana = absensiData.reduce((sum, d) => sum + (d.evsarana || d.evalsarana || 0), 0) / (absensiData.length || 1);
                 
@@ -2951,7 +2977,7 @@
                         labels: ['Penyelenggaraan', 'Fasilitator', 'Sarana', 'Materi', 'Waktu'],
                         datasets: [{
                             label: 'Rata-rata Keseluruhan',
-                            data: [avgPenyelorga.toFixed(1), avgFasilitator.toFixed(1), avgSarana.toFixed(1), '4.2', '4.0'],
+                            data: [parseFloat(avgPenyelenggara.toFixed(1)), parseFloat(avgFasilitator.toFixed(1)), parseFloat(avgSarana.toFixed(1)), 4.2, 4.0],
                             backgroundColor: 'rgba(30, 136, 229, 0.2)',
                             borderColor: '#1E88E5',
                             borderWidth: 2,
@@ -3130,8 +3156,8 @@
             document.getElementById('searchJadwal')?.addEventListener('input', () => { currentPage.jadwal = 1; renderJadwalTable(); });
             document.getElementById('searchSertifikat')?.addEventListener('input', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
             document.getElementById('searchMateri')?.addEventListener('input', () => { currentPage.materi = 1; renderMateriTable(); });
-            document.getElementById('searchRegistrasiAdmin')?.addEventListener('input', renderAdminRegistrasiTable);
-            document.getElementById('searchAbsensiAdmin')?.addEventListener('input', renderAdminAbsensiTable);
+            // searchRegistrasiAdmin removed - handled by loadPendaftaranForAdmin
+            // searchAbsensiAdmin removed - handled by loadAbsensiForAdmin (guarded listener)
             
             // Filter selects with null checks
             document.getElementById('filterTema')?.addEventListener('change', () => { currentPage.jadwal = 1; renderJadwalTable(); });
@@ -3142,7 +3168,7 @@
             document.getElementById('filterTanggalSertifikat')?.addEventListener('change', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
             document.getElementById('filterNarasumberMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
             document.getElementById('filterTanggalMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
-            document.getElementById('filterTemaAdmin')?.addEventListener('change', renderAdminRegistrasiTable);
+            // filterTemaAdmin removed - handled by loadPendaftaranForAdmin
             
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
