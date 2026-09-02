@@ -40,65 +40,25 @@
         [data-theme="dark"] .table-container,
         [data-theme="dark"] .form-card,
         [data-theme="dark"] .card,
-        [data-theme="dark"] .chart-container {
-            background: #16213e;
-        }
-        [data-theme="dark"] .table thead th {
-            background: #1a1a2e;
-            color: #e0e0e0;
-            border-bottom-color: #2a2a4e;
-        }
-        [data-theme="dark"] .table tbody td {
-            color: #c0c0c0;
-            border-top-color: #2a2a4e;
-        }
-        [data-theme="dark"] .table tbody tr:hover {
-            background-color: rgba(30, 136, 229, 0.1);
-        }
+        [data-theme="dark"] .chart-container { background: #16213e; }
+        [data-theme="dark"] .table thead th { background: #1a1a2e; color: #e0e0e0; border-bottom-color: #2a2a4e; }
+        [data-theme="dark"] .table tbody td { color: #c0c0c0; border-top-color: #2a2a4e; }
+        [data-theme="dark"] .table tbody tr:hover { background-color: rgba(30, 136, 229, 0.1); }
         [data-theme="dark"] .page-title,
         [data-theme="dark"] .table-title,
         [data-theme="dark"] .card-title,
-        [data-theme="dark"] .form-title {
-            color: #e0e0e0;
-        }
+        [data-theme="dark"] .form-title { color: #e0e0e0; }
         [data-theme="dark"] .form-control,
-        [data-theme="dark"] .form-select {
-            background: #1a1a2e;
-            color: #e0e0e0;
-            border-color: #2a2a4e;
-        }
-        [data-theme="dark"] .form-label {
-            color: #b0b0b0;
-        }
-        [data-theme="dark"] .stat-label {
-            color: #a0a0a0;
-        }
-        [data-theme="dark"] .pagination-info {
-            color: #a0a0a0;
-        }
-        [data-theme="dark"] .verification-card {
-            background: #16213e;
-            color: #e0e0e0;
-        }
-        [data-theme="dark"] .content-header {
-            border-bottom-color: #2a2a4e;
-        }
-        [data-theme="dark"] .text-muted {
-            color: #808080 !important;
-        }
-        [data-theme="dark"] .alert {
-            background: #16213e;
-            border-color: #2a2a4e;
-            color: #c0c0c0;
-        }
-        [data-theme="dark"] .admin-tabs .nav-link {
-            color: #a0a0a0;
-            border-bottom-color: transparent;
-        }
-        [data-theme="dark"] .admin-tabs .nav-link.active {
-            color: #42A5F5;
-            border-bottom-color: #42A5F5;
-        }
+        [data-theme="dark"] .form-select { background: #1a1a2e; color: #e0e0e0; border-color: #2a2a4e; }
+        [data-theme="dark"] .form-label { color: #b0b0b0; }
+        [data-theme="dark"] .stat-label { color: #a0a0a0; }
+        [data-theme="dark"] .pagination-info { color: #a0a0a0; }
+        [data-theme="dark"] .verification-card { background: #16213e; color: #e0e0e0; }
+        [data-theme="dark"] .content-header { border-bottom-color: #2a2a4e; }
+        [data-theme="dark"] .text-muted { color: #808080 !important; }
+        [data-theme="dark"] .alert { background: #16213e; border-color: #2a2a4e; color: #c0c0c0; }
+        [data-theme="dark"] .admin-tabs .nav-link { color: #a0a0a0; border-bottom-color: transparent; }
+        [data-theme="dark"] .admin-tabs .nav-link.active { color: #42A5F5; border-bottom-color: #42A5F5; }
         [data-theme="dark"] .bg-gradient-blue { background: linear-gradient(135deg, #1a3a5c 0%, #1a2a4e 100%); }
         [data-theme="dark"] .bg-gradient-green { background: linear-gradient(135deg, #1a3a2e 0%, #1a2e3e 100%); }
         [data-theme="dark"] .bg-gradient-purple { background: linear-gradient(135deg, #2a1a3e 0%, #2a1a3e 100%); }
@@ -1357,7 +1317,7 @@
         // ============================================
         const SUPABASE_URL = 'https://qszoeprhvrkaxrljwmhe.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzem9lcHJodnJrYXhybGp3bWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyODk0MzYsImV4cCI6MjEwMzg2NTQzNn0.ETIV3fyXhaHHAnXLULi7gqhjp86lSKHGFFBsG0Z-QhE';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================
         // GLOBAL VARIABLES
@@ -1393,40 +1353,40 @@
         // ============================================
 
         async function getJadwal() {
-            const { data, error } = await supabase.from('jadwal').select('*').order('tanggal', { ascending: true });
+            const { data, error } = await sb.from('jadwal').select('*').order('tanggal', { ascending: true });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getSertifikat() {
-            const { data, error } = await supabase.from('sertifikat').select('*').order('tanggalkegiatann', { ascending: false });
+            const { data, error } = await sb.from('sertifikat').select('*').order('tanggalkegiatann', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getMateri() {
-            const { data, error } = await supabase.from('materi').select('*').order('tanggalkegiatann', { ascending: false });
+            const { data, error } = await sb.from('materi').select('*').order('tanggalkegiatann', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getRegistrasi() {
-            const { data, error } = await supabase.from('registrasi').select('*').order('created_at', { ascending: false });
+            const { data, error } = await sb.from('registrasi').select('*').order('created_at', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getAbsensi() {
-            const { data, error } = await supabase.from('absensi').select('*').order('created_at', { ascending: false });
+            const { data, error } = await sb.from('absensi').select('*').order('created_at', { ascending: false });
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function getStatistics() {
             const [jadwalRes, regRes, absRes] = await Promise.all([
-                supabase.from('jadwal').select('jp, narasumber'),
-                supabase.from('registrasi').select('nip'),
-                supabase.from('absensi').select('nip')
+                sb.from('jadwal').select('jp, narasumber'),
+                sb.from('registrasi').select('nip'),
+                sb.from('absensi').select('nip')
             ]);
             const totalActivities = jadwalRes.data?.length || 0;
             const allNip = regRes.data?.map(r => r.nip) || [];
@@ -1440,7 +1400,7 @@
         }
 
         async function checkDuplicateRegistrasi(nip, tema) {
-            const { data, error } = await supabase.from('registrasi')
+            const { data, error } = await sb.from('registrasi')
                 .select('id')
                 .eq('nip', nip)
                 .eq('tema', tema);
@@ -1449,13 +1409,13 @@
         }
 
         async function submitRegistrasi(regData) {
-            const { data, error } = await supabase.from('registrasi').insert([regData]).select();
+            const { data, error } = await sb.from('registrasi').insert([regData]).select();
             if (error) return { success: false, message: error.message };
             return { success: true, data: data, id: data[0]?.id };
         }
 
         async function verifyPeserta(email, nip) {
-            const { data, error } = await supabase.from('registrasi')
+            const { data, error } = await sb.from('registrasi')
                 .select('*')
                 .eq('email', email)
                 .eq('nip', nip)
@@ -1465,7 +1425,7 @@
         }
 
         async function checkAbsensiExists(nip, tema) {
-            const { data, error } = await supabase.from('absensi')
+            const { data, error } = await sb.from('absensi')
                 .select('id')
                 .eq('nip', nip)
                 .eq('tema', tema);
@@ -1474,13 +1434,13 @@
         }
 
         async function submitAbsensi(absData) {
-            const { data, error } = await supabase.from('absensi').insert([absData]).select();
+            const { data, error } = await sb.from('absensi').insert([absData]).select();
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function addJadwal(jadwalData) {
-            const { data, error } = await supabase.from('jadwal').insert([jadwalData]).select();
+            const { data, error } = await sb.from('jadwal').insert([jadwalData]).select();
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
@@ -1489,13 +1449,13 @@
             const id = jadwalData.no || jadwalData.id;
             delete jadwalData.no;
             delete jadwalData.id;
-            const { data, error } = await supabase.from('jadwal').update(jadwalData).eq('id', id).select();
+            const { data, error } = await sb.from('jadwal').update(jadwalData).eq('id', id).select();
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
 
         async function deleteJadwalById(id) {
-            const { error } = await supabase.from('jadwal').delete().eq('id', id);
+            const { error } = await sb.from('jadwal').delete().eq('id', id);
             if (error) return { success: false, message: error.message };
             return { success: true };
         }
@@ -1538,7 +1498,7 @@
             const password = document.getElementById('password').value;
 
             // Admin authentication via Supabase admins table
-            const { data, error } = await supabase.from('admins')
+            const { data, error } = await sb.from('admins')
                 .select('*')
                 .eq('username', username)
                 .eq('password', password)
@@ -1716,7 +1676,7 @@
                 allAbsensi = absensiResult.data || [];
             }
             
-            // Load data for admin tabs (each tab has its own loader)
+            // Load data for new admin tabs
             loadJadwalForAdmin();
         }
 
@@ -2193,7 +2153,7 @@
             
             const dateInfo = document.getElementById('absensiDateInfo');
             if (tanggal) {
-                dateInfo.textContent = formatDate(tanggal);
+                dateInfo.textContent = `📅 ${formatDate(tanggal)}`;
             } else {
                 dateInfo.textContent = '';
             }
@@ -2614,7 +2574,7 @@
                 });
             }
             
-            // Setup search (only once to prevent duplicate listeners)
+            // Setup search (guarded)
             if (!_jadwalAdminListenerAdded) {
                 const searchInput = document.getElementById('searchJadwalAdmin');
                 if (searchInput) {
@@ -2691,7 +2651,7 @@
                 });
             }
             
-            // Setup search & filter (only once to prevent duplicate listeners)
+            // Setup search & filter (guarded)
             if (!_pesertaAdminListenerAdded) {
                 const searchInput = document.getElementById('searchPesertaAdmin');
                 if (searchInput) {
@@ -2705,7 +2665,6 @@
                         renderPesertaAdminTable(filtered);
                     });
                 }
-                
                 const filterSelect = document.getElementById('filterTemaPeserta');
                 if (filterSelect) {
                     filterSelect.addEventListener('change', function() {
@@ -2774,7 +2733,7 @@
                 });
             }
             
-            // Setup search & filter (only once to prevent duplicate listeners)
+            // Setup search & filter (guarded)
             if (!_pendaftaranAdminListenerAdded) {
                 const searchInput = document.getElementById('searchPendaftaranAdmin');
                 if (searchInput) {
@@ -2787,7 +2746,6 @@
                         renderPendaftaranAdminTable(filtered);
                     });
                 }
-                
                 const filterSelect = document.getElementById('filterTemaPendaftaran');
                 if (filterSelect) {
                     filterSelect.addEventListener('change', function() {
@@ -2853,7 +2811,7 @@
                 });
             }
             
-            // Setup search (only once to prevent duplicate listeners)
+            // Setup search (guarded)
             if (!_absensiAdminListenerAdded) {
                 const searchInput = document.getElementById('searchAbsensiAdmin');
                 if (searchInput) {
@@ -2887,9 +2845,9 @@
                     <td>${item.unitkerja || '-'}</td>
                     <td>${formatDate(item.tanggalabsensi || item.tanggal)}</td>
                     <td>${item.jamabsensi || item.jam || '-'}</td>
-                    <td><span class="badge bg-${getEvalColor(item.evalpenyelenggara || item.evpenyelenggara)}">${item.evalpenyelenggara || item.evpenyelenggara || '-'}</span></td>
-                    <td><span class="badge bg-${getEvalColor(item.evalfasilitator || item.evfasilitator)}">${item.evalfasilitator || item.evfasilitator || '-'}</span></td>
-                    <td><span class="badge bg-${getEvalColor(item.evalsarana || item.evsarana)}">${item.evalsarana || item.evsarana || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evpenyelenggara || item.evalpenyelenggara)}">${item.evpenyelenggara || item.evalpenyelenggara || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evfasilitator || item.evalfasilitator)}">${item.evfasilitator || item.evalfasilitator || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evsarana || item.evalsarana)}">${item.evsarana || item.evalsarana || '-'}</span></td>
                 </tr>
             `).join('');
         }
@@ -2912,9 +2870,9 @@
             if (charts.evaluasiTrend) charts.evaluasiTrend.destroy();
             
             const absensiData = allAbsensi.length > 0 ? allAbsensi : [
-                { tema: 'Leadership Transformation', evpenyelorga: 5, evfasilitator: 4, evsarana: 4 },
-                { tema: 'Digital Government Innovation', evpenyelorga: 4, evfasilitator: 5, evsarana: 4 },
-                { tema: 'Public Service Excellence', evpenyelorga: 5, evfasilitator: 5, evsarana: 5 }
+                { tema: 'Leadership Transformation', evalpenyelenggara: 5, evalfasilitator: 4, evalsarana: 4 },
+                { tema: 'Digital Government Innovation', evalpenyelenggara: 4, evalfasilitator: 5, evalsarana: 4 },
+                { tema: 'Public Service Excellence', evalpenyelenggara: 5, evalfasilitator: 5, evalsarana: 5 }
             ];
             
             // Chart 1: Rata-rata Nilai Evaluasi per Kegiatan (Bar Chart)
@@ -2967,7 +2925,7 @@
             // Chart 2: Perbandingan Kategori Evaluasi (Radar Chart)
             const ctx2 = document.getElementById('evaluasiRadarChart')?.getContext('2d');
             if (ctx2) {
-                const avgPenyelenggara = absensiData.reduce((sum, d) => sum + (d.evalpenyelenggara || d.evpenyelenggara || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
+                const avgPenyelenggara = absensiData.reduce((sum, d) => sum + (d.evalpenyelenggara || d.evalpenyelenggara || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
                 const avgFasilitator = absensiData.reduce((sum, d) => sum + (d.evfasilitator || d.evalfasilitator || 0), 0) / (absensiData.length || 1);
                 const avgSarana = absensiData.reduce((sum, d) => sum + (d.evsarana || d.evalsarana || 0), 0) / (absensiData.length || 1);
                 
@@ -3156,8 +3114,8 @@
             document.getElementById('searchJadwal')?.addEventListener('input', () => { currentPage.jadwal = 1; renderJadwalTable(); });
             document.getElementById('searchSertifikat')?.addEventListener('input', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
             document.getElementById('searchMateri')?.addEventListener('input', () => { currentPage.materi = 1; renderMateriTable(); });
-            // searchRegistrasiAdmin removed - handled by loadPendaftaranForAdmin
-            // searchAbsensiAdmin removed - handled by loadAbsensiForAdmin (guarded listener)
+            // searchRegistrasiAdmin - handled by loadPendaftaranForAdmin
+            // searchAbsensiAdmin - handled by loadAbsensiForAdmin
             
             // Filter selects with null checks
             document.getElementById('filterTema')?.addEventListener('change', () => { currentPage.jadwal = 1; renderJadwalTable(); });
@@ -3168,7 +3126,7 @@
             document.getElementById('filterTanggalSertifikat')?.addEventListener('change', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
             document.getElementById('filterNarasumberMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
             document.getElementById('filterTanggalMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
-            // filterTemaAdmin removed - handled by loadPendaftaranForAdmin
+            // filterTemaAdmin - handled by loadPendaftaranForAdmin
             
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
