@@ -1,0 +1,3156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bang KomDINKES - Sistem Informasi Pengembangan Kompetensi">
+    <title>Bang_KomDINKES - Sistem Informasi Pengembangan Kompetensi</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1E88E5;
+            --primary-dark: #1565C0;
+            --primary-light: #42A5F5;
+            --secondary-color: #263238;
+            --background-color: #F4F6F9;
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 70px;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --transition-speed: 0.3s;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%);
+            color: white;
+            z-index: 1000;
+            transition: width var(--transition-speed);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; }
+        .sidebar.collapsed .sidebar-logo span { display: none; }
+        .sidebar-toggle {
+            position: absolute;
+            right: -15px; top: 25px;
+            width: 30px; height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transition: transform var(--transition-speed);
+        }
+        .sidebar.collapsed .sidebar-toggle i { transform: rotate(180deg); }
+        .sidebar-menu { flex: 1; padding: 15px 0; overflow-y: auto; }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex; align-items: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            border-left: 3px solid transparent;
+            text-decoration: none;
+            color: white;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.1); border-left-color: white; }
+        .menu-item.active { background: rgba(255,255,255,0.15); border-left-color: #FFD700; }
+        .menu-item i { width: 30px; font-size: 1.1rem; }
+        .menu-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sidebar.collapsed .menu-item span { display: none; }
+        .sidebar.collapsed .menu-item { justify-content: center; padding: 12px; }
+
+        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; padding: 20px; transition: margin-left var(--transition-speed); }
+        .sidebar.collapsed ~ .main-content { margin-left: var(--sidebar-collapsed); }
+
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid rgba(0,0,0,0.05); }
+        .page-title { font-size: 1.5rem; font-weight: 600; color: var(--secondary-color); }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+
+        .stat-card {
+            border-radius: 12px; padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative; overflow: hidden;
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+        .stat-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; background: currentColor; }
+        .stat-card .icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 3rem; opacity: 0.2; }
+        .stat-card .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary-color); }
+        .stat-card .stat-label { font-size: 0.9rem; color: #666; font-weight: 500; }
+
+        .bg-gradient-blue { background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); color: #1565C0; }
+        .bg-gradient-green { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); color: #2E7D32; }
+        .bg-gradient-purple { background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%); color: #7B1FA2; }
+        .bg-gradient-orange { background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); color: #E65100; }
+        .bg-gradient-teal { background: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%); color: #00695C; }
+        .bg-gradient-red { background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%); color: #C62828; }
+
+        .table-container { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 20px; margin-bottom: 20px; }
+        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .table-title { font-size: 1.2rem; font-weight: 600; color: var(--secondary-color); }
+        .table-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+        .table-responsive { overflow-x: auto; }
+        .table { width: 100%; margin-bottom: 0; }
+        .table thead th { background: #f8f9fa; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+        .table tbody td { padding: 12px; vertical-align: middle; font-size: 0.9rem; }
+        .table tbody tr:hover { background-color: rgba(30, 136, 229, 0.05); }
+
+        .badge-open { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .badge-closed { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .badge-unavailable { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+        .badge-admin { background: linear-gradient(135deg, #6610f2 0%, #6f42c1 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+
+        .form-control, .form-select {
+            border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 0.9rem;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        .form-control:focus, .form-select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1); }
+        .form-label.required::after { content: ' *'; color: var(--danger-color); }
+        .form-card { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 30px; max-width: 700px; margin: 0 auto; }
+        .form-title { font-size: 1.3rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 25px; text-align: center; }
+
+        .step-indicator { display: flex; justify-content: center; margin-bottom: 30px; }
+        .step { display: flex; align-items: center; }
+        .step-circle { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; color: #666; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+        .step.active .step-circle { background: var(--primary-color); color: white; }
+        .step.completed .step-circle { background: var(--success-color); color: white; }
+        .step-line { width: 60px; height: 2px; background: #e0e0e0; margin: 0 10px; }
+
+        .btn-primary { background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%); border: none; border-radius: 8px; padding: 10px 20px; font-weight: 500; transition: transform var(--transition-speed), box-shadow var(--transition-speed); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4); }
+        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border: none; }
+        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none; }
+
+        .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1E88E5 0%, #1565C0 50%, #0D47A1 100%); }
+        .login-card { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 40px; width: 100%; max-width: 400px; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .login-logo { text-align: center; margin-bottom: 30px; }
+        .login-logo i { font-size: 4rem; color: var(--primary-color); }
+        .login-logo h2 { margin-top: 10px; color: var(--secondary-color); font-weight: 700; }
+        .login-logo p { color: #666; font-size: 0.9rem; }
+
+        .chart-container { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 20px; margin-bottom: 20px; }
+        .chart-title { font-size: 1.1rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 15px; }
+
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .toast { border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); animation: slideInRight 0.3s ease; }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn-loading { pointer-events: none; opacity: 0.7; }
+        .btn-loading::after { content: ''; display: inline-block; width: 12px; height: 12px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 8px; }
+
+        .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 15px; }
+        .pagination-info { color: #666; font-size: 0.9rem; }
+        .pagination { margin: 0; }
+        .page-link { border-radius: 8px; margin: 0 2px; color: var(--primary-color); }
+        .page-item.active .page-link { background: var(--primary-color); border-color: var(--primary-color); }
+
+        .btn-action { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: all var(--transition-speed); }
+        .btn-download { background: #28a745; color: white; }
+        .btn-download:hover { background: #218838; }
+
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .dark-mode-toggle { width: 45px; height: 45px; border-radius: 12px; background: white; border: none; box-shadow: var(--card-shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--secondary-color); transition: all var(--transition-speed); }
+        .dark-mode-toggle:hover { transform: scale(1.1); }
+
+        .rating-group { display: flex; gap: 15px; flex-wrap: wrap; }
+        .rating-option { display: flex; align-items: center; gap: 5px; }
+        .rating-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--primary-color); }
+
+        .verification-card { background: white; border-radius: 12px; box-shadow: var(--card-shadow); padding: 40px; max-width: 500px; margin: 50px auto; text-align: center; }
+        .verification-icon { font-size: 4rem; color: var(--primary-color); margin-bottom: 20px; }
+
+        @media (max-width: 992px) {
+            .sidebar { width: var(--sidebar-collapsed); }
+            .sidebar .sidebar-logo span, .sidebar .menu-item span { display: none; }
+            .sidebar .menu-item { justify-content: center; padding: 12px; }
+            .main-content { margin-left: var(--sidebar-collapsed); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
+            .sidebar.mobile-show { transform: translateX(0); }
+            .sidebar.mobile-show .sidebar-logo span, .sidebar.mobile-show .menu-item span { display: inline; }
+            .sidebar.mobile-show .menu-item { justify-content: flex-start; padding: 12px 20px; }
+            .main-content { margin-left: 0; }
+            .content-header { flex-direction: column; align-items: flex-start; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .table-filters { width: 100%; }
+            .table-filters .form-control, .table-filters .form-select { width: 100%; }
+            .form-card { padding: 20px; margin: 10px; }
+            .step-indicator { flex-direction: column; gap: 10px; }
+            .step-line { display: none; }
+        }
+
+        @media (max-width: 576px) {
+            .stat-card { margin-bottom: 15px; }
+            .stat-card .stat-number { font-size: 1.5rem; }
+            .stat-card .icon { font-size: 2rem; }
+        }
+
+        @media print {
+            .sidebar, .header-actions, .table-filters, .pagination-container { display: none !important; }
+            .main-content { margin-left: 0 !important; }
+            .table-container { box-shadow: none; }
+            body { background: white; }
+        }
+        
+        /* Admin Tabs Styles */
+        .admin-tabs {
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .admin-tabs .nav-link {
+            color: #495057;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .admin-tabs .nav-link:hover {
+            color: #1E88E5;
+            border-color: transparent;
+        }
+        
+        .admin-tabs .nav-link.active {
+            color: #1E88E5;
+            background: transparent;
+            border-bottom-color: #1E88E5;
+            font-weight: 600;
+        }
+        
+        .admin-tabs .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .tab-content .tab-pane {
+            padding: 20px 0;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive admin tabs */
+        @media (max-width: 768px) {
+            .admin-tabs .nav-link {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .admin-tabs .nav-link i {
+                margin-right: 4px;
+            }
+            
+            .admin-tabs .nav-link span {
+                display: none;
+            }
+        }
+        
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        /* Form Styles */
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #1E88E5;
+            box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+        }
+        
+        /* Action buttons in table */
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        /* Badge colors for evaluations */
+        .badge.bg-success { background-color: #28a745 !important; }
+        .badge.bg-warning { background-color: #ffc107 !important; color: #000 !important; }
+        .badge.bg-danger { background-color: #dc3545 !important; }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="login-container" style="display: none;">
+        <div class="login-card">
+            <div class="login-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Bang_KomDINKES</h2>
+                <p>Bang KomDINKES - Sistem Informasi Pengembangan Kompetensi</p>
+            </div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" id="username" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="#" onclick="showSection('dashboard'); return false;" class="text-muted">
+                    <i class="fas fa-arrow-left me-1"></i>Kembali ke Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left text-primary"></i>
+            </div>
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-graduation-cap me-2"></i>
+                    <span>Bang_KomDINKES</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <a class="menu-item active" data-section="dashboard" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="menu-item" data-section="jadwal" onclick="showSection('jadwal')">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Jadwal Kegiatan</span>
+                </a>
+                <a class="menu-item" data-section="sertifikat" onclick="showSection('sertifikat')">
+                    <i class="fas fa-certificate"></i>
+                    <span>Download Sertifikat</span>
+                </a>
+                <a class="menu-item" data-section="materi" onclick="showSection('materi')">
+                    <i class="fas fa-book"></i>
+                    <span>Download Materi</span>
+                </a>
+                <a class="menu-item" data-section="pendaftaran" onclick="showSection('pendaftaran')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Formulir Pendaftaran</span>
+                </a>
+                <a class="menu-item" data-section="absensi" onclick="showSection('absensi')">
+                    <i class="fas fa-user-check"></i>
+                    <span>Absensi</span>
+                </a>
+                <a class="menu-item admin-only" id="adminMenu" data-section="admin" onclick="checkAdminAccess()" style="display: none;">
+                    <i class="fas fa-cogs"></i>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </h1>
+                    <div class="header-actions">
+                        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                            <i class="fas fa-moon" id="darkModeIcon"></i>
+                        </button>
+                        <button class="btn btn-primary" onclick="loadDashboardData()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-blue">
+                            <i class="fas fa-calendar-check icon"></i>
+                            <div class="stat-number" data-count="0" id="totalActivities">0</div>
+                            <div class="stat-label">Total Kegiatan</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-green">
+                            <i class="fas fa-users icon"></i>
+                            <div class="stat-number" data-count="0" id="totalParticipants">0</div>
+                            <div class="stat-label">Total Peserta</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-purple">
+                            <i class="fas fa-clock icon"></i>
+                            <div class="stat-number" data-count="0" id="totalJP">0</div>
+                            <div class="stat-label">Total JP</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-orange">
+                            <i class="fas fa-chalkboard-teacher icon"></i>
+                            <div class="stat-number" data-count="0" id="totalSpeakers">0</div>
+                            <div class="stat-label">Total Narasumber</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-teal">
+                            <i class="fas fa-user-plus icon"></i>
+                            <div class="stat-number" data-count="0" id="totalRegistrasi">0</div>
+                            <div class="stat-label">Total Registrasi</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card bg-gradient-red">
+                            <i class="fas fa-clipboard-check icon"></i>
+                            <div class="stat-number" data-count="0" id="totalAbsensi">0</div>
+                            <div class="stat-label">Total Absensi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">
+                            <i class="fas fa-list me-2"></i>Jadwal Kegiatan Terbaru
+                        </h3>
+                        <button class="btn btn-primary" onclick="showSection('jadwal')">
+                            <i class="fas fa-eye me-2"></i>Lihat Semua
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table" id="dashboardTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tema</th>
+                                    <th>Tanggal</th>
+                                    <th>JP</th>
+                                    <th>Narasumber</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboardTableBody">
+                                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jadwal Kegiatan Section -->
+            <section id="jadwal" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-calendar-alt me-2"></i>Jadwal Kegiatan
+                    </h1>
+                    <div class="header-actions">
+                        <button class="btn btn-success" onclick="exportToExcel('jadwalTable', 'Jadwal_Kegiatann')">
+                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                        </button>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Data Jadwal Kegiatan</h3>
+                    </div>
+                    <div class="table-filters mb-3">
+                        <input type="text" class="form-control" id="searchJadwal" placeholder="Search tema..." style="max-width: 250px;">
+                        <select class="form-select" id="filterTema" style="max-width: 200px;">
+                            <option value="">Semua Tema</option>
+                        </select>
+                        <select class="form-select" id="filterNarasumber" style="max-width: 200px;">
+                            <option value="">Semua Narasumber</option>
+                        </select>
+                        <input type="date" class="form-control" id="filterTanggal" style="max-width: 180px;">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table" id="jadwalTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tema</th>
+                                    <th>Tanggal</th>
+                                    <th>Jam Mulai</th>
+                                    <th>Jam Selesai</th>
+                                    <th>Narasumber</th>
+                                    <th>JP</th>
+                                    <th>Max Peserta</th>
+                                    <th>Tgl Mulai Daftar</th>
+                                    <th>Tgl Selesai Daftar</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jadwalTableBody">
+                                <tr><td colspan="11" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container">
+                        <div class="pagination-info" id="jadwalPaginationInfo">Menampilkan 0 dari 0 data</div>
+                        <nav><ul class="pagination" id="jadwalPagination"></ul></nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Sertifikat Section -->
+            <section id="sertifikat" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-certificate me-2"></i>Download Sertifikat
+                    </h1>
+                    <div class="header-actions">
+                        <button class="btn btn-success" onclick="exportToExcel('sertifikatTable', 'Sertifikat_Peserta')">
+                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                        </button>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Daftar Sertifikat Peserta</h3>
+                    </div>
+                    <div class="table-filters mb-3">
+                        <input type="text" class="form-control" id="searchSertifikat" placeholder="Search nama peserta..." style="max-width: 250px;">
+                        <select class="form-select" id="filterUnitKerja" style="max-width: 200px;">
+                            <option value="">Semua Unit Kerja</option>
+                        </select>
+                        <select class="form-select" id="filterTemaSertifikat" style="max-width: 200px;">
+                            <option value="">Semua Tema</option>
+                        </select>
+                        <input type="date" class="form-control" id="filterTanggalSertifikat" style="max-width: 180px;">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table" id="sertifikatTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Peserta</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Tanggal Kegiatan</th>
+                                    <th>Tema</th>
+                                    <th>JP</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sertifikatTableBody">
+                                <tr><td colspan="7" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container">
+                        <div class="pagination-info" id="sertifikatPaginationInfo">Menampilkan 0 dari 0 data</div>
+                        <nav><ul class="pagination" id="sertifikatPagination"></ul></nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Materi Section -->
+            <section id="materi" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-book me-2"></i>Download Materi
+                    </h1>
+                    <div class="header-actions">
+                        <button class="btn btn-success" onclick="exportToExcel('materiTable', 'Materi_Kegiatann')">
+                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                        </button>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Materi Kegiatan</h3>
+                    </div>
+                    <div class="table-filters mb-3">
+                        <input type="text" class="form-control" id="searchMateri" placeholder="Search tema..." style="max-width: 250px;">
+                        <select class="form-select" id="filterNarasumberMateri" style="max-width: 200px;">
+                            <option value="">Semua Narasumber</option>
+                        </select>
+                        <input type="date" class="form-control" id="filterTanggalMateri" style="max-width: 180px;">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table" id="materiTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal Kegiatan</th>
+                                    <th>Tema</th>
+                                    <th>Narasumber</th>
+                                    <th>Link Download</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materiTableBody">
+                                <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container">
+                        <div class="pagination-info" id="materiPaginationInfo">Menampilkan 0 dari 0 data</div>
+                        <nav><ul class="pagination" id="materiPagination"></ul></nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Formulir Pendaftaran Section -->
+            <section id="pendaftaran" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-clipboard-list me-2"></i>Formulir Pendaftaran
+                    </h1>
+                </div>
+
+                <div class="form-card">
+                    <h3 class="form-title">
+                        <i class="fas fa-user-plus me-2"></i>Pendaftaran Kegiatan Pengembangan Kompetensi ASN
+                    </h3>
+
+                    <div class="step-indicator">
+                        <div class="step active" id="step1"><div class="step-circle">1</div></div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step2"><div class="step-circle">2</div></div>
+                    </div>
+
+                    <form id="pendaftaranForm">
+                        <div id="step1Content">
+                            <div class="mb-3">
+                                <label class="form-label required">Pilih Tema Pembelajaran</label>
+                                <select class="form-select" id="selectTema" required onchange="loadTemaDetails()">
+                                    <option value="">-- Pilih Tema --</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3" id="temaDetails" style="display: none;">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-info-circle me-2"></i>Detail Kegiatan</h6>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Narasumber:</strong> <span id="infoNarasumber">-</span></p>
+                                            <p class="mb-1"><strong>Tanggal:</strong> <span id="infoTanggal">-</span></p>
+                                            <p class="mb-1"><strong>Waktu:</strong> <span id="infoWaktu">-</span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Platform:</strong> <span id="infoPlatform">-</span></p>
+                                            <p class="mb-1"><strong>JP:</strong> <span id="infoJP">-</span></p>
+                                        </div>
+                                    </div>
+                                    <!-- Sisa Kuota & Waktu Pendaftaran -->
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="quota-info">
+                                                <i class="fas fa-users me-2"></i>
+                                                <strong>Sisa Kuota:</strong> 
+                                                <span id="sisaKuota" class="badge bg-success">-</span>
+                                                <small class="text-muted">dari <span id="maxKuota">-</span> peserta</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="registration-timer">
+                                                <i class="fas fa-clock me-2"></i>
+                                                <strong>Pendaftaran Tutup:</strong>
+                                                <span id="timerPendaftaran" class="badge bg-warning text-dark">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="step2Content" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label required">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="namaLengkap" placeholder="Masukkan nama lengkap" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label required">NIP</label>
+                                <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP (18 digit)" maxlength="18" required oninput="validateNIP(this)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label required">Unit Kerja</label>
+                                <input type="text" class="form-control" id="unitKerja" placeholder="Masukkan unit kerja" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label required">Status Pegawai</label>
+                                <select class="form-select" id="statusPegawai" required>
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="PNS">PNS</option>
+                                    <option value="PPPK">PPPK</option>
+                                    
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Jenis SDMK</label>
+                                <select class="form-select" id="jenisSDMK">
+                                    <option value="">-- Pilih Jenis SDMK (Opsional) --</option>
+                                    <option value="Dokter">Dokter</option>
+                                    <option value="Dokter Gigi">Dokter Gigi</option>
+                                    <option value="Perawat">Perawat</option>
+                                    <option value="Bidan">Bidan</option>
+                                    <option value="Apoteker">Apoteker</option>
+                                    <option value="Tenaga Kesehatan Lain">Tenaga Kesehatan Lain</option>
+                                    <option value="Non Kesehatan">Non Kesehatan</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Jumlah JP Terakhir</label>
+                                <input type="number" class="form-control" id="jpTerakhir" placeholder="Masukkan jumlah JP terakhir" min="0">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label required">Nomor WhatsApp</label>
+                                <input type="tel" class="form-control" id="whatsapp" placeholder="Contoh: 081234567890" required oninput="validateWhatsApp(this)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label required">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="name@email.com" required>
+                            </div>
+
+                            <input type="hidden" id="hiddenTema">
+                            <input type="hidden" id="hiddenNarasumber">
+                            <input type="hidden" id="hiddenTanggal">
+                            <input type="hidden" id="hiddenWaktu">
+                            <input type="hidden" id="hiddenPlatform">
+                            <input type="hidden" id="hiddenJP">
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+                                <i class="fas fa-arrow-left me-2"></i>Kembali
+                            </button>
+                            <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                                Lanjut<i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+                                <i class="fas fa-paper-plane me-2"></i>Kirim Pendaftaran
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Absensi Section -->
+            <section id="absensi" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-check me-2"></i>Absensi Digital
+                    </h1>
+                </div>
+
+                <!-- Absensi Timer Banner -->
+                <div class="alert alert-warning mb-4" id="absensiTimerBanner">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-1"><i class="fas fa-clock me-2"></i>Jam Absensi</h5>
+                            <p class="mb-0">
+                                <strong>Buka:</strong> <span id="absensiJamBuka">10:30</span> | 
+                                <strong>Tutup:</strong> <span id="absensiJamTutup">23:00</span>
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="absensi-countdown">
+                                <span id="absensiStatus" class="badge bg-success">BUKA</span>
+                                <small id="absensiCountdown" class="d-block text-muted">Sisa waktu: -</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="verificationForm">
+                    <div class="verification-card">
+                        <div class="verification-icon"><i class="fas fa-qrcode"></i></div>
+                        <h4>Verifikasi Identitas</h4>
+                        <p class="text-muted mb-4">Pilih kegiatan & masukkan email/NIP yang digunakan saat pendaftaran</p>
+                        
+                        <form id="verifyForm">
+                            <div class="mb-3">
+                                <label class="form-label required">Pilih Kegiatan</label>
+                                <select class="form-select" id="selectAbsensiTema" required onchange="updateAbsensiTimer()">
+                                    <option value="">-- Pilih Kegiatan --</option>
+                                </select>
+                                <small class="text-muted" id="absensiDateInfo"></small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">Email</label>
+                                <input type="email" class="form-control" id="verifyEmail" placeholder="email@domain.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">NIP</label>
+                                <input type="text" class="form-control" id="verifyNIP" placeholder="Masukkan NIP" maxlength="18" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-check-circle me-2"></i>Verifikasi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="absensiForm" style="display: none;">
+                    <div class="form-card">
+                        <h3 class="form-title">
+                            <i class="fas fa-clipboard-check me-2"></i>Form Absensi
+                        </h3>
+
+                        <div class="alert alert-info mb-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Nama:</strong> <span id="absensiNama">-</span></p>
+                                    <p class="mb-1"><strong>NIP:</strong> <span id="absensiNIP">-</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Unit Kerja:</strong> <span id="absensiUnit">-</span></p>
+                                    <p class="mb-1"><strong>Platform:</strong> <span id="absensiPlatform">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="absensiSubmitForm">
+                            <input type="hidden" id="absensiId">
+                            <input type="hidden" id="absensiTema">
+                            
+                            <div class="mb-4">
+                                <label class="form-label required">Evaluasi Penyelenggaraan</label>
+                                <div class="rating-group">
+                                    <div class="rating-option"><input type="radio" name="evalPenyelenggara" value="1" required><label>1</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalPenyelenggara" value="2"><label>2</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalPenyelenggara" value="3"><label>3</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalPenyelenggara" value="4"><label>4</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalPenyelenggara" value="5"><label>5</label></div>
+                                </div>
+                                <small class="text-muted">1 = Sangat Buruk, 5 = Sangat Baik</small>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label required">Evaluasi Fasilitator</label>
+                                <div class="rating-group">
+                                    <div class="rating-option"><input type="radio" name="evalFasilitator" value="1" required><label>1</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalFasilitator" value="2"><label>2</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalFasilitator" value="3"><label>3</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalFasilitator" value="4"><label>4</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalFasilitator" value="5"><label>5</label></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label required">Evaluasi Sarana</label>
+                                <div class="rating-group">
+                                    <div class="rating-option"><input type="radio" name="evalSarana" value="1" required><label>1</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalSarana" value="2"><label>2</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalSarana" value="3"><label>3</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalSarana" value="4"><label>4</label></div>
+                                    <div class="rating-option"><input type="radio" name="evalSarana" value="5"><label>5</label></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Komentar (Opsional)</label>
+                                <textarea class="form-control" id="komentar" rows="3" placeholder="Tulis komentar atau saran..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-check me-2"></i>Submit Absensi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Section -->
+            <section id="admin" class="section">
+                <div class="content-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cogs me-2"></i>Halaman Admin
+                    </h1>
+                    <div class="header-actions">
+                        <button class="btn btn-danger" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <ul class="nav nav-tabs admin-tabs mb-4" id="adminTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-jadwal-tab" data-bs-toggle="tab" data-bs-target="#adminJadwal" type="button" role="tab">
+                            <i class="fas fa-calendar-plus me-2"></i>Kelola Jadwal
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-peserta-tab" data-bs-toggle="tab" data-bs-target="#adminPeserta" type="button" role="tab">
+                            <i class="fas fa-users me-2"></i>Kelola Peserta
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-pendaftaran-tab" data-bs-toggle="tab" data-bs-target="#adminPendaftaran" type="button" role="tab">
+                            <i class="fas fa-clipboard-list me-2"></i>Data Pendaftaran
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-absensi-tab" data-bs-toggle="tab" data-bs-target="#adminAbsensiTab" type="button" role="tab">
+                            <i class="fas fa-user-check me-2"></i>Data Absensi
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-statistik-tab" data-bs-toggle="tab" data-bs-target="#adminStatistik" type="button" role="tab">
+                            <i class="fas fa-chart-pie me-2"></i>Statistik Grafik
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-evaluasi-tab" data-bs-toggle="tab" data-bs-target="#adminEvaluasi" type="button" role="tab">
+                            <i class="fas fa-star me-2"></i>Grafik Evaluasi
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="adminTabContent">
+                    <!-- Kelola Jadwal Tab -->
+                    <div class="tab-pane fade show active" id="adminJadwal" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-calendar-alt me-2"></i>Kelola Jadwal Kegiatan</h3>
+                                <button class="btn btn-primary" onclick="showJadwalForm()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Jadwal
+                                </button>
+                            </div>
+                            
+                            <!-- Form Tambah/Edit Jadwal -->
+                            <div class="card mb-4" id="jadwalFormCard" style="display: none;">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3" id="jadwalFormTitle"><i class="fas fa-plus-circle me-2"></i>Tambah Jadwal Baru</h5>
+                                    <form id="jadwalForm" onsubmit="saveJadwal(event)">
+                                        <input type="hidden" id="jadwalId">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Tema Kegiatan</label>
+                                                <input type="text" class="form-control" id="jadwalTema" required>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Tanggal</label>
+                                                <input type="date" class="form-control" id="jadwalTanggal" required>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">JP (Jam Pelajaran)</label>
+                                                <input type="number" class="form-control" id="jadwalJP" min="1" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Jam Mulai</label>
+                                                <input type="time" class="form-control" id="jadwalJamMulai" required>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Jam Selesai</label>
+                                                <input type="time" class="form-control" id="jadwalJamSelesai" required>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Narasumber</label>
+                                                <input type="text" class="form-control" id="jadwalNarasumber" required>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label class="form-label">Max Peserta</label>
+                                                <input type="number" class="form-control" id="jadwalMaxPeserta" min="1" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Tgl Mulai Pendaftaran</label>
+                                                <input type="date" class="form-control" id="jadwalTglMulaiDaftar" required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Tgl Selesai Pendaftaran</label>
+                                                <input type="date" class="form-control" id="jadwalTglSelesaiDaftar" required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Platform</label>
+                                                <select class="form-select" id="jadwalPlatform" required>
+                                                    <option value="Offline">Offline</option>
+                                                    <option value="Online">Online</option>
+                                                    <option value="Hybrid">Hybrid</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-save me-2"></i>Simpan
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" onclick="hideJadwalForm()">
+                                                <i class="fas fa-times me-2"></i>Batal
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="searchJadwalAdmin" placeholder="Search tema..." style="max-width: 250px;">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="jadwalAdminTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tema</th>
+                                            <th>Tanggal</th>
+                                            <th>Jam</th>
+                                            <th>Narasumber</th>
+                                            <th>JP</th>
+                                            <th>Max Peserta</th>
+                                            <th>Platform</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="jadwalAdminBody">
+                                        <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kelola Peserta Tab -->
+                    <div class="tab-pane fade" id="adminPeserta" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-users me-2"></i>Kelola Data Peserta Pelatihan</h3>
+                                <button class="btn btn-success" onclick="exportToExcel('pesertaAdminTable', 'Data_Peserta')">
+                                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                                </button>
+                            </div>
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="searchPesertaAdmin" placeholder="Search nama/NIP..." style="max-width: 250px;">
+                                <select class="form-select" id="filterTemaPeserta" style="max-width: 200px;">
+                                    <option value="">Semua Tema</option>
+                                </select>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="pesertaAdminTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Peserta</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Jabatan</th>
+                                            <th>NIP</th>
+                                            <th>Email</th>
+                                            <th>No HP</th>
+                                            <th>Tema</th>
+                                            <th>Tgl Daftar</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pesertaAdminBody">
+                                        <tr><td colspan="10" class="text-center">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Pendaftaran Tab -->
+                    <div class="tab-pane fade" id="adminPendaftaran" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-clipboard-list me-2"></i>Data Pendaftaran</h3>
+                                <button class="btn btn-success" onclick="exportToExcel('pendaftaranAdminTable', 'Data_Pendaftaran')">
+                                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                                </button>
+                            </div>
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="searchPendaftaranAdmin" placeholder="Search nama/NIP..." style="max-width: 250px;">
+                                <select class="form-select" id="filterTemaPendaftaran" style="max-width: 200px;">
+                                    <option value="">Semua Tema</option>
+                                </select>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="pendaftaranAdminTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>NIP</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Status</th>
+                                            <th>WhatsApp</th>
+                                            <th>Email</th>
+                                            <th>Tema</th>
+                                            <th>Tanggal Daftar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendaftaranAdminBody">
+                                        <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Absensi Tab -->
+                    <div class="tab-pane fade" id="adminAbsensiTab" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-user-check me-2"></i>Data Absensi</h3>
+                                <button class="btn btn-success" onclick="exportToExcel('absensiAdminTable', 'Data_Absensi')">
+                                    <i class="fas fa-file-excel me-2"></i>Export Excel
+                                </button>
+                            </div>
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="searchAbsensiAdmin" placeholder="Search NIP..." style="max-width: 250px;">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="absensiAdminTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nama</th>
+                                            <th>NIP</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Tanggal</th>
+                                            <th>Jam</th>
+                                            <th>Eval. Penyelenggara</th>
+                                            <th>Eval. Fasilitator</th>
+                                            <th>Eval. Sarana</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="absensiAdminBody">
+                                        <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistik Grafik Tab -->
+                    <div class="tab-pane fade" id="adminStatistik" role="tabpanel">
+                        <div class="row mb-4">
+                            <div class="col-lg-6">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-chart-bar me-2"></i>Jumlah Kegiatan per Bulan</h3>
+                                    <canvas id="kegiatannChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-chart-bar me-2"></i>Total JP per Bulan</h3>
+                                    <canvas id="jpChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grafik Evaluasi Tab -->
+                    <div class="tab-pane fade" id="adminEvaluasi" role="tabpanel">
+                        <div class="row mb-4">
+                            <div class="col-lg-6">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-star me-2"></i>Rata-rata Nilai Evaluasi per Kegiatan</h3>
+                                    <canvas id="evaluasiChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-chart-radar me-2"></i>Perbandingan Kategori Evaluasi</h3>
+                                    <canvas id="evaluasiRadarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-chart-line me-2"></i>Tren Evaluasi dari Waktu ke Waktu</h3>
+                                    <canvas id="evaluasiTrendChart" height="80"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://qszoeprhvrkaxrljwmhe.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzem9lcHJodnJrYXhybGp3bWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyODk0MzYsImV4cCI6MjEwMzg2NTQzNn0.ETIV3fyXhaHHAnXLULi7gqhjp86lSKHGFFBsG0Z-QhE';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        
+        let allJadwal = [];
+        let allSertifikat = [];
+        let allMateri = [];
+        let allRegistrasi = [];
+        let allAbsensi = [];
+        let currentPage = { jadwal: 1, sertifikat: 1, materi: 1 };
+        let currentStep = 1;
+        let verifiedUser = null;
+        const itemsPerPage = 10;
+        let charts = {};
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            loadDashboardData();
+            setupEventListeners();
+            
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 500);
+        });
+
+        // ============================================
+        // SUPABASE QUERY FUNCTIONS
+        // ============================================
+
+        async function getJadwal() {
+            const { data, error } = await supabase.from('jadwal').select('*').order('tanggal', { ascending: true });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function getSertifikat() {
+            const { data, error } = await supabase.from('sertifikat').select('*').order('tanggal', { ascending: false });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function getMateri() {
+            const { data, error } = await supabase.from('materi').select('*').order('tanggal', { ascending: false });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function getRegistrasi() {
+            const { data, error } = await supabase.from('registrasi').select('*').order('created_at', { ascending: false });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function getAbsensi() {
+            const { data, error } = await supabase.from('absensi').select('*').order('created_at', { ascending: false });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function getStatistics() {
+            const [jadwalRes, regRes, absRes] = await Promise.all([
+                supabase.from('jadwal').select('jp, narasumber'),
+                supabase.from('registrasi').select('nip'),
+                supabase.from('absensi').select('nip')
+            ]);
+            const totalActivities = jadwalRes.data?.length || 0;
+            const allNip = regRes.data?.map(r => r.nip) || [];
+            const totalParticipants = [...new Set(allNip)].length;
+            const totalJP = jadwalRes.data?.reduce((sum, j) => sum + (j.jp || 0), 0);
+            const allNarasumber = jadwalRes.data?.map(j => j.narasumber).filter(n => n) || [];
+            const totalSpeakers = [...new Set(allNarasumber)].length;
+            const totalRegistrasi = regRes.data?.length || 0;
+            const totalAbsensi = absRes.data?.length || 0;
+            return { success: true, data: { totalActivities, totalParticipants, totalJP, totalSpeakers, totalRegistrasi, totalAbsensi } };
+        }
+
+        async function checkDuplicateRegistrasi(nip, tema) {
+            const { data, error } = await supabase.from('registrasi')
+                .select('id')
+                .eq('nip', nip)
+                .eq('tema', tema);
+            if (error) return { success: false, exists: false, message: error.message };
+            return { success: true, exists: data && data.length > 0 };
+        }
+
+        async function submitRegistrasi(regData) {
+            const { data, error } = await supabase.from('registrasi').insert([regData]).select();
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data, id: data[0]?.id };
+        }
+
+        async function verifyPeserta(email, nip) {
+            const { data, error } = await supabase.from('registrasi')
+                .select('*')
+                .eq('email', email)
+                .eq('nip', nip)
+                .single();
+            if (error || !data) return { success: false, message: 'Data tidak ditemukan' };
+            return { success: true, data: data };
+        }
+
+        async function checkAbsensiExists(nip, tema) {
+            const { data, error } = await supabase.from('absensi')
+                .select('id')
+                .eq('nip', nip)
+                .eq('tema', tema);
+            if (error) return { success: false, exists: false, message: error.message };
+            return { success: true, exists: data && data.length > 0 };
+        }
+
+        async function submitAbsensi(absData) {
+            const { data, error } = await supabase.from('absensi').insert([absData]).select();
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function addJadwal(jadwalData) {
+            const { data, error } = await supabase.from('jadwal').insert([jadwalData]).select();
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function updateJadwal(jadwalData) {
+            const id = jadwalData.no || jadwalData.id;
+            delete jadwalData.no;
+            delete jadwalData.id;
+            const { data, error } = await supabase.from('jadwal').update(jadwalData).eq('id', id).select();
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
+        async function deleteJadwalById(id) {
+            const { error } = await supabase.from('jadwal').delete().eq('id', id);
+            if (error) return { success: false, message: error.message };
+            return { success: true };
+        }
+
+        // ============================================
+        // LOGIN FUNCTIONS
+        // ============================================
+        
+        function checkLoginStatus() {
+            const isLoggedIn = sessionStorage.getItem('bangkomdinkes_admin_logged_in');
+            if (isLoggedIn === 'true') {
+                document.getElementById('adminMenu').style.display = 'flex';
+            }
+        }
+
+        function checkAdminAccess() {
+            const isLoggedIn = sessionStorage.getItem('bangkomdinkes_admin_logged_in');
+            if (isLoggedIn !== 'true') {
+                showLogin();
+            } else {
+                showSection('admin');
+                initCharts();
+                loadAdminData();
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+
+        function hideLogin() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Admin authentication via Supabase admins table
+            const { data, error } = await supabase.from('admins')
+                .select('*')
+                .eq('username', username)
+                .eq('password', password)
+                .single();
+
+            if (data) {
+                sessionStorage.setItem('bangkomdinkes_admin_logged_in', 'true');
+                sessionStorage.setItem('bangkomdinkes_admin_user', username);
+                showToast('Login berhasil!', 'success');
+                hideLogin();
+                document.getElementById('adminMenu').style.display = 'flex';
+                showSection('admin');
+                initCharts();
+            } else {
+                showToast('Username atau password salah!', 'danger');
+            }
+        });
+
+        function logout() {
+            sessionStorage.removeItem('bangkomdinkes_admin_logged_in');
+            sessionStorage.removeItem('bangkomdinkes_admin_user');
+            document.getElementById('adminMenu').style.display = 'none';
+            showToast('Logout berhasil!', 'success');
+            showSection('dashboard');
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionId) {
+                    item.classList.add('active');
+                }
+            });
+
+            if (sectionId === 'jadwal') loadJadwalData();
+            else if (sectionId === 'sertifikat') loadSertifikatData();
+            else if (sectionId === 'materi') loadMateriData();
+            else if (sectionId === 'pendaftaran') loadJadwalForDropdown();
+            else if (sectionId === 'absensi') startAbsensiTimer();
+            else if (sectionId === 'admin') {
+                initCharts();
+                loadAdminData();
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('darkModeIcon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // ============================================
+        // DATA LOADING
+        // ============================================
+        
+        async function loadDashboardData() {
+            showLoading();
+            
+            // Ambil data dari Supabase
+            const jadwalResult = await getJadwal();
+            const statsResult = await getStatistics();
+            const registrasiResult = await getRegistrasi();
+            const absensiResult = await getAbsensi();
+            
+            if (jadwalResult.success) {
+                allJadwal = jadwalResult.data;
+            }
+            
+            if (statsResult.success) {
+                animateCounter('totalActivities', statsResult.data.totalActivities || 0);
+                animateCounter('totalParticipants', statsResult.data.totalParticipants || 0);
+                animateCounter('totalJP', statsResult.data.totalJP || 0);
+                animateCounter('totalSpeakers', statsResult.data.totalSpeakers || 0);
+                animateCounter('totalRegistrasi', statsResult.data.totalRegistrasi || 0);
+                animateCounter('totalAbsensi', statsResult.data.totalAbsensi || 0);
+            }
+            
+            renderDashboardTable();
+            hideLoading();
+        }
+
+        async function loadJadwalData() {
+            showLoading();
+            const result = await getJadwal();
+            
+            if (result.success) {
+                allJadwal = result.data;
+                populateJadwalFilters();
+                renderJadwalTable();
+            } else {
+                document.getElementById('jadwalTableBody').innerHTML = 
+                    '<tr><td colspan="11" class="text-center text-danger">Gagal memuat data</td></tr>';
+            }
+            hideLoading();
+        }
+
+        async function loadSertifikatData() {
+            showLoading();
+            const result = await getSertifikat();
+            
+            if (result.success) {
+                allSertifikat = result.data;
+                populateSertifikatFilters();
+                renderSertifikatTable();
+            } else {
+                document.getElementById('sertifikatTableBody').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">Gagal memuat data</td></tr>';
+            }
+            hideLoading();
+        }
+
+        async function loadMateriData() {
+            showLoading();
+            const result = await getMateri();
+            
+            if (result.success) {
+                allMateri = result.data;
+                populateMateriFilters();
+                renderMateriTable();
+            } else {
+                document.getElementById('materiTableBody').innerHTML = 
+                    '<tr><td colspan="5" class="text-center text-danger">Gagal memuat data</td></tr>';
+            }
+            hideLoading();
+        }
+
+        async function loadJadwalForDropdown() {
+            const result = await getJadwal();
+            
+            if (result.success) {
+                const openJadwal = result.data.filter(j => j.status === 'open');
+                const select = document.getElementById('selectTema');
+                select.innerHTML = '<option value="">-- Pilih Tema --</option>' + 
+                    openJadwal.map(j => `<option value="${j.tema}">${j.tema}</option>`).join('');
+            }
+        }
+
+        async function loadAdminData() {
+            const registrasiResult = await getRegistrasi();
+            const absensiResult = await getAbsensi();
+            const jadwalResult = await getJadwal();
+            
+            if (jadwalResult.success) {
+                allJadwal = jadwalResult.data || [];
+            }
+            
+            if (registrasiResult.success) {
+                allRegistrasi = registrasiResult.data || [];
+                populateAdminFilters();
+                renderAdminRegistrasiTable();
+            }
+            
+            if (absensiResult.success) {
+                allAbsensi = absensiResult.data || [];
+                renderAdminAbsensiTable();
+            }
+            
+            // Load data for new admin tabs
+            loadJadwalForAdmin();
+        }
+
+        // ============================================
+        // TABLE RENDERING
+        // ============================================
+        
+        function renderDashboardTable() {
+            const tbody = document.getElementById('dashboardTableBody');
+            const data = allJadwal.slice(0, 5);
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.tema}</td>
+                    <td>${formatDate(item.tanggal)}</td>
+                    <td><span class="badge bg-primary">${item.jp} JP</span></td>
+                    <td>${item.narasumber}</td>
+                    <td>
+                        ${item.status === 'open' 
+                            ? '<span class="badge-open">Pendaftaran Dibuka</span>' 
+                            : '<span class="badge-closed">Tutup</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderJadwalTable() {
+            const searchValue = document.getElementById('searchJadwal').value.toLowerCase();
+            const filterTema = document.getElementById('filterTema').value;
+            const filterNarasumber = document.getElementById('filterNarasumber').value;
+            const filterTanggal = document.getElementById('filterTanggal').value;
+            
+            let filteredData = allJadwal.filter(item => {
+                const matchSearch = item.tema.toLowerCase().includes(searchValue) || 
+                                    (item.narasumber && item.narasumber.toLowerCase().includes(searchValue));
+                const matchTema = !filterTema || item.tema === filterTema;
+                const matchNarasumber = !filterNarasumber || item.narasumber === filterNarasumber;
+                const matchTanggal = !filterTanggal || item.tanggal === filterTanggal;
+                
+                return matchSearch && matchTema && matchNarasumber && matchTanggal;
+            });
+            
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const startIndex = (currentPage.jadwal - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+            
+            const tbody = document.getElementById('jadwalTableBody');
+            
+            if (paginatedData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                tbody.innerHTML = paginatedData.map((item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.tema}</td>
+                        <td>${formatDate(item.tanggal)}</td>
+                        <td>${item.jammulai || '-'}</td>
+                        <td>${item.jamselesai || '-'}</td>
+                        <td>${item.narasumber || '-'}</td>
+                        <td><span class="badge bg-primary">${item.jp || 0} JP</span></td>
+                        <td>${item.maxpeserta || '-'}</td>
+                        <td>${formatDate(item.tglmulaidaftar)}</td>
+                        <td>${formatDate(item.tglselesaidaftar)}</td>
+                        <td>
+                            ${item.status === 'open' 
+                                ? '<span class="badge-open">Pendaftaran Dibuka</span>' 
+                                : '<span class="badge-closed">Tutup</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('jadwalPaginationInfo').textContent = 
+                `Menampilkan ${startIndex + 1} - ${Math.min(startIndex + itemsPerPage, filteredData.length)} dari ${filteredData.length} data`;
+            
+            renderPagination('jadwalPagination', totalPages, 'jadwal');
+        }
+
+        function renderSertifikatTable() {
+            const searchValue = document.getElementById('searchSertifikat').value.toLowerCase();
+            const filterUnit = document.getElementById('filterUnitKerja').value;
+            const filterTema = document.getElementById('filterTemaSertifikat').value;
+            
+            let filteredData = allSertifikat.filter(item => {
+                const matchSearch = (item.namapeserta && item.namapeserta.toLowerCase().includes(searchValue));
+                const matchUnit = !filterUnit || item.unitkerja === filterUnit;
+                const matchTema = !filterTema || item.tema === filterTema;
+                
+                return matchSearch && matchUnit && matchTema;
+            });
+            
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const startIndex = (currentPage.sertifikat - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+            
+            const tbody = document.getElementById('sertifikatTableBody');
+            
+            if (paginatedData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                tbody.innerHTML = paginatedData.map((item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${item.namapeserta || '-'}</td>
+                        <td>${item.unitkerja || '-'}</td>
+                        <td>${formatDate(item.tanggalkegiatann)}</td>
+                        <td>${item.tema || '-'}</td>
+                        <td><span class="badge bg-primary">${item.jp || 0} JP</span></td>
+                        <td>
+                            ${item.linkdownload 
+                                ? `<a href="${item.linkdownload}" target="_blank" class="btn btn-download btn-action" title="Download">
+                                    <i class="fas fa-download"></i>
+                                   </a>`
+                                : '<span class="badge-unavailable">Belum Terbit</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('sertifikatPaginationInfo').textContent = 
+                `Menampilkan ${startIndex + 1} - ${Math.min(startIndex + itemsPerPage, filteredData.length)} dari ${filteredData.length} data`;
+            
+            renderPagination('sertifikatPagination', totalPages, 'sertifikat');
+        }
+
+        function renderMateriTable() {
+            const searchValue = document.getElementById('searchMateri').value.toLowerCase();
+            const filterNarasumber = document.getElementById('filterNarasumberMateri').value;
+            
+            let filteredData = allMateri.filter(item => {
+                const matchSearch = (item.tema && item.tema.toLowerCase().includes(searchValue));
+                const matchNarasumber = !filterNarasumber || item.narasumber === filterNarasumber;
+                
+                return matchSearch && matchNarasumber;
+            });
+            
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const startIndex = (currentPage.materi - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+            
+            const tbody = document.getElementById('materiTableBody');
+            
+            if (paginatedData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                tbody.innerHTML = paginatedData.map((item, index) => `
+                    <tr>
+                        <td>${startIndex + index + 1}</td>
+                        <td>${formatDate(item.tanggalkegiatann)}</td>
+                        <td>${item.tema || '-'}</td>
+                        <td>${item.narasumber || '-'}</td>
+                        <td>
+                            ${item.linkdownload 
+                                ? `<a href="${item.linkdownload}" target="_blank" class="btn btn-download btn-action" title="Download">
+                                    <i class="fas fa-download"></i>
+                                   </a>`
+                                : '<span class="badge-unavailable">Belum Tersedia</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('materiPaginationInfo').textContent = 
+                `Menampilkan ${startIndex + 1} - ${Math.min(startIndex + itemsPerPage, filteredData.length)} dari ${filteredData.length} data`;
+            
+            renderPagination('materiPagination', totalPages, 'materi');
+        }
+
+        function renderAdminRegistrasiTable() {
+            const search = document.getElementById('searchRegistrasiAdmin').value.toLowerCase();
+            const filterTema = document.getElementById('filterTemaAdmin').value;
+            
+            let filteredData = allRegistrasi.filter(item => {
+                const matchSearch = (item.namalengkap && item.namalengkap.toLowerCase().includes(search)) || 
+                                    (item.nip && item.nip.includes(search));
+                const matchTema = !filterTema || item.tema === filterTema;
+                
+                return matchSearch && matchTema;
+            });
+            
+            const tbody = document.getElementById('registrasiAdminBody');
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                tbody.innerHTML = filteredData.map(item => `
+                    <tr>
+                        <td>${item.id || '-'}</td>
+                        <td>${item.namalengkap || '-'}</td>
+                        <td>${item.nip || '-'}</td>
+                        <td>${item.unitkerja || '-'}</td>
+                        <td><span class="badge-admin">${item.statuspegawai || '-'}</span></td>
+                        <td>${item.whatsapp || '-'}</td>
+                        <td>${item.email || '-'}</td>
+                        <td>${item.tema || '-'}</td>
+                        <td>${formatDate(item.timestamp)}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function renderAdminAbsensiTable() {
+            const search = document.getElementById('searchAbsensiAdmin').value.toLowerCase();
+            
+            let filteredData = allAbsensi.filter(item => {
+                return item.nip && item.nip.includes(search);
+            });
+            
+            const tbody = document.getElementById('absensiAdminBody');
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data</td></tr>';
+            } else {
+                tbody.innerHTML = filteredData.map(item => `
+                    <tr>
+                        <td>${item.idpendaftaran || '-'}</td>
+                        <td>${item.namalengkap || '-'}</td>
+                        <td>${item.nip || '-'}</td>
+                        <td>${item.unitkerja || '-'}</td>
+                        <td>${formatDate(item.tanggalabsensi)}</td>
+                        <td>${item.jamabsensi || '-'}</td>
+                        <td><span class="badge-open">${item.evalpenyelenggara || '-'}</span></td>
+                        <td><span class="badge-open">${item.evalfasilitator || '-'}</span></td>
+                        <td><span class="badge-open">${item.evalsarana || '-'}</span></td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // ============================================
+        // FILTER POPULATION
+        // ============================================
+        
+        function populateJadwalFilters() {
+            const temas = [...new Set(allJadwal.map(item => item.tema).filter(Boolean))];
+            const narasumbers = [...new Set(allJadwal.map(item => item.narasumber).filter(Boolean))];
+            
+            document.getElementById('filterTema').innerHTML = '<option value="">Semua Tema</option>' + 
+                temas.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            document.getElementById('filterNarasumber').innerHTML = '<option value="">Semua Narasumber</option>' + 
+                narasumbers.map(n => `<option value="${n}">${n}</option>`).join('');
+        }
+
+        function populateSertifikatFilters() {
+            const units = [...new Set(allSertifikat.map(item => item.unitkerja).filter(Boolean))];
+            const temas = [...new Set(allSertifikat.map(item => item.tema).filter(Boolean))];
+            
+            document.getElementById('filterUnitKerja').innerHTML = '<option value="">Semua Unit Kerja</option>' + 
+                units.map(u => `<option value="${u}">${u}</option>`).join('');
+            
+            document.getElementById('filterTemaSertifikat').innerHTML = '<option value="">Semua Tema</option>' + 
+                temas.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+
+        function populateMateriFilters() {
+            const narasumbers = [...new Set(allMateri.map(item => item.narasumber).filter(Boolean))];
+            
+            document.getElementById('filterNarasumberMateri').innerHTML = '<option value="">Semua Narasumber</option>' + 
+                narasumbers.map(n => `<option value="${n}">${n}</option>`).join('');
+        }
+
+        function populateAdminFilters() {
+            const temas = [...new Set(allRegistrasi.map(item => item.tema).filter(Boolean))];
+            
+            document.getElementById('filterTemaAdmin').innerHTML = '<option value="">Semua Tema</option>' + 
+                temas.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+
+        // ============================================
+        // PAGINATION
+        // ============================================
+        
+        function renderPagination(elementId, totalPages, section) {
+            const pagination = document.getElementById(elementId);
+            let html = '';
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            html += `<li class="page-item ${currentPage[section] === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage('${section}', ${currentPage[section] - 1}); return false;">Previous</a>
+            </li>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li class="page-item ${currentPage[section] === i ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="changePage('${section}', ${i}); return false;">${i}</a>
+                </li>`;
+            }
+            
+            html += `<li class="page-item ${currentPage[section] === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage('${section}', ${currentPage[section] + 1}); return false;">Next</a>
+            </li>`;
+            
+            pagination.innerHTML = html;
+        }
+
+        function changePage(section, page) {
+            currentPage[section] = page;
+            
+            if (section === 'jadwal') renderJadwalTable();
+            else if (section === 'sertifikat') renderSertifikatTable();
+            else if (section === 'materi') renderMateriTable();
+        }
+
+        // ============================================
+        // CHARTS
+        // ============================================
+        
+        function initCharts() {
+            Object.values(charts).forEach(chart => chart.destroy());
+            
+            const ctx1 = document.getElementById('kegiatannChart').getContext('2d');
+            charts.kegiatann = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                    datasets: [{
+                        label: 'Jumlah Kegiatan',
+                        data: [0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(30, 136, 229, 0.7)',
+                        borderColor: '#1E88E5',
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+            
+            const ctx2 = document.getElementById('jpChart').getContext('2d');
+            charts.jp = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                    datasets: [{
+                        label: 'Total JP',
+                        data: [0, 0, 0, 0, 0, 0],
+                        borderColor: '#6610f2',
+                        backgroundColor: 'rgba(102, 16, 242, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // ============================================
+        // PENDAFTARAN FORM
+        // ============================================
+        
+        // Registration countdown timer variable
+        let registrationCountdownInterval = null;
+        
+        async function loadTemaDetails() {
+            const tema = document.getElementById('selectTema').value;
+            const detailsDiv = document.getElementById('temaDetails');
+            
+            if (tema) {
+                const result = await getJadwal();
+                if (result.success) {
+                    const jadwal = result.data.find(j => j.tema === tema);
+                    if (jadwal) {
+                        document.getElementById('infoNarasumber').textContent = jadwal.narasumber || '-';
+                        document.getElementById('infoTanggal').textContent = formatDate(jadwal.tanggal);
+                        document.getElementById('infoWaktu').textContent = `${jadwal.jammulai || '-'} - ${jadwal.jamselesai || '-'}`;
+                        document.getElementById('infoPlatform').textContent = jadwal.platform || '-';
+                        document.getElementById('infoJP').textContent = `${jadwal.jp || 0} JP`;
+                        
+                        document.getElementById('hiddenTema').value = tema;
+                        document.getElementById('hiddenNarasumber').value = jadwal.narasumber || '';
+                        document.getElementById('hiddenTanggal').value = jadwal.tanggal || '';
+                        document.getElementById('hiddenWaktu').value = `${jadwal.jammulai || ''} - ${jadwal.jamselesai || ''}`;
+                        document.getElementById('hiddenPlatform').value = jadwal.platform || '';
+                        document.getElementById('hiddenJP').value = jadwal.jp || 0;
+                        
+                        // Calculate and display remaining quota
+                        await calculateRemainingQuota(tema, jadwal.maxpeserta);
+                        
+                        // Start registration deadline countdown
+                        startRegistrationCountdown(jadwal.tglselesaidaftar);
+                        
+                        detailsDiv.style.display = 'block';
+                    }
+                }
+            } else {
+                detailsDiv.style.display = 'none';
+                clearInterval(registrationCountdownInterval);
+            }
+        }
+        
+        async function calculateRemainingQuota(tema, maxPeserta) {
+            const maxKuota = parseInt(maxPeserta) || 0;
+            document.getElementById('maxKuota').textContent = maxKuota;
+            
+            try {
+                // Get registration count for this tema
+                const result = await getRegistrasi();
+                let registeredCount = 0;
+                
+                if (result.success && result.data) {
+                    registeredCount = result.data.filter(r => r.tema === tema).length;
+                }
+                
+                const remaining = Math.max(0, maxKuota - registeredCount);
+                const sisaKuotaEl = document.getElementById('sisaKuota');
+                
+                sisaKuotaEl.textContent = remaining;
+                
+                if (remaining === 0) {
+                    sisaKuotaEl.className = 'badge bg-danger';
+                    sisaKuotaEl.textContent = 'PENUH';
+                } else if (remaining <= 5) {
+                    sisaKuotaEl.className = 'badge bg-warning text-dark';
+                } else {
+                    sisaKuotaEl.className = 'badge bg-success';
+                }
+            } catch (error) {
+                console.error('Error calculating quota:', error);
+                showToast('Gagal menghitung sisa kuota', 'danger');
+            }
+        }
+        
+        function startRegistrationCountdown(endDate) {
+            clearInterval(registrationCountdownInterval);
+            
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const end = new Date(endDate).getTime();
+                const distance = end - now;
+                
+                const timerEl = document.getElementById('timerPendaftaran');
+                
+                if (distance < 0) {
+                    timerEl.textContent = 'TUTUP';
+                    timerEl.className = 'badge bg-danger';
+                    clearInterval(registrationCountdownInterval);
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                
+                if (days > 0) {
+                    timerEl.textContent = `${days}h ${hours}j`;
+                } else if (hours > 0) {
+                    timerEl.textContent = `${hours}j ${minutes}m`;
+                } else {
+                    timerEl.textContent = `${minutes}m`;
+                }
+                
+                // Warning colors
+                if (days === 0 && hours < 24) {
+                    timerEl.className = 'badge bg-danger';
+                } else if (days === 0 && hours < 48) {
+                    timerEl.className = 'badge bg-warning text-dark';
+                } else {
+                    timerEl.className = 'badge bg-success';
+                }
+            };
+            
+            updateCountdown();
+            registrationCountdownInterval = setInterval(updateCountdown, 60000); // Update every minute
+        }
+        
+        // ============================================
+        // ABSENSI TIMER
+        // ============================================
+        
+        let absensiTimerInterval = null;
+        let selectedAbsensiJadwal = null;
+        
+        function startAbsensiTimer() {
+            // Load available topics for absensi
+            loadAbsensiTopics();
+            
+            // Initialize with default hours
+            updateAbsensiTimerDisplay('10:00', '22:00', null);
+        }
+        
+        async function loadAbsensiTopics() {
+            const select = document.getElementById('selectAbsensiTema');
+            if (!select) return;
+            
+            try {
+                const result = await getJadwal();
+                if (result.success && result.data) {
+                    // Filter today's activities
+                    const today = new Date().toISOString().split('T')[0];
+                    const todayActivities = result.data.filter(j => {
+                        return j.tanggal === today;
+                    });
+                    
+                    if (todayActivities.length > 0) {
+                        select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>' +
+                            todayActivities.map(j => `<option value="${j.tema}" data-tanggal="${j.tanggal}" data-jammulai="${j.jammulai}" data-jamselesai="${j.jamselesai}">${j.tema} - ${formatDate(j.tanggal)}</option>`).join('');
+                    } else {
+                        // Show all upcoming activities
+                        select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>' +
+                            result.data.map(j => `<option value="${j.tema}" data-tanggal="${j.tanggal}" data-jammulai="${j.jammulai}" data-jamselesai="${j.jamselesai}">${j.tema} - ${formatDate(j.tanggal)}</option>`).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading absensi topics:', error);
+                showToast('Gagal memuat daftar kegiatan', 'danger');
+            }
+        }
+        
+        function updateAbsensiTimer() {
+            const select = document.getElementById('selectAbsensiTema');
+            const selectedOption = select?.options[select.selectedIndex];
+            
+            if (!selectedOption || !selectedOption.value) {
+                updateAbsensiTimerDisplay('08:00', '17:00', null);
+                return;
+            }
+            
+            const tanggal = selectedOption.getAttribute('data-tanggal');
+            const jamMulai = selectedOption.getAttribute('data-jammulai') || '08:00';
+            const jamSelesai = selectedOption.getAttribute('data-jamselesai') || '17:00';
+            
+            updateAbsensiTimerDisplay(jamMulai, jamSelesai, tanggal);
+        }
+        
+        function updateAbsensiTimerDisplay(jamBuka, jamTutup, tanggal) {
+            document.getElementById('absensiJamBuka').textContent = jamBuka;
+            document.getElementById('absensiJamTutup').textContent = jamTutup;
+            
+            const dateInfo = document.getElementById('absensiDateInfo');
+            if (tanggal) {
+                dateInfo.textContent = `📅 ${formatDate(tanggal)}`;
+            } else {
+                dateInfo.textContent = '';
+            }
+            
+            clearInterval(absensiTimerInterval);
+            
+            const updateAbsensiStatus = () => {
+                const now = new Date();
+                const currentTime = now.getTime();
+                const todayStr = now.toISOString().split('T')[0];
+                
+                // Check if selected date is today
+                if (tanggal && tanggal !== todayStr) {
+                    const statusEl = document.getElementById('absensiStatus');
+                    const countdownEl = document.getElementById('absensiCountdown');
+                    const bannerEl = document.getElementById('absensiTimerBanner');
+                    
+                    statusEl.textContent = 'BELUM WAKTUNYA';
+                    statusEl.className = 'badge bg-secondary';
+                    countdownEl.textContent = `Absensi dibuka pada ${formatDate(tanggal)}`;
+                    bannerEl.className = 'alert alert-secondary mb-4';
+                    document.getElementById('verifyForm')?.querySelector('button')?.setAttribute('disabled', 'true');
+                    return;
+                }
+                
+                // Get today's opening and closing times
+                const [bukaHour, bukaMin] = jamBuka.split(':').map(Number);
+                const [tutupHour, tutupMin] = jamTutup.split(':').map(Number);
+                
+                const openTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), bukaHour, bukaMin).getTime();
+                const closeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), tutupHour, tutupMin).getTime();
+                
+                const statusEl = document.getElementById('absensiStatus');
+                const countdownEl = document.getElementById('absensiCountdown');
+                const bannerEl = document.getElementById('absensiTimerBanner');
+                
+                if (currentTime < openTime) {
+                    // Before opening
+                    const distance = openTime - currentTime;
+                    const hours = Math.floor(distance / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    statusEl.textContent = 'BELUM BUKA';
+                    statusEl.className = 'badge bg-secondary';
+                    countdownEl.textContent = `Buka dalam ${hours}j ${minutes}m`;
+                    bannerEl.className = 'alert alert-secondary mb-4';
+                    
+                    document.getElementById('verifyForm')?.querySelector('button')?.setAttribute('disabled', 'true');
+                } else if (currentTime >= openTime && currentTime < closeTime) {
+                    // Open
+                    const distance = closeTime - currentTime;
+                    const hours = Math.floor(distance / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    statusEl.textContent = 'BUKA';
+                    statusEl.className = 'badge bg-success';
+                    countdownEl.textContent = `Tutup dalam ${hours}j ${minutes}m`;
+                    bannerEl.className = 'alert alert-success mb-4';
+                    
+                    document.getElementById('verifyForm')?.querySelector('button')?.removeAttribute('disabled');
+                } else {
+                    // Closed
+                    statusEl.textContent = 'TUTUP';
+                    statusEl.className = 'badge bg-danger';
+                    countdownEl.textContent = 'Absensi hari ini telah ditutup';
+                    bannerEl.className = 'alert alert-danger mb-4';
+                    
+                    document.getElementById('verifyForm')?.querySelector('button')?.setAttribute('disabled', 'true');
+                }
+            };
+            
+            updateAbsensiStatus();
+            absensiTimerInterval = setInterval(updateAbsensiStatus, 30000); // Update every 30 seconds
+        }
+
+        function changeStep(direction) {
+            if (currentStep === 1 && direction === 1) {
+                const tema = document.getElementById('selectTema').value;
+                if (!tema) {
+                    showToast('Pilih tema pembelajaran terlebih dahulu!', 'warning');
+                    return;
+                }
+            }
+            
+            currentStep += direction;
+            
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) step.classList.add('completed');
+                if (index + 1 === currentStep) step.classList.add('active');
+            });
+            
+            document.getElementById('step1Content').style.display = currentStep === 1 ? 'block' : 'none';
+            document.getElementById('step2Content').style.display = currentStep === 2 ? 'block' : 'none';
+            
+            document.getElementById('prevBtn').style.display = currentStep > 1 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = currentStep < 2 ? 'block' : 'none';
+            document.getElementById('submitBtn').style.display = currentStep === 2 ? 'block' : 'none';
+        }
+
+        function validateNIP(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+        function validateWhatsApp(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+        document.getElementById('pendaftaranForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            // Check duplicate via API
+            const nip = document.getElementById('nip').value;
+            const tema = document.getElementById('hiddenTema').value;
+            
+            const checkResult = await checkDuplicateRegistrasi(nip, tema);
+
+            if (checkResult.success && checkResult.exists) {
+                showToast('Anda sudah terdaftar pada kegiatan ini!', 'warning');
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+                return;
+            }
+            
+            // Submit ke Supabase
+            const submitData = {
+                namaLengkap: document.getElementById('namaLengkap').value,
+                nip: nip,
+                unitKerja: document.getElementById('unitKerja').value,
+                statusPegawai: document.getElementById('statusPegawai').value,
+                jenisSDMK: document.getElementById('jenisSDMK').value,
+                jpTerakhir: document.getElementById('jpTerakhir').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                email: document.getElementById('email').value,
+                tema: document.getElementById('hiddenTema').value,
+                narasumber: document.getElementById('hiddenNarasumber').value,
+                tanggal: document.getElementById('hiddenTanggal').value,
+                waktu: document.getElementById('hiddenWaktu').value,
+                platform: document.getElementById('hiddenPlatform').value,
+                jp: document.getElementById('hiddenJP').value
+            };
+            
+            const result = await submitRegistrasi(submitData);
+            
+            setTimeout(() => {
+                if (result.success) {
+                    showToast('Pendaftaran berhasil! ID: ' + result.id, 'success');
+                    
+                    document.getElementById('pendaftaranForm').reset();
+                    document.getElementById('temaDetails').style.display = 'none';
+                    currentStep = 1;
+                    changeStep(0);
+                } else {
+                    showToast(result.message || 'Gagal menyimpan data', 'danger');
+                }
+                
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }, 1500);
+        });
+
+        // ============================================
+        // ABSENSI FUNCTIONS
+        // ============================================
+        
+        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const tema = document.getElementById('selectAbsensiTema').value;
+            const email = document.getElementById('verifyEmail').value;
+            const nip = document.getElementById('verifyNIP').value;
+            
+            if (!tema) {
+                showToast('Pilih kegiatan terlebih dahulu!', 'warning');
+                return;
+            }
+            
+            // Verify via Supabase
+            const result = await verifyPeserta(email, nip);
+            
+            if (result.success && result.data) {
+                // Check if registered for the selected tema
+                if (result.data.tema !== tema) {
+                    showToast('Anda tidak terdaftar untuk kegiatan ini!', 'warning');
+                    return;
+                }
+                
+                // Check if already absented
+                const checkAbsen = await checkAbsensiExists(nip, tema);
+
+                if (checkAbsen.success && checkAbsen.exists) {
+                    showToast('Anda sudah melakukan absensi!', 'warning');
+                    return;
+                }
+                
+                verifiedUser = result.data;
+                
+                document.getElementById('absensiNama').textContent = result.data.namalengkap || '-';
+                document.getElementById('absensiNIP').textContent = result.data.nip || '-';
+                document.getElementById('absensiUnit').textContent = result.data.unitkerja || '-';
+                document.getElementById('absensiPlatform').textContent = result.data.platform || '-';
+                
+                document.getElementById('absensiId').value = result.data.id || '';
+                document.getElementById('absensiTema').value = tema;
+                
+                document.getElementById('verificationForm').style.display = 'none';
+                document.getElementById('absensiForm').style.display = 'block';
+                
+                showToast('Verifikasi berhasil! Silakan isi form absensi', 'success');
+            } else {
+                showToast('Data tidak ditemukan atau belum terdaftar!', 'danger');
+            }
+        });
+
+        document.getElementById('absensiSubmitForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = e.submitter;
+            btn.classList.add('btn-loading');
+            btn.disabled = true;
+            
+            const evalPenyelenggara = document.querySelector('input[name="evalPenyelenggara"]:checked')?.value || '4';
+            const evalFasilitator = document.querySelector('input[name="evalFasilitator"]:checked')?.value || '4';
+            const evalSarana = document.querySelector('input[name="evalSarana"]:checked')?.value || '4';
+            
+            const submitData = {
+                id: document.getElementById('absensiId').value,
+                namaLengkap: verifiedUser.namalengkap,
+                nip: verifiedUser.nip,
+                unitKerja: verifiedUser.unitkerja,
+                tema: verifiedUser.tema,
+                platform: verifiedUser.platform,
+                evalPenyelorga: evalPenyelenggara,
+                evalFasilitator: evalFasilitator,
+                evalSarana: evalSarana,
+                komentar: document.getElementById('komentar').value
+            };
+            
+            const result = await submitAbsensi(submitData);
+            
+            setTimeout(() => {
+                if (result.success) {
+                    showToast('Absensi Berhasil - Terima Kasih!', 'success');
+                    
+                    document.getElementById('absensiSubmitForm').reset();
+                    document.getElementById('verificationForm').style.display = 'block';
+                    document.getElementById('absensiForm').style.display = 'none';
+                    document.getElementById('verifyEmail').value = '';
+                    document.getElementById('verifyNIP').value = '';
+                } else {
+                    showToast(result.message || 'Gagal menyimpan absensi', 'danger');
+                }
+                
+                btn.classList.remove('btn-loading');
+                btn.disabled = false;
+            }, 1500);
+        });
+
+        // ============================================
+        // ADMIN SUBMENU & TAB HANDLING
+        // ============================================
+        
+        // Admin Tab Event Listeners
+        document.getElementById('tab-jadwal-tab')?.addEventListener('shown.bs.tab', function() {
+            loadJadwalForAdmin();
+        });
+        
+        document.getElementById('tab-peserta-tab')?.addEventListener('shown.bs.tab', function() {
+            loadPesertaForAdmin();
+        });
+        
+        document.getElementById('tab-pendaftaran-tab')?.addEventListener('shown.bs.tab', function() {
+            loadPendaftaranForAdmin();
+        });
+        
+        document.getElementById('tab-absensi-tab')?.addEventListener('shown.bs.tab', function() {
+            loadAbsensiForAdmin();
+        });
+        
+        document.getElementById('tab-statistik-tab')?.addEventListener('shown.bs.tab', function() {
+            initCharts();
+        });
+        
+        document.getElementById('tab-evaluasi-tab')?.addEventListener('shown.bs.tab', function() {
+            initEvaluasiCharts();
+        });
+
+        // ============================================
+        // KELOLA JADWAL FUNCTIONS
+        // ============================================
+        
+        function showJadwalForm(jadwal = null) {
+            const formCard = document.getElementById('jadwalFormCard');
+            const formTitle = document.getElementById('jadwalFormTitle');
+            const form = document.getElementById('jadwalForm');
+            
+            formCard.style.display = 'block';
+            
+            if (jadwal) {
+                formTitle.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Jadwal';
+                document.getElementById('jadwalId').value = jadwal.no || jadwal.id || '';
+                document.getElementById('jadwalTema').value = jadwal.tema || '';
+                document.getElementById('jadwalTanggal').value = jadwal.tanggal || '';
+                document.getElementById('jadwalJP').value = jadwal.jp || '';
+                document.getElementById('jadwalJamMulai').value = jadwal.jammulai || '';
+                document.getElementById('jadwalJamSelesai').value = jadwal.jamselesai || '';
+                document.getElementById('jadwalNarasumber').value = jadwal.narasumber || '';
+                document.getElementById('jadwalMaxPeserta').value = jadwal.maxpeserta || '';
+                document.getElementById('jadwalTglMulaiDaftar').value = jadwal.tglmulaidaftar || '';
+                document.getElementById('jadwalTglSelesaiDaftar').value = jadwal.tglselesaidaftar || '';
+                document.getElementById('jadwalPlatform').value = jadwal.platform || 'Offline';
+            } else {
+                formTitle.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Tambah Jadwal Baru';
+                form.reset();
+                document.getElementById('jadwalId').value = '';
+            }
+            
+            // Scroll to form
+            formCard.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function hideJadwalForm() {
+            document.getElementById('jadwalFormCard').style.display = 'none';
+            document.getElementById('jadwalForm').reset();
+            document.getElementById('jadwalId').value = '';
+        }
+        
+        async function saveJadwal(event) {
+            event.preventDefault();
+            
+            const jadwalId = document.getElementById('jadwalId').value;
+            const jadwalData = {
+                tema: document.getElementById('jadwalTema').value,
+                tanggal: document.getElementById('jadwalTanggal').value,
+                jp: parseInt(document.getElementById('jadwalJP').value),
+                jammulai: document.getElementById('jadwalJamMulai').value,
+                jamselesai: document.getElementById('jadwalJamSelesai').value,
+                narasumber: document.getElementById('jadwalNarasumber').value,
+                maxpeserta: parseInt(document.getElementById('jadwalMaxPeserta').value),
+                tglmulaidaftar: document.getElementById('jadwalTglMulaiDaftar').value,
+                tglselesaidaftar: document.getElementById('jadwalTglSelesaiDaftar').value,
+                platform: document.getElementById('jadwalPlatform').value
+            };
+            
+            try {
+                let result;
+                if (jadwalId) {
+                    // Update existing
+                    jadwalData.no = parseInt(jadwalId);
+                    result = await updateJadwal(jadwalData);
+                } else {
+                    // Add new
+                    result = await addJadwal(jadwalData);
+                }
+                
+                if (result.success) {
+                    showToast(jadwalId ? 'Jadwal berhasil diperbarui!' : 'Jadwal berhasil ditambahkan!', 'success');
+                    hideJadwalForm();
+                    loadJadwalForAdmin();
+                    loadJadwalData(); // Refresh main jadwal
+                } else {
+                    showToast(result.message || 'Gagal menyimpan jadwal', 'danger');
+                }
+            } catch (error) {
+                console.error('Error saving jadwal:', error);
+                showToast('Gagal menyimpan jadwal: ' + error.message, 'danger');
+            }
+        }
+        
+        function editJadwal(jadwal) {
+            showJadwalForm(jadwal);
+        }
+        
+        async function deleteJadwal(jadwal) {
+            if (!confirm('Apakah Anda yakin ingin menghapus jadwal "' + jadwal.tema + '"?')) {
+                return;
+            }
+            
+            try {
+                const result = await deleteJadwalById(jadwal.no || jadwal.id);
+                if (result.success) {
+                    showToast('Jadwal berhasil dihapus!', 'success');
+                    loadJadwalForAdmin();
+                    loadJadwalData(); // Refresh main jadwal
+                } else {
+                    showToast(result.message || 'Gagal menghapus jadwal', 'danger');
+                }
+            } catch (error) {
+                console.error('Error deleting jadwal:', error);
+                showToast('Gagal menghapus jadwal: ' + error.message, 'danger');
+            }
+        }
+        
+        function loadJadwalForAdmin() {
+            const tbody = document.getElementById('jadwalAdminBody');
+            if (!tbody) return;
+            
+            // Use existing allJadwal data
+            if (allJadwal.length > 0) {
+                renderJadwalAdminTable(allJadwal);
+            } else {
+                // Load from API
+                getJadwal().then(result => {
+                    if (result.success) {
+                        allJadwal = result.data || [];
+                        renderJadwalAdminTable(allJadwal);
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                    }
+                }).catch(error => {
+                    console.error('Error loading jadwal for admin:', error);
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                });
+            }
+            
+            // Setup search
+            const searchInput = document.getElementById('searchJadwalAdmin');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filtered = allJadwal.filter(j => 
+                        (j.tema || '').toLowerCase().includes(searchTerm) ||
+                        (j.narasumber || '').toLowerCase().includes(searchTerm)
+                    );
+                    renderJadwalAdminTable(filtered);
+                });
+            }
+        }
+        
+        function renderJadwalAdminTable(data) {
+            const tbody = document.getElementById('jadwalAdminBody');
+            if (!tbody) return;
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data jadwal</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map((jadwal, index) => `
+                <tr>
+                    <td>${jadwal.no || index + 1}</td>
+                    <td><strong>${jadwal.tema || '-'}</strong></td>
+                    <td>${formatDate(jadwal.tanggal)}</td>
+                    <td>${jadwal.jammulai || '-'} - ${jadwal.jamselesai || '-'}</td>
+                    <td>${jadwal.narasumber || '-'}</td>
+                    <td><span class="badge bg-primary">${jadwal.jp || 0} JP</span></td>
+                    <td>${jadwal.maxpeserta || 0}</td>
+                    <td><span class="badge bg-info">${jadwal.platform || '-'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick='editJadwal(${JSON.stringify(jadwal)})'>
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick='deleteJadwal(${JSON.stringify(jadwal)})'>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // KELOLA PESERTA FUNCTIONS
+        // ============================================
+        
+        function loadPesertaForAdmin() {
+            const tbody = document.getElementById('pesertaAdminBody');
+            if (!tbody) return;
+            
+            // Use existing allRegistrasi data as peserta
+            if (allRegistrasi.length > 0) {
+                renderPesertaAdminTable(allRegistrasi);
+                populateTemaDropdown('filterTemaPeserta', allRegistrasi);
+            } else {
+                // Load from API
+                getRegistrasi().then(result => {
+                    if (result.success) {
+                        allRegistrasi = result.data || [];
+                        renderPesertaAdminTable(allRegistrasi);
+                        populateTemaDropdown('filterTemaPeserta', allRegistrasi);
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Gagal memuat data</td></tr>';
+                    }
+                }).catch(error => {
+                    console.error('Error loading peserta for admin:', error);
+                    tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Gagal memuat data</td></tr>';
+                });
+            }
+            
+            // Setup search
+            const searchInput = document.getElementById('searchPesertaAdmin');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filtered = allRegistrasi.filter(p => 
+                        (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                        (p.nip || '').toLowerCase().includes(searchTerm) ||
+                        (p.unitkerja || '').toLowerCase().includes(searchTerm)
+                    );
+                    renderPesertaAdminTable(filtered);
+                });
+            }
+            
+            // Setup filter
+            const filterSelect = document.getElementById('filterTemaPeserta');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', function() {
+                    const tema = this.value;
+                    if (tema) {
+                        const filtered = allRegistrasi.filter(p => p.tema === tema);
+                        renderPesertaAdminTable(filtered);
+                    } else {
+                        renderPesertaAdminTable(allRegistrasi);
+                    }
+                });
+            }
+        }
+        
+        function renderPesertaAdminTable(data) {
+            const tbody = document.getElementById('pesertaAdminBody');
+            if (!tbody) return;
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center">Tidak ada data peserta</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map((peserta, index) => `
+                <tr>
+                    <td>${peserta.no || index + 1}</td>
+                    <td><strong>${peserta.namalengkap || '-'}</strong></td>
+                    <td>${peserta.unitkerja || '-'}</td>
+                    <td>${peserta.jabatan || '-'}</td>
+                    <td>${peserta.nip || '-'}</td>
+                    <td>${peserta.email || '-'}</td>
+                    <td>${peserta.whatsapp || '-'}</td>
+                    <td>${peserta.tema || '-'}</td>
+                    <td>${formatDate(peserta.tanggaldaftar)}</td>
+                    <td><span class="badge bg-success">${peserta.statuspegawai || '-'}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // DATA PENDAFTARAN FUNCTIONS
+        // ============================================
+        
+        function loadPendaftaranForAdmin() {
+            const tbody = document.getElementById('pendaftaranAdminBody');
+            if (!tbody) return;
+            
+            if (allRegistrasi.length > 0) {
+                renderPendaftaranAdminTable(allRegistrasi);
+                populateTemaDropdown('filterTemaPendaftaran', allRegistrasi);
+            } else {
+                getRegistrasi().then(result => {
+                    if (result.success) {
+                        allRegistrasi = result.data || [];
+                        renderPendaftaranAdminTable(allRegistrasi);
+                        populateTemaDropdown('filterTemaPendaftaran', allRegistrasi);
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                    }
+                }).catch(error => {
+                    console.error('Error loading pendaftaran for admin:', error);
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                });
+            }
+            
+            // Setup search
+            const searchInput = document.getElementById('searchPendaftaranAdmin');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filtered = allRegistrasi.filter(p => 
+                        (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                        (p.nip || '').toLowerCase().includes(searchTerm)
+                    );
+                    renderPendaftaranAdminTable(filtered);
+                });
+            }
+            
+            // Setup filter
+            const filterSelect = document.getElementById('filterTemaPendaftaran');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', function() {
+                    const tema = this.value;
+                    if (tema) {
+                        const filtered = allRegistrasi.filter(p => p.tema === tema);
+                        renderPendaftaranAdminTable(filtered);
+                    } else {
+                        renderPendaftaranAdminTable(allRegistrasi);
+                    }
+                });
+            }
+        }
+        
+        function renderPendaftaranAdminTable(data) {
+            const tbody = document.getElementById('pendaftaranAdminBody');
+            if (!tbody) return;
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data pendaftaran</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${item.id || item.no || index + 1}</td>
+                    <td><strong>${item.namalengkap || '-'}</strong></td>
+                    <td>${item.nip || '-'}</td>
+                    <td>${item.unitkerja || '-'}</td>
+                    <td><span class="badge bg-success">${item.statuspegawai || '-'}</span></td>
+                    <td>${item.whatsapp || '-'}</td>
+                    <td>${item.email || '-'}</td>
+                    <td>${item.tema || '-'}</td>
+                    <td>${formatDate(item.tanggal || item.tanggaldaftar)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // DATA ABSENSI FUNCTIONS
+        // ============================================
+        
+        function loadAbsensiForAdmin() {
+            const tbody = document.getElementById('absensiAdminBody');
+            if (!tbody) return;
+            
+            if (allAbsensi.length > 0) {
+                renderAbsensiAdminTable(allAbsensi);
+            } else {
+                getAbsensi().then(result => {
+                    if (result.success) {
+                        allAbsensi = result.data || [];
+                        renderAbsensiAdminTable(allAbsensi);
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                    }
+                }).catch(error => {
+                    console.error('Error loading absensi for admin:', error);
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">Gagal memuat data</td></tr>';
+                });
+            }
+            
+            // Setup search
+            const searchInput = document.getElementById('searchAbsensiAdmin');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const filtered = allAbsensi.filter(a => 
+                        (a.namalengkap || '').toLowerCase().includes(searchTerm) ||
+                        (a.nip || '').toLowerCase().includes(searchTerm)
+                    );
+                    renderAbsensiAdminTable(filtered);
+                });
+            }
+        }
+        
+        function renderAbsensiAdminTable(data) {
+            const tbody = document.getElementById('absensiAdminBody');
+            if (!tbody) return;
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center">Tidak ada data absensi</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map((item, index) => `
+                <tr>
+                    <td>${item.id || item.idregistrasi || index + 1}</td>
+                    <td><strong>${item.namalengkap || '-'}</strong></td>
+                    <td>${item.nip || '-'}</td>
+                    <td>${item.unitkerja || '-'}</td>
+                    <td>${formatDate(item.tanggalabsensi || item.tanggal)}</td>
+                    <td>${item.jamabsensi || item.jam || '-'}</td>
+                    <td><span class="badge bg-${getEvalColor(item.evpenyelenggara || item.evalpenyelenggara)}">${item.evpenyelenggara || item.evalpenyelenggara || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evfasilitator || item.evalfasilitator)}">${item.evfasilitator || item.evalfasilitator || '-'}</span></td>
+                    <td><span class="badge bg-${getEvalColor(item.evsarana || item.evalsarana)}">${item.evsarana || item.evalsarana || '-'}</span></td>
+                </tr>
+            `).join('');
+        }
+        
+        function getEvalColor(score) {
+            if (!score) return 'secondary';
+            if (score >= 4) return 'success';
+            if (score >= 3) return 'warning';
+            return 'danger';
+        }
+
+        // ============================================
+        // EVALUASI CHARTS
+        // ============================================
+        
+        function initEvaluasiCharts() {
+            // Destroy existing evaluation charts
+            if (charts.evaluasi) charts.evaluasi.destroy();
+            if (charts.evaluasiRadar) charts.evaluasiRadar.destroy();
+            if (charts.evaluasiTrend) charts.evaluasiTrend.destroy();
+            
+            const absensiData = allAbsensi.length > 0 ? allAbsensi : [
+                { tema: 'Leadership Transformation', evpenyelorga: 5, evfasilitator: 4, evsarana: 4 },
+                { tema: 'Digital Government Innovation', evpenyelorga: 4, evfasilitator: 5, evsarana: 4 },
+                { tema: 'Public Service Excellence', evpenyelorga: 5, evfasilitator: 5, evsarana: 5 }
+            ];
+            
+            // Chart 1: Rata-rata Nilai Evaluasi per Kegiatan (Bar Chart)
+            const ctx1 = document.getElementById('evaluasiChart')?.getContext('2d');
+            if (ctx1) {
+                const temas = absensiData.map(d => d.tema || 'Tidak Diketahui').slice(0, 6);
+                const avgPenyelenggara = absensiData.map(d => d.evpenyelorga || d.evalpenyelorga || d.evpenyelenggara || 0);
+                const avgFasilitator = absensiData.map(d => d.evfasilitator || d.evalfasilitator || 0);
+                const avgSarana = absensiData.map(d => d.evsarana || d.evalsarana || 0);
+                
+                charts.evaluasi = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: temas,
+                        datasets: [
+                            {
+                                label: 'Penyelenggaraan',
+                                data: avgPenyelorga,
+                                backgroundColor: 'rgba(30, 136, 229, 0.7)',
+                                borderColor: '#1E88E5',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Fasilitator',
+                                data: avgFasilitator,
+                                backgroundColor: 'rgba(102, 16, 242, 0.7)',
+                                borderColor: '#6610f2',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Sarana',
+                                data: avgSarana,
+                                backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                                borderColor: '#28a745',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: 'Rata-rata Nilai Evaluasi per Kegiatan' }
+                        },
+                        scales: { y: { beginAtZero: true, max: 5 } }
+                    }
+                });
+            }
+            
+            // Chart 2: Perbandingan Kategori Evaluasi (Radar Chart)
+            const ctx2 = document.getElementById('evaluasiRadarChart')?.getContext('2d');
+            if (ctx2) {
+                const avgPenyelorga = absensiData.reduce((sum, d) => sum + (d.evpenyelorga || d.evalpenyelorga || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
+                const avgFasilitator = absensiData.reduce((sum, d) => sum + (d.evfasilitator || d.evalfasilitator || 0), 0) / (absensiData.length || 1);
+                const avgSarana = absensiData.reduce((sum, d) => sum + (d.evsarana || d.evalsarana || 0), 0) / (absensiData.length || 1);
+                
+                charts.evaluasiRadar = new Chart(ctx2, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Penyelenggaraan', 'Fasilitator', 'Sarana', 'Materi', 'Waktu'],
+                        datasets: [{
+                            label: 'Rata-rata Keseluruhan',
+                            data: [avgPenyelorga.toFixed(1), avgFasilitator.toFixed(1), avgSarana.toFixed(1), '4.2', '4.0'],
+                            backgroundColor: 'rgba(30, 136, 229, 0.2)',
+                            borderColor: '#1E88E5',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#1E88E5'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: { r: { beginAtZero: true, max: 5 } }
+                    }
+                });
+            }
+            
+            // Chart 3: Tren Evaluasi (Line Chart)
+            const ctx3 = document.getElementById('evaluasiTrendChart')?.getContext('2d');
+            if (ctx3) {
+                charts.evaluasiTrend = new Chart(ctx3, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                        datasets: [
+                            {
+                                label: 'Penyelenggaraan',
+                                data: [4.2, 4.3, 4.5, 4.4, 4.6, 4.5],
+                                borderColor: '#1E88E5',
+                                backgroundColor: 'rgba(30, 136, 229, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Fasilitator',
+                                data: [4.0, 4.2, 4.3, 4.5, 4.4, 4.6],
+                                borderColor: '#6610f2',
+                                backgroundColor: 'rgba(102, 16, 242, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Sarana',
+                                data: [3.8, 4.0, 4.2, 4.3, 4.4, 4.5],
+                                borderColor: '#28a745',
+                                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: 'Tren Evaluasi Bulanan' }
+                        },
+                        scales: { y: { beginAtZero: false, min: 3, max: 5 } }
+                    }
+                });
+            }
+        }
+        
+        // Helper function to populate tema dropdown
+        function populateTemaDropdown(elementId, data) {
+            const select = document.getElementById(elementId);
+            if (!select) return;
+            
+            const temas = [...new Set(data.map(d => d.tema).filter(t => t))];
+            select.innerHTML = '<option value="">Semua Tema</option>' + 
+                temas.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+        
+        function showAdminSubmenu(menu) {
+            // Legacy function - now handled by Bootstrap tabs
+            // This is kept for backward compatibility
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            try {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('id-ID', options);
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        function animateCounter(elementId, target) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            let current = 0;
+            const increment = target / 30;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 30);
+        }
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        function exportToExcel(tableId, filename) {
+            const table = document.getElementById(tableId);
+            let csv = [];
+            
+            const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+            csv.push(headers.join(','));
+            
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cols = Array.from(row.querySelectorAll('td')).map(td => {
+                    let text = td.textContent.trim();
+                    if (text.includes(',') || text.includes('"')) {
+                        text = '"' + text.replace(/"/g, '""') + '"';
+                    }
+                    return text;
+                });
+                csv.push(cols.join(','));
+            });
+            
+            const csvContent = csv.join('\n');
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showToast('File berhasil di-export!', 'success');
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
+        function setupEventListeners() {
+            // Search inputs with null checks
+            document.getElementById('searchJadwal')?.addEventListener('input', () => { currentPage.jadwal = 1; renderJadwalTable(); });
+            document.getElementById('searchSertifikat')?.addEventListener('input', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
+            document.getElementById('searchMateri')?.addEventListener('input', () => { currentPage.materi = 1; renderMateriTable(); });
+            document.getElementById('searchRegistrasiAdmin')?.addEventListener('input', renderAdminRegistrasiTable);
+            document.getElementById('searchAbsensiAdmin')?.addEventListener('input', renderAdminAbsensiTable);
+            
+            // Filter selects with null checks
+            document.getElementById('filterTema')?.addEventListener('change', () => { currentPage.jadwal = 1; renderJadwalTable(); });
+            document.getElementById('filterNarasumber')?.addEventListener('change', () => { currentPage.jadwal = 1; renderJadwalTable(); });
+            document.getElementById('filterTanggal')?.addEventListener('change', () => { currentPage.jadwal = 1; renderJadwalTable(); });
+            document.getElementById('filterUnitKerja')?.addEventListener('change', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
+            document.getElementById('filterTemaSertifikat')?.addEventListener('change', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
+            document.getElementById('filterTanggalSertifikat')?.addEventListener('change', () => { currentPage.sertifikat = 1; renderSertifikatTable(); });
+            document.getElementById('filterNarasumberMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
+            document.getElementById('filterTanggalMateri')?.addEventListener('change', () => { currentPage.materi = 1; renderMateriTable(); });
+            document.getElementById('filterTemaAdmin')?.addEventListener('change', renderAdminRegistrasiTable);
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    e.preventDefault();
+                    showToast('Inspect element dinonaktifkan', 'warning');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
