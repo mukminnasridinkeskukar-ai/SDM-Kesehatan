@@ -1166,7 +1166,7 @@
                                             <th>No</th>
                                             <th>Nama Peserta</th>
                                             <th>Unit Kerja</th>
-                                            <th>Jabatan</th>
+                                            <th>Jenis SDMK</th>
                                             <th>NIP</th>
                                             <th>Email</th>
                                             <th>No HP</th>
@@ -2284,12 +2284,12 @@
             
             // Submit ke Supabase
             const submitData = {
-                namaLengkap: document.getElementById('namaLengkap').value,
+                namalengkap: document.getElementById('namaLengkap').value,
                 nip: nip,
-                unitKerja: document.getElementById('unitKerja').value,
-                statusPegawai: document.getElementById('statusPegawai').value,
-                jenisSDMK: document.getElementById('jenisSDMK').value,
-                jpTerakhir: document.getElementById('jpTerakhir').value,
+                unitkerja: document.getElementById('unitKerja').value,
+                statuspegawai: document.getElementById('statusPegawai').value,
+                jenissdmk: document.getElementById('jenisSDMK').value,
+                jpterakhir: document.getElementById('jpTerakhir').value,
                 whatsapp: document.getElementById('whatsapp').value,
                 email: document.getElementById('email').value,
                 tema: document.getElementById('hiddenTema').value,
@@ -2385,14 +2385,14 @@
             
             const submitData = {
                 id: document.getElementById('absensiId').value,
-                namaLengkap: verifiedUser.namalengkap,
+                namalengkap: verifiedUser.namalengkap,
                 nip: verifiedUser.nip,
-                unitKerja: verifiedUser.unitkerja,
+                unitkerja: verifiedUser.unitkerja,
                 tema: verifiedUser.tema,
                 platform: verifiedUser.platform,
-                evalPenyelenggara: evalPenyelenggara,
-                evalFasilitator: evalFasilitator,
-                evalSarana: evalSarana,
+                evalpenyelenggara: evalPenyelenggara,
+                evalfasilitator: evalFasilitator,
+                evalsarana: evalSarana,
                 komentar: document.getElementById('komentar').value
             };
             
@@ -2695,7 +2695,7 @@
                     <td>${peserta.no || index + 1}</td>
                     <td><strong>${peserta.namalengkap || '-'}</strong></td>
                     <td>${peserta.unitkerja || '-'}</td>
-                    <td>${peserta.jabatan || '-'}</td>
+                    <td>${peserta.jenissdmk || '-'}</td>
                     <td>${peserta.nip || '-'}</td>
                     <td>${peserta.email || '-'}</td>
                     <td>${peserta.whatsapp || '-'}</td>
