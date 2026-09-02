@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bang_KomDINKES - Sistem Informasi Pengembangan Kompetensi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1e3a5f;
+            --accent-color: #4a90e2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .login-logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: var(--card-shadow);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 10px 15px !important;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 20px 25px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .card-body-custom {
+            padding: 25px;
+        }
+
+        /* Tables */
+        .table-custom {
+            margin: 0;
+        }
+
+        .table-custom thead {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .table-custom thead th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .table-custom tbody tr {
+            transition: background 0.2s;
+        }
+
+        .table-custom tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .table-custom tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+        }
+
+        .btn-success-custom {
+            background: var(--success-color);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Forms */
+        .form-control-custom {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: all 0.3s;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.1);
+        }
+
+        .form-label-custom {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 700;
+            color: #999;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-circle {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Attendance Timer */
+        .timer-display {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .timer-display h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .timer-status {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .timer-status.open {
+            background: var(--success-color);
+        }
+
+        .timer-status.closed {
+            background: var(--danger-color);
+        }
+
+        /* Rating */
+        .rating-group {
+            margin-bottom: 20px;
+        }
+
+        .rating-group label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .rating-stars input[type="radio"] {
+            display: none;
+        }
+
+        .rating-stars label {
+            font-size: 32px;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rating-stars label:hover,
+        .rating-stars input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+
+        /* Admin Sidebar */
+        .admin-sidebar {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .admin-menu-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .admin-menu-item:hover {
+            background: var(--light-bg);
+        }
+
+        .admin-menu-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stat-card h3 {
+                font-size: 24px;
+            }
+
+            .timer-display h2 {
+                font-size: 36px;
+            }
+
+            .admin-sidebar {
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Badge */
+        .badge-custom {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success-color);
+        }
+
+        .badge-warning {
+            background: var(--warning-color);
+            color: #333;
+        }
+
+        .badge-danger {
+            background: var(--danger-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1><i class="bi bi-mortarboard-fill"></i> Bang_KomDINKES</h1>
+                <p>Sistem Informasi Pengembangan Kompetensi</p>
+            </div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label-custom">Username</label>
+                    <input type="text" class="form-control form-control-custom" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Password</label>
+                    <input type="password" class="form-control form-control-custom" id="password" required>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </button>
+                    <a href="#" class="btn btn-link text-center">Kembali ke Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-mortarboard-fill"></i> Bang_KomDINKES
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                                <i class="bi bi-house-door"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('jadwal')">
+                                <i class="bi bi-calendar-event"></i> Jadwal Kegiatan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('sertifikat')">
+                                <i class="bi bi-award"></i> Sertifikat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('materi')">
+                                <i class="bi bi-file-earmark-text"></i> Materi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('pendaftaran')">
+                                <i class="bi bi-pencil-square"></i> Pendaftaran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('absensi')">
+                                <i class="bi bi-check2-square"></i> Absensi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('admin')">
+                                <i class="bi bi-gear"></i> Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="container">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="section-content">
+                    <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalKegiatan">0</h3>
+                                <p><i class="bi bi-calendar-event"></i> Total Kegiatan</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalPeserta">0</h3>
+                                <p><i class="bi bi-people"></i> Total Peserta</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalJP">0</h3>
+                                <p><i class="bi bi-clock"></i> Total JP</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalNarasumber">0</h3>
+                                <p><i class="bi bi-person-badge"></i> Total Narasumber</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalRegistrasi">0</h3>
+                                <p><i class="bi bi-person-plus"></i> Total Registrasi</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h3 id="totalAbsensi">0</h3>
+                                <p><i class="bi bi-check2-square"></i> Total Absensi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Latest Schedule -->
+                    <div class="content-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-calendar-event"></i> Jadwal Kegiatan Terbaru</span>
+                            <button class="btn btn-light btn-sm" onclick="showSection('jadwal')">
+                                Lihat Semua <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="card-body-custom">
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tema</th>
+                                            <th>Tanggal</th>
+                                            <th>JP</th>
+                                            <th>Narasumber</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardScheduleTable">
+                                        <tr>
+                                            <td colspan="6" class="text-center">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Section -->
+                <div id="jadwalSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-calendar-event"></i> Jadwal Kegiatan</h2>
+                    
+                    <div class="content-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span>Data Jadwal Kegiatan</span>
+                            <div>
+                                <button class="btn btn-light btn-sm me-2">
+                                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                </button>
+                                <button class="btn btn-light btn-sm">
+                                    <i class="bi bi-printer"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body-custom">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <select class="form-control form-control-custom" id="filterTemaJadwal">
+                                        <option value="">Semua Tema</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control form-control-custom" id="filterNarasumberJadwal">
+                                        <option value="">Semua Narasumber</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tema</th>
+                                            <th>Tanggal</th>
+                                            <th>Jam Mulai</th>
+                                            <th>Jam Selesai</th>
+                                            <th>Narasumber</th>
+                                            <th>JP</th>
+                                            <th>Max Peserta</th>
+                                            <th>Tgl Mulai Daftar</th>
+                                            <th>Tgl Selesai Daftar</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="scheduleTable">
+                                        <tr>
+                                            <td colspan="11" class="text-center">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3 text-muted">
+                                <small>Menampilkan <span id="scheduleCount">0</span> dari <span id="scheduleTotal">0</span> data</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificate Section -->
+                <div id="sertifikatSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-award"></i> Download Sertifikat</h2>
+                    
+                    <div class="content-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span>Daftar Sertifikat Peserta</span>
+                            <div>
+                                <button class="btn btn-light btn-sm me-2">
+                                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                </button>
+                                <button class="btn btn-light btn-sm">
+                                    <i class="bi bi-printer"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body-custom">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <select class="form-control form-control-custom" id="filterUnitKerja">
+                                        <option value="">Semua Unit Kerja</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control form-control-custom" id="filterTemaSertifikat">
+                                        <option value="">Semua Tema</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Peserta</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Tanggal Kegiatan</th>
+                                            <th>Tema</th>
+                                            <th>JP</th>
+                                            <th>Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="certificateTable">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3 text-muted">
+                                <small>Menampilkan <span id="certificateCount">0</span> dari <span id="certificateTotal">0</span> data</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Material Section -->
+                <div id="materiSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-file-earmark-text"></i> Download Materi</h2>
+                    
+                    <div class="content-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span>Materi Kegiatan</span>
+                            <div>
+                                <button class="btn btn-light btn-sm me-2">
+                                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                </button>
+                                <button class="btn btn-light btn-sm">
+                                    <i class="bi bi-printer"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body-custom">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <select class="form-control form-control-custom" id="filterNarasumberMateri">
+                                        <option value="">Semua Narasumber</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tanggal Kegiatan</th>
+                                            <th>Tema</th>
+                                            <th>Narasumber</th>
+                                            <th>Link Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="materialTable">
+                                        <tr>
+                                            <td colspan="5" class="text-center">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3 text-muted">
+                                <small>Menampilkan <span id="materialCount">0</span> dari <span id="materialTotal">0</span> data</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Section -->
+                <div id="pendaftaranSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-pencil-square"></i> Formulir Pendaftaran</h2>
+                    
+                    <div class="content-card">
+                        <div class="card-header-custom">
+                            <span>Pendaftaran Kegiatan Pengembangan Kompetensi ASN</span>
+                        </div>
+                        <div class="card-body-custom">
+                            <!-- Progress Steps -->
+                            <div class="progress-steps">
+                                <div class="step active" id="step1">
+                                    <div class="step-circle">1</div>
+                                    <div class="step-label">Pilih Tema</div>
+                                </div>
+                                <div class="step" id="step2">
+                                    <div class="step-circle">2</div>
+                                    <div class="step-label">Data Peserta</div>
+                                </div>
+                                <div class="step" id="step3">
+                                    <div class="step-circle">3</div>
+                                    <div class="step-label">Konfirmasi</div>
+                                </div>
+                            </div>
+
+                            <!-- Step 1: Select Theme -->
+                            <div id="registrationStep1">
+                                <div class="mb-4">
+                                    <label class="form-label-custom">Pilih Tema Pembelajaran</label>
+                                    <select class="form-control form-control-custom" id="selectTema" onchange="loadActivityDetails()">
+                                        <option value="">-- Pilih Tema --</option>
+                                    </select>
+                                </div>
+
+                                <div id="activityDetails" class="alert alert-info" style="display: none;">
+                                    <h5>Detail Kegiatan</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Narasumber:</strong> <span id="detailNarasumber">-</span></p>
+                                            <p><strong>Tanggal:</strong> <span id="detailTanggal">-</span></p>
+                                            <p><strong>Waktu:</strong> <span id="detailWaktu">-</span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Platform:</strong> <span id="detailPlatform">-</span></p>
+                                            <p><strong>JP:</strong> <span id="detailJP">-</span></p>
+                                            <p><strong>Sisa Kuota:</strong> <span id="detailKuota">-</span> dari <span id="detailMaxPeserta">-</span> peserta</p>
+                                        </div>
+                                    </div>
+                                    <p><strong>Pendaftaran Tutup:</strong> <span id="detailTutup">-</span></p>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary-custom" onclick="nextStep(2)" id="btnNextStep1" disabled>
+                                        Lanjut <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Participant Data -->
+                            <div id="registrationStep2" style="display: none;">
+                                <form id="registrationForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">Nama Lengkap <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-custom" id="namaLengkap" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">NIP <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-custom" id="nip" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label-custom">Unit Kerja <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-custom" id="unitKerja" required>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">Status Pegawai <span class="text-danger">*</span></label>
+                                            <select class="form-control form-control-custom" id="statusPegawai" required>
+                                                <option value="">-- Pilih Status --</option>
+                                                <option value="PNS">PNS</option>
+                                                <option value="PPPK">PPPK</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">Jenis SDMK</label>
+                                            <select class="form-control form-control-custom" id="jenisSDMK">
+                                                <option value="">-- Pilih Jenis SDMK (Opsional) --</option>
+                                                <option value="Dokter">Dokter</option>
+                                                <option value="Dokter Gigi">Dokter Gigi</option>
+                                                <option value="Perawat">Perawat</option>
+                                                <option value="Bidan">Bidan</option>
+                                                <option value="Apoteker">Apoteker</option>
+                                                <option value="Tenaga Kesehatan Lain">Tenaga Kesehatan Lain</option>
+                                                <option value="Non Kesehatan">Non Kesehatan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">Jumlah JP Terakhir</label>
+                                            <input type="number" class="form-control form-control-custom" id="jpTerakhir" value="0">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label-custom">Nomor WhatsApp <span class="text-danger">*</span></label>
+                                            <input type="tel" class="form-control form-control-custom" id="whatsapp" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label-custom">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control form-control-custom" id="email" required>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-secondary" onclick="nextStep(1)">
+                                            <i class="bi bi-arrow-left"></i> Kembali
+                                        </button>
+                                        <button type="button" class="btn btn-primary-custom" onclick="nextStep(3)">
+                                            Lanjut <i class="bi bi-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Step 3: Confirmation -->
+                            <div id="registrationStep3" style="display: none;">
+                                <div class="alert alert-success">
+                                    <h5>Konfirmasi Data Pendaftaran</h5>
+                                    <div id="confirmationData"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary" onclick="nextStep(2)">
+                                        <i class="bi bi-arrow-left"></i> Kembali
+                                    </button>
+                                    <button type="button" class="btn btn-success-custom btn-lg" onclick="submitRegistration()">
+                                        <i class="bi bi-check-circle"></i> Kirim Pendaftaran
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Section -->
+                <div id="absensiSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-check2-square"></i> Absensi Digital</h2>
+                    
+                    <div class="content-card">
+                        <div class="card-header-custom">
+                            <span>Jam Absensi</span>
+                        </div>
+                        <div class="card-body-custom">
+                            <!-- Timer Display -->
+                            <div class="timer-display">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Buka: <span id="absensiBuka">10:30</span></h6>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Tutup: <span id="absensiTutup">23:00</span></h6>
+                                    </div>
+                                </div>
+                                <h2 id="currentTime">--:--:--</h2>
+                                <span class="timer-status" id="absensiStatus">BUKA</span>
+                                <p class="mt-2 mb-0">Sisa waktu: <span id="remainingTime">-</span></p>
+                            </div>
+
+                            <!-- Verification Form -->
+                            <div class="mb-4">
+                                <h5>Verifikasi Identitas</h5>
+                                <p class="text-muted">Pilih kegiatan & masukkan email/NIP yang digunakan saat pendaftaran</p>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label-custom">Pilih Kegiatan</label>
+                                    <select class="form-control form-control-custom" id="pilihKegiatanAbsensi">
+                                        <option value="">-- Pilih Kegiatan --</option>
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label-custom">Email</label>
+                                        <input type="email" class="form-control form-control-custom" id="emailAbsensi">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label-custom">NIP</label>
+                                        <input type="text" class="form-control form-control-custom" id="nipAbsensi">
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary-custom" onclick="verifyAttendance()">
+                                    <i class="bi bi-search"></i> Verifikasi
+                                </button>
+                            </div>
+
+                            <!-- Attendance Form -->
+                            <div id="attendanceForm" style="display: none;">
+                                <hr>
+                                <h5>Form Absensi</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong>Nama:</strong> <span id="absensiNama">-</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>NIP:</strong> <span id="absensiNIP">-</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong>Unit Kerja:</strong> <span id="absensiUnitKerja">-</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Platform:</strong> <span id="absensiPlatform">-</span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Evaluation -->
+                                <div class="rating-group">
+                                    <label>Evaluasi Penyelenggaraan</label>
+                                    <div class="rating-stars">
+                                        <input type="radio" name="evalPenyelenggara" id="eval1-1" value="1">
+                                        <label for="eval1-1">★</label>
+                                        <input type="radio" name="evalPenyelenggara" id="eval1-2" value="2">
+                                        <label for="eval1-2">★</label>
+                                        <input type="radio" name="evalPenyelenggara" id="eval1-3" value="3">
+                                        <label for="eval1-3">★</label>
+                                        <input type="radio" name="evalPenyelenggara" id="eval1-4" value="4">
+                                        <label for="eval1-4">★</label>
+                                        <input type="radio" name="evalPenyelenggara" id="eval1-5" value="5">
+                                        <label for="eval1-5">★</label>
+                                    </div>
+                                    <small class="text-muted">1 = Sangat Buruk, 5 = Sangat Baik</small>
+                                </div>
+
+                                <div class="rating-group">
+                                    <label>Evaluasi Fasilitator</label>
+                                    <div class="rating-stars">
+                                        <input type="radio" name="evalFasilitator" id="eval2-1" value="1">
+                                        <label for="eval2-1">★</label>
+                                        <input type="radio" name="evalFasilitator" id="eval2-2" value="2">
+                                        <label for="eval2-2">★</label>
+                                        <input type="radio" name="evalFasilitator" id="eval2-3" value="3">
+                                        <label for="eval2-3">★</label>
+                                        <input type="radio" name="evalFasilitator" id="eval2-4" value="4">
+                                        <label for="eval2-4">★</label>
+                                        <input type="radio" name="evalFasilitator" id="eval2-5" value="5">
+                                        <label for="eval2-5">★</label>
+                                    </div>
+                                </div>
+
+                                <div class="rating-group">
+                                    <label>Evaluasi Sarana</label>
+                                    <div class="rating-stars">
+                                        <input type="radio" name="evalSarana" id="eval3-1" value="1">
+                                        <label for="eval3-1">★</label>
+                                        <input type="radio" name="evalSarana" id="eval3-2" value="2">
+                                        <label for="eval3-2">★</label>
+                                        <input type="radio" name="evalSarana" id="eval3-3" value="3">
+                                        <label for="eval3-3">★</label>
+                                        <input type="radio" name="evalSarana" id="eval3-4" value="4">
+                                        <label for="eval3-4">★</label>
+                                        <input type="radio" name="evalSarana" id="eval3-5" value="5">
+                                        <label for="eval3-5">★</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label-custom">Komentar (Opsional)</label>
+                                    <textarea class="form-control form-control-custom" id="komentarAbsensi" rows="3"></textarea>
+                                </div>
+
+                                <button class="btn btn-success-custom btn-lg" onclick="submitAttendance()">
+                                    <i class="bi bi-check-circle"></i> Submit Absensi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div id="adminSection" class="section-content" style="display: none;">
+                    <h2 class="mb-4"><i class="bi bi-gear"></i> Halaman Admin</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="admin-sidebar">
+                                <div class="admin-menu-item active" onclick="showAdminMenu('kelolaJadwal')">
+                                    <i class="bi bi-calendar-event"></i> Kelola Jadwal
+                                </div>
+                                <div class="admin-menu-item" onclick="showAdminMenu('kelolaPeserta')">
+                                    <i class="bi bi-people"></i> Kelola Peserta
+                                </div>
+                                <div class="admin-menu-item" onclick="showAdminMenu('dataPendaftaran')">
+                                    <i class="bi bi-pencil-square"></i> Data Pendaftaran
+                                </div>
+                                <div class="admin-menu-item" onclick="showAdminMenu('dataAbsensi')">
+                                    <i class="bi bi-check2-square"></i> Data Absensi
+                                </div>
+                                <div class="admin-menu-item" onclick="showAdminMenu('statistikGrafik')">
+                                    <i class="bi bi-graph-up"></i> Statistik Grafik
+                                </div>
+                                <div class="admin-menu-item" onclick="showAdminMenu('grafikEvaluasi')">
+                                    <i class="bi bi-star"></i> Grafik Evaluasi
+                                </div>
+                                <hr>
+                                <div class="admin-menu-item text-danger" onclick="logout()">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <!-- Kelola Jadwal -->
+                            <div id="kelolaJadwalContent" class="admin-content">
+                                <div class="content-card">
+                                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                                        <span>Kelola Jadwal Kegiatan</span>
+                                        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                            <i class="bi bi-plus-circle"></i> Tambah Jadwal
+                                        </button>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="table-responsive">
+                                            <table class="table table-custom">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Tema</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Jam</th>
+                                                        <th>Narasumber</th>
+                                                        <th>JP</th>
+                                                        <th>Max Peserta</th>
+                                                        <th>Platform</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="adminScheduleTable">
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">Memuat data...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kelola Peserta -->
+                            <div id="kelolaPesertaContent" class="admin-content" style="display: none;">
+                                <div class="content-card">
+                                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                                        <span>Kelola Data Peserta Pelatihan</span>
+                                        <button class="btn btn-light btn-sm">
+                                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="mb-3">
+                                            <select class="form-control form-control-custom" style="max-width: 300px;">
+                                                <option>Semua Tema</option>
+                                            </select>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-custom">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama Peserta</th>
+                                                        <th>Unit Kerja</th>
+                                                        <th>Jabatan</th>
+                                                        <th>NIP</th>
+                                                        <th>Email</th>
+                                                        <th>No HP</th>
+                                                        <th>Tema</th>
+                                                        <th>Tgl Daftar</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="participantTable">
+                                                    <tr>
+                                                        <td colspan="10" class="text-center">Memuat data...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Pendaftaran -->
+                            <div id="dataPendaftaranContent" class="admin-content" style="display: none;">
+                                <div class="content-card">
+                                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                                        <span>Data Pendaftaran</span>
+                                        <button class="btn btn-light btn-sm">
+                                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="mb-3">
+                                            <select class="form-control form-control-custom" style="max-width: 300px;">
+                                                <option>Semua Tema</option>
+                                            </select>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-custom">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Nama Lengkap</th>
+                                                        <th>NIP</th>
+                                                        <th>Unit Kerja</th>
+                                                        <th>Status</th>
+                                                        <th>WhatsApp</th>
+                                                        <th>Email</th>
+                                                        <th>Tema</th>
+                                                        <th>Tanggal Daftar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="registrationTable">
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">Memuat data...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Absensi -->
+                            <div id="dataAbsensiContent" class="admin-content" style="display: none;">
+                                <div class="content-card">
+                                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                                        <span>Data Absensi</span>
+                                        <button class="btn btn-light btn-sm">
+                                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="table-responsive">
+                                            <table class="table table-custom">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Nama</th>
+                                                        <th>NIP</th>
+                                                        <th>Unit Kerja</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Jam</th>
+                                                        <th>Eval. Penyelenggara</th>
+                                                        <th>Eval. Fasilitator</th>
+                                                        <th>Eval. Sarana</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="attendanceDataTable">
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">Memuat data...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistik Grafik -->
+                            <div id="statistikGrafikContent" class="admin-content" style="display: none;">
+                                <div class="content-card">
+                                    <div class="card-header-custom">
+                                        <span>Statistik Grafik</span>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <h6>Jumlah Kegiatan per Bulan</h6>
+                                                <canvas id="chartKegiatanPerBulan"></canvas>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <h6>Total JP per Bulan</h6>
+                                                <canvas id="chartJPPerBulan"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grafik Evaluasi -->
+                            <div id="grafikEvaluasiContent" class="admin-content" style="display: none;">
+                                <div class="content-card">
+                                    <div class="card-header-custom">
+                                        <span>Grafik Evaluasi</span>
+                                    </div>
+                                    <div class="card-body-custom">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-4">
+                                                <h6>Rata-rata Nilai Evaluasi per Kegiatan</h6>
+                                                <canvas id="chartRataEvaluasi"></canvas>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <h6>Perbandingan Kategori Evaluasi</h6>
+                                                <canvas id="chartPerbandinganEvaluasi"></canvas>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <h6>Tren Evaluasi dari Waktu ke Waktu</h6>
+                                                <canvas id="chartTrenEvaluasi"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div class="modal fade" id="addScheduleModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Jadwal Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addScheduleForm">
+                        <div class="mb-3">
+                            <label class="form-label-custom">Tema Kegiatan</label>
+                            <input type="text" class="form-control form-control-custom" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Tanggal</label>
+                                <input type="date" class="form-control form-control-custom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">JP (Jam Pelajaran)</label>
+                                <input type="number" class="form-control form-control-custom" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Jam Mulai</label>
+                                <input type="time" class="form-control form-control-custom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Jam Selesai</label>
+                                <input type="time" class="form-control form-control-custom" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-custom">Narasumber</label>
+                            <input type="text" class="form-control form-control-custom" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Max Peserta</label>
+                                <input type="number" class="form-control form-control-custom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Platform</label>
+                                <select class="form-control form-control-custom" required>
+                                    <option value="Offline">Offline</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Tgl Mulai Pendaftaran</label>
+                                <input type="date" class="form-control form-control-custom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-custom">Tgl Selesai Pendaftaran</label>
+                                <input type="date" class="form-control form-control-custom" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" onclick="saveSchedule()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+        // Global variables
+        let currentStep = 1;
+        let selectedActivity = null;
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation (in real app, this would be server-side)
+            if (username && password) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                loadDashboard();
+            }
+        });
+
+        // Logout
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('loginForm').reset();
+            }
+        }
+
+        // Navigation
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Show selected section
+            document.getElementById(section + 'Section').style.display = 'block';
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.closest('.nav-link').classList.add('active');
+
+            // Load data based on section
+            switch(section) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'jadwal':
+                    loadSchedule();
+                    break;
+                case 'sertifikat':
+                    loadCertificates();
+                    break;
+                case 'materi':
+                    loadMaterials();
+                    break;
+                case 'pendaftaran':
+                    loadRegistrationForm();
+                    break;
+                case 'absensi':
+                    loadAttendance();
+                    break;
+                case 'admin':
+                    loadAdminData();
+                    break;
+            }
+        }
+
+        // Dashboard
+        function loadDashboard() {
+            // Simulate loading data
+            setTimeout(() => {
+                document.getElementById('totalKegiatan').textContent = '12';
+                document.getElementById('totalPeserta').textContent = '245';
+                document.getElementById('totalJP').textContent = '96';
+                document.getElementById('totalNarasumber').textContent = '18';
+                document.getElementById('totalRegistrasi').textContent = '312';
+                document.getElementById('totalAbsensi').textContent = '198';
+
+                // Load latest schedule
+                const scheduleData = [
+                    { no: 1, tema: 'Manajemen Kesehatan Modern', tanggal: '2024-02-15', jp: 8, narasumber: 'Dr. Ahmad', status: 'Aktif' },
+                    { no: 2, tema: 'Digitalisasi Layanan Kesehatan', tanggal: '2024-02-20', jp: 6, narasumber: 'Dr. Siti', status: 'Akan Datang' },
+                    { no: 3, tema: 'Kepemimpinan dalam Kesehatan', tanggal: '2024-02-25', jp: 10, narasumber: 'Prof. Budi', status: 'Akan Datang' }
+                ];
+
+                const tbody = document.getElementById('dashboardScheduleTable');
+                tbody.innerHTML = scheduleData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.jp}</td>
+                        <td>${item.narasumber}</td>
+                        <td><span class="badge badge-custom ${item.status === 'Aktif' ? 'badge-success' : 'badge-warning'}">${item.status}</span></td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+
+        // Schedule
+        function loadSchedule() {
+            setTimeout(() => {
+                const scheduleData = [
+                    { no: 1, tema: 'Manajemen Kesehatan Modern', tanggal: '2024-02-15', jamMulai: '08:00', jamSelesai: '16:00', narasumber: 'Dr. Ahmad', jp: 8, maxPeserta: 50, tglMulaiDaftar: '2024-02-01', tglSelesaiDaftar: '2024-02-10', status: 'Aktif' },
+                    { no: 2, tema: 'Digitalisasi Layanan Kesehatan', tanggal: '2024-02-20', jamMulai: '09:00', jamSelesai: '15:00', narasumber: 'Dr. Siti', jp: 6, maxPeserta: 40, tglMulaiDaftar: '2024-02-05', tglSelesaiDaftar: '2024-02-15', status: 'Akan Datang' },
+                    { no: 3, tema: 'Kepemimpinan dalam Kesehatan', tanggal: '2024-02-25', jamMulai: '08:00', jamSelesai: '18:00', narasumber: 'Prof. Budi', jp: 10, maxPeserta: 60, tglMulaiDaftar: '2024-02-10', tglSelesaiDaftar: '2024-02-20', status: 'Akan Datang' }
+                ];
+
+                const tbody = document.getElementById('scheduleTable');
+                tbody.innerHTML = scheduleData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.jamMulai}</td>
+                        <td>${item.jamSelesai}</td>
+                        <td>${item.narasumber}</td>
+                        <td>${item.jp}</td>
+                        <td>${item.maxPeserta}</td>
+                        <td>${item.tglMulaiDaftar}</td>
+                        <td>${item.tglSelesaiDaftar}</td>
+                        <td><span class="badge badge-custom ${item.status === 'Aktif' ? 'badge-success' : 'badge-warning'}">${item.status}</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('scheduleCount').textContent = scheduleData.length;
+                document.getElementById('scheduleTotal').textContent = scheduleData.length;
+            }, 500);
+        }
+
+        // Certificates
+        function loadCertificates() {
+            setTimeout(() => {
+                const certData = [
+                    { no: 1, nama: 'John Doe', unitKerja: 'RSUD Kota', tanggal: '2024-01-15', tema: 'Manajemen Kesehatan', jp: 8, download: true },
+                    { no: 2, nama: 'Jane Smith', unitKerja: 'Puskesmas Kecamatan', tanggal: '2024-01-20', tema: 'Digitalisasi Layanan', jp: 6, download: true }
+                ];
+
+                const tbody = document.getElementById('certificateTable');
+                tbody.innerHTML = certData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.unitKerja}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.jp}</td>
+                        <td><button class="btn btn-success-custom btn-sm"><i class="bi bi-download"></i> Download</button></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('certificateCount').textContent = certData.length;
+                document.getElementById('certificateTotal').textContent = certData.length;
+            }, 500);
+        }
+
+        // Materials
+        function loadMaterials() {
+            setTimeout(() => {
+                const materialData = [
+                    { no: 1, tanggal: '2024-01-15', tema: 'Manajemen Kesehatan', narasumber: 'Dr. Ahmad', link: '#' },
+                    { no: 2, tanggal: '2024-01-20', tema: 'Digitalisasi Layanan', narasumber: 'Dr. Siti', link: '#' }
+                ];
+
+                const tbody = document.getElementById('materialTable');
+                tbody.innerHTML = materialData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.narasumber}</td>
+                        <td><a href="${item.link}" class="btn btn-success-custom btn-sm"><i class="bi bi-download"></i> Download</a></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('materialCount').textContent = materialData.length;
+                document.getElementById('materialTotal').textContent = materialData.length;
+            }, 500);
+        }
+
+        // Registration
+        function loadRegistrationForm() {
+            const themes = [
+                { id: 1, nama: 'Manajemen Kesehatan Modern', narasumber: 'Dr. Ahmad', tanggal: '2024-02-15', waktu: '08:00 - 16:00', platform: 'Offline', jp: 8, sisaKuota: 25, maxPeserta: 50, tutup: '2024-02-10' },
+                { id: 2, nama: 'Digitalisasi Layanan Kesehatan', narasumber: 'Dr. Siti', tanggal: '2024-02-20', waktu: '09:00 - 15:00', platform: 'Online', jp: 6, sisaKuota: 15, maxPeserta: 40, tutup: '2024-02-15' }
+            ];
+
+            const select = document.getElementById('selectTema');
+            select.innerHTML = '<option value="">-- Pilih Tema --</option>';
+            themes.forEach(theme => {
+                select.innerHTML += `<option value="${theme.id}">${theme.nama}</option>`;
+            });
+
+            // Store themes data
+            window.themesData = themes;
+        }
+
+        function loadActivityDetails() {
+            const themeId = document.getElementById('selectTema').value;
+            const detailsDiv = document.getElementById('activityDetails');
+            const btnNext = document.getElementById('btnNextStep1');
+
+            if (themeId) {
+                const theme = window.themesData.find(t => t.id == themeId);
+                if (theme) {
+                    document.getElementById('detailNarasumber').textContent = theme.narasumber;
+                    document.getElementById('detailTanggal').textContent = theme.tanggal;
+                    document.getElementById('detailWaktu').textContent = theme.waktu;
+                    document.getElementById('detailPlatform').textContent = theme.platform;
+                    document.getElementById('detailJP').textContent = theme.jp;
+                    document.getElementById('detailKuota').textContent = theme.sisaKuota;
+                    document.getElementById('detailMaxPeserta').textContent = theme.maxPeserta;
+                    document.getElementById('detailTutup').textContent = theme.tutup;
+                    
+                    detailsDiv.style.display = 'block';
+                    btnNext.disabled = false;
+                    selectedActivity = theme;
+                }
+            } else {
+                detailsDiv.style.display = 'none';
+                btnNext.disabled = true;
+                selectedActivity = null;
+            }
+        }
+
+        function nextStep(step) {
+            currentStep = step;
+            
+            // Update progress steps
+            document.querySelectorAll('.step').forEach((el, index) => {
+                if (index < step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Show/hide step content
+            document.getElementById('registrationStep1').style.display = step === 1 ? 'block' : 'none';
+            document.getElementById('registrationStep2').style.display = step === 2 ? 'block' : 'none';
+            document.getElementById('registrationStep3').style.display = step === 3 ? 'block' : 'none';
+
+            // If step 3, show confirmation
+            if (step === 3) {
+                showConfirmation();
+            }
+        }
+
+        function showConfirmation() {
+            const nama = document.getElementById('namaLengkap').value;
+            const nip = document.getElementById('nip').value;
+            const unitKerja = document.getElementById('unitKerja').value;
+            const status = document.getElementById('statusPegawai').value;
+            const sdmk = document.getElementById('jenisSDMK').value;
+            const jp = document.getElementById('jpTerakhir').value;
+            const wa = document.getElementById('whatsapp').value;
+            const email = document.getElementById('email').value;
+
+            const confirmationHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Nama:</strong> ${nama}</p>
+                        <p><strong>NIP:</strong> ${nip}</p>
+                        <p><strong>Unit Kerja:</strong> ${unitKerja}</p>
+                        <p><strong>Status:</strong> ${status}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Jenis SDMK:</strong> ${sdmk || '-'}</p>
+                        <p><strong>JP Terakhir:</strong> ${jp}</p>
+                        <p><strong>WhatsApp:</strong> ${wa}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                    </div>
+                </div>
+                <hr>
+                <h6>Kegiatan yang dipilih:</h6>
+                <p><strong>Tema:</strong> ${selectedActivity.nama}</p>
+                <p><strong>Tanggal:</strong> ${selectedActivity.tanggal}</p>
+                <p><strong>Narasumber:</strong> ${selectedActivity.narasumber}</p>
+            `;
+
+            document.getElementById('confirmationData').innerHTML = confirmationHTML;
+        }
+
+        function submitRegistration() {
+            if (confirm('Apakah data sudah benar? Kirim pendaftaran?')) {
+                alert('Pendaftaran berhasil dikirim! Silakan cek email Anda untuk konfirmasi.');
+                // Reset form
+                document.getElementById('registrationForm').reset();
+                nextStep(1);
+                document.getElementById('selectTema').value = '';
+                document.getElementById('activityDetails').style.display = 'none';
+            }
+        }
+
+        // Attendance
+        function loadAttendance() {
+            // Update current time
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('id-ID');
+                document.getElementById('currentTime').textContent = timeString;
+
+                // Check if attendance is open (10:30 - 23:00)
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                const currentTimeInMinutes = currentHour * 60 + currentMinute;
+                const openTime = 10 * 60 + 30; // 10:30
+                const closeTime = 23 * 60; // 23:00
+
+                const statusEl = document.getElementById('absensiStatus');
+                const remainingEl = document.getElementById('remainingTime');
+
+                if (currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime) {
+                    statusEl.textContent = 'BUKA';
+                    statusEl.className = 'timer-status open';
+                    
+                    const remainingMinutes = closeTime - currentTimeInMinutes;
+                    const hours = Math.floor(remainingMinutes / 60);
+                    const minutes = remainingMinutes % 60;
+                    remainingEl.textContent = `${hours} jam ${minutes} menit`;
+                } else {
+                    statusEl.textContent = 'TUTUP';
+                    statusEl.className = 'timer-status closed';
+                    remainingEl.textContent = '-';
+                }
+            }
+
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Load activities for selection
+            const activities = [
+                { id: 1, nama: 'Manajemen Kesehatan Modern - 15 Feb 2024' },
+                { id: 2, nama: 'Digitalisasi Layanan Kesehatan - 20 Feb 2024' }
+            ];
+
+            const select = document.getElementById('pilihKegiatanAbsensi');
+            select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
+            activities.forEach(activity => {
+                select.innerHTML += `<option value="${activity.id}">${activity.nama}</option>`;
+            });
+        }
+
+        function verifyAttendance() {
+            const kegiatan = document.getElementById('pilihKegiatanAbsensi').value;
+            const email = document.getElementById('emailAbsensi').value;
+            const nip = document.getElementById('nipAbsensi').value;
+
+            if (!kegiatan) {
+                alert('Silakan pilih kegiatan terlebih dahulu');
+                return;
+            }
+
+            if (!email && !nip) {
+                alert('Silakan masukkan Email atau NIP');
+                return;
+            }
+
+            // Simulate verification
+            document.getElementById('absensiNama').textContent = 'John Doe';
+            document.getElementById('absensiNIP').textContent = nip || '123456789';
+            document.getElementById('absensiUnitKerja').textContent = 'RSUD Kota';
+            document.getElementById('absensiPlatform').textContent = 'Offline';
+
+            document.getElementById('attendanceForm').style.display = 'block';
+        }
+
+        function submitAttendance() {
+            const evalPenyelenggara = document.querySelector('input[name="evalPenyelenggara"]:checked');
+            const evalFasilitator = document.querySelector('input[name="evalFasilitator"]:checked');
+            const evalSarana = document.querySelector('input[name="evalSarana"]:checked');
+
+            if (!evalPenyelenggara || !evalFasilitator || !evalSarana) {
+                alert('Silakan isi semua evaluasi');
+                return;
+            }
+
+            if (confirm('Submit absensi?')) {
+                alert('Absensi berhasil dicatat! Terima kasih atas partisipasi Anda.');
+                document.getElementById('attendanceForm').style.display = 'none';
+                document.getElementById('pilihKegiatanAbsensi').value = '';
+                document.getElementById('emailAbsensi').value = '';
+                document.getElementById('nipAbsensi').value = '';
+                
+                // Reset ratings
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                document.getElementById('komentarAbsensi').value = '';
+            }
+        }
+
+        // Admin
+        function loadAdminData() {
+            loadAdminSchedule();
+        }
+
+        function showAdminMenu(menu) {
+            // Update active menu
+            document.querySelectorAll('.admin-menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.admin-menu-item').classList.add('active');
+
+            // Hide all content
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show selected content
+            document.getElementById(menu + 'Content').style.display = 'block';
+
+            // Load data based on menu
+            switch(menu) {
+                case 'kelolaJadwal':
+                    loadAdminSchedule();
+                    break;
+                case 'kelolaPeserta':
+                    loadAdminParticipants();
+                    break;
+                case 'dataPendaftaran':
+                    loadAdminRegistrations();
+                    break;
+                case 'dataAbsensi':
+                    loadAdminAttendance();
+                    break;
+                case 'statistikGrafik':
+                    loadStatisticsCharts();
+                    break;
+                case 'grafikEvaluasi':
+                    loadEvaluationCharts();
+                    break;
+            }
+        }
+
+        function loadAdminSchedule() {
+            setTimeout(() => {
+                const scheduleData = [
+                    { no: 1, tema: 'Manajemen Kesehatan Modern', tanggal: '2024-02-15', jam: '08:00 - 16:00', narasumber: 'Dr. Ahmad', jp: 8, maxPeserta: 50, platform: 'Offline' },
+                    { no: 2, tema: 'Digitalisasi Layanan Kesehatan', tanggal: '2024-02-20', jam: '09:00 - 15:00', narasumber: 'Dr. Siti', jp: 6, maxPeserta: 40, platform: 'Online' }
+                ];
+
+                const tbody = document.getElementById('adminScheduleTable');
+                tbody.innerHTML = scheduleData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.jam}</td>
+                        <td>${item.narasumber}</td>
+                        <td>${item.jp}</td>
+                        <td>${item.maxPeserta}</td>
+                        <td>${item.platform}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+
+        function loadAdminParticipants() {
+            setTimeout(() => {
+                const participantData = [
+                    { no: 1, nama: 'John Doe', unitKerja: 'RSUD Kota', jabatan: 'Dokter', nip: '123456789', email: 'john@email.com', noHp: '081234567890', tema: 'Manajemen Kesehatan', tglDaftar: '2024-02-01', status: 'Aktif' },
+                    { no: 2, nama: 'Jane Smith', unitKerja: 'Puskesmas Kecamatan', jabatan: 'Perawat', nip: '987654321', email: 'jane@email.com', noHp: '082345678901', tema: 'Digitalisasi Layanan', tglDaftar: '2024-02-05', status: 'Aktif' }
+                ];
+
+                const tbody = document.getElementById('participantTable');
+                tbody.innerHTML = participantData.map(item => `
+                    <tr>
+                        <td>${item.no}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.unitKerja}</td>
+                        <td>${item.jabatan}</td>
+                        <td>${item.nip}</td>
+                        <td>${item.email}</td>
+                        <td>${item.noHp}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.tglDaftar}</td>
+                        <td><span class="badge badge-custom badge-success">${item.status}</span></td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+
+        function loadAdminRegistrations() {
+            setTimeout(() => {
+                const regData = [
+                    { id: 1, nama: 'John Doe', nip: '123456789', unitKerja: 'RSUD Kota', status: 'PNS', whatsapp: '081234567890', email: 'john@email.com', tema: 'Manajemen Kesehatan', tglDaftar: '2024-02-01' },
+                    { id: 2, nama: 'Jane Smith', nip: '987654321', unitKerja: 'Puskesmas Kecamatan', status: 'PPPK', whatsapp: '082345678901', email: 'jane@email.com', tema: 'Digitalisasi Layanan', tglDaftar: '2024-02-05' }
+                ];
+
+                const tbody = document.getElementById('registrationTable');
+                tbody.innerHTML = regData.map(item => `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.nip}</td>
+                        <td>${item.unitKerja}</td>
+                        <td>${item.status}</td>
+                        <td>${item.whatsapp}</td>
+                        <td>${item.email}</td>
+                        <td>${item.tema}</td>
+                        <td>${item.tglDaftar}</td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+
+        function loadAdminAttendance() {
+            setTimeout(() => {
+                const attendanceData = [
+                    { id: 1, nama: 'John Doe', nip: '123456789', unitKerja: 'RSUD Kota', tanggal: '2024-02-15', jam: '08:15', evalPenyelenggara: 5, evalFasilitator: 4, evalSarana: 5 },
+                    { id: 2, nama: 'Jane Smith', nip: '987654321', unitKerja: 'Puskesmas Kecamatan', tanggal: '2024-02-20', jam: '09:05', evalPenyelenggara: 4, evalFasilitator: 5, evalSarana: 4 }
+                ];
+
+                const tbody = document.getElementById('attendanceDataTable');
+                tbody.innerHTML = attendanceData.map(item => `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.nip}</td>
+                        <td>${item.unitKerja}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.jam}</td>
+                        <td>${item.evalPenyelenggara}</td>
+                        <td>${item.evalFasilitator}</td>
+                        <td>${item.evalSarana}</td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+
+        function loadStatisticsCharts() {
+            // Chart 1: Jumlah Kegiatan per Bulan
+            const ctx1 = document.getElementById('chartKegiatanPerBulan').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Jumlah Kegiatan',
+                        data: [3, 5, 4, 6, 8, 7],
+                        backgroundColor: 'rgba(44, 90, 160, 0.8)',
+                        borderColor: 'rgba(44, 90, 160, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Total JP per Bulan
+            const ctx2 = document.getElementById('chartJPPerBulan').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Total JP',
+                        data: [24, 40, 32, 48, 64, 56],
+                        borderColor: 'rgba(74, 144, 226, 1)',
+                        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadEvaluationCharts() {
+            // Chart 1: Rata-rata Nilai Evaluasi per Kegiatan
+            const ctx1 = document.getElementById('chartRataEvaluasi').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Kegiatan 1', 'Kegiatan 2', 'Kegiatan 3', 'Kegiatan 4'],
+                    datasets: [{
+                        label: 'Rata-rata Evaluasi',
+                        data: [4.5, 4.2, 4.7, 4.3],
+                        backgroundColor: [
+                            'rgba(44, 90, 160, 0.8)',
+                            'rgba(74, 144, 226, 0.8)',
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(255, 193, 7, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Perbandingan Kategori Evaluasi
+            const ctx2 = document.getElementById('chartPerbandinganEvaluasi').getContext('2d');
+            new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['Penyelenggara', 'Fasilitator', 'Sarana'],
+                    datasets: [{
+                        label: 'Rata-rata Nilai',
+                        data: [4.5, 4.3, 4.6],
+                        backgroundColor: 'rgba(44, 90, 160, 0.2)',
+                        borderColor: 'rgba(44, 90, 160, 1)',
+                        pointBackgroundColor: 'rgba(44, 90, 160, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(44, 90, 160, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Tren Evaluasi dari Waktu ke Waktu
+            const ctx3 = document.getElementById('chartTrenEvaluasi').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Tren Evaluasi',
+                        data: [4.2, 4.3, 4.4, 4.5, 4.4, 4.6],
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 3,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveSchedule() {
+            if (confirm('Simpan jadwal baru?')) {
+                alert('Jadwal berhasil disimpan!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addScheduleModal'));
+                modal.hide();
+                document.getElementById('addScheduleForm').reset();
+                loadAdminSchedule();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show login page by default
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
