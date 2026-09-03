@@ -1410,6 +1410,11 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-narasumber-tab" data-bs-toggle="tab" data-bs-target="#adminNarasumber" type="button" role="tab">
+                            <i class="fas fa-user-tie me-2"></i>Kelola Narasumber
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tab-pendaftaran-tab" data-bs-toggle="tab" data-bs-target="#adminPendaftaran" type="button" role="tab">
                             <i class="fas fa-clipboard-list me-2"></i>Data Pendaftaran
                         </button>
@@ -1483,7 +1488,8 @@
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Narasumber</label>
-                                                <input type="text" class="form-control" id="jadwalNarasumber" required>
+                                                <input type="text" class="form-control" id="jadwalNarasumber" list="narasumberDatalist" placeholder="Ketik untuk mencari narasumber..." required>
+                                                <datalist id="narasumberDatalist"></datalist>
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Max Peserta</label>
@@ -1554,6 +1560,81 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Kelola Narasumber Tab -->
+                    <div class="tab-pane fade" id="adminNarasumber" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-user-tie me-2"></i>Kelola Data Narasumber</h3>
+                                <button class="btn btn-primary" onclick="showNarasumberForm()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Narasumber
+                                </button>
+                            </div>
+
+                            <!-- Form Tambah/Edit Narasumber -->
+                            <div class="card mb-4" id="narasumberFormCard" style="display: none;">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3" id="narasumberFormTitle"><i class="fas fa-plus-circle me-2"></i>Tambah Narasumber Baru</h5>
+                                    <form id="narasumberForm" onsubmit="saveNarasumber(event)">
+                                        <input type="hidden" id="narasumberId">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Nama Lengkap</label>
+                                                <input type="text" class="form-control" id="narasumberNama" placeholder="cth: Agustina, S.E." required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Unit Kerja</label>
+                                                <input type="text" class="form-control" id="narasumberUnit" placeholder="cth: Diskominfo Kab. Kutai Kartanegara">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label">Jenis SDMK</label>
+                                                <select class="form-select" id="narasumberSdmk">
+                                                    <option value="">-- Pilih Jenis SDMK (Opsional) --</option>
+                                                    <option value="Dokter">Dokter</option>
+                                                    <option value="Dokter Gigi">Dokter Gigi</option>
+                                                    <option value="Perawat">Perawat</option>
+                                                    <option value="Bidan">Bidan</option>
+                                                    <option value="Apoteker">Apoteker</option>
+                                                    <option value="Tenaga Kesehatan Lain">Tenaga Kesehatan Lain</option>
+                                                    <option value="Non Kesehatan">Non Kesehatan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-save me-2"></i>Simpan
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" onclick="hideNarasumberForm()">
+                                                <i class="fas fa-times me-2"></i>Batal
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="searchNarasumberAdmin" placeholder="Cari nama / unit kerja..." style="max-width: 250px;">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="narasumberAdminTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Jenis SDMK</th>
+                                            <th class="text-center">Jml Kegiatan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="narasumberAdminBody">
+                                        <tr><td colspan="6" class="text-center">Memuat data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <small class="text-muted d-block mt-2">Master data narasumber: otomatis muncul sebagai saran pada form Kelola Jadwal dan melengkapi Jenis SDMK pada popup Total Narasumber di Dashboard.</small>
                         </div>
                     </div>
 
@@ -2075,6 +2156,7 @@
         let allMateri = [];
         let allRegistrasi = [];
         let allAbsensi = [];
+        let allNarasumber = [];
         let currentPage = { jadwal: 1, sertifikat: 1, materi: 1 };
         let currentStep = 1;
         let verifiedUser = null;
@@ -2129,6 +2211,12 @@
             return { success: true, data: data };
         }
 
+        async function getNarasumber() {
+            const { data, error } = await sb.from('narasumber').select('*').order('namalengkap', { ascending: true });
+            if (error) return { success: false, message: error.message };
+            return { success: true, data: data };
+        }
+
         async function getStatistics() {
             const [jadwalRes, regRes, absRes] = await Promise.all([
                 sb.from('jadwal').select('jp, narasumber'),
@@ -2141,10 +2229,16 @@
             regRes.data?.forEach(r => pesertaKeys.add(r.nip || 'nama:' + (r.namalengkap || '').toLowerCase()));
             const totalParticipants = pesertaKeys.size;
             const totalJP = jadwalRes.data?.reduce((sum, j) => sum + (j.jp || 0), 0);
-            // Hitung narasumber sebagai orang unik (urai daftar "1) A 2) B" dan buang unit kerja dalam kurung)
-            const allNarasumber = [];
-            jadwalRes.data?.forEach(j => allNarasumber.push(...parseNarasumberNames(j.narasumber)));
-            const totalSpeakers = [...new Set(allNarasumber.map(n => n.toLowerCase()))].length;
+            // Total narasumber = orang unik. Prioritas tabel master narasumber; fallback urai teks jadwal.
+            const narRes = await sb.from('narasumber').select('namalengkap');
+            let totalSpeakers;
+            if (!narRes.error && narRes.data && narRes.data.length > 0) {
+                totalSpeakers = [...new Set(narRes.data.map(n => (n.namalengkap || '').toLowerCase()).filter(Boolean))].size;
+            } else {
+                const allNarText = [];
+                jadwalRes.data?.forEach(j => allNarText.push(...parseNarasumberNames(j.narasumber)));
+                totalSpeakers = [...new Set(allNarText.map(n => n.toLowerCase()))].length;
+            }
             const totalRegistrasi = regRes.data?.length || 0;
             const totalAbsensi = absRes.data?.length || 0;
             return { success: true, data: { totalActivities, totalParticipants, totalJP, totalSpeakers, totalRegistrasi, totalAbsensi } };
@@ -2520,12 +2614,13 @@
         }
 
         async function loadAdminData() {
-            const [registrasiResult, absensiResult, jadwalResult, sertifikatResult, materiResult] = await Promise.all([
+            const [registrasiResult, absensiResult, jadwalResult, sertifikatResult, materiResult, narasumberResult] = await Promise.all([
                 getRegistrasi(),
                 getAbsensi(),
                 getJadwal(),
                 getSertifikat(),
-                getMateri()
+                getMateri(),
+                getNarasumber()
             ]);
             
             if (jadwalResult.success) {
@@ -2547,6 +2642,10 @@
             if (materiResult.success) {
                 allMateri = materiResult.data || [];
             }
+
+            if (narasumberResult.success) {
+                allNarasumber = narasumberResult.data || [];
+            }
             
             // Load data for admin tabs
             loadJadwalForAdmin();
@@ -2554,6 +2653,7 @@
             loadSertifikatForAdmin();
             loadMateriForAdmin();
             loadAbsensiForAdmin();
+            populateNarasumberDatalist();
         }
 
         // ============================================
@@ -3427,6 +3527,10 @@
         document.getElementById('tab-jadwal-tab')?.addEventListener('shown.bs.tab', function() {
             loadJadwalForAdmin();
         });
+
+        document.getElementById('tab-narasumber-tab')?.addEventListener('shown.bs.tab', function() {
+            loadNarasumberForAdmin();
+        });
         
         document.getElementById('tab-pendaftaran-tab')?.addEventListener('shown.bs.tab', function() {
             loadPendaftaranForAdmin();
@@ -3645,6 +3749,181 @@
                     </td>
                 </tr>
             `).join('');
+        }
+
+        // ============================================
+        // KELOLA NARASUMBER FUNCTIONS (CRUD)
+        // ============================================
+
+        let _adminNarasumberData = [];
+        let _narasumberAdminListenerAdded = false;
+
+        function populateNarasumberDatalist() {
+            const dl = document.getElementById('narasumberDatalist');
+            if (!dl) return;
+            dl.innerHTML = allNarasumber.map(n => {
+                const val = (n.namalengkap || '') + (n.unitkerja ? ' (' + n.unitkerja + ')' : '');
+                return `<option value="${escStat(val)}"></option>`;
+            }).join('');
+        }
+
+        function loadNarasumberForAdmin() {
+            const tbody = document.getElementById('narasumberAdminBody');
+            if (!tbody) return;
+
+            getNarasumber().then(result => {
+                if (result.success) {
+                    allNarasumber = result.data || [];
+                    renderNarasumberAdminTable(allNarasumber);
+                    populateNarasumberDatalist();
+                } else {
+                    const msg = (result.message || '').toLowerCase();
+                    if (msg.includes('schema cache') || msg.includes('could not find')) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tabel <strong>narasumber</strong> belum tersedia di Supabase. Buat dulu via SQL Editor: CREATE TABLE narasumber + RLS policy (lihat petunjuk dari asisten).</td></tr>';
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat data: ' + escStat(result.message) + '</td></tr>';
+                    }
+                }
+            }).catch(error => {
+                console.error('Error loading narasumber:', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat data</td></tr>';
+            });
+
+            if (!_narasumberAdminListenerAdded) {
+                const searchInput = document.getElementById('searchNarasumberAdmin');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const term = this.value.toLowerCase();
+                        renderNarasumberAdminTable(allNarasumber.filter(n =>
+                            (n.namalengkap || '').toLowerCase().includes(term) ||
+                            (n.unitkerja || '').toLowerCase().includes(term) ||
+                            (n.jenissdmk || '').toLowerCase().includes(term)
+                        ));
+                    });
+                    _narasumberAdminListenerAdded = true;
+                }
+            }
+        }
+
+        function renderNarasumberAdminTable(data) {
+            const tbody = document.getElementById('narasumberAdminBody');
+            if (!tbody) return;
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Belum ada data narasumber</td></tr>';
+                return;
+            }
+            // Jumlah kegiatan per narasumber (cocokkan nama dari teks jadwal)
+            const kegiatanCount = {};
+            allJadwal.forEach(j => {
+                parseNarasumberNames(j.narasumber).forEach(nm => {
+                    const k = nm.toLowerCase();
+                    kegiatanCount[k] = (kegiatanCount[k] || 0) + 1;
+                });
+            });
+            _adminNarasumberData = data;
+            tbody.innerHTML = data.map((n, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><strong>${escStat(n.namalengkap)}</strong></td>
+                    <td>${escStat(n.unitkerja || '-')}</td>
+                    <td>${escStat(n.jenissdmk || '-')}</td>
+                    <td class="text-center"><span class="badge bg-secondary">${kegiatanCount[(n.namalengkap || '').toLowerCase()] || 0} kegiatan</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick="editNarasumber(${index})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteNarasumber(${index})" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showNarasumberForm(narasumber = null) {
+            const formCard = document.getElementById('narasumberFormCard');
+            const formTitle = document.getElementById('narasumberFormTitle');
+            formCard.style.display = 'block';
+            if (narasumber) {
+                formTitle.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Narasumber';
+                document.getElementById('narasumberId').value = narasumber.id || '';
+                document.getElementById('narasumberNama').value = narasumber.namalengkap || '';
+                document.getElementById('narasumberUnit').value = narasumber.unitkerja || '';
+                document.getElementById('narasumberSdmk').value = narasumber.jenissdmk || '';
+            } else {
+                formTitle.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Tambah Narasumber Baru';
+                document.getElementById('narasumberForm').reset();
+                document.getElementById('narasumberId').value = '';
+            }
+            formCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideNarasumberForm() {
+            document.getElementById('narasumberFormCard').style.display = 'none';
+            document.getElementById('narasumberForm').reset();
+            document.getElementById('narasumberId').value = '';
+        }
+
+        async function saveNarasumber(event) {
+            event.preventDefault();
+            const btn = document.getElementById('narasumberForm')?.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+
+            const id = document.getElementById('narasumberId').value;
+            const data = {
+                namalengkap: document.getElementById('narasumberNama').value.trim(),
+                unitkerja: document.getElementById('narasumberUnit').value.trim() || null,
+                jenissdmk: document.getElementById('narasumberSdmk').value || null
+            };
+
+            try {
+                const { error } = id
+                    ? await sb.from('narasumber').update(data).eq('id', parseInt(id)).select()
+                    : await sb.from('narasumber').insert([data]).select();
+
+                if (!error) {
+                    showToast(id ? 'Narasumber berhasil diperbarui!' : 'Narasumber berhasil ditambahkan!', 'success');
+                    hideNarasumberForm();
+                    allNarasumber = [];
+                    loadNarasumberForAdmin();
+                } else {
+                    const msg = (error.message || '').toLowerCase();
+                    if (msg.includes('schema cache') || msg.includes('could not find')) {
+                        showToast('Tabel narasumber belum dibuat di Supabase. Jalankan SQL CREATE TABLE narasumber terlebih dahulu.', 'warning');
+                    } else {
+                        showToast(error.message || 'Gagal menyimpan narasumber', 'danger');
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving narasumber:', error);
+                showToast('Gagal menyimpan narasumber: ' + error.message, 'danger');
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function editNarasumber(index) {
+            const n = _adminNarasumberData[index];
+            if (n) showNarasumberForm(n);
+        }
+
+        async function deleteNarasumber(index) {
+            const n = _adminNarasumberData[index];
+            if (!n) return;
+            if (!confirm('Apakah Anda yakin ingin menghapus narasumber "' + n.namalengkap + '"?')) return;
+            try {
+                const { error } = await sb.from('narasumber').delete().eq('id', n.id);
+                if (!error) {
+                    showToast('Narasumber berhasil dihapus!', 'success');
+                    allNarasumber = [];
+                    loadNarasumberForAdmin();
+                } else {
+                    showToast(error.message || 'Gagal menghapus narasumber', 'danger');
+                }
+            } catch (error) {
+                console.error('Error deleting narasumber:', error);
+                showToast('Gagal menghapus narasumber: ' + error.message, 'danger');
+            }
         }
 
         // ============================================
@@ -4609,6 +4888,7 @@
 
         let statDetailRows = [];
         let statDetailType = null;
+        let statNarasumberMaster = false;
 
         function escStat(v) {
             return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -4655,15 +4935,18 @@
 
         async function buildStatDetailRows(type) {
             // Ambil data terbaru dari Supabase agar popup selalu akurat
-            const [regRes, jadwalRes, absRes] = await Promise.all([
-                getRegistrasi(), getJadwal(), getAbsensi()
+            const [regRes, jadwalRes, absRes, narRes] = await Promise.all([
+                getRegistrasi(), getJadwal(), getAbsensi(), getNarasumber()
             ]);
             const registrasi = regRes.success ? (regRes.data || []) : allRegistrasi;
             const jadwal = jadwalRes.success ? (jadwalRes.data || []) : allJadwal;
             const absensi = absRes.success ? (absRes.data || []) : allAbsensi;
+            const masterNar = narRes.success ? (narRes.data || []) : allNarasumber;
             allRegistrasi = registrasi;
             allJadwal = jadwal;
             allAbsensi = absensi;
+            allNarasumber = masterNar;
+            statNarasumberMaster = masterNar.length > 0;
 
             if (type === 'peserta') {
                 // Satu peserta unik per NIP (fallback nama), plus jumlah kegiatan yang didaftar
@@ -4677,17 +4960,30 @@
             }
 
             if (type === 'narasumber') {
-                // Satu narasumber per nama; unit kerja diambil dari tanda kurung pada teks nama
+                // Jumlah kegiatan per nama narasumber dari jadwal
                 const map = {};
+                const kegiatanCount = {};
+                jadwal.forEach(j => {
+                    parseNarasumberNames(j.narasumber).forEach(nm => {
+                        const k = nm.toLowerCase();
+                        kegiatanCount[k] = (kegiatanCount[k] || 0) + 1;
+                    });
+                });
+                // 1) Seed dari tabel master narasumber (jika sudah dibuat & terisi)
+                masterNar.forEach(n => {
+                    const key = (n.namalengkap || '').toLowerCase();
+                    if (!key) return;
+                    map[key] = { nama: n.namalengkap || '-', unit: n.unitkerja || '-', sdmk: n.jenissdmk || '-', n: kegiatanCount[key] || 0 };
+                });
+                // 2) Tambah narasumber dari teks jadwal yang belum tercatat di master
                 jadwal.forEach(j => {
                     String(j.narasumber || '').split(/(?:^|[\s.;,])\d+[\)\.]\s*/).map(s => s.trim()).filter(Boolean).forEach(p => {
                         const m = p.match(/^(.*?)\s*\((.+)\)\s*$/);
                         const nama = (m ? m[1] : p).trim() || '-';
                         const unit = m ? m[2].trim() : '';
                         const key = nama.toLowerCase();
-                        if (!map[key]) map[key] = { nama, unit: unit || '-', sdmk: '-', n: 0 };
-                        if (unit && map[key].unit === '-') map[key].unit = unit;
-                        map[key].n++;
+                        if (!map[key]) map[key] = { nama, unit: unit || '-', sdmk: '-', n: kegiatanCount[key] || 0 };
+                        else if (map[key].unit === '-' && unit) map[key].unit = unit;
                     });
                 });
                 return Object.values(map).sort((a, b) => b.n - a.n || a.nama.localeCompare(b.nama));
@@ -4729,7 +5025,9 @@
                 </tr>
             `).join('');
             let note = `Menampilkan ${rows.length} dari ${statDetailRows.length} data`;
-            if (statDetailType === 'narasumber') note += ' • Unit kerja diambil dari tanda kurung pada nama narasumber; jenis SDMK belum tersedia untuk data narasumber';
+            if (statDetailType === 'narasumber') note += statNarasumberMaster
+                ? ' • Unit kerja & Jenis SDMK dari master narasumber; jumlah kegiatan dihitung dari jadwal'
+                : ' • Unit kerja diambil dari tanda kurung pada nama narasumber; jenis SDMK belum tersedia untuk data narasumber';
             if (statDetailType === 'absensi') note += ' • Jenis SDMK diambil dari data pendaftaran berdasarkan NIP';
             foot.textContent = note;
         }
