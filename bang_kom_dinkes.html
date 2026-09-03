@@ -321,6 +321,47 @@
         [data-theme="dark"] .stat-modal .modal-header { border-bottom-color: #1D3B36; }
         [data-theme="dark"] .stat-modal .btn-close { filter: invert(1) grayscale(100%); }
 
+        /* ===== Bukti Pendaftaran (Nomor Register Otomatis) ===== */
+        .bukti-modal .modal-content { border: none; border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(7,42,38,0.30); }
+        .bukti-header { background: linear-gradient(135deg, #0B3B36 0%, #0D9488 100%); color: #fff; padding: 16px 22px; border-bottom: none; }
+        .bukti-header .btn-close { filter: invert(1) grayscale(100%); }
+        .bukti-logo { width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .bukti-title { font-weight: 800; letter-spacing: 1.5px; margin: 0; font-size: 1.02rem; }
+        .bukti-sub { font-size: 0.74rem; opacity: 0.88; margin: 0; }
+        .bukti-nomor-box { background: #F0FDFA; border: 1.5px dashed #14B8A6; border-radius: 12px; padding: 12px 16px; text-align: center; }
+        .bukti-nomor-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #0F766E; }
+        .bukti-nomor { font-family: 'Courier New', monospace; font-size: 1.35rem; font-weight: 800; color: #0F766E; letter-spacing: 1px; word-break: break-all; }
+        .bukti-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 9px 2px; border-bottom: 1px dashed rgba(12,59,54,0.14); }
+        .bukti-row:last-of-type { border-bottom: none; }
+        .bukti-label { font-size: 0.8rem; color: #64748B; font-weight: 600; white-space: nowrap; }
+        .bukti-value { font-weight: 700; text-align: right; word-break: break-word; }
+        .bukti-value.text-muted2 { font-weight: 500; color: #94A3B8; font-size: 0.82rem; }
+        .bukti-note { font-size: 0.76rem; color: #6B7C7A; background: rgba(13,148,136,0.07); border-radius: 10px; padding: 9px 12px; }
+        [data-theme="dark"] .bukti-modal .modal-content { background: #10241F; color: #E6F1EF; }
+        [data-theme="dark"] .bukti-nomor-box { background: rgba(20,184,166,0.09); border-color: #14B8A6; }
+        [data-theme="dark"] .bukti-nomor-box .bukti-nomor-label, [data-theme="dark"] .bukti-nomor-box .bukti-nomor { color: #5EEAD4; }
+        [data-theme="dark"] .bukti-row { border-bottom-color: #1D3B36; }
+        [data-theme="dark"] .bukti-label { color: #8FB0AA; }
+        [data-theme="dark"] .bukti-note { background: rgba(20,184,166,0.10); color: #A7C8C3; }
+        .reg-cell { font-weight: 700; color: #0F766E; font-size: 0.8rem; white-space: nowrap; }
+        [data-theme="dark"] .reg-cell { color: #5EEAD4; }
+        .bukti-alert { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: linear-gradient(135deg, rgba(13,148,136,0.10) 0%, rgba(20,184,166,0.14) 100%); border: 1px solid rgba(13,148,136,0.28); border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; }
+        .bukti-alert h6 { margin: 0 0 2px; font-weight: 700; color: #0F766E; }
+        [data-theme="dark"] .bukti-alert h6 { color: #5EEAD4; }
+        .jam-live { font-weight: 800; color: #0F766E; font-size: 0.95rem; white-space: nowrap; }
+        [data-theme="dark"] .jam-live { color: #5EEAD4; }
+
+        /* Cetak: hanya kartu bukti pendaftaran yang tercetak */
+        @media print {
+            body.print-bukti * { visibility: hidden !important; }
+            body.print-bukti .bukti-print, body.print-bukti .bukti-print * { visibility: visible !important; }
+            body.print-bukti .bukti-modal .modal-dialog { position: static !important; margin: 0 !important; max-width: 100% !important; }
+            body.print-bukti .bukti-modal .modal-content { position: static !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+            body.print-bukti .bukti-modal .modal-body { padding: 0 !important; overflow: visible !important; }
+            body.print-bukti .bukti-print { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; padding: 24px !important; box-shadow: none !important; }
+            body.print-bukti .bukti-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
         .bg-gradient-blue { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%); color: #0369A1; }
         .bg-gradient-green { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); color: #047857; }
         .bg-gradient-purple { background: linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%); color: #6D28D9; }
@@ -746,7 +787,7 @@
                                 <div class="gs-num">2</div>
                                 <i class="fas fa-clipboard-list gs-icon"></i>
                                 <h5>Daftar Kegiatan</h5>
-                                <p>Buka <strong>Formulir Pendaftaran</strong>: pilih tema (step 1), periksa detail &amp; sisa kuota, lalu lengkapi data diri (step 2). Pastikan NIK, NIP, WhatsApp, dan email aktif karena digunakan untuk verifikasi absensi &amp; pencegahan pendaftaran ganda. Sistem menolak pendaftaran ganda pada tema yang sama (dicek dari NIK, NIP, atau Nama pada tabel registrasi Supabase).</p>
+                                <p>Buka <strong>Formulir Pendaftaran</strong>: pilih tema (step 1), periksa detail &amp; sisa kuota, lalu lengkapi data diri (step 2). Pastikan NIK, NIP, WhatsApp, dan email aktif karena digunakan untuk verifikasi absensi &amp; pencegahan pendaftaran ganda. Sistem menolak pendaftaran ganda pada tema yang sama (dicek dari NIK, NIP, atau Nama pada tabel registrasi Supabase). Setelah pendaftaran berhasil, sistem otomatis menerbitkan <strong>bukti pendaftaran</strong> berisi nomor register, waktu pendaftaran, nama lengkap, unit kerja, dan tema pembelajaran — bukti dapat langsung dicetak.</p>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
@@ -1187,6 +1228,16 @@
                         </div>
 
                         <div id="step2Content" style="display: none;">
+                            <div class="bukti-alert">
+                                <div>
+                                    <h6><i class="fas fa-receipt me-2"></i>Bukti Pendaftaran Otomatis</h6>
+                                    <div class="small">Nomor register dan bukti pendaftaran diterbitkan otomatis begitu pendaftaran berhasil dikirim.</div>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted d-block">Waktu saat ini (WIB)</small>
+                                    <span class="jam-live" id="jamLive">-</span>
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label required">NIK</label>
                                 <input type="text" class="form-control" id="nik" placeholder="Masukkan NIK (16 digit)" maxlength="16" minlength="16" data-exactlen="16" required oninput="validateNIK(this)">
@@ -1202,8 +1253,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label required">NIP</label>
-                                <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP 18 digit (untuk non ASN pakai NIK)" maxlength="18" minlength="18" data-exactlen="18" required oninput="validateNIP(this)">
-                                <div class="invalid-feedback">Non ASN isi dengan NIK.</div>
+                                <input type="text" class="form-control" id="nip" placeholder="untuk non ASN masukkan NIK" maxlength="18" minlength="18" data-exactlen="18" required oninput="validateNIP(this)">
+                                <div class="invalid-feedback">NIP wajib diisi lengkap 18 digit angka.</div>
                             </div>
 
                             <div class="mb-3">
@@ -1907,6 +1958,16 @@
                                                 <input type="number" class="form-control" id="pendaftaranJp" min="0">
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">No. Register <span class="text-muted small">(otomatis)</span></label>
+                                                <input type="text" class="form-control" id="pendaftaranNoReg" readonly placeholder="Terbit otomatis saat disimpan">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Waktu Pendaftaran <span class="text-muted small">(otomatis)</span></label>
+                                                <input type="text" class="form-control" id="pendaftaranWaktuDaftar" readonly placeholder="Dicatat otomatis saat disimpan">
+                                            </div>
+                                        </div>
                                         <div class="d-flex gap-2">
                                             <button type="submit" class="btn btn-success" id="pendaftaranSubmitBtn">
                                                 <i class="fas fa-save me-2"></i>Simpan
@@ -1920,7 +1981,7 @@
                             </div>
 
                             <div class="table-filters mb-3">
-                                <input type="text" class="form-control" id="searchPendaftaranAdmin" placeholder="Search nama/NIP..." style="max-width: 250px;">
+                                <input type="text" class="form-control" id="searchPendaftaranAdmin" placeholder="Cari nama/NIK/NIP/No. Register..." style="max-width: 250px;">
                                 <select class="form-select" id="filterTemaPendaftaran" style="max-width: 200px;">
                                     <option value="">Semua Tema</option>
                                 </select>
@@ -1930,6 +1991,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No. Register</th>
                                             <th>NIK</th>
                                             <th>Nama Lengkap</th>
                                             <th>NIP</th>
@@ -1938,12 +2000,12 @@
                                             <th>WhatsApp</th>
                                             <th>Email</th>
                                             <th>Tema</th>
-                                            <th>Tanggal Daftar</th>
+                                            <th>Waktu Daftar</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendaftaranAdminBody">
-                                        <tr><td colspan="11" class="text-center">Memuat data...</td></tr>
+                                        <tr><td colspan="12" class="text-center">Memuat data...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -2161,6 +2223,63 @@
         </div>
     </div>
 
+    <!-- Bukti Pendaftaran Modal (terbit otomatis setelah pendaftaran berhasil dikirim) -->
+    <div class="modal fade bukti-modal" id="buktiPendaftaranModal" tabindex="-1" aria-labelledby="buktiModalTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bukti-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bukti-logo"><i class="fas fa-receipt"></i></div>
+                        <div>
+                            <h5 class="bukti-title" id="buktiModalTitle">BUKTI PENDAFTARAN</h5>
+                            <p class="bukti-sub mb-0">KomDINKES &mdash; Pengembangan Kompetensi</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="bukti-print" id="buktiPrintArea">
+                        <div class="bukti-nomor-box mb-3">
+                            <div class="bukti-nomor-label">Nomor Register</div>
+                            <div class="bukti-nomor" id="buktiNomor">-</div>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-clock me-1"></i>Waktu Pendaftaran</span>
+                            <span class="bukti-value" id="buktiWaktu">-</span>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-user me-1"></i>Nama Lengkap</span>
+                            <span class="bukti-value" id="buktiNama">-</span>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-building me-1"></i>Unit Kerja</span>
+                            <span class="bukti-value" id="buktiUnit">-</span>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-book-open me-1"></i>Tema Pembelajaran</span>
+                            <span class="bukti-value" id="buktiTema">-</span>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-id-card me-1"></i>NIK</span>
+                            <span class="bukti-value text-muted2" id="buktiNik">-</span>
+                        </div>
+                        <div class="bukti-row">
+                            <span class="bukti-label"><i class="fas fa-id-badge me-1"></i>NIP</span>
+                            <span class="bukti-value text-muted2" id="buktiNip">-</span>
+                        </div>
+                        <div class="bukti-note mt-3">
+                            <i class="fas fa-circle-info me-1"></i>Bukti pendaftaran diterbitkan otomatis oleh sistem saat pendaftaran berhasil dikirim. Simpan atau cetak bukti ini sebagai tanda Anda telah terdaftar.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnCetakBukti"><i class="fas fa-print me-2"></i>Cetak Bukti</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-check me-2"></i>Selesai</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Supabase JS Client -->
@@ -2305,22 +2424,118 @@
             return /nik/i.test(msg) && /column|schema/i.test(msg);
         }
 
-        async function submitRegistrasi(regData) {
-            const { data, error } = await sb.from('registrasi').insert([regData]).select();
-            if (error) {
-                // Kolom nik belum dibuat di Supabase -> simpan tanpa NIK agar pendaftaran tetap berjalan
-                if (isNikColumnError(error)) {
-                    const fallback = Object.assign({}, regData);
-                    delete fallback.nik;
-                    const retry = await sb.from('registrasi').insert([fallback]).select();
-                    if (retry.error) return { success: false, message: retry.error.message };
-                    if (!retry.data || retry.data.length === 0) return { success: false, message: 'Gagal: pendaftaran tidak tersimpan (kebijakan RLS Supabase menolak INSERT pada tabel registrasi).' };
-                    return { success: true, data: retry.data, id: retry.data[0]?.id, noNikColumn: true };
-                }
-                return { success: false, message: error.message };
+        // Deteksi error "kolom tidak ditemukan" untuk kolom tertentu (PGRST204 / PostgREST schema cache)
+        function isColumnError(err, col) {
+            if (!err || !col) return false;
+            const msg = [err.message, err.details, err.hint].filter(Boolean).join(' ');
+            return new RegExp(col, 'i').test(msg) && /column|schema|could not find/i.test(msg);
+        }
+
+        // Kolom opsional yang mungkin belum ada di Supabase sebelum SQL upgrade dijalankan
+        const REG_OPTIONAL_COLUMNS = ['nik', 'nomor_register', 'waktu_pendaftaran'];
+
+        // Buat payload tanpa kolom yang disebut error; null bila tidak ada kolom opsional yang cocok
+        function buildColumnFallback(regData, error) {
+            const fb = Object.assign({}, regData);
+            let removed = false;
+            REG_OPTIONAL_COLUMNS.forEach(col => {
+                if (fb[col] !== undefined && isColumnError(error, col)) { delete fb[col]; removed = true; }
+            });
+            return removed ? fb : null;
+        }
+
+        // ---------- WAKTU PENDAFTARAN ----------
+        // Format lengkap: "Rabu, 3 September 2026 • 14:35:07 WIB"
+        function formatWaktuPendaftaran(date) {
+            try {
+                const hari = date.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'Asia/Jakarta' });
+                const tgl = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' });
+                const jam = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' }).replace(/\./g, ':');
+                return hari + ', ' + tgl + ' • ' + jam + ' WIB';
+            } catch (e) {
+                return date.toLocaleString('id-ID');
             }
-            if (!data || data.length === 0) return { success: false, message: 'Gagal: pendaftaran tidak tersimpan (kebijakan RLS Supabase menolak INSERT pada tabel registrasi).' };
-            return { success: true, data: data, id: data[0]?.id };
+        }
+
+        // Format singkat utk tabel admin: "03 Sep 2026 14:35 WIB"
+        function formatWaktuSingkat(dateString) {
+            if (!dateString) return '-';
+            const d = new Date(dateString);
+            if (isNaN(d.getTime())) return escStat(dateString);
+            try {
+                const tgl = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Jakarta' });
+                const jam = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' }).replace(/\./g, ':');
+                return tgl + ' ' + jam + ' WIB';
+            } catch (e) {
+                return d.toLocaleString('id-ID');
+            }
+        }
+
+        // Jam live di form pendaftaran (tanggal & jam terkini, otomatis)
+        function updateJamLive() {
+            const el = document.getElementById('jamLive');
+            if (!el) return;
+            const now = new Date();
+            try {
+                const hari = now.toLocaleDateString('id-ID', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Asia/Jakarta' });
+                const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Jakarta' }).replace(/\./g, ':');
+                el.textContent = hari + ' ' + jam + ' WIB';
+            } catch (e) {
+                el.textContent = now.toLocaleString('id-ID');
+            }
+        }
+        updateJamLive();
+        setInterval(updateJamLive, 1000);
+
+        // ---------- NOMOR REGISTER OTOMATIS ----------
+        // Format: REG-YYYYMMDD-XXXX (XXXX = urutan pendaftar + 1, bebas tabrakan lewat cek DB)
+        async function generateNomorRegister() {
+            const now = new Date();
+            const ymd = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+            let seq = 1;
+            let colMissing = false;
+            try {
+                const { count, error } = await sb.from('registrasi').select('id', { count: 'exact', head: true });
+                if (!error && typeof count === 'number' && count > 0) seq = count + 1;
+            } catch (e) { /* pakai seq 1 */ }
+            for (let i = 0; i < 5; i++) {
+                const kandidat = 'REG-' + ymd + '-' + String(seq).padStart(4, '0');
+                try {
+                    const { data, error } = await sb.from('registrasi').select('id').eq('nomor_register', kandidat).limit(1);
+                    if (error) {
+                        if (isColumnError(error, 'nomor_register')) colMissing = true;
+                        return { nomor: kandidat, waktu: now, colMissing: colMissing };
+                    }
+                    if (!data || data.length === 0) return { nomor: kandidat, waktu: now, colMissing: colMissing };
+                    seq++;
+                } catch (e) {
+                    return { nomor: kandidat, waktu: now, colMissing: colMissing };
+                }
+            }
+            return { nomor: 'REG-' + ymd + '-' + String(seq).padStart(4, '0') + '-' + Math.random().toString(36).slice(2, 5).toUpperCase(), waktu: now, colMissing: colMissing };
+        }
+
+        // INSERT registrasi dengan fallback otomatis bila kolom opsional belum ada di Supabase
+        async function submitRegistrasi(regData) {
+            let payload = regData;
+            const missing = [];
+            for (let attempt = 0; attempt < 4; attempt++) {
+                const { data, error } = await sb.from('registrasi').insert([payload]).select();
+                if (!error) {
+                    if (!data || data.length === 0) return { success: false, message: 'Gagal: pendaftaran tidak tersimpan (kebijakan RLS Supabase menolak INSERT pada tabel registrasi).' };
+                    const flags = { success: true, data: data, id: data[0]?.id };
+                    if (missing.includes('nik')) flags.noNikColumn = true;
+                    if (missing.length > 0) flags.missingColumns = missing.slice();
+                    return flags;
+                }
+                const fb = buildColumnFallback(payload, error);
+                if (!fb) return { success: false, message: error.message };
+                REG_OPTIONAL_COLUMNS.forEach(col => {
+                    if (payload[col] !== undefined && fb[col] === undefined && !missing.includes(col)) missing.push(col);
+                });
+                payload = fb;
+            }
+            return { success: false, message: 'Gagal menyimpan pendaftaran setelah beberapa percobaan.' };
         }
 
         async function verifyPeserta(email, nip) {
@@ -2409,35 +2624,48 @@
 
         // ---------- CRUD REGISTRASI (PENDAFTARAN) ----------
         async function addRegistrasiAdmin(data) {
-            const { data: rows, error } = await sb.from('registrasi').insert([data]).select();
-            if (error) {
-                if (isNikColumnError(error)) {
-                    const fb = Object.assign({}, data);
-                    delete fb.nik;
-                    const retry = await sb.from('registrasi').insert([fb]).select();
-                    if (retry.error) return { success: false, message: retry.error.message };
-                    return { success: true, data: retry.data, noNikColumn: true };
+            // Fallback otomatis bila kolom opsional (nik/nomor_register/waktu_pendaftaran) belum ada
+            let payload = data;
+            const missing = [];
+            for (let attempt = 0; attempt < 4; attempt++) {
+                const { data: rows, error } = await sb.from('registrasi').insert([payload]).select();
+                if (!error) {
+                    const flags = { success: true, data: rows };
+                    if (missing.includes('nik')) flags.noNikColumn = true;
+                    if (missing.length > 0) flags.missingColumns = missing.slice();
+                    return flags;
                 }
-                return { success: false, message: error.message };
+                const fb = buildColumnFallback(payload, error);
+                if (!fb) return { success: false, message: error.message };
+                REG_OPTIONAL_COLUMNS.forEach(col => {
+                    if (payload[col] !== undefined && fb[col] === undefined && !missing.includes(col)) missing.push(col);
+                });
+                payload = fb;
             }
-            return { success: true, data: rows };
+            return { success: false, message: 'Gagal menyimpan pendaftaran setelah beberapa percobaan.' };
         }
 
         async function updateRegistrasi(id, data) {
-            const { data: rows, error } = await sb.from('registrasi').update(data).eq('id', id).select();
-            if (error) {
-                if (isNikColumnError(error)) {
-                    const fb = Object.assign({}, data);
-                    delete fb.nik;
-                    const retry = await sb.from('registrasi').update(fb).eq('id', id).select();
-                    if (retry.error) return { success: false, message: retry.error.message };
-                    if (!retry.data || retry.data.length === 0) return { success: false, message: 'Gagal: perubahan tidak tersimpan (kebijakan RLS Supabase menolak UPDATE pada tabel registrasi). Jalankan SQL policy yang diberikan.' };
-                    return { success: true, data: retry.data, noNikColumn: true };
+            // Fallback otomatis bila kolom opsional belum ada; nomor_register & waktu pendaftaran tidak diubah saat edit
+            let payload = data;
+            const missing = [];
+            for (let attempt = 0; attempt < 4; attempt++) {
+                const { data: rows, error } = await sb.from('registrasi').update(payload).eq('id', id).select();
+                if (!error) {
+                    if (!rows || rows.length === 0) return { success: false, message: 'Gagal: perubahan tidak tersimpan (kebijakan RLS Supabase menolak UPDATE pada tabel registrasi). Jalankan SQL policy yang diberikan.' };
+                    const flags = { success: true, data: rows };
+                    if (missing.includes('nik')) flags.noNikColumn = true;
+                    if (missing.length > 0) flags.missingColumns = missing.slice();
+                    return flags;
                 }
-                return { success: false, message: error.message };
+                const fb = buildColumnFallback(payload, error);
+                if (!fb) return { success: false, message: error.message };
+                REG_OPTIONAL_COLUMNS.forEach(col => {
+                    if (payload[col] !== undefined && fb[col] === undefined && !missing.includes(col)) missing.push(col);
+                });
+                payload = fb;
             }
-            if (!rows || rows.length === 0) return { success: false, message: 'Gagal: perubahan tidak tersimpan (kebijakan RLS Supabase menolak UPDATE pada tabel registrasi). Jalankan SQL policy yang diberikan.' };
-            return { success: true, data: rows };
+            return { success: false, message: 'Gagal memperbarui pendaftaran setelah beberapa percobaan.' };
         }
 
         async function deleteRegistrasiById(id) {
@@ -3539,8 +3767,13 @@
                 return;
             }
             
+            // Terbitkan nomor register + catat waktu pendaftaran (tanggal & jam terkini, otomatis)
+            const regMeta = await generateNomorRegister();
+
             // Submit ke Supabase
             const submitData = {
+                nomor_register: regMeta.nomor,
+                waktu_pendaftaran: regMeta.waktu.toISOString(),
                 nik: nik,
                 namalengkap: namaLengkap,
                 nip: nip,
@@ -3557,16 +3790,31 @@
                 platform: document.getElementById('hiddenPlatform').value,
                 jp: document.getElementById('hiddenJP').value
             };
-            
+
             const result = await submitRegistrasi(submitData);
-            
+
             setTimeout(() => {
                 if (result.success) {
-                    showToast('Pendaftaran berhasil! ID: ' + result.id, 'success');
+                    showToast('Pendaftaran berhasil! No. Register: ' + regMeta.nomor, 'success');
                     if (result.noNikColumn) {
                         showToast('Catatan: kolom "nik" belum ada di tabel registrasi Supabase — NIK tidak ikut tersimpan. Jalankan SQL ALTER TABLE (lihat petunjuk).', 'warning');
                     }
-                    
+                    if (result.missingColumns && result.missingColumns.some(c => c !== 'nik')) {
+                        const cols = result.missingColumns.filter(c => c !== 'nik').map(c => '"' + c + '"').join(' & ');
+                        showToast('Catatan: kolom ' + cols + ' belum ada di tabel registrasi Supabase — nomor register & waktu pendaftaran terbit pada bukti namun belum tersimpan di database. Jalankan SQL upgrade bukti pendaftaran.', 'warning');
+                    }
+
+                    // Terbitkan bukti pendaftaran otomatis
+                    showBuktiPendaftaran({
+                        nomor: regMeta.nomor,
+                        waktu: regMeta.waktu,
+                        nama: namaLengkap,
+                        unit: document.getElementById('unitKerja').value,
+                        tema: tema,
+                        nik: nik,
+                        nip: nip
+                    });
+
                     document.getElementById('pendaftaranForm').reset();
                     formEl.classList.remove('was-validated');
                     document.getElementById('temaDetails').style.display = 'none';
@@ -3575,11 +3823,39 @@
                 } else {
                     showToast(result.message || 'Gagal menyimpan data', 'danger');
                 }
-                
+
                 btn.classList.remove('btn-loading');
                 btn.disabled = false;
             }, 1500);
         });
+
+        // ============================================
+        // BUKTI PENDAFTARAN OTOMATIS
+        // ============================================
+
+        function showBuktiPendaftaran(b) {
+            document.getElementById('buktiNomor').textContent = b.nomor || '-';
+            document.getElementById('buktiWaktu').textContent = formatWaktuPendaftaran(b.waktu || new Date());
+            document.getElementById('buktiNama').textContent = b.nama || '-';
+            document.getElementById('buktiUnit').textContent = b.unit || '-';
+            document.getElementById('buktiTema').textContent = b.tema || '-';
+            document.getElementById('buktiNik').textContent = b.nik || '-';
+            document.getElementById('buktiNip').textContent = b.nip || '-';
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('buktiPendaftaranModal')).show();
+        }
+
+        // Cetak: hanya kartu bukti pendaftaran yang tercetak (CSS body.print-bukti)
+        (function attachBuktiPrint() {
+            const btn = document.getElementById('btnCetakBukti');
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    document.body.classList.add('print-bukti');
+                    window.print();
+                    setTimeout(() => document.body.classList.remove('print-bukti'), 500);
+                });
+            }
+            window.addEventListener('afterprint', () => document.body.classList.remove('print-bukti'));
+        })();
 
         // ============================================
         // ABSENSI FUNCTIONS
@@ -4460,7 +4736,8 @@
                         _adminPendaftaranData = allRegistrasi.filter(p => 
                             (p.namalengkap || '').toLowerCase().includes(searchTerm) ||
                             (p.nip || '').toLowerCase().includes(searchTerm) ||
-                            (p.nik || '').toLowerCase().includes(searchTerm)
+                            (p.nik || '').toLowerCase().includes(searchTerm) ||
+                            (p.nomor_register || '').toLowerCase().includes(searchTerm)
                         );
                         renderPendaftaranAdminTable(_adminPendaftaranData);
                     });
@@ -4486,7 +4763,7 @@
             if (!tbody) return;
             
             if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="11" class="text-center">Tidak ada data pendaftaran</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" class="text-center">Tidak ada data pendaftaran</td></tr>';
                 return;
             }
             
@@ -4494,6 +4771,7 @@
             tbody.innerHTML = data.map((item, index) => `
                 <tr>
                     <td>${index + 1}</td>
+                    <td><span class="reg-cell">${escStat(item.nomor_register || '-')}</span></td>
                     <td>${escStat(item.nik || '-')}</td>
                     <td><strong>${escStat(item.namalengkap || '-')}</strong></td>
                     <td>${escStat(item.nip || '-')}</td>
@@ -4502,7 +4780,7 @@
                     <td>${item.whatsapp || '-'}</td>
                     <td>${item.email || '-'}</td>
                     <td>${item.tema || '-'}</td>
-                    <td>${formatDate(item.created_at || item.tanggal || item.tanggaldaftar)}</td>
+                    <td>${formatWaktuSingkat(item.waktu_pendaftaran || item.created_at || item.tanggal || item.tanggaldaftar)}</td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1" onclick="editPendaftaran(${index})" title="Edit">
                             <i class="fas fa-edit"></i>
@@ -4535,6 +4813,8 @@
                 document.getElementById('pendaftaranEmail').value = item.email || '';
                 document.getElementById('pendaftaranTema').value = item.tema || '';
                 document.getElementById('pendaftaranJp').value = item.jpterakhir || '';
+                document.getElementById('pendaftaranNoReg').value = item.nomor_register || '';
+                document.getElementById('pendaftaranWaktuDaftar').value = formatWaktuSingkat(item.waktu_pendaftaran || item.created_at);
             } else {
                 formTitle.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Tambah Pendaftaran';
                 form.reset();
@@ -4582,6 +4862,16 @@
             };
             
             try {
+                // Pendaftaran baru: terbitkan nomor register + waktu pendaftaran otomatis
+                // (mode edit: nomor & waktu pendaftaran asli tidak diubah)
+                let noRegBaru = null;
+                if (!recId) {
+                    const meta = await generateNomorRegister();
+                    data.nomor_register = meta.nomor;
+                    data.waktu_pendaftaran = meta.waktu.toISOString();
+                    noRegBaru = meta.nomor;
+                }
+                
                 // Cegah pendaftar ganda pada tema yang sama (cek NIK / Nama / NIP vs tabel registrasi)
                 const dup = await checkDuplicateRegistrasi(data.nip, data.nik, data.namalengkap, data.tema, recId || null);
                 if (dup.success && dup.exists) {
@@ -4592,7 +4882,7 @@
                 const result = recId ? await updateRegistrasi(recId, data) : await addRegistrasiAdmin(data);
                 
                 if (result.success) {
-                    showToast(recId ? 'Pendaftaran berhasil diperbarui!' : 'Pendaftaran berhasil ditambahkan!', 'success');
+                    showToast(recId ? 'Pendaftaran berhasil diperbarui!' : 'Pendaftaran berhasil ditambahkan! No. Register: ' + (noRegBaru || '-'), 'success');
                     if (result.noNikColumn) {
                         showToast('Catatan: kolom "nik" belum ada di tabel registrasi Supabase — NIK tidak ikut tersimpan.', 'warning');
                     }
