@@ -633,113 +633,197 @@
             outline: 2px solid #14B8A6;
             outline-offset: 2px;
         }
-
-        /* ===== PEMBUATAN SERTIFIKAT ===== */
-        .cert-form-card { background: white; border-radius: 16px; box-shadow: var(--card-shadow); border: 1px solid rgba(12,59,54,0.05); padding: 28px; }
-        .cert-section-title { font-size: 1.1rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-        .cert-section-title i { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #2DD4BF, #0D9488); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
-        .cert-materi-table { width: 100%; border-collapse: collapse; }
-        .cert-materi-table thead th { background: #E6F4F1; color: #0F766E; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; border-bottom: 2px solid #BEE3DC; }
-        .cert-materi-table tbody td { padding: 10px 12px; border-bottom: 1px solid #E8F0EE; vertical-align: middle; }
-        .cert-materi-table tbody tr:hover { background-color: rgba(13,148,136,0.04); }
-        .cert-materi-table input.form-control { padding: 7px 10px; font-size: 0.88rem; }
-        .cert-total-jp { background: linear-gradient(135deg, #E6F4F1 0%, #D1FAE5 100%); border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(13,148,136,0.15); }
-        .cert-total-jp .label { font-size: 0.85rem; font-weight: 600; color: #0F766E; }
-        .cert-total-jp .value { font-size: 1.6rem; font-weight: 800; color: #047857; }
-        .cert-search-result { max-height: 320px; overflow-y: auto; border: 1px solid #D7E5E2; border-radius: 12px; }
-        .cert-search-result .result-item { padding: 12px 16px; border-bottom: 1px solid #E8F0EE; cursor: pointer; transition: background 0.2s; }
-        .cert-search-result .result-item:hover { background: #F0FDFA; }
-        .cert-search-result .result-item:last-child { border-bottom: none; }
-        .cert-search-result .result-name { font-weight: 700; color: var(--secondary-color); font-size: 0.95rem; }
-        .cert-search-result .result-meta { font-size: 0.8rem; color: #6B8B85; margin-top: 2px; }
-        .cert-selected-peserta { background: linear-gradient(135deg, #F0FDFA 0%, #E6F4F1 100%); border-radius: 12px; padding: 16px 20px; border: 1px dashed #14B8A6; }
-        .cert-selected-peserta .sp-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #0F766E; margin-bottom: 4px; }
-        .cert-selected-peserta .sp-value { font-weight: 700; color: var(--secondary-color); font-size: 1rem; }
-        .cert-badge-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-        .cert-badge-status.draft { background: #FEF3C7; color: #92400E; }
-        .cert-badge-status.terbit { background: #D1FAE5; color: #065F46; }
-
-        /* ===== PREVIEW SERTIFIKAT ===== */
-        .cert-preview-modal .modal-dialog { max-width: 1000px; }
-        .cert-preview-modal .modal-content { border: none; border-radius: 16px; }
-        .cert-preview-wrap { background: #f5f5f5; padding: 24px; border-radius: 12px; }
-        .cert-page { width: 297mm; min-height: 210mm; background: white; margin: 0 auto 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); position: relative; overflow: hidden; page-break-after: always; }
-        .cert-page:last-child { page-break-after: auto; margin-bottom: 0; }
-        .cert-front { padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(180deg, #ffffff 0%, #f8fffe 40%, #f0fdfb 100%); }
-        .cert-front::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #0D9488, #2DD4BF, #0D9488); }
-        .cert-front::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #0D9488, #2DD4BF, #0D9488); }
-        .cert-front .cert-border { position: absolute; top: 16px; left: 16px; right: 16px; bottom: 16px; border: 2px solid rgba(13,148,136,0.25); border-radius: 8px; pointer-events: none; }
-        .cert-front .cert-border-inner { position: absolute; top: 22px; left: 22px; right: 22px; bottom: 22px; border: 1px solid rgba(13,148,136,0.12); border-radius: 4px; pointer-events: none; }
-        .cert-front .cert-logo-area { margin-top: 30px; margin-bottom: 10px; }
-        .cert-front .cert-logo-area i { font-size: 3.5rem; color: #0D9488; }
-        .cert-front .cert-title { font-size: 2.4rem; font-weight: 800; letter-spacing: 4px; color: #0F766E; margin: 8px 0 6px; text-transform: uppercase; }
-        .cert-front .cert-subtitle { font-size: 0.85rem; color: #6B8B85; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-        .cert-front .cert-nomor { font-size: 0.85rem; color: #52706B; margin-bottom: 16px; font-family: 'Courier New', monospace; }
-        .cert-front .cert-diberikan { font-size: 1rem; color: #52706B; margin-bottom: 8px; }
-        .cert-front .cert-nama { font-size: 2.2rem; font-weight: 800; color: #0C3B36; margin: 8px 0 6px; letter-spacing: 1px; }
-        .cert-front .cert-unit { font-size: 1.1rem; font-weight: 600; color: #0F766E; margin-bottom: 20px; }
-        .cert-front .cert-atas { font-size: 0.95rem; color: #52706B; margin-bottom: 6px; }
-        .cert-front .cert-tema { font-size: 1.4rem; font-weight: 700; color: #0C3B36; margin: 8px 40px 16px; line-height: 1.4; font-style: italic; }
-        .cert-front .cert-info-row { display: flex; gap: 40px; justify-content: center; margin-bottom: 24px; }
-        .cert-front .cert-info-item { text-align: center; }
-        .cert-front .cert-info-item .lbl { font-size: 0.75rem; color: #8FA8A3; text-transform: uppercase; letter-spacing: 1px; }
-        .cert-front .cert-info-item .val { font-size: 0.95rem; font-weight: 700; color: #0C3B36; }
-        .cert-front .cert-footer { margin-top: auto; margin-bottom: 40px; text-align: center; }
-        .cert-front .cert-footer .tempat-tgl { font-size: 0.8rem; color: #52706B; margin-bottom: 30px; }
-        .cert-front .cert-footer .penyelenggara { font-size: 1rem; font-weight: 700; color: #0C3B36; margin-bottom: 50px; }
-        .cert-front .cert-footer .ttd-line { width: 220px; height: 1px; background: #0C3B36; margin: 0 auto 8px; }
-        .cert-front .cert-footer .ttd-nama { font-size: 0.95rem; font-weight: 700; color: #0C3B36; }
-        .cert-front .cert-footer .ttd-jabatan { font-size: 0.8rem; color: #6B8B85; }
-
-        .cert-back { padding: 40px 50px; background: white; }
-        .cert-back .cb-title { font-size: 1.3rem; font-weight: 800; color: #0F766E; text-align: center; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 2px; }
-        .cert-back .cb-info { display: flex; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cert-back .cb-info-item { flex: 1; min-width: 200px; }
-        .cert-back .cb-info-item .lbl { font-size: 0.75rem; color: #8FA8A3; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
-        .cert-back .cb-info-item .val { font-size: 0.95rem; font-weight: 700; color: #0C3B36; }
-        .cert-back .cb-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-        .cert-back .cb-table thead th { background: #E6F4F1; color: #0F766E; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; border: 1px solid #BEE3DC; }
-        .cert-back .cb-table tbody td { padding: 10px 12px; border: 1px solid #E8F0EE; font-size: 0.9rem; vertical-align: middle; }
-        .cert-back .cb-table tbody tr:nth-child(even) { background: #F8FFFE; }
-        .cert-back .cb-total { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px; padding-top: 12px; border-top: 2px solid #0D9488; }
-        .cert-back .cb-total .lbl { font-size: 0.9rem; font-weight: 700; color: #0F766E; text-transform: uppercase; }
-        .cert-back .cb-total .val { font-size: 1.4rem; font-weight: 800; color: #047857; }
-        .cert-back .cb-keterangan { margin-top: 20px; padding: 12px 16px; background: #F8FFFE; border-radius: 8px; border: 1px dashed #BEE3DC; font-size: 0.85rem; color: #52706B; }
-
-        /* Print styles for certificate */
-        @media print {
-            body.cert-print * { visibility: hidden !important; }
-            body.cert-print .cert-print-area, body.cert-print .cert-print-area * { visibility: visible !important; }
-            body.cert-print .cert-preview-modal .modal-dialog { position: static !important; margin: 0 !important; max-width: 100% !important; }
-            body.cert-print .cert-preview-modal .modal-content { position: static !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; background: white !important; }
-            body.cert-print .cert-preview-modal .modal-body { padding: 0 !important; overflow: visible !important; background: white !important; }
-            body.cert-print .cert-preview-wrap { padding: 0 !important; background: white !important; }
-            body.cert-print .cert-page { box-shadow: none !important; margin: 0 !important; page-break-after: always !important; width: 297mm !important; min-height: 210mm !important; }
-            body.cert-print .cert-page:last-child { page-break-after: auto !important; }
-            body.cert-print .cert-front::before, body.cert-print .cert-front::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            body.cert-print .cert-front .cert-border, body.cert-print .cert-front .cert-border-inner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            @page { size: A4 landscape; margin: 0; }
+        /* ============================================================
+           FITUR BARU: PEMBUATAN SERTIFIKAT (Panel Admin)
+           Konsisten dengan tema aplikasi (teal / Plus Jakarta Sans)
+           ============================================================ */
+        .cert-card-title { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 700; color: var(--secondary-color); margin: 0; }
+        .cert-step-num {
+            width: 30px; height: 30px; border-radius: 50%; flex: none;
+            background: linear-gradient(135deg, #2DD4BF, #0D9488); color: #fff;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(13,148,136,0.4);
         }
+        .cert-info-banner {
+            display: flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(20,184,166,0.13));
+            border: 1px solid rgba(13,148,136,0.25); border-radius: 12px;
+            padding: 11px 16px; margin-bottom: 16px; font-size: 0.85rem; color: #0F766E; font-weight: 600;
+        }
+        .cert-info-banner i { font-size: 1.05rem; flex: none; }
+        [data-theme="dark"] .cert-info-banner { background: rgba(20,184,166,0.10); color: #5EEAD4; border-color: #1D3B36; }
 
-        [data-theme="dark"] .cert-form-card { background: #10241F; }
-        [data-theme="dark"] .cert-section-title { color: #DCE9E7; }
-        [data-theme="dark"] .cert-materi-table thead th { background: #0C1C19; color: #A8CCC6; border-bottom-color: #1D3B36; }
-        [data-theme="dark"] .cert-materi-table tbody td { border-bottom-color: #1D3B36; color: #C4DAD6; }
-        [data-theme="dark"] .cert-materi-table tbody tr:hover { background-color: rgba(45,212,191,0.07); }
-        [data-theme="dark"] .cert-total-jp { background: linear-gradient(135deg, #0B2E2A 0%, #0A2622 100%); border-color: rgba(45,212,191,0.2); }
-        [data-theme="dark"] .cert-total-jp .label { color: #5EEAD4; }
-        [data-theme="dark"] .cert-total-jp .value { color: #6EE7B7; }
-        [data-theme="dark"] .cert-search-result { border-color: #1D3B36; background: #10241F; }
-        [data-theme="dark"] .cert-search-result .result-item { border-bottom-color: #1D3B36; }
-        [data-theme="dark"] .cert-search-result .result-item:hover { background: rgba(45,212,191,0.07); }
-        [data-theme="dark"] .cert-search-result .result-name { color: #DCE9E7; }
-        [data-theme="dark"] .cert-search-result .result-meta { color: #8FA8A3; }
-        [data-theme="dark"] .cert-selected-peserta { background: rgba(20,184,166,0.08); border-color: #14B8A6; }
-        [data-theme="dark"] .cert-selected-peserta .sp-label { color: #5EEAD4; }
-        [data-theme="dark"] .cert-selected-peserta .sp-value { color: #DCE9E7; }
-        [data-theme="dark"] .cert-preview-wrap { background: #0A1715; }
-        [data-theme="dark"] .cert-page { background: white; }
+        .cert-selected-box {
+            background: linear-gradient(135deg, #F0FDFA, #CCFBF1);
+            border: 1.5px dashed #14B8A6; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+        }
+        [data-theme="dark"] .cert-selected-box { background: rgba(20,184,166,0.08); border-color: #14B8A6; }
+        .cert-selected-box .csb-name { font-weight: 800; color: #0F766E; font-size: 1.02rem; }
+        [data-theme="dark"] .cert-selected-box .csb-name { color: #5EEAD4; }
+        .cert-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #fff; border: 1px solid #99F6E4; color: #0F766E;
+            border-radius: 20px; padding: 3px 12px; font-size: 0.76rem; font-weight: 600; margin: 6px 6px 0 0;
+            max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        [data-theme="dark"] .cert-chip { background: #0C1C19; border-color: #1D3B36; color: #5EEAD4; }
 
+        /* Tombol aksi kecil di tabel daftar */
+        .btn-action-cert {
+            width: 34px; height: 34px; border-radius: 9px; border: none; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 0.84rem; margin: 0 2px; transition: all 0.25s;
+        }
+        .btn-action-cert:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.22); color: #fff; }
+        .bac-view  { background: #0284C7; } .bac-view:hover  { background: #0369A1; }
+        .bac-edit  { background: #D97706; } .bac-edit:hover  { background: #B45309; }
+        .bac-print { background: #7C3AED; } .bac-print:hover { background: #6D28D9; }
+        .bac-pdf   { background: #DC2626; } .bac-pdf:hover   { background: #B91C1C; }
+        .bac-del   { background: #64748B; } .bac-del:hover   { background: #475569; }
+
+        /* Tabel materi dinamis */
+        .cert-materi-table input.form-control { min-width: 110px; }
+        .cert-materi-table td { vertical-align: middle; }
+        .cert-total-jp-box {
+            display: inline-flex; justify-content: flex-end; align-items: center; gap: 10px;
+            background: #F0FDFA; border: 1.5px solid #99F6E4; border-radius: 12px;
+            padding: 12px 20px; font-weight: 700; color: #0F766E;
+        }
+        [data-theme="dark"] .cert-total-jp-box { background: rgba(20,184,166,0.08); border-color: #1D3B36; color: #5EEAD4; }
+        .cert-total-jp-box .total-value { font-size: 1.3rem; font-weight: 800; }
+
+        /* ============================================================
+           HALAMAN SERTIFIKAT — A4 LANDSCAPE (297mm x 210mm)
+           ============================================================ */
+        .certificate-page {
+            width: 297mm; height: 210mm;
+            background: #ffffff; color: #1F2937;
+            position: relative; overflow: hidden;
+            font-family: Georgia, 'Times New Roman', serif;
+            margin: 0 auto 18px auto;
+            box-shadow: 0 10px 40px rgba(7,42,38,0.35);
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            page-break-after: always; break-after: page;
+        }
+        .certificate-page:last-child { margin-bottom: 0; page-break-after: auto; break-after: auto; }
+
+        .cert-frame { position: absolute; inset: 7mm; border: 1mm solid #0F766E; }
+        .cert-frame::before {
+            content: ''; position: absolute; inset: 1.6mm;
+            border: 0.35mm solid #14B8A6;
+        }
+        .cert-frame::after {
+            content: ''; position: absolute; left: 8mm; right: 8mm; top: 3.4mm; height: 0.6mm;
+            background: linear-gradient(90deg, transparent, #D4AF37 18%, #F1D98A 50%, #D4AF37 82%, transparent);
+        }
+        .cert-frame .cert-frame-bottom {
+            position: absolute; left: 8mm; right: 8mm; bottom: 3.4mm; height: 0.6mm;
+            background: linear-gradient(90deg, transparent, #D4AF37 18%, #F1D98A 50%, #D4AF37 82%, transparent);
+        }
+        .cert-corner { position: absolute; width: 13mm; height: 13mm; border: 0 solid #0B4F4A; z-index: 2; }
+        .cert-c-tl { top: -1mm; left: -1mm; border-top-width: 1.6mm; border-left-width: 1.6mm; }
+        .cert-c-tr { top: -1mm; right: -1mm; border-top-width: 1.6mm; border-right-width: 1.6mm; }
+        .cert-c-bl { bottom: -1mm; left: -1mm; border-bottom-width: 1.6mm; border-left-width: 1.6mm; }
+        .cert-c-br { bottom: -1mm; right: -1mm; border-bottom-width: 1.6mm; border-right-width: 1.6mm; }
+
+        /* --- Halaman 1: Sertifikat --- */
+        .cert-content {
+            position: absolute; inset: 15mm 18mm 12mm 18mm;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .cert-logo { width: 21mm; height: 21mm; margin-bottom: 2mm; flex: none; }
+        .cert-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .logo-fallback {
+            width: 100%; height: 100%; border-radius: 5mm;
+            background: linear-gradient(135deg, #14B8A6, #0F766E); color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 9mm;
+        }
+        .cert-title { font-size: 29pt; font-weight: bold; letter-spacing: 7px; color: #0F766E; line-height: 1.1; }
+        .cert-subtitle { font-size: 11pt; font-style: italic; color: #4B5563; margin-top: 2.5mm; }
+        .cert-diberikan { font-size: 12pt; margin-top: 6.5mm; color: #374151; }
+        .cert-nama {
+            font-size: 23pt; font-weight: bold; color: #0C3B36;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 2mm;
+            line-height: 1.2; max-width: 245mm;
+        }
+        .cert-unit { font-size: 11.5pt; font-weight: bold; color: #4B5563; text-transform: uppercase; margin-top: 1.6mm; max-width: 230mm; }
+        .cert-atas { font-size: 12pt; margin-top: 5.5mm; color: #374151; }
+        .cert-tema {
+            font-size: 15.5pt; font-weight: bold; font-style: italic; color: #0F766E;
+            margin-top: 2mm; max-width: 235mm; line-height: 1.35;
+        }
+        .cert-pada { font-size: 12pt; margin-top: 4.5mm; color: #374151; }
+        .cert-waktu { font-size: 12.5pt; font-weight: bold; color: #111827; margin-top: 1.4mm; max-width: 250mm; }
+        .cert-sign {
+            position: absolute; right: 19mm; bottom: 12mm; width: 80mm;
+            text-align: center; font-size: 11.5pt; color: #1F2937; line-height: 1.55;
+        }
+        .cert-sign .cs-instansi { font-weight: bold; text-transform: uppercase; margin-bottom: 13mm; }
+        .cert-sign .cs-nama { font-weight: bold; text-decoration: underline; }
+        .cert-sign .cs-jabatan { font-size: 10.5pt; }
+
+        /* --- Halaman 2: Rincian Kegiatan & Materi --- */
+        .certb-content { position: absolute; inset: 14mm 16mm 12mm 16mm; display: flex; flex-direction: column; }
+        .certb-header {
+            display: flex; align-items: center; gap: 5mm;
+            border-bottom: 0.6mm solid #0F766E; padding-bottom: 3mm; margin-bottom: 5mm;
+        }
+        .certb-header .ch-logo { width: 15mm; height: 15mm; flex: none; }
+        .certb-header .ch-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .certb-header .ch-logo .logo-fallback { border-radius: 3.5mm; font-size: 6.5mm; }
+        .certb-title { flex: 1; text-align: center; font-size: 17pt; font-weight: bold; letter-spacing: 2px; color: #0F766E; line-height: 1.25; }
+        .certb-info { display: grid; grid-template-columns: 40mm 1fr; row-gap: 1.8mm; column-gap: 4mm; font-size: 11pt; margin-bottom: 4.5mm; }
+        .certb-info .ci-label { font-weight: bold; color: #0F766E; }
+        .certb-info .ci-value { color: #1F2937; font-weight: 600; }
+        .certb-table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+        .certb-table th { background: #0F766E; color: #fff; padding: 2.6mm 3mm; text-align: left; border: 0.3mm solid #0F766E; font-weight: bold; }
+        .certb-table td { padding: 2.2mm 3mm; border: 0.25mm solid #9CA3AF; vertical-align: top; color: #1F2937; }
+        .certb-table th.num, .certb-table td.num { text-align: center; }
+        .certb-table th.jp, .certb-table td.jp { text-align: right; font-weight: bold; white-space: nowrap; }
+        .certb-table tbody tr:nth-child(even) td { background: #F0FDFA; }
+        .certb-total { margin-top: 4mm; text-align: right; font-size: 13pt; font-weight: bold; color: #0F766E; letter-spacing: 0.5px; }
+        .certb-ket { margin-top: auto; font-size: 10.5pt; }
+        .certb-ket .ck-label { font-weight: bold; color: #0F766E; margin-bottom: 1.2mm; text-transform: uppercase; letter-spacing: 1px; }
+        .certb-ket .ck-value { color: #1F2937; white-space: pre-wrap; }
+        .certb-ket .ck-empty { color: #9CA3AF; font-style: italic; }
+        .certb-footer { text-align: center; font-size: 8.5pt; color: #6B7280; font-style: italic; margin-top: 4mm; }
+
+        /* ============================================================
+           MODAL PREVIEW (zoom, toolbar) + STAGE cetak/PDF
+           ============================================================ */
+        .cert-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; }
+        .cert-modal .modal-header {
+            background: linear-gradient(135deg, #0B3B36 0%, #0D9488 100%);
+            color: #fff; border-bottom: none; flex-wrap: wrap; gap: 8px;
+        }
+        .cert-modal .modal-header .btn-close { filter: invert(1) grayscale(100%); }
+        .cert-zoom-outer { background: #454B52; padding: 18px; max-height: 76vh; overflow: auto; }
+        .cert-zoom-inner { transform: scale(var(--cert-zoom, 1)); transform-origin: top center; width: max-content; max-width: none; margin: 0 auto; }
+        .cert-zoom-val { color: #fff; font-weight: 700; font-size: 0.85rem; min-width: 46px; text-align: center; }
+        .btn-zoom {
+            width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.45); background: rgba(255,255,255,0.14); color: #fff;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .btn-zoom:hover { background: rgba(255,255,255,0.28); color: #fff; }
+        [data-theme="dark"] .cert-modal .modal-content { background: #10241F; color: #DCE9E7; }
+        [data-theme="dark"] .cert-modal .modal-footer { border-top-color: #1D3B36; }
+
+        /* Stage offscreen: sumber tunggal untuk Cetak & PDF (2 halaman utuh) */
+        #certPdfStage { position: fixed; left: -12000px; top: 0; width: 297mm; }
+
+        /* ============================================================
+           CETAK: hanya 2 halaman sertifikat (A4 landscape).
+           @page { size: A4 landscape } diinjeksi dinamis oleh JS hanya
+           saat mencetak sertifikat, agar cetak Bukti Pendaftaran yang
+           lama tidak berubah perilaku.
+           ============================================================ */
+        @media print {
+            body.print-sertifikat * { visibility: hidden !important; }
+            body.print-sertifikat #certPdfStage, body.print-sertifikat #certPdfStage * { visibility: visible !important; }
+            body.print-sertifikat #certPdfStage { position: absolute !important; left: 0 !important; top: 0 !important; }
+            body.print-sertifikat .certificate-page { margin: 0 !important; box-shadow: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -841,8 +925,8 @@
                     <i class="fas fa-cogs"></i>
                     <span>Panel Admin</span>
                 </a>
-                <a class="menu-item admin-item admin-only" id="adminPembuatanSertifikatMenu" data-section="admin" onclick="checkAdminAccess()" style="display: none;">
-                    <i class="fas fa-file-signature"></i>
+                <a class="menu-item admin-item admin-only" id="certMenu" data-section="pembuatan-sertifikat" onclick="checkCertAccess()" style="display: none;">
+                    <i class="fas fa-award"></i>
                     <span>Pembuatan Sertifikat</span>
                 </a>
                 <a class="menu-item admin-item" id="adminLoginMenu" data-section="admin-login" onclick="handleAdminMenuClick()">
@@ -1623,12 +1707,6 @@
                             <i class="fas fa-user-check me-2"></i>Data Absensi
                         </button>
                     </li>
-
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="tab-pembuatan-sertifikat-tab" data-bs-toggle="tab" data-bs-target="#adminPembuatanSertifikat" type="button" role="tab">
-                            <i class="fas fa-file-signature me-2"></i>Pembuatan Sertifikat
-                        </button>
-                    </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tab-statistik-tab" data-bs-toggle="tab" data-bs-target="#adminStatistik" type="button" role="tab">
                             <i class="fas fa-chart-pie me-2"></i>Statistik Grafik
@@ -2241,250 +2319,6 @@
                         </div>
                     </div>
 
-
-                    <!-- Pembuatan Sertifikat Tab -->
-                    <div class="tab-pane fade" id="adminPembuatanSertifikat" role="tabpanel">
-                        <!-- Sub Tabs -->
-                        <ul class="nav nav-tabs admin-tabs mb-3" id="certSubTab" role="tablist" style="border-bottom-color:#D7E5E2;">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="cert-buat-tab" data-bs-toggle="tab" data-bs-target="#certBuat" type="button" role="tab">
-                                    <i class="fas fa-plus-circle me-2"></i>Buat Sertifikat
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="cert-daftar-tab" data-bs-toggle="tab" data-bs-target="#certDaftar" type="button" role="tab">
-                                    <i class="fas fa-list me-2"></i>Daftar Sertifikat
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="certSubTabContent">
-                            <!-- Buat Sertifikat -->
-                            <div class="tab-pane fade show active" id="certBuat" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-lg-7">
-                                        <div class="cert-form-card mb-4">
-                                            <h4 class="cert-section-title"><i class="fas fa-user-search"></i>Cari Peserta</h4>
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                                <input type="text" class="form-control" id="certSearchPeserta" placeholder="Cari nama, NIK, email, atau unit kerja..." autocomplete="off">
-                                                <button class="btn btn-primary" type="button" id="certBtnCari" onclick="certCariPeserta()">
-                                                    <i class="fas fa-search me-1"></i>Cari
-                                                </button>
-                                            </div>
-                                            <div id="certSearchResult" class="cert-search-result mb-3" style="display:none;"></div>
-                                            <div id="certSelectedPeserta" class="cert-selected-peserta mb-3" style="display:none;">
-                                                <div class="row g-3">
-                                                    <div class="col-md-6">
-                                                        <div class="sp-label">Nama Lengkap</div>
-                                                        <div class="sp-value" id="certSpNama">-</div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="sp-label">Unit Kerja</div>
-                                                        <div class="sp-value" id="certSpUnit">-</div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="sp-label">NIK</div>
-                                                        <div class="sp-value" id="certSpNik">-</div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="sp-label">Email</div>
-                                                        <div class="sp-value" id="certSpEmail">-</div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" id="certRegistrasiId">
-                                            </div>
-                                        </div>
-
-                                        <div class="cert-form-card mb-4">
-                                            <h4 class="cert-section-title"><i class="fas fa-file-alt"></i>Data Sertifikat</h4>
-                                            <form id="certForm" novalidate>
-                                                <div class="row">
-                                                    <div class="col-md-8 mb-3">
-                                                        <label class="form-label required">Nomor Sertifikat</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="certNomor" placeholder="Contoh: 001/SERT/DINKES-KUKAR/IX/2026" required>
-                                                            <button type="button" class="btn btn-outline-primary" onclick="certGenerateNomor()">
-                                                                <i class="fas fa-magic me-1"></i>Generate
-                                                            </button>
-                                                        </div>
-                                                        <div class="invalid-feedback">Nomor sertifikat wajib diisi dan harus unik.</div>
-                                                        <small class="text-muted">Klik Generate untuk membuat nomor otomatis.</small>
-                                                    </div>
-                                                    <div class="col-md-4 mb-3">
-                                                        <label class="form-label required">Tanggal Pelaksanaan</label>
-                                                        <input type="date" class="form-control" id="certTanggal" required>
-                                                        <div class="invalid-feedback">Tanggal pelaksanaan wajib diisi.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label required">Nama Lengkap</label>
-                                                        <input type="text" class="form-control" id="certNama" readonly required>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label required">Unit Kerja</label>
-                                                        <input type="text" class="form-control" id="certUnitKerja" readonly required>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label required">Tema Kegiatan</label>
-                                                    <textarea class="form-control" id="certTema" rows="2" placeholder="Masukkan tema kegiatan..." required></textarea>
-                                                    <div class="invalid-feedback">Tema kegiatan wajib diisi.</div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label required">Tempat Pelaksanaan</label>
-                                                    <input type="text" class="form-control" id="certTempat" placeholder="Contoh: Aula Dinas Kesehatan" required>
-                                                    <div class="invalid-feedback">Tempat pelaksanaan wajib diisi.</div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Tempat Penerbitan</label>
-                                                        <input type="text" class="form-control" id="certTempatTerbit" placeholder="Contoh: Tenggarong">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Tanggal Penerbitan</label>
-                                                        <input type="date" class="form-control" id="certTanggalTerbit">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Nama Pejabat Penandatangan</label>
-                                                        <input type="text" class="form-control" id="certNamaPejabat" placeholder="Nama lengkap pejabat">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Jabatan Pejabat</label>
-                                                        <input type="text" class="form-control" id="certJabatanPejabat" placeholder="Contoh: Kepala Dinas Kesehatan">
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Penyelenggara (tampil pada sertifikat)</label>
-                                                    <input type="text" class="form-control" id="certPenyelenggara" placeholder="Contoh: Dinas Kesehatan Kabupaten Kutai Kartanegara">
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                        <div class="cert-form-card mb-4">
-                                            <h4 class="cert-section-title"><i class="fas fa-book-open"></i>Rincian Materi</h4>
-                                            <div class="table-responsive mb-3">
-                                                <table class="cert-materi-table" id="certMateriTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width:40px;">No</th>
-                                                            <th>Judul Materi <span class="text-danger">*</span></th>
-                                                            <th>Narasumber <span class="text-danger">*</span></th>
-                                                            <th>Penyelenggara <span class="text-danger">*</span></th>
-                                                            <th style="width:90px;">JP <span class="text-danger">*</span></th>
-                                                            <th style="width:50px;">Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="certMateriBody">
-                                                        <tr data-index="0">
-                                                            <td class="text-center cert-materi-no">1</td>
-                                                            <td><input type="text" class="form-control cert-m-judul" placeholder="Judul materi" required></td>
-                                                            <td><input type="text" class="form-control cert-m-narasumber" placeholder="Nama narasumber" required></td>
-                                                            <td><input type="text" class="form-control cert-m-penyelenggara" placeholder="Penyelenggara" required></td>
-                                                            <td><input type="number" class="form-control cert-m-jp" placeholder="0" min="0" required oninput="certHitungTotalJP()"></td>
-                                                            <td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="certHapusMateriRow(this)" title="Hapus"><i class="fas fa-trash"></i></button></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="certTambahMateri()">
-                                                <i class="fas fa-plus me-1"></i>Tambah Materi
-                                            </button>
-                                            <div class="cert-total-jp">
-                                                <span class="label"><i class="fas fa-calculator me-2"></i>Total Jumlah JP</span>
-                                                <span class="value" id="certTotalJP">0 JP</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button type="button" class="btn btn-success" id="certBtnSimpan" onclick="certSimpan()">
-                                                <i class="fas fa-save me-2"></i>Simpan Sertifikat
-                                            </button>
-                                            <button type="button" class="btn btn-primary" id="certBtnPreview" onclick="certPreview()">
-                                                <i class="fas fa-eye me-2"></i>Preview Sertifikat
-                                            </button>
-                                            <button type="button" class="btn btn-secondary" onclick="certResetForm()">
-                                                <i class="fas fa-undo me-2"></i>Reset
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <div class="cert-form-card" style="position:sticky; top:20px;">
-                                            <h4 class="cert-section-title"><i class="fas fa-lightbulb"></i>Petunjuk</h4>
-                                            <div class="alert alert-info" style="font-size:0.85rem;">
-                                                <h6 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Alur Pembuatan Sertifikat</h6>
-                                                <ol class="mb-0 ps-3 mt-2">
-                                                    <li>Cari dan pilih peserta dari data registrasi.</li>
-                                                    <li>Isi nomor sertifikat (manual atau generate otomatis).</li>
-                                                    <li>Lengkapi data kegiatan (tema, tanggal, tempat).</li>
-                                                    <li>Tambahkan materi minimal 1 (satu).</li>
-                                                    <li>Total JP dihitung otomatis.</li>
-                                                    <li>Klik <strong>Preview</strong> untuk melihat hasil.</li>
-                                                    <li>Klik <strong>Simpan</strong> untuk menyimpan ke database.</li>
-                                                </ol>
-                                            </div>
-                                            <div class="alert alert-warning" style="font-size:0.85rem;">
-                                                <h6 class="fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Perhatian</h6>
-                                                <ul class="mb-0 ps-3 mt-2">
-                                                    <li>Nomor sertifikat harus <strong>unik</strong>.</li>
-                                                    <li>Data peserta bersifat <strong>readonly</strong> (diambil dari registrasi).</li>
-                                                    <li>Minimal <strong>1 materi</strong> wajib diisi.</li>
-                                                    <li>JP harus berupa angka positif.</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Daftar Sertifikat -->
-                            <div class="tab-pane fade" id="certDaftar" role="tabpanel">
-                                <div class="table-container">
-                                    <div class="table-header">
-                                        <h3 class="table-title"><i class="fas fa-list me-2"></i>Daftar Sertifikat</h3>
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button class="btn btn-success" onclick="exportToExcel('certDaftarTable', 'Daftar_Sertifikat')">
-                                                <i class="fas fa-file-excel me-2"></i>Export Excel
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="table-filters mb-3">
-                                        <input type="text" class="form-control" id="certSearchDaftar" placeholder="Cari nomor, nama, unit kerja, atau tema..." style="max-width: 320px;" oninput="certFilterDaftar()">
-                                        <select class="form-select" id="certFilterUnit" style="max-width: 200px;" onchange="certFilterDaftar()">
-                                            <option value="">Semua Unit Kerja</option>
-                                        </select>
-                                        <input type="date" class="form-control" id="certFilterTanggal" style="max-width: 180px;" onchange="certFilterDaftar()">
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table" id="certDaftarTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Nomor Sertifikat</th>
-                                                    <th>Nama Lengkap</th>
-                                                    <th>Unit Kerja</th>
-                                                    <th>Tema</th>
-                                                    <th>Tanggal</th>
-                                                    <th>Total JP</th>
-                                                    <th class="text-center">Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="certDaftarBody">
-                                                <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="pagination-container">
-                                        <div class="pagination-info" id="certPaginationInfo">Menampilkan 0 dari 0 data</div>
-                                        <nav><ul class="pagination" id="certPagination"></ul></nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Statistik Grafik Tab -->
                     <div class="tab-pane fade" id="adminStatistik" role="tabpanel">
                         <div class="row mb-4">
@@ -2556,6 +2390,327 @@
             </section>
         </main>
     </div>
+
+            <!-- ============================================================ -->
+            <!-- PEMBUATAN SERTIFIKAT — Panel Admin (fitur baru)               -->
+            <!-- ============================================================ -->
+            <section id="pembuatan-sertifikat" class="section">
+                <div class="content-header">
+                    <div class="title-wrap">
+                        <h1 class="page-title">
+                            <i class="fas fa-award me-2"></i>Pembuatan Sertifikat
+                        </h1>
+                        <p class="page-subtitle">Buat sertifikat resmi peserta (A4 Landscape, 2 halaman) &mdash; data peserta langsung dari Supabase</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                            <i class="fas fa-moon" id="darkModeIconSertifikat"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs admin-tabs mb-4" id="certTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="certTabBuatBtn" data-bs-toggle="tab" data-bs-target="#certTabBuat" type="button" role="tab">
+                            <i class="fas fa-file-circle-plus me-2"></i>Buat Sertifikat
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="certTabDaftarBtn" data-bs-toggle="tab" data-bs-target="#certTabDaftar" type="button" role="tab">
+                            <i class="fas fa-list-ul me-2"></i>Daftar Sertifikat
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="certTabContent">
+                    <!-- ================= TAB 1: BUAT SERTIFIKAT ================= -->
+                    <div class="tab-pane fade show active" id="certTabBuat" role="tabpanel">
+
+                        <!-- LANGKAH 1: Cari Peserta -->
+                        <div class="table-container">
+                            <h3 class="card-title cert-card-title mb-3">
+                                <span class="cert-step-num">1</span>
+                                <i class="fas fa-magnifying-glass text-primary"></i>Cari Peserta
+                                <span class="badge badge-admin ms-1">Supabase &rarr; registrasi</span>
+                            </h3>
+                            <div class="cert-info-banner">
+                                <i class="fas fa-circle-info"></i>
+                                <span>Data peserta diambil langsung dari tabel <b>registrasi</b> di Supabase &mdash; pencarian efisien dengan filter, limit 10 baris, dan pagination.</span>
+                            </div>
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="certSearchPeserta" placeholder="Cari nama, NIK, email, atau unit kerja..." style="max-width: 420px;" autocomplete="off">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="certPesertaTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>NIK / NIP</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Email</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="certPesertaBody">
+                                        <tr><td colspan="6" class="text-center text-muted">Memuat data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container">
+                                <div class="pagination-info" id="certPesertaInfo">-</div>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary btn-sm" id="certPesertaPrev" disabled><i class="fas fa-chevron-left me-1"></i>Sebelumnya</button>
+                                    <button class="btn btn-outline-primary btn-sm" id="certPesertaNext">Berikutnya<i class="fas fa-chevron-right ms-1"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LANGKAH 2: Data Sertifikat -->
+                        <div class="table-container">
+                            <h3 class="card-title cert-card-title mb-3">
+                                <span class="cert-step-num">2</span>
+                                <i class="fas fa-file-signature text-primary"></i>Data Sertifikat
+                            </h3>
+
+                            <div id="certPesertaSelectedBox" class="cert-selected-box" style="display: none;">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                    <div style="min-width: 0;">
+                                        <div class="csb-name"><i class="fas fa-user-check me-2"></i><span id="certSelNama">-</span></div>
+                                        <div>
+                                            <span class="cert-chip"><i class="fas fa-id-card"></i><span id="certSelNik">-</span></span>
+                                            <span class="cert-chip"><i class="fas fa-building"></i><span id="certSelUnit">-</span></span>
+                                            <span class="cert-chip"><i class="fas fa-envelope"></i><span id="certSelEmail">-</span></span>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="certResetPeserta()"><i class="fas fa-rotate me-1"></i>Ganti Peserta</button>
+                                </div>
+                            </div>
+                            <div id="certPesertaEmpty" class="alert alert-light border text-center mb-0" style="border-style: dashed !important;">
+                                <i class="fas fa-hand-pointer me-2 text-primary"></i>Pilih peserta dari hasil pencarian di atas. Nama lengkap, unit kerja, dan NIK akan terisi otomatis (readonly).
+                            </div>
+
+                            <form id="certForm" onsubmit="return false;" novalidate>
+                                <input type="hidden" id="certRegistrasiId">
+                                <input type="hidden" id="certEditId">
+                                <div class="row mt-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Nomor Sertifikat</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="certNomor" placeholder="Contoh: 001/SERT/DINKES-KUKAR/IX/2026" autocomplete="off">
+                                            <button type="button" class="btn btn-outline-primary" id="certBtnGenerateNomor" onclick="generateNomorSertifikat()"><i class="fas fa-wand-magic-sparkles me-1"></i>Generate</button>
+                                        </div>
+                                        <div class="invalid-feedback" id="certNomorFeedback">Nomor sertifikat wajib diisi.</div>
+                                        <small class="text-muted">Isi manual atau klik <b>Generate</b> untuk nomor otomatis yang unik (dicek ke database).</small>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Format Nomor Otomatis</label>
+                                        <div class="row g-2">
+                                            <div class="col-4"><input type="text" class="form-control" id="certKodeDokumen" value="SERT" title="Kode dokumen" placeholder="SERT"></div>
+                                            <div class="col-8"><input type="text" class="form-control" id="certKodeInstansi" value="DINKES-KUKAR" title="Kode instansi" placeholder="DINKES-KUKAR"></div>
+                                        </div>
+                                        <small class="text-muted">Urutan: 001 / SERT / DINKES-KUKAR / IX / 2026</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Nama Lengkap</label>
+                                        <input type="text" class="form-control" id="certNama" readonly placeholder="Terisi otomatis dari registrasi">
+                                        <div class="invalid-feedback">Peserta belum dipilih.</div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Unit Kerja</label>
+                                        <input type="text" class="form-control" id="certUnit" readonly placeholder="Terisi otomatis dari registrasi">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">NIK / NIP</label>
+                                        <input type="text" class="form-control" id="certNik" readonly placeholder="-">
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <label class="form-label">Email Peserta</label>
+                                        <input type="text" class="form-control" id="certEmail" readonly placeholder="-">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 mb-3">
+                                        <label class="form-label required">Tema Kegiatan</label>
+                                        <textarea class="form-control" id="certTema" rows="2" placeholder="Masukkan tema kegiatan..." ></textarea>
+                                        <div class="invalid-feedback">Tema kegiatan wajib diisi.</div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label required">Tanggal Pelaksanaan</label>
+                                        <input type="date" class="form-control" id="certTanggal">
+                                        <div class="invalid-feedback">Tanggal pelaksanaan wajib diisi.</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label required">Tempat Pelaksanaan</label>
+                                        <input type="text" class="form-control" id="certTempat" placeholder="Contoh: Aula Dinas Kesehatan / Zoom Meeting">
+                                        <div class="invalid-feedback">Tempat pelaksanaan wajib diisi.</div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">URL Logo Instansi (opsional)</label>
+                                        <input type="url" class="form-control" id="certLogoUrl" placeholder="https://.../logo.png">
+                                        <small class="text-muted">Kosongkan untuk memakai logo bawaan aplikasi.</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Kota Penerbitan</label>
+                                        <input type="text" class="form-control" id="certKota" placeholder="Contoh: Tenggarong">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Tanggal Penerbitan</label>
+                                        <input type="date" class="form-control" id="certTglTerbit">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Penyelenggara</label>
+                                        <input type="text" class="form-control" id="certPenyelenggara" placeholder="Contoh: Dinas Kesehatan Kab. Kutai Kartanegara">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Nama Pejabat Penanda Tangan</label>
+                                        <input type="text" class="form-control" id="certNamaPejabat" placeholder="Nama lengkap pejabat">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jabatan Pejabat</label>
+                                        <input type="text" class="form-control" id="certJabatanPejabat" placeholder="Contoh: Kepala Dinas Kesehatan">
+                                    </div>
+                                    <div class="col-12 mb-1">
+                                        <label class="form-label">Keterangan (halaman rincian, opsional)</label>
+                                        <textarea class="form-control" id="certKeterangan" rows="2" placeholder="Keterangan tambahan pada halaman belakang sertifikat..."></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- LANGKAH 3: Rincian Materi -->
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="card-title cert-card-title mb-0">
+                                    <span class="cert-step-num">3</span>
+                                    <i class="fas fa-book-open text-primary"></i>Rincian Materi
+                                </h3>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <select class="form-select" id="certJadwalSelect" style="max-width: 340px;">
+                                        <option value="">&mdash; Ambil awal dari jadwal kegiatan &mdash;</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-primary" onclick="certAddMateriFromJadwal()"><i class="fas fa-download me-1"></i>Ambil dari Jadwal</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table cert-materi-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 36px;">No</th>
+                                            <th>Judul Materi</th>
+                                            <th>Narasumber</th>
+                                            <th>Penyelenggara</th>
+                                            <th style="width: 95px;">JP</th>
+                                            <th style="width: 64px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="certMateriBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+                                <button type="button" class="btn btn-primary" onclick="certAddMateri()"><i class="fas fa-plus me-2"></i>Tambah Materi</button>
+                                <div class="cert-total-jp-box">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Total Jumlah JP:</span>
+                                    <span class="total-value" id="certTotalJP">0 JP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action bar -->
+                        <div class="d-flex gap-2 flex-wrap justify-content-end mb-2">
+                            <button type="button" class="btn btn-secondary" id="certBtnCancelEdit" style="display: none;" onclick="certCancelEdit()"><i class="fas fa-xmark me-2"></i>Batal Edit</button>
+                            <button type="button" class="btn btn-outline-primary" id="certBtnPreview" onclick="certPreviewFromForm()"><i class="fas fa-eye me-2"></i>Preview Sertifikat</button>
+                            <button type="button" class="btn btn-success" id="certBtnSave" onclick="certSaveSertifikat()"><i class="fas fa-save me-2"></i>Simpan Sertifikat</button>
+                        </div>
+                    </div>
+
+                    <!-- ================= TAB 2: DAFTAR SERTIFIKAT ================= -->
+                    <div class="tab-pane fade" id="certTabDaftar" role="tabpanel">
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3 class="table-title"><i class="fas fa-list-ul me-2"></i>Daftar Sertifikat</h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-primary" onclick="loadSertifikat()"><i class="fas fa-rotate me-2"></i>Muat Ulang</button>
+                                </div>
+                            </div>
+                            <div class="table-filters mb-3">
+                                <input type="text" class="form-control" id="certFilterSearch" placeholder="Cari nomor, nama, unit kerja, tema..." style="max-width: 280px;" autocomplete="off">
+                                <input type="date" class="form-control" id="certFilterTanggal" style="max-width: 170px;" title="Filter tanggal pelaksanaan">
+                                <select class="form-select" id="certFilterUnit" style="max-width: 230px;"><option value="">Semua Unit Kerja</option></select>
+                                <select class="form-select" id="certFilterTema" style="max-width: 260px;"><option value="">Semua Tema</option></select>
+                                <button class="btn btn-outline-secondary" onclick="certResetFilters()"><i class="fas fa-filter-circle-xmark me-1"></i>Reset</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="certDaftarTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nomor Sertifikat</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>Unit Kerja</th>
+                                            <th>Tema</th>
+                                            <th>Tanggal</th>
+                                            <th class="text-end">Total JP</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="certDaftarBody">
+                                        <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container">
+                                <div class="pagination-info" id="certDaftarInfo">-</div>
+                                <nav><ul class="pagination pagination-sm mb-0" id="certDaftarPagination"></ul></nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MODAL PREVIEW SERTIFIKAT (2 halaman A4 landscape)             -->
+            <!-- ============================================================ -->
+            <div class="modal fade cert-modal" id="certPreviewModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-eye me-2"></i>Preview Sertifikat <span class="badge bg-light text-dark ms-1" id="certPreviewModeBadge">Draft dari Form</span></h5>
+                            <div class="d-flex align-items-center gap-2 ms-auto flex-wrap">
+                                <button type="button" class="btn-zoom" onclick="certZoom(-0.1)" title="Perkecil"><i class="fas fa-minus"></i></button>
+                                <span class="cert-zoom-val" id="certZoomVal">100%</span>
+                                <button type="button" class="btn-zoom" onclick="certZoom(0.1)" title="Perbesar"><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-light btn-sm" id="certBtnPrint" onclick="printCertificate()"><i class="fas fa-print me-1"></i>Cetak</button>
+                                <button type="button" class="btn btn-warning btn-sm" id="certBtnPdf" onclick="downloadPDF()"><i class="fas fa-file-pdf me-1"></i>Download PDF</button>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                            </div>
+                        </div>
+                        <div class="modal-body cert-zoom-outer">
+                            <div class="cert-zoom-inner" id="certPreviewPages">
+                                <div class="text-center text-white-50 py-5"><i class="fas fa-spinner fa-spin me-2"></i>Memuat preview...</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer py-2 justify-content-between flex-wrap gap-2">
+                            <small class="text-muted"><i class="fas fa-circle-info me-1"></i>Halaman 1: Sertifikat &bull; Halaman 2: Rincian Kegiatan &amp; Materi &mdash; preview mengikuti data form secara langsung.</small>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage offscreen: sumber tunggal untuk Cetak & PDF -->
+            <div id="certPdfStage" aria-hidden="true"></div>
 
     <!-- Stat Detail Modal (Popup Total Peserta / Narasumber / Absensi) -->
     <div class="modal fade stat-modal" id="statDetailModal" tabindex="-1" aria-labelledby="statDetailTitle" aria-hidden="true">
@@ -2655,6 +2810,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- html2canvas + jsPDF (fitur Download PDF sertifikat) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         // ============================================
@@ -3103,8 +3261,8 @@
             const isLoggedIn = sessionStorage.getItem('bangkomdinkes_admin_logged_in');
             if (isLoggedIn === 'true') {
                 document.getElementById('adminMenu').style.display = 'flex';
-                const certMenu = document.getElementById('adminPembuatanSertifikatMenu');
-                if (certMenu) certMenu.style.display = 'flex';
+                const certMenuEl = document.getElementById('certMenu');
+                if (certMenuEl) certMenuEl.style.display = 'flex';
                 const loginMenu = document.getElementById('adminLoginMenu');
                 if (loginMenu) {
                     const text = document.getElementById('adminLoginMenuText');
@@ -3173,8 +3331,8 @@
                 showToast('Login berhasil!', 'success');
                 hideLogin();
                 document.getElementById('adminMenu').style.display = 'flex';
-                const certMenu = document.getElementById('adminPembuatanSertifikatMenu');
-                if (certMenu) certMenu.style.display = 'flex';
+                const certMenuEl = document.getElementById('certMenu');
+                if (certMenuEl) certMenuEl.style.display = 'flex';
                 const text = document.getElementById('adminLoginMenuText');
                 if (text) text.textContent = 'Logout Admin';
                 document.querySelector('#adminLoginMenu i')?.classList.replace('fa-right-to-bracket', 'fa-right-from-bracket');
@@ -3189,8 +3347,8 @@
             sessionStorage.removeItem('bangkomdinkes_admin_logged_in');
             sessionStorage.removeItem('bangkomdinkes_admin_user');
             document.getElementById('adminMenu').style.display = 'none';
-            const certMenu = document.getElementById('adminPembuatanSertifikatMenu');
-            if (certMenu) certMenu.style.display = 'none';
+            const certMenuEl = document.getElementById('certMenu');
+            if (certMenuEl) certMenuEl.style.display = 'none';
             const text = document.getElementById('adminLoginMenuText');
             if (text) text.textContent = 'Login Admin';
             document.querySelector('#adminLoginMenu i')?.classList.replace('fa-right-from-bracket', 'fa-right-to-bracket');
@@ -3225,6 +3383,10 @@
                 initCharts();
                 loadAdminData();
             }
+            else if (sectionId === 'pembuatan-sertifikat') {
+                if (sessionStorage.getItem('bangkomdinkes_admin_logged_in') !== 'true') { showLogin(); return; }
+                initCertSection();
+            }
         }
 
         function toggleSidebar() {
@@ -3236,13 +3398,13 @@
             
             if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
-                document.querySelectorAll('#darkModeIcon, #darkModeIconPetunjuk').forEach(icon => {
+                document.querySelectorAll('#darkModeIcon, #darkModeIconPetunjuk, #darkModeIconSertifikat').forEach(icon => {
                     icon?.classList.remove('fa-sun');
                     icon?.classList.add('fa-moon');
                 });
             } else {
                 body.setAttribute('data-theme', 'dark');
-                document.querySelectorAll('#darkModeIcon, #darkModeIconPetunjuk').forEach(icon => {
+                document.querySelectorAll('#darkModeIcon, #darkModeIconPetunjuk, #darkModeIconSertifikat').forEach(icon => {
                     icon?.classList.remove('fa-moon');
                     icon?.classList.add('fa-sun');
                 });
@@ -6053,764 +6215,1333 @@
                 }
             });
         }
-    
+    </script>
+    <script>
+        // ============================================================
+        // ============================================================
+        // FITUR BARU: PEMBUATAN SERTIFIKAT (Panel Admin)
+        // ============================================================
+        // - Peserta    : tabel `registrasi` (kolom diverifikasi langsung
+        //                dari database live via REST API Supabase)
+        // - Sertifikat : tabel `sertifikat_pembuatan` + `sertifikat_materi`
+        //                (tabel `sertifikat` LAMA untuk Galeri Sertifikat
+        //                TIDAK disentuh dan tetap berfungsi)
+        // - Semua fungsi memakai prefix `cert*` / nama bebas-bentrok karena
+        //   saveSertifikat, updateSertifikat, deleteSertifikat, editSertifikat,
+        //   addMateri, getSertifikat sudah dipakai fitur galeri.
+        // - RPC transaksional (create/update/delete_sertifikat_lengkap)
+        //   dipakai bila tersedia; otomatis fallback ke insert 2 langkah
+        //   dengan pembersihan bila RPC belum dijalankan.
+        // ============================================================
 
-        // ============================================
-        // PEMBUATAN SERTIFIKAT — KONFIGURASI & STATE
-        // ============================================
-        const CERT_TABLE = 'sertifikat_pembuatan';
-        const CERT_MATERI_TABLE = 'sertifikat_materi';
-        let _certEditId = null;
-        let _certDaftarData = [];
-        let _certDaftarFiltered = [];
-        let _certCurrentPage = 1;
-        const CERT_ITEMS_PER_PAGE = 10;
-        let _certSearchDebounce = null;
+        const CERT_PAGE_SIZE = 10;
+        const CERT_PESERTA_PAGE_SIZE = 10;
 
-        // ============================================
-        // FIELD MAP (mapping terpusat)
-        // ============================================
-        const REG_FIELD = {
-            id: 'id',
-            nik: 'nik',
-            nama: 'namalengkap',
-            unitKerja: 'unitkerja',
-            email: 'email',
-            nip: 'nip',
-            tema: 'tema',
-            narasumber: 'narasumber',
-            tanggal: 'tanggal',
-            platform: 'platform',
-            jp: 'jp',
-            whatsapp: 'whatsapp',
-            statusPegawai: 'statuspegawai',
-            jenisSdmk: 'jenissdmk'
+        // ---------- MAPPING FIELD TERPUSAT (satu-satunya sumber nama kolom) ----------
+        const CERT_FIELD_MAP = {
+            registrasi: {
+                id: 'id',
+                nama: 'namalengkap',
+                nik: 'nik',
+                nip: 'nip',
+                email: 'email',
+                unitKerja: 'unitkerja',
+                tema: 'tema',
+                narasumber: 'narasumber',
+                tanggal: 'tanggal',
+                jp: 'jp'
+            },
+            sertifikat: {
+                id: 'id',
+                registrasiId: 'registrasi_id',
+                nomor: 'nomor_sertifikat',
+                nama: 'nama_lengkap',
+                unitKerja: 'unit_kerja',
+                tema: 'tema_kegiatan',
+                tanggal: 'tanggal_pelaksanaan',
+                tempat: 'tempat_pelaksanaan',
+                totalJp: 'total_jp'
+            },
+            materi: {
+                sertifikatId: 'sertifikat_id',
+                judul: 'judul_materi',
+                narasumber: 'narasumber',
+                penyelenggara: 'penyelenggara',
+                jp: 'jumlah_jp',
+                urutan: 'urutan'
+            }
         };
 
-        // ============================================
-        // CARI PESERTA
-        // ============================================
-        async function certCariPeserta() {
-            const q = document.getElementById('certSearchPeserta').value.trim();
-            const resultDiv = document.getElementById('certSearchResult');
-            if (!q || q.length < 2) {
-                showToast('Ketik minimal 2 karakter untuk mencari', 'warning');
-                return;
-            }
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Mencari...</div>';
+        // ---------- TEMPLATE REGISTRY (siap ditambah: formal / modern / minimalis) ----------
+        const CERT_TEMPLATES = { default: { name: 'Default', front: null, back: null } };
+        let certActiveTemplate = 'default';
 
+        // ---------- STATE MODUL ----------
+        const certState = {
+            initialized: false,
+            selectedPeserta: null,
+            editingId: null,
+            pesertaTerm: '',
+            pesertaPage: 1,
+            pesertaCount: 0,
+            lastPesertaRows: [],
+            daftarPage: 1,
+            daftarCount: 0,
+            lastListRows: [],
+            jadwalList: [],
+            lastPreviewData: null,
+            zoom: 1
+        };
+
+        // ============================================================
+        // UTILITAS
+        // ============================================================
+        function certDebounce(fn, ms) {
+            let t;
+            return function() {
+                const args = arguments, ctx = this;
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(ctx, args), ms);
+            };
+        }
+
+        function certEsc(v) {
+            return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function certRomanMonth(m) {
+            return ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][(parseInt(m, 10) - 1 + 12) % 12] || 'I';
+        }
+
+        function certFormatTanggalPanjang(dateString) {
+            if (!dateString) return '.......................';
+            const d = new Date(String(dateString).length === 10 ? dateString + 'T00:00:00' : dateString);
+            if (isNaN(d.getTime())) return certEsc(dateString);
             try {
-                const { data, error } = await sb
-                    .from('registrasi')
-                    .select('*')
-                    .or(`${REG_FIELD.nama}.ilike.%${q}%,${REG_FIELD.nik}.ilike.%${q}%,${REG_FIELD.email}.ilike.%${q}%,${REG_FIELD.unitKerja}.ilike.%${q}%`)
-                    .limit(20);
-
-                if (error) throw error;
-                if (!data || data.length === 0) {
-                    resultDiv.innerHTML = '<div class="text-center py-3 text-muted"><i class="fas fa-search me-2"></i>Tidak ditemukan peserta</div>';
-                    return;
-                }
-                resultDiv.innerHTML = data.map((r, i) => `
-                    <div class="result-item" onclick="certPilihPeserta(${r.id}, this)">
-                        <div class="result-name">${escStat(r[REG_FIELD.nama])}</div>
-                        <div class="result-meta">
-                            <i class="fas fa-id-card me-1"></i>${escStat(r[REG_FIELD.nik] || '-')} &nbsp;|&nbsp;
-                            <i class="fas fa-building me-1"></i>${escStat(r[REG_FIELD.unitKerja] || '-')} &nbsp;|&nbsp;
-                            <i class="fas fa-envelope me-1"></i>${escStat(r[REG_FIELD.email] || '-')}
-                        </div>
-                    </div>
-                `).join('');
-            } catch (err) {
-                console.error('certCariPeserta:', err);
-                resultDiv.innerHTML = '<div class="text-center py-3 text-danger"><i class="fas fa-exclamation-circle me-2"></i>Gagal mencari peserta</div>';
+                const hari = d.toLocaleDateString('id-ID', { weekday: 'long' });
+                const tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                return hari + ', ' + tgl;
+            } catch (e) {
+                return certEsc(dateString);
             }
         }
 
-        function certPilihPeserta(id, el) {
-            const nama = el.querySelector('.result-name').textContent;
-            const meta = el.querySelector('.result-meta').textContent;
-            // Parse dari meta text
-            const parts = meta.split('|').map(s => s.trim());
-            const nik = (parts[0] || '').replace(/[^0-9]/g, '');
-            const unit = (parts[1] || '').replace(/^[^\w]*/, '').trim();
-            const email = (parts[2] || '').replace(/^[^\w]*/, '').trim();
-
-            document.getElementById('certRegistrasiId').value = id;
-            document.getElementById('certSpNama').textContent = nama;
-            document.getElementById('certSpUnit').textContent = unit || '-';
-            document.getElementById('certSpNik').textContent = nik || '-';
-            document.getElementById('certSpEmail').textContent = email || '-';
-            document.getElementById('certNama').value = nama;
-            document.getElementById('certUnitKerja').value = unit || '';
-            document.getElementById('certSearchResult').style.display = 'none';
-            document.getElementById('certSelectedPeserta').style.display = 'block';
-            showToast('Peserta dipilih: ' + nama, 'success');
-        }
-
-        // ============================================
-        // GENERATE NOMOR SERTIFIKAT OTOMATIS
-        // ============================================
-        async function certGenerateNomor() {
-            const btn = document.querySelector('#certNomor').nextElementSibling;
-            if (btn) btn.disabled = true;
-            try {
-                const now = new Date();
-                const y = now.getFullYear();
-                const m = now.getMonth() + 1;
-                const romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][m-1];
-                // Ambil count sertifikat bulan ini
-                const startOfMonth = new Date(y, m-1, 1).toISOString();
-                const endOfMonth = new Date(y, m, 1).toISOString();
-                const { count, error } = await sb
-                    .from(CERT_TABLE)
-                    .select('id', { count: 'exact', head: true })
-                    .gte('created_at', startOfMonth)
-                    .lt('created_at', endOfMonth);
-                if (error) throw error;
-                const seq = (count || 0) + 1;
-                const nomor = String(seq).padStart(3, '0') + '/SERT/DINKES-KUKAR/' + romawi + '/' + y;
-                document.getElementById('certNomor').value = nomor;
-                showToast('Nomor sertifikat dibuat: ' + nomor, 'success');
-            } catch (err) {
-                console.error('certGenerateNomor:', err);
-                showToast('Gagal generate nomor. Isi manual.', 'warning');
-            } finally {
-                if (btn) btn.disabled = false;
+        function certMarkInvalid(el, msg) {
+            if (!el) return;
+            el.classList.add('is-invalid');
+            if (msg) {
+                const fb = el.closest('.mb-3')?.querySelector('.invalid-feedback')
+                    || el.parentElement?.querySelector('.invalid-feedback');
+                if (fb) fb.textContent = msg;
             }
         }
 
-        // ============================================
-        // MANAJEMEN MATERI
-        // ============================================
-        function certTambahMateri() {
-            const tbody = document.getElementById('certMateriBody');
-            const idx = tbody.querySelectorAll('tr').length;
-            const tr = document.createElement('tr');
-            tr.setAttribute('data-index', idx);
-            tr.innerHTML = `
-                <td class="text-center cert-materi-no">${idx + 1}</td>
-                <td><input type="text" class="form-control cert-m-judul" placeholder="Judul materi" required></td>
-                <td><input type="text" class="form-control cert-m-narasumber" placeholder="Nama narasumber" required></td>
-                <td><input type="text" class="form-control cert-m-penyelenggara" placeholder="Penyelenggara" required></td>
-                <td><input type="number" class="form-control cert-m-jp" placeholder="0" min="0" required oninput="certHitungTotalJP()"></td>
-                <td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="certHapusMateriRow(this)" title="Hapus"><i class="fas fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-            certRenumberMateri();
+        function certClearInvalid(root) {
+            (root || document).querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
         }
 
-        function certHapusMateriRow(btn) {
-            const tbody = document.getElementById('certMateriBody');
-            if (tbody.querySelectorAll('tr').length <= 1) {
-                showToast('Minimal harus ada 1 materi', 'warning');
-                return;
-            }
-            btn.closest('tr').remove();
-            certRenumberMateri();
-            certHitungTotalJP();
-        }
-
-        function certRenumberMateri() {
-            document.querySelectorAll('#certMateriBody tr').forEach((tr, i) => {
-                tr.querySelector('.cert-materi-no').textContent = i + 1;
-            });
-        }
-
-        function certHitungTotalJP() {
-            let total = 0;
-            document.querySelectorAll('.cert-m-jp').forEach(inp => {
-                const v = parseInt(inp.value) || 0;
-                if (v > 0) total += v;
-            });
-            document.getElementById('certTotalJP').textContent = total + ' JP';
-            return total;
-        }
-
-        function certGetMateriData() {
-            const materi = [];
-            document.querySelectorAll('#certMateriBody tr').forEach((tr, i) => {
-                const judul = tr.querySelector('.cert-m-judul').value.trim();
-                const narasumber = tr.querySelector('.cert-m-narasumber').value.trim();
-                const penyelenggara = tr.querySelector('.cert-m-penyelenggara').value.trim();
-                const jp = parseInt(tr.querySelector('.cert-m-jp').value) || 0;
-                if (judul && narasumber && penyelenggara) {
-                    materi.push({ judul_materi: judul, narasumber, penyelenggara, jumlah_jp: jp, urutan: i + 1 });
-                }
-            });
-            return materi;
-        }
-
-        // ============================================
-        // VALIDASI FORM
-        // ============================================
-        function certValidateForm() {
-            const issues = [];
-            const regId = document.getElementById('certRegistrasiId').value;
-            if (!regId) issues.push('Peserta belum dipilih');
-
-            const nomor = document.getElementById('certNomor').value.trim();
-            if (!nomor) issues.push('Nomor sertifikat wajib diisi');
-
-            const tema = document.getElementById('certTema').value.trim();
-            if (!tema) issues.push('Tema kegiatan wajib diisi');
-
-            const tanggal = document.getElementById('certTanggal').value;
-            if (!tanggal) issues.push('Tanggal pelaksanaan wajib diisi');
-
-            const tempat = document.getElementById('certTempat').value.trim();
-            if (!tempat) issues.push('Tempat pelaksanaan wajib diisi');
-
-            const materi = certGetMateriData();
-            if (materi.length === 0) issues.push('Minimal satu materi harus ditambahkan');
-
-            // Validasi setiap materi
-            document.querySelectorAll('#certMateriBody tr').forEach((tr, i) => {
-                const judul = tr.querySelector('.cert-m-judul').value.trim();
-                const narasumber = tr.querySelector('.cert-m-narasumber').value.trim();
-                const penyelenggara = tr.querySelector('.cert-m-penyelenggara').value.trim();
-                const jp = tr.querySelector('.cert-m-jp').value;
-                if (!judul) issues.push('Materi #' + (i+1) + ': Judul wajib diisi');
-                if (!narasumber) issues.push('Materi #' + (i+1) + ': Narasumber wajib diisi');
-                if (!penyelenggara) issues.push('Materi #' + (i+1) + ': Penyelenggara wajib diisi');
-                if (jp === '' || isNaN(parseInt(jp)) || parseInt(jp) < 0) issues.push('Materi #' + (i+1) + ': JP harus angka positif');
-            });
-
-            return { valid: issues.length === 0, issues };
-        }
-
-        // ============================================
-        // SIMPAN SERTIFIKAT
-        // ============================================
-        async function certSimpan() {
-            const validation = certValidateForm();
-            if (!validation.valid) {
-                const msg = validation.issues.slice(0, 4).join(' • ') + (validation.issues.length > 4 ? ' • +' + (validation.issues.length - 4) + ' lainnya' : '');
-                showToast('<strong>Data belum lengkap</strong><br>' + msg, 'warning');
-                return;
-            }
-
-            const btn = document.getElementById('certBtnSimpan');
-            btn.classList.add('btn-loading');
+        function certBtnLoading(btn, text) {
+            if (!btn) return;
+            btn.dataset.origHtml = btn.innerHTML;
             btn.disabled = true;
+            btn.classList.add('btn-loading');
+            btn.innerHTML = certEsc(text);
+        }
+
+        function certBtnRestore(btn) {
+            if (!btn) return;
+            btn.disabled = false;
+            btn.classList.remove('btn-loading');
+            if (btn.dataset.origHtml) btn.innerHTML = btn.dataset.origHtml;
+            delete btn.dataset.origHtml;
+        }
+
+        function certCurrentUser() {
+            return sessionStorage.getItem('bangkomdinkes_admin_user') || '(tidak diketahui)';
+        }
+
+        function certLogoFallback(img) {
+            if (!img) return;
+            const div = document.createElement('div');
+            div.className = 'logo-fallback';
+            div.innerHTML = '<i class="fas fa-heart-pulse"></i>';
+            img.replaceWith(div);
+        }
+
+        // ============================================================
+        // AKSES MENU — memakai sistem login admin yang sudah ada
+        // ============================================================
+        function checkCertAccess() {
+            if (sessionStorage.getItem('bangkomdinkes_admin_logged_in') !== 'true') {
+                showLogin();
+                return;
+            }
+            hideLogin();
+            showSection('pembuatan-sertifikat');
+        }
+
+        // ============================================================
+        // INISIALISASI SECTION
+        // ============================================================
+        function initCertSection() {
+            if (sessionStorage.getItem('bangkomdinkes_admin_logged_in') !== 'true') { showLogin(); return; }
+            if (certState.initialized) { loadSertifikat(); return; }
+            certState.initialized = true;
+
+            document.getElementById('certSearchPeserta')?.addEventListener('input', certDebounce(function() {
+                certState.pesertaTerm = document.getElementById('certSearchPeserta').value;
+                certState.pesertaPage = 1;
+                searchPeserta();
+            }, 400));
+            document.getElementById('certPesertaPrev')?.addEventListener('click', () => {
+                if (certState.pesertaPage > 1) { certState.pesertaPage--; searchPeserta(); }
+            });
+            document.getElementById('certPesertaNext')?.addEventListener('click', () => {
+                const max = Math.max(1, Math.ceil(certState.pesertaCount / CERT_PESERTA_PAGE_SIZE));
+                if (certState.pesertaPage < max) { certState.pesertaPage++; searchPeserta(); }
+            });
+
+            document.getElementById('certFilterSearch')?.addEventListener('input', certDebounce(() => { certState.daftarPage = 1; loadSertifikat(); }, 400));
+            document.getElementById('certFilterTanggal')?.addEventListener('change', () => { certState.daftarPage = 1; loadSertifikat(); });
+            document.getElementById('certFilterUnit')?.addEventListener('change', () => { certState.daftarPage = 1; loadSertifikat(); });
+            document.getElementById('certFilterTema')?.addEventListener('change', () => { certState.daftarPage = 1; loadSertifikat(); });
+
+            // cek duplikat nomor sertifikat saat mengetik (debounce)
+            document.getElementById('certNomor')?.addEventListener('input', certDebounce(certCheckNomorInput, 500));
+
+            // total JP & preview live mengikuti isi materi
+            document.getElementById('certMateriBody')?.addEventListener('input', () => {
+                calculateTotalJP();
+                certLivePreviewRefresh();
+            });
+            document.getElementById('certMateriBody')?.addEventListener('click', function(e) {
+                const btn = e.target.closest('.cert-remove-materi');
+                if (btn) certRemoveMateri(parseInt(btn.dataset.idx, 10));
+            });
+
+            // preview live utk field utama
+            ['certNomor','certTema','certTanggal','certTempat','certLogoUrl','certKota','certTglTerbit',
+             'certPenyelenggara','certNamaPejabat','certJabatanPejabat','certKeterangan']
+                .forEach(id => document.getElementById(id)?.addEventListener('input', certDebounce(certLivePreviewRefresh, 350)));
+
+            const tglTerbit = document.getElementById('certTglTerbit');
+            if (tglTerbit && !tglTerbit.value) tglTerbit.value = new Date().toISOString().slice(0, 10);
+
+            certAddMateri();          // satu baris materi awal
+            loadCertJadwalOptions();
+            searchPeserta();          // tampilkan 10 peserta terbaru
+            loadSertifikat();
+        }
+
+        // ============================================================
+        // PENCARIAN PESERTA (Supabase: registrasi — filter + limit + pagination)
+        // ============================================================
+        async function searchPeserta() {
+            const tbody = document.getElementById('certPesertaBody');
+            if (!tbody) return;
+            const F = CERT_FIELD_MAP.registrasi;
+            const raw = (certState.pesertaTerm || '').trim();
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin me-2"></i>Memuat data...</td></tr>';
+
+            // sanitasi karakter khusus filter PostgREST (ilike / or)
+            const t = raw.replace(/[,()%\\"]/g, ' ').replace(/\s+/g, ' ').trim();
+            const from = (certState.pesertaPage - 1) * CERT_PESERTA_PAGE_SIZE;
+            const to = from + CERT_PESERTA_PAGE_SIZE - 1;
+
+            const buildQuery = (withNik) => {
+                let q = sb.from('registrasi')
+                    .select(`${F.id}, ${F.nama}, ${F.nik}, ${F.nip}, ${F.email}, ${F.unitKerja}, ${F.tema}, ${F.tanggal}, ${F.narasumber}, ${F.jp}`, { count: 'exact' });
+                if (t) {
+                    const parts = [
+                        `${F.nama}.ilike.%${t}%`,
+                        `${F.nip}.ilike.%${t}%`,
+                        `${F.email}.ilike.%${t}%`,
+                        `${F.unitKerja}.ilike.%${t}%`
+                    ];
+                    if (withNik) parts.push(`${F.nik}.ilike.%${t}%`);
+                    q = q.or(parts.join(','));
+                }
+                return q.order('created_at', { ascending: false }).range(from, to);
+            };
 
             try {
-                // Cek duplikat nomor
-                const nomor = document.getElementById('certNomor').value.trim();
-                const dupCheck = await sb.from(CERT_TABLE).select('id').eq('nomor_sertifikat', nomor).limit(1);
-                if (dupCheck.error) throw dupCheck.error;
-                if (dupCheck.data && dupCheck.data.length > 0 && String(dupCheck.data[0].id) !== String(_certEditId || '')) {
-                    showToast('Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.', 'warning');
+                let res = await buildQuery(true);
+                // fallback bila kolom nik ternyata belum ada di environment lain
+                if (res.error && typeof isColumnError === 'function' && isColumnError(res.error, F.nik)) {
+                    res = await buildQuery(false);
+                }
+                if (res.error) throw res.error;
+
+                const rows = res.data || [];
+                certState.lastPesertaRows = rows;
+                certState.pesertaCount = res.count || 0;
+
+                if (rows.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding: 26px 0;">
+                        <i class="fas fa-user-slash" style="font-size:1.6rem;opacity:.45;"></i>
+                        <div class="mt-2">${t ? 'Peserta tidak ditemukan untuk kata kunci "' + certEsc(raw) + '"' : 'Belum ada data registrasi peserta.'}</div></td></tr>`;
+                } else {
+                    tbody.innerHTML = rows.map((r, i) => `
+                        <tr>
+                            <td>${from + i + 1}</td>
+                            <td><strong>${certEsc(r[F.nama]) || '-'}</strong></td>
+                            <td class="reg-cell">${certEsc(r[F.nik] || r[F.nip] || '-')}</td>
+                            <td>${certEsc(r[F.unitKerja]) || '-'}</td>
+                            <td>${certEsc(r[F.email]) || '-'}</td>
+                            <td><button class="btn btn-sm btn-primary" onclick="selectPeserta('${String(r[F.id]).replace(/'/g, '')}')"><i class="fas fa-check me-1"></i>Pilih</button></td>
+                        </tr>`).join('');
+                }
+
+                document.getElementById('certPesertaInfo').textContent =
+                    `Menampilkan ${rows.length} dari ${certState.pesertaCount} peserta${t ? ' (hasil pencarian)' : ''}`;
+                const maxPage = Math.max(1, Math.ceil(certState.pesertaCount / CERT_PESERTA_PAGE_SIZE));
+                document.getElementById('certPesertaPrev').disabled = certState.pesertaPage <= 1;
+                document.getElementById('certPesertaNext').disabled = certState.pesertaPage >= maxPage;
+            } catch (err) {
+                console.error('searchPeserta error:', err);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger" style="padding: 20px 0;"><i class="fas fa-triangle-exclamation me-2"></i>Gagal memuat data peserta. Periksa koneksi ke Supabase lalu coba lagi.</td></tr>';
+                showToast('Gagal mengambil data peserta dari Supabase. Silakan coba lagi.', 'danger');
+            }
+        }
+
+        // ============================================================
+        // PILIH PESERTA — isi otomatis, field peserta menjadi readonly
+        // ============================================================
+        function selectPeserta(id) {
+            const F = CERT_FIELD_MAP.registrasi;
+            const r = (certState.lastPesertaRows || []).find(x => String(x[F.id]) === String(id));
+            if (!r) {
+                showToast('Data peserta tidak ditemukan. Silakan cari ulang.', 'warning');
+                return;
+            }
+            certState.selectedPeserta = r;
+            document.getElementById('certRegistrasiId').value = r[F.id] ?? '';
+            document.getElementById('certSelNama').textContent = r[F.nama] || '-';
+            document.getElementById('certSelNik').textContent = r[F.nik] || r[F.nip] || '-';
+            document.getElementById('certSelUnit').textContent = r[F.unitKerja] || '-';
+            document.getElementById('certSelEmail').textContent = r[F.email] || '-';
+            document.getElementById('certNama').value = r[F.nama] || '';
+            document.getElementById('certUnit').value = r[F.unitKerja] || '';
+            document.getElementById('certNik').value = r[F.nik] || r[F.nip] || '';
+            document.getElementById('certEmail').value = r[F.email] || '';
+            document.getElementById('certPesertaSelectedBox').style.display = 'block';
+            document.getElementById('certPesertaEmpty').style.display = 'none';
+            ['certNama','certUnit','certNik','certEmail'].forEach(x => document.getElementById(x).classList.remove('is-invalid'));
+
+            // isi tema & tanggal dari data kegiatan peserta bila masih kosong
+            const temaEl = document.getElementById('certTema');
+            if (!temaEl.value && r[F.tema]) temaEl.value = r[F.tema];
+            const tglEl = document.getElementById('certTanggal');
+            if (!tglEl.value && r[F.tanggal]) tglEl.value = r[F.tanggal];
+
+            certLivePreviewRefresh();
+            showToast('Peserta dipilih: ' + (r[F.nama] || '-'), 'success');
+            document.getElementById('certNomor').focus();
+        }
+
+        function certResetPeserta() {
+            if (certState.editingId) {
+                showToast('Sedang mode edit — gunakan tombol "Batal Edit" terlebih dahulu.', 'warning');
+                return;
+            }
+            certState.selectedPeserta = null;
+            ['certRegistrasiId','certNama','certUnit','certNik','certEmail'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.value = ''; el.classList.remove('is-invalid'); }
+            });
+            document.getElementById('certPesertaSelectedBox').style.display = 'none';
+            document.getElementById('certPesertaEmpty').style.display = 'block';
+        }
+
+        // ============================================================
+        // RINCIAN MATERI (multi-baris, tanpa batas yang wajar)
+        // ============================================================
+        function certMateriRowHtml(idx, m) {
+            m = m || { judul: '', narasumber: '', penyelenggara: '', jp: '' };
+            return `
+                <tr data-idx="${idx}">
+                    <td class="text-center cert-row-num">${idx + 1}</td>
+                    <td><input type="text" class="form-control form-control-sm cert-m-judul" value="${certEsc(m.judul)}" placeholder="Judul materi" autocomplete="off"></td>
+                    <td><input type="text" class="form-control form-control-sm cert-m-narasumber" value="${certEsc(m.narasumber)}" placeholder="Narasumber" autocomplete="off"></td>
+                    <td><input type="text" class="form-control form-control-sm cert-m-penyelenggara" value="${certEsc(m.penyelenggara)}" placeholder="Penyelenggara" autocomplete="off"></td>
+                    <td><input type="number" class="form-control form-control-sm cert-m-jp text-end" value="${m.jp === '' || m.jp === null || m.jp === undefined ? '' : certEsc(m.jp)}" min="0" step="1" placeholder="0"></td>
+                    <td class="text-center"><button type="button" class="btn-action-cert bac-del cert-remove-materi" data-idx="${idx}" title="Hapus Materi"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
+        }
+
+        function certAddMateri(data) {
+            const tbody = document.getElementById('certMateriBody');
+            if (!tbody) return;
+            const idx = tbody.querySelectorAll('tr').length;
+            tbody.insertAdjacentHTML('beforeend', certMateriRowHtml(idx, data));
+            calculateTotalJP();
+            tbody.querySelector('tr:last-child .cert-m-judul')?.focus();
+        }
+
+        function certAddMateriFromJadwal() {
+            const sel = document.getElementById('certJadwalSelect');
+            const id = sel?.value;
+            if (!id) {
+                showToast('Pilih kegiatan pada dropdown "Ambil dari Jadwal" terlebih dahulu.', 'warning');
+                return;
+            }
+            const j = (certState.jadwalList || []).find(x => String(x.id) === String(id));
+            if (!j) {
+                showToast('Data jadwal tidak ditemukan.', 'danger');
+                return;
+            }
+            certAddMateri({
+                judul: j.tema || '',
+                narasumber: j.narasumber || '',
+                penyelenggara: (document.getElementById('certPenyelenggara').value.trim() || document.getElementById('certKodeInstansi').value.trim() || ''),
+                jp: j.jp ?? ''
+            });
+            showToast('Materi diambil dari jadwal: ' + (j.tema || '-'), 'success');
+        }
+
+        function certRemoveMateri(idx) {
+            const tbody = document.getElementById('certMateriBody');
+            const rows = tbody.querySelectorAll('tr');
+            if (rows.length <= 1) {
+                showToast('Minimal satu materi harus ditambahkan. Isi baris ini atau tambah materi lain.', 'warning');
+                return;
+            }
+            if (rows[idx]) rows[idx].remove();
+            tbody.querySelectorAll('tr').forEach((tr, i) => {
+                tr.dataset.idx = i;
+                tr.querySelector('.cert-row-num').textContent = i + 1;
+                const btn = tr.querySelector('.cert-remove-materi');
+                if (btn) btn.dataset.idx = i;
+            });
+            calculateTotalJP();
+            certLivePreviewRefresh();
+        }
+
+        function certCollectMateri() {
+            const items = [];
+            document.querySelectorAll('#certMateriBody tr').forEach(tr => {
+                items.push({
+                    judul_materi: tr.querySelector('.cert-m-judul')?.value.trim() || '',
+                    narasumber: tr.querySelector('.cert-m-narasumber')?.value.trim() || '',
+                    penyelenggara: tr.querySelector('.cert-m-penyelenggara')?.value.trim() || '',
+                    jumlah_jp: tr.querySelector('.cert-m-jp')?.value.trim() || ''
+                });
+            });
+            return items;
+        }
+
+        // ============================================================
+        // PERHITUNGAN TOTAL JP (otomatis, admin tidak menghitung manual)
+        // ============================================================
+        function calculateTotalJP() {
+            let total = 0, invalid = false;
+            document.querySelectorAll('#certMateriBody tr').forEach(tr => {
+                const val = tr.querySelector('.cert-m-jp')?.value.trim() || '';
+                if (val === '') return;
+                const n = Number(val);
+                if (!isFinite(n) || n < 0) { invalid = true; return; }
+                total += n;
+            });
+            total = Math.round(total * 100) / 100;
+            const el = document.getElementById('certTotalJP');
+            if (el) el.textContent = (invalid ? '—' : total) + ' JP';
+            return { total: total, invalid: invalid };
+        }
+
+        // ============================================================
+        // NOMOR SERTIFIKAT OTOMATIS (001/SERT/DINKES-KUKAR/IX/2026)
+        // ============================================================
+        async function generateNomorSertifikat() {
+            const btn = document.getElementById('certBtnGenerateNomor');
+            certBtnLoading(btn, 'Membuat...');
+            const kodeDok = (document.getElementById('certKodeDokumen').value.trim() || 'SERT').toUpperCase();
+            const kodeIns = (document.getElementById('certKodeInstansi').value.trim() || 'DINKES-KUKAR').toUpperCase();
+            try {
+                let nomor = null;
+                // 1) RPC atomik (rekomendasi — bila migration sudah dijalankan)
+                try {
+                    const { data, error } = await sb.rpc('generate_nomor_sertifikat', { p_kode_dokumen: kodeDok, p_kode_instansi: kodeIns });
+                    if (!error && data) nomor = data;
+                    else if (error) console.warn('RPC generate_nomor_sertifikat tidak tersedia:', error.message);
+                } catch (e) { console.warn(e); }
+                // 2) fallback hitung dari data yang ada (keunikan tetap dijaga UNIQUE constraint)
+                if (!nomor) nomor = await certComputeNomorClient(kodeDok, kodeIns);
+                const input = document.getElementById('certNomor');
+                input.value = nomor;
+                input.classList.remove('is-invalid');
+                showToast('Nomor sertifikat dibuat: ' + nomor, 'success');
+                certLivePreviewRefresh();
+            } catch (err) {
+                console.error('generateNomorSertifikat error:', err);
+                showToast('Gagal membuat nomor otomatis. Silakan isi nomor secara manual.', 'danger');
+            } finally {
+                certBtnRestore(btn);
+            }
+        }
+
+        async function certComputeNomorClient(kodeDok, kodeIns) {
+            const tahun = new Date().getFullYear();
+            const roman = certRomanMonth(new Date().getMonth() + 1);
+            const pattern = `%/${kodeDok}/${kodeIns}/${roman}/${tahun}`;
+            let max = 0;
+            try {
+                const { data, error } = await sb.from('sertifikat_pembuatan')
+                    .select('nomor_sertifikat')
+                    .like('nomor_sertifikat', pattern)
+                    .limit(1000);
+                if (error) console.warn('certComputeNomorClient:', error.message);
+                (data || []).forEach(r => {
+                    const seq = parseInt(String(r.nomor_sertifikat).split('/')[0], 10);
+                    if (isFinite(seq) && seq > max) max = seq;
+                });
+            } catch (e) { console.warn(e); }
+            return String(max + 1).padStart(3, '0') + '/' + kodeDok + '/' + kodeIns + '/' + roman + '/' + tahun;
+        }
+
+        async function certCheckNomorInput() {
+            const input = document.getElementById('certNomor');
+            const nomor = input.value.trim();
+            input.classList.remove('is-invalid');
+            if (!nomor) return;
+            try {
+                let q = sb.from('sertifikat_pembuatan').select('id').eq('nomor_sertifikat', nomor).limit(1);
+                if (certState.editingId) q = q.ne('id', certState.editingId);
+                const { data, error } = await q;
+                if (error) { console.warn('cek nomor:', error.message); return; } // tabel mungkin belum dibuat
+                if (data && data.length > 0) {
+                    input.classList.add('is-invalid');
+                    const fb = document.getElementById('certNomorFeedback');
+                    if (fb) fb.textContent = 'Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.';
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function certIsNomorTaken(nomor, excludeId) {
+            try {
+                let q = sb.from('sertifikat_pembuatan').select('id').eq('nomor_sertifikat', nomor).limit(1);
+                if (excludeId) q = q.ne('id', excludeId);
+                const { data, error } = await q;
+                if (error) return false; // keunikan tetap dijaga UNIQUE constraint di DB
+                return !!(data && data.length > 0);
+            } catch (e) { return false; }
+        }
+
+        // ============================================================
+        // VALIDASI SEBELUM SIMPAN (error tampil langsung pada field)
+        // ============================================================
+        function certValidateForm() {
+            certClearInvalid(document.getElementById('certForm'));
+            const errors = [];
+            const mark = (id, msg) => {
+                certMarkInvalid(document.getElementById(id), msg);
+                errors.push(msg);
+            };
+
+            if (!certState.selectedPeserta) mark('certNama', 'Peserta belum dipilih.');
+
+            if (!document.getElementById('certNomor').value.trim()) mark('certNomor', 'Nomor sertifikat wajib diisi.');
+            if (!document.getElementById('certTema').value.trim()) mark('certTema', 'Tema kegiatan wajib diisi.');
+            if (!document.getElementById('certTanggal').value) mark('certTanggal', 'Tanggal pelaksanaan wajib diisi.');
+            if (!document.getElementById('certTempat').value.trim()) mark('certTempat', 'Tempat pelaksanaan wajib diisi.');
+
+            const items = certCollectMateri();
+            const rows = document.querySelectorAll('#certMateriBody tr');
+            if (items.length === 0) errors.push('Minimal satu materi harus ditambahkan.');
+            items.forEach((m, i) => {
+                const tr = rows[i];
+                if (!m.judul_materi) { tr?.querySelector('.cert-m-judul')?.classList.add('is-invalid'); errors.push('Judul materi baris ' + (i + 1) + ' wajib diisi.'); }
+                if (!m.narasumber) { tr?.querySelector('.cert-m-narasumber')?.classList.add('is-invalid'); errors.push('Narasumber baris ' + (i + 1) + ' wajib diisi.'); }
+                if (m.jumlah_jp === '') {
+                    tr?.querySelector('.cert-m-jp')?.classList.add('is-invalid');
+                    errors.push('Jumlah JP baris ' + (i + 1) + ' wajib diisi.');
+                } else {
+                    const jpNum = Number(m.jumlah_jp);
+                    if (!isFinite(jpNum) || jpNum < 0) {
+                        tr?.querySelector('.cert-m-jp')?.classList.add('is-invalid');
+                        errors.push('Jumlah JP baris ' + (i + 1) + ' harus berupa angka dan tidak boleh negatif.');
+                    }
+                }
+            });
+
+            return { valid: errors.length === 0, errors: errors, items: items, total: calculateTotalJP().total };
+        }
+
+        // ============================================================
+        // KUMPULKAN DATA FORM
+        // ============================================================
+        function certCollectFormData() {
+            const items = certCollectMateri();
+            const total = items.reduce((s, m) => s + (isFinite(Number(m.jumlah_jp)) && m.jumlah_jp !== '' ? Number(m.jumlah_jp) : 0), 0);
+            const val = id => (document.getElementById(id)?.value || '').trim();
+            return {
+                registrasi_id: document.getElementById('certRegistrasiId').value || null,
+                nomor_sertifikat: val('certNomor'),
+                nama_lengkap: val('certNama'),
+                unit_kerja: val('certUnit'),
+                tema_kegiatan: val('certTema'),
+                tanggal_pelaksanaan: document.getElementById('certTanggal').value || null,
+                tempat_pelaksanaan: val('certTempat'),
+                logo_url: val('certLogoUrl') || null,
+                kota_penerbitan: val('certKota') || null,
+                tanggal_penerbitan: document.getElementById('certTglTerbit').value || null,
+                penyelenggara: val('certPenyelenggara') || null,
+                nama_pejabat: val('certNamaPejabat') || null,
+                jabatan_pejabat: val('certJabatanPejabat') || null,
+                keterangan: val('certKeterangan') || null,
+                created_by: certCurrentUser(),
+                total_jp: Math.round(total * 100) / 100,
+                materi: items.map((m, i) => ({
+                    judul_materi: m.judul_materi,
+                    narasumber: m.narasumber,
+                    penyelenggara: m.penyelenggara || null,
+                    jumlah_jp: m.jumlah_jp === '' ? 0 : Math.round(Number(m.jumlah_jp) * 100) / 100,
+                    urutan: i + 1
+                }))
+            };
+        }
+
+        // ============================================================
+        // SIMPAN (CREATE / UPDATE)
+        // ============================================================
+        async function certSaveSertifikat() {
+            const v = certValidateForm();
+            if (!v.valid) {
+                showToast(v.errors[0] || 'Periksa kembali data yang diisi.', 'danger');
+                document.querySelector('#pembuatan-sertifikat .is-invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            const data = certCollectFormData();
+            const btn = document.getElementById('certBtnSave');
+            const isEdit = !!certState.editingId;
+            certBtnLoading(btn, isEdit ? 'Menyimpan perubahan...' : 'Menyimpan sertifikat...');
+
+            try {
+                // cek duplikat dulu agar pesan ramah (constraint UNIQUE tetap penjaga akhir)
+                if (await certIsNomorTaken(data.nomor_sertifikat, certState.editingId)) {
+                    certMarkInvalid(document.getElementById('certNomor'), 'Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.');
+                    showToast('Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.', 'danger');
                     return;
                 }
 
-                const totalJP = certHitungTotalJP();
-                const sertifikatData = {
-                    registrasi_id: parseInt(document.getElementById('certRegistrasiId').value),
-                    nomor_sertifikat: nomor,
-                    nama_lengkap: document.getElementById('certNama').value.trim(),
-                    unit_kerja: document.getElementById('certUnitKerja').value.trim(),
-                    tema_kegiatan: document.getElementById('certTema').value.trim(),
-                    tanggal_pelaksanaan: document.getElementById('certTanggal').value,
-                    tempat_pelaksanaan: document.getElementById('certTempat').value.trim(),
-                    total_jp: totalJP,
-                    tempat_terbit: document.getElementById('certTempatTerbit').value.trim() || null,
-                    tanggal_terbit: document.getElementById('certTanggalTerbit').value || null,
-                    nama_pejabat: document.getElementById('certNamaPejabat').value.trim() || null,
-                    jabatan_pejabat: document.getElementById('certJabatanPejabat').value.trim() || null,
-                    penyelenggara: document.getElementById('certPenyelenggara').value.trim() || null,
-                    updated_at: new Date().toISOString()
-                };
+                const result = isEdit
+                    ? await certUpdateSertifikat(certState.editingId, data)
+                    : await certInsertSertifikat(data);
 
-                let certId;
-                if (_certEditId) {
-                    // Update
-                    const { error } = await sb.from(CERT_TABLE).update(sertifikatData).eq('id', _certEditId);
-                    if (error) throw error;
-                    certId = _certEditId;
-                    // Hapus materi lama
-                    await sb.from(CERT_MATERI_TABLE).delete().eq('sertifikat_id', certId);
-                } else {
-                    // Insert baru
-                    sertifikatData.created_at = new Date().toISOString();
-                    sertifikatData.created_by = sessionStorage.getItem('bangkomdinkes_admin_user') || 'admin';
-                    const { data, error } = await sb.from(CERT_TABLE).insert([sertifikatData]).select();
-                    if (error) throw error;
-                    if (!data || data.length === 0) throw new Error('Insert gagal, tidak ada data dikembalikan');
-                    certId = data[0].id;
+                if (!result.success) {
+                    if (result.duplicate) {
+                        certMarkInvalid(document.getElementById('certNomor'), 'Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.');
+                        showToast('Nomor sertifikat sudah digunakan. Silakan gunakan nomor lain.', 'danger');
+                    } else {
+                        showToast(result.message || 'Terjadi kesalahan saat menyimpan sertifikat. Silakan coba lagi.', 'danger');
+                    }
+                    return;
                 }
 
-                // Insert materi
-                const materiList = certGetMateriData().map(m => ({ ...m, sertifikat_id: certId }));
-                if (materiList.length > 0) {
-                    const { error: mErr } = await sb.from(CERT_MATERI_TABLE).insert(materiList);
-                    if (mErr) throw mErr;
-                }
-
-                showToast(_certEditId ? 'Sertifikat berhasil diperbarui!' : 'Sertifikat berhasil disimpan!', 'success');
+                showToast(isEdit ? 'Sertifikat berhasil diperbarui!' : 'Sertifikat berhasil disimpan: ' + data.nomor_sertifikat, 'success');
+                certLog(isEdit ? 'memperbarui sertifikat' : 'membuat sertifikat', data.nomor_sertifikat);
                 certResetForm();
-                certLoadDaftar();
-                // Pindah ke tab daftar
-                const tabEl = document.getElementById('cert-daftar-tab');
-                if (tabEl) bootstrap.Tab.getOrCreateInstance(tabEl).show();
+                loadSertifikat();
+                certPopulateFilterOptions();
+                bootstrap.Tab.getOrCreateInstance(document.getElementById('certTabDaftarBtn')).show();
             } catch (err) {
-                console.error('certSimpan:', err);
-                const msg = err.message || 'Terjadi kesalahan saat menyimpan sertifikat. Silakan coba lagi.';
-                showToast(msg, 'danger');
+                console.error('certSaveSertifikat error:', err);
+                showToast('Terjadi kesalahan saat menyimpan sertifikat. Silakan coba lagi.', 'danger');
             } finally {
-                btn.classList.remove('btn-loading');
-                btn.disabled = false;
+                certBtnRestore(btn);
             }
         }
 
-        // ============================================
-        // PREVIEW SERTIFIKAT
-        // ============================================
-        function certPreview() {
-            const validation = certValidateForm();
-            if (!validation.valid) {
-                const msg = validation.issues.slice(0, 4).join(' • ') + (validation.issues.length > 4 ? ' • +' + (validation.issues.length - 4) + ' lainnya' : '');
-                showToast('<strong>Data belum lengkap untuk preview</strong><br>' + msg, 'warning');
-                return;
-            }
-            certRenderPreview();
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('certPreviewModal')).show();
+        // deteksi nama kolom dari error PGRST204 ("Could not find the 'x' column")
+        function certWhichColumnMissing(err) {
+            const msg = [err?.message, err?.details, err?.hint].filter(Boolean).join(' ');
+            const m = msg.match(/Could not find the '([A-Za-z_]+)' column/i);
+            return m ? m[1] : null;
         }
 
-        function certRenderPreview() {
-            const nomor = document.getElementById('certNomor').value.trim();
-            const nama = document.getElementById('certNama').value.trim();
-            const unit = document.getElementById('certUnitKerja').value.trim();
-            const tema = document.getElementById('certTema').value.trim();
-            const tanggal = document.getElementById('certTanggal').value;
-            const tempat = document.getElementById('certTempat').value.trim();
-            const tempatTerbit = document.getElementById('certTempatTerbit').value.trim();
-            const tanggalTerbit = document.getElementById('certTanggalTerbit').value;
-            const namaPejabat = document.getElementById('certNamaPejabat').value.trim();
-            const jabatanPejabat = document.getElementById('certJabatanPejabat').value.trim();
-            const penyelenggara = document.getElementById('certPenyelenggara').value.trim();
-            const totalJP = certHitungTotalJP();
-            const materi = certGetMateriData();
-
-            // Halaman Depan
-            document.getElementById('previewNomor').textContent = 'Nomor: ' + nomor;
-            document.getElementById('previewNama').textContent = nama;
-            document.getElementById('previewUnit').textContent = unit;
-            document.getElementById('previewTema').textContent = '"' + tema + '"';
-            document.getElementById('previewTanggal').textContent = formatDate(tanggal);
-            document.getElementById('previewTempat').textContent = tempat;
-
-            const tglTerbitStr = tanggalTerbit ? formatDate(tanggalTerbit) : formatDate(new Date().toISOString().split('T')[0]);
-            document.getElementById('previewTempatTgl').textContent = (tempatTerbit || 'Tenggarong') + ', ' + tglTerbitStr;
-            document.getElementById('previewPenyelenggara').textContent = penyelenggara || 'Dinas Kesehatan Kabupaten Kutai Kartanegara';
-            document.getElementById('previewNamaPejabat').textContent = namaPejabat || '_______________________';
-            document.getElementById('previewJabatanPejabat').textContent = jabatanPejabat || 'Kepala Dinas Kesehatan';
-
-            // Halaman Belakang
-            document.getElementById('previewBackNama').textContent = nama;
-            document.getElementById('previewBackUnit').textContent = unit;
-            document.getElementById('previewBackNomor').textContent = nomor;
-            document.getElementById('previewBackTotalJP').textContent = totalJP + ' JP';
-
-            const tbody = document.getElementById('previewMateriBody');
-            if (materi.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada materi</td></tr>';
-            } else {
-                tbody.innerHTML = materi.map((m, i) => `
-                    <tr>
-                        <td class="text-center">${i + 1}</td>
-                        <td>${escStat(m.judul_materi)}</td>
-                        <td>${escStat(m.narasumber)}</td>
-                        <td>${escStat(m.penyelenggara)}</td>
-                        <td class="text-center">${m.jumlah_jp}</td>
-                    </tr>
-                `).join('');
-            }
-        }
-
-        // ============================================
-        // PRINT & PDF
-        // ============================================
-        function certPrint() {
-            certRenderPreview();
-            document.body.classList.add('cert-print');
-            window.print();
-            setTimeout(() => document.body.classList.remove('cert-print'), 500);
-        }
-
-        function certDownloadPDF() {
-            certRenderPreview();
-            showToast('Menyiapkan PDF...', 'info');
-            setTimeout(() => {
-                document.body.classList.add('cert-print');
-                window.print();
-                setTimeout(() => document.body.classList.remove('cert-print'), 500);
-                showToast('Gunakan "Save as PDF" pada dialog print', 'success');
-            }, 300);
-        }
-
-        // ============================================
-        // RESET FORM
-        // ============================================
-        function certResetForm() {
-            document.getElementById('certForm').reset();
-            document.getElementById('certRegistrasiId').value = '';
-            document.getElementById('certSelectedPeserta').style.display = 'none';
-            document.getElementById('certSearchResult').style.display = 'none';
-            document.getElementById('certSearchPeserta').value = '';
-            document.getElementById('certMateriBody').innerHTML = `
-                <tr data-index="0">
-                    <td class="text-center cert-materi-no">1</td>
-                    <td><input type="text" class="form-control cert-m-judul" placeholder="Judul materi" required></td>
-                    <td><input type="text" class="form-control cert-m-narasumber" placeholder="Nama narasumber" required></td>
-                    <td><input type="text" class="form-control cert-m-penyelenggara" placeholder="Penyelenggara" required></td>
-                    <td><input type="number" class="form-control cert-m-jp" placeholder="0" min="0" required oninput="certHitungTotalJP()"></td>
-                    <td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="certHapusMateriRow(this)" title="Hapus"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-            certHitungTotalJP();
-            _certEditId = null;
-            document.getElementById('certBtnSimpan').innerHTML = '<i class="fas fa-save me-2"></i>Simpan Sertifikat';
-        }
-
-        // ============================================
-        // DAFTAR SERTIFIKAT (CRUD)
-        // ============================================
-        async function certLoadDaftar() {
-            const tbody = document.getElementById('certDaftarBody');
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Memuat data...</td></tr>';
+        // INSERT: RPC transaksional dulu; fallback 2 langkah + rollback manual
+        async function certInsertSertifikat(data) {
+            const { materi, ...header } = data;
             try {
-                const { data, error } = await sb.from(CERT_TABLE)
-                    .select('*, ' + CERT_MATERI_TABLE + '(*)')
-                    .order('created_at', { ascending: false });
-                if (error) throw error;
-                _certDaftarData = data || [];
-                _certDaftarFiltered = [..._certDaftarData];
-                certPopulateFilterUnit();
-                certRenderDaftar();
-            } catch (err) {
-                console.error('certLoadDaftar:', err);
-                const msg = (err.message || '').toLowerCase();
-                if (msg.includes('relation') || msg.includes('does not exist') || msg.includes('could not find')) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="text-center">Tabel <strong>sertifikat_pembuatan</strong> belum tersedia. Jalankan SQL migration terlebih dahulu.</td></tr>';
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Gagal memuat data: ' + escStat(err.message) + '</td></tr>';
+                const { data: newId, error } = await sb.rpc('create_sertifikat_lengkap', { p_sertifikat: header, p_materi: materi });
+                if (!error) return { success: true, id: newId };
+                if (error.code === '23505' || /duplicate key/i.test(error.message || '')) return { success: false, duplicate: true };
+                console.warn('RPC create_sertifikat_lengkap gagal, memakai fallback:', error.message);
+            } catch (e) { console.warn('RPC tidak tersedia:', e); }
+
+            try {
+                // retry: buang kolom pelengkap yang belum ada di DB (pola sama dgn buildColumnFallback registrasi)
+                let payload = { ...header }, insErr = null, insRows = null;
+                for (let attempt = 0; attempt < 5; attempt++) {
+                    const ins = await sb.from('sertifikat_pembuatan').insert([payload]).select('id');
+                    insErr = ins.error; insRows = ins.data;
+                    if (!insErr) break;
+                    if (insErr.code === '23505' || /duplicate key/i.test(insErr.message || '')) return { success: false, duplicate: true };
+                    if (/row-level security|permission denied/i.test(insErr.message || '')) {
+                        return { success: false, message: 'Gagal: penyimpanan ditolak kebijakan RLS Supabase. Jalankan migration_sertifikat.sql (bagian policy) di Supabase SQL Editor, lalu coba lagi.' };
+                    }
+                    const col = certWhichColumnMissing(insErr);
+                    if (col && payload[col] !== undefined) { delete payload[col]; continue; }
+                    break;
                 }
+                if (insErr) {
+                    if (certWhichColumnMissing(insErr)) {
+                        return { success: false, message: 'Struktur tabel sertifikat belum lengkap. Jalankan migration_sertifikat.sql di Supabase SQL Editor terlebih dahulu, lalu coba lagi.' };
+                    }
+                    return { success: false, message: 'Gagal menyimpan sertifikat: ' + insErr.message };
+                }
+                if (!insRows || insRows.length === 0) {
+                    return { success: false, message: 'Gagal: data tidak tersimpan (kebijakan RLS menolak INSERT). Jalankan migration_sertifikat.sql yang diberikan.' };
+                }
+                const sertId = insRows[0].id;
+                const rows = materi.map(m => ({ ...m, sertifikat_id: sertId }));
+                const insM = await sb.from('sertifikat_materi').insert(rows);
+                if (insM.error) {
+                    console.error('Insert materi gagal — melakukan rollback header:', insM.error);
+                    await sb.from('sertifikat_pembuatan').delete().eq('id', sertId);
+                    return { success: false, message: 'Gagal menyimpan rincian materi. Seluruh data dibatalkan agar tidak setengah jadi — silakan coba lagi.' };
+                }
+                return { success: true, id: sertId };
+            } catch (err) {
+                console.error('certInsertSertifikat fallback error:', err);
+                return { success: false, message: 'Terjadi kesalahan saat menyimpan sertifikat. Silakan coba lagi.' };
             }
         }
 
-        function certPopulateFilterUnit() {
-            const select = document.getElementById('certFilterUnit');
-            if (!select) return;
-            const units = [...new Set(_certDaftarData.map(d => d.unit_kerja).filter(Boolean))].sort();
-            select.innerHTML = '<option value="">Semua Unit Kerja</option>' +
-                units.map(u => `<option value="${escStat(u)}">${escStat(u)}</option>`).join('');
+        // UPDATE: RPC transaksional dulu; fallback update header + ganti materi
+        async function certUpdateSertifikat(id, data) {
+            const { materi, ...headerRaw } = data;
+            const header = { ...headerRaw };
+            delete header.created_by; // created_by tidak diubah saat update
+            try {
+                const { error } = await sb.rpc('update_sertifikat_lengkap', { p_id: id, p_sertifikat: header, p_materi: materi });
+                if (!error) return { success: true };
+                if (error.code === '23505' || /duplicate key/i.test(error.message || '')) return { success: false, duplicate: true };
+                console.warn('RPC update_sertifikat_lengkap gagal, memakai fallback:', error.message);
+            } catch (e) { console.warn('RPC tidak tersedia:', e); }
+
+            try {
+                // retry: buang kolom pelengkap yang belum ada di DB (pola sama dgn buildColumnFallback registrasi)
+                let payload = { ...header };
+                payload.updated_at = new Date().toISOString(); // jaga-jaga bila trigger updated_at belum terpasang
+                let upErr = null, upRows = null;
+                for (let attempt = 0; attempt < 5; attempt++) {
+                    const up = await sb.from('sertifikat_pembuatan').update(payload).eq('id', id).select('id');
+                    upErr = up.error; upRows = up.data;
+                    if (!upErr) break;
+                    if (upErr.code === '23505' || /duplicate key/i.test(upErr.message || '')) return { success: false, duplicate: true };
+                    if (/row-level security|permission denied/i.test(upErr.message || '')) {
+                        return { success: false, message: 'Gagal: perubahan ditolak kebijakan RLS Supabase. Jalankan migration_sertifikat.sql (bagian policy) terlebih dahulu.' };
+                    }
+                    const col = certWhichColumnMissing(upErr);
+                    if (col && payload[col] !== undefined) { delete payload[col]; continue; }
+                    break;
+                }
+                if (upErr) {
+                    if (certWhichColumnMissing(upErr)) {
+                        return { success: false, message: 'Struktur tabel sertifikat belum lengkap. Jalankan migration_sertifikat.sql di Supabase SQL Editor terlebih dahulu.' };
+                    }
+                    return { success: false, message: 'Gagal memperbarui sertifikat: ' + upErr.message };
+                }
+                if (!upRows || upRows.length === 0) {
+                    return { success: false, message: 'Gagal: perubahan tidak tersimpan (kebijakan RLS menolak UPDATE). Jalankan migration_sertifikat.sql.' };
+                }
+                const del = await sb.from('sertifikat_materi').delete().eq('sertifikat_id', id);
+                if (del.error) return { success: false, message: 'Gagal memperbarui rincian materi: ' + del.error.message };
+                const rows = materi.map(m => ({ ...m, sertifikat_id: id }));
+                const insM = await sb.from('sertifikat_materi').insert(rows);
+                if (insM.error) return { success: false, message: 'Gagal menyimpan rincian materi baru: ' + insM.error.message };
+                return { success: true };
+            } catch (err) {
+                console.error('certUpdateSertifikat fallback error:', err);
+                return { success: false, message: 'Terjadi kesalahan saat memperbarui sertifikat. Silakan coba lagi.' };
+            }
         }
 
-        function certFilterDaftar() {
-            const q = document.getElementById('certSearchDaftar').value.toLowerCase();
-            const unit = document.getElementById('certFilterUnit').value;
-            const tgl = document.getElementById('certFilterTanggal').value;
-            _certDaftarFiltered = _certDaftarData.filter(d => {
-                const matchQ = !q ||
-                    (d.nomor_sertifikat || '').toLowerCase().includes(q) ||
-                    (d.nama_lengkap || '').toLowerCase().includes(q) ||
-                    (d.unit_kerja || '').toLowerCase().includes(q) ||
-                    (d.tema_kegiatan || '').toLowerCase().includes(q);
-                const matchUnit = !unit || d.unit_kerja === unit;
-                const matchTgl = !tgl || d.tanggal_pelaksanaan === tgl;
-                return matchQ && matchUnit && matchTgl;
+        function certResetForm() {
+            certState.editingId = null;
+            certState.selectedPeserta = null;
+            ['certRegistrasiId','certEditId','certNomor','certNama','certUnit','certNik','certEmail','certTema',
+             'certTanggal','certTempat','certLogoUrl','certKota','certPenyelenggara','certNamaPejabat',
+             'certJabatanPejabat','certKeterangan'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
             });
-            _certCurrentPage = 1;
-            certRenderDaftar();
+            const tglTerbit = document.getElementById('certTglTerbit');
+            if (tglTerbit) tglTerbit.value = new Date().toISOString().slice(0, 10);
+            document.getElementById('certPesertaSelectedBox').style.display = 'none';
+            document.getElementById('certPesertaEmpty').style.display = 'block';
+            document.getElementById('certMateriBody').innerHTML = '';
+            certAddMateri();
+            calculateTotalJP();
+            certClearInvalid(document.getElementById('certForm'));
+            document.getElementById('certBtnSave').innerHTML = '<i class="fas fa-save me-2"></i>Simpan Sertifikat';
+            document.getElementById('certBtnCancelEdit').style.display = 'none';
         }
 
-        function certRenderDaftar() {
+        // ============================================================
+        // EDIT SERTIFIKAT
+        // ============================================================
+        async function certEditSertifikat(id) {
+            showLoading();
+            try {
+                const { data: head, error: e1 } = await sb.from('sertifikat_pembuatan').select('*').eq('id', id).single();
+                if (e1) throw e1;
+                const { data: materi, error: e2 } = await sb.from('sertifikat_materi').select('*').eq('sertifikat_id', id).order('urutan', { ascending: true });
+                if (e2) throw e2;
+
+                bootstrap.Tab.getOrCreateInstance(document.getElementById('certTabBuatBtn')).show();
+
+                certState.editingId = id;
+                certState.selectedPeserta = { id: head.registrasi_id, namalengkap: head.nama_lengkap, unitkerja: head.unit_kerja };
+
+                document.getElementById('certEditId').value = id;
+                document.getElementById('certRegistrasiId').value = head.registrasi_id ?? '';
+                document.getElementById('certNomor').value = head.nomor_sertifikat || '';
+                document.getElementById('certNama').value = head.nama_lengkap || '';
+                document.getElementById('certUnit').value = head.unit_kerja || '';
+                document.getElementById('certTema').value = head.tema_kegiatan || '';
+                document.getElementById('certTanggal').value = head.tanggal_pelaksanaan || '';
+                document.getElementById('certTempat').value = head.tempat_pelaksanaan || '';
+                document.getElementById('certLogoUrl').value = head.logo_url || '';
+                document.getElementById('certKota').value = head.kota_penerbitan || '';
+                document.getElementById('certTglTerbit').value = head.tanggal_penerbitan || '';
+                document.getElementById('certPenyelenggara').value = head.penyelenggara || '';
+                document.getElementById('certNamaPejabat').value = head.nama_pejabat || '';
+                document.getElementById('certJabatanPejabat').value = head.jabatan_pejabat || '';
+                document.getElementById('certKeterangan').value = head.keterangan || '';
+
+                document.getElementById('certSelNama').textContent = head.nama_lengkap || '-';
+                document.getElementById('certSelNik').textContent = '(dari data tersimpan)';
+                document.getElementById('certSelUnit').textContent = head.unit_kerja || '-';
+                document.getElementById('certSelEmail').textContent = '-';
+                document.getElementById('certPesertaSelectedBox').style.display = 'block';
+                document.getElementById('certPesertaEmpty').style.display = 'none';
+
+                // lengkapi NIK & email dari registrasi bila relasi masih ada
+                document.getElementById('certNik').value = '';
+                document.getElementById('certEmail').value = '';
+                if (head.registrasi_id) {
+                    sb.from('registrasi').select('nik, nip, email').eq('id', head.registrasi_id).single()
+                        .then(({ data }) => {
+                            if (data) {
+                                document.getElementById('certNik').value = data.nik || data.nip || '';
+                                document.getElementById('certEmail').value = data.email || '';
+                            }
+                        }).catch(() => {});
+                }
+
+                document.getElementById('certMateriBody').innerHTML = (materi && materi.length ? materi : [{}]).map((m, i) =>
+                    certMateriRowHtml(i, {
+                        judul: m.judul_materi || '',
+                        narasumber: m.narasumber || '',
+                        penyelenggara: m.penyelenggara || '',
+                        jp: (m.jumlah_jp ?? '')
+                    })).join('');
+                calculateTotalJP();
+
+                document.getElementById('certBtnSave').innerHTML = '<i class="fas fa-save me-2"></i>Update Sertifikat';
+                document.getElementById('certBtnCancelEdit').style.display = 'inline-block';
+                showToast('Mode edit: ' + (head.nomor_sertifikat || ''), 'info');
+                document.getElementById('certTabBuat').scrollIntoView({ behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                console.error('certEditSertifikat error:', err);
+                showToast('Gagal memuat data sertifikat untuk diedit. Silakan coba lagi.', 'danger');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function certCancelEdit() {
+            certResetForm();
+            showToast('Mode edit dibatalkan.', 'info');
+        }
+
+        // ============================================================
+        // DAFTAR SERTIFIKAT (server-side: search, filter, pagination)
+        // ============================================================
+        async function loadSertifikat() {
             const tbody = document.getElementById('certDaftarBody');
-            const totalPages = Math.ceil(_certDaftarFiltered.length / CERT_ITEMS_PER_PAGE);
-            const start = (_certCurrentPage - 1) * CERT_ITEMS_PER_PAGE;
-            const pageData = _certDaftarFiltered.slice(start, start + CERT_ITEMS_PER_PAGE);
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin me-2"></i>Memuat data...</td></tr>';
 
-            if (pageData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-center">Tidak ada data sertifikat</td></tr>';
-            } else {
-                tbody.innerHTML = pageData.map((d, i) => `
-                    <tr>
-                        <td>${start + i + 1}</td>
-                        <td><span class="reg-cell">${escStat(d.nomor_sertifikat)}</span></td>
-                        <td><strong>${escStat(d.nama_lengkap)}</strong></td>
-                        <td>${escStat(d.unit_kerja)}</td>
-                        <td>${escStat(d.tema_kegiatan)}</td>
-                        <td>${formatDate(d.tanggal_pelaksanaan)}</td>
-                        <td><span class="badge bg-primary">${d.total_jp || 0} JP</span></td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-info me-1" onclick="certPreviewById(${d.id})" title="Preview"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-sm btn-warning me-1" onclick="certEdit(${d.id})" title="Edit"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger" onclick="certHapus(${d.id})" title="Hapus"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
+            const search = (document.getElementById('certFilterSearch')?.value || '').trim();
+            const tanggal = document.getElementById('certFilterTanggal')?.value || '';
+            const unit = document.getElementById('certFilterUnit')?.value || '';
+            const tema = document.getElementById('certFilterTema')?.value || '';
+
+            const t = search.replace(/[,()%\\"]/g, ' ').replace(/\s+/g, ' ').trim();
+            const from = (certState.daftarPage - 1) * CERT_PAGE_SIZE;
+            const to = from + CERT_PAGE_SIZE - 1;
+
+            try {
+                let q = sb.from('sertifikat_pembuatan').select('*', { count: 'exact' });
+                if (t) q = q.or(`nomor_sertifikat.ilike.%${t}%,nama_lengkap.ilike.%${t}%,unit_kerja.ilike.%${t}%,tema_kegiatan.ilike.%${t}%`);
+                if (tanggal) q = q.eq('tanggal_pelaksanaan', tanggal);
+                if (unit) q = q.eq('unit_kerja', unit);
+                if (tema) q = q.eq('tema_kegiatan', tema);
+                q = q.order('created_at', { ascending: false }).range(from, to);
+
+                const { data, error, count } = await q;
+                if (error) throw error;
+
+                certState.lastListRows = data || [];
+                certState.daftarCount = count || 0;
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted" style="padding: 34px 0;">
+                        <i class="fas fa-certificate" style="font-size: 2rem; opacity: .4;"></i>
+                        <div class="mt-2">Belum ada sertifikat${t ? ' yang cocok dengan pencarian/filter' : ''}.<br>
+                        <small>Buka tab <b>Buat Sertifikat</b> untuk membuat sertifikat pertama.</small></div></td></tr>`;
+                } else {
+                    tbody.innerHTML = data.map((s, i) => {
+                        const idAttr = String(s.id).replace(/'/g, '');
+                        return `
+                        <tr>
+                            <td>${from + i + 1}</td>
+                            <td><span class="reg-cell">${certEsc(s.nomor_sertifikat)}</span></td>
+                            <td><strong>${certEsc(s.nama_lengkap)}</strong></td>
+                            <td>${certEsc(s.unit_kerja) || '-'}</td>
+                            <td style="max-width: 280px;">${certEsc(s.tema_kegiatan)}</td>
+                            <td>${formatDate(s.tanggal_pelaksanaan)}</td>
+                            <td class="text-end"><span class="badge bg-primary">${certEsc(s.total_jp ?? 0)} JP</span></td>
+                            <td style="white-space: nowrap;">
+                                <button class="btn-action-cert bac-view" title="Preview" onclick="certPreviewById('${idAttr}')"><i class="fas fa-eye"></i></button>
+                                <button class="btn-action-cert bac-edit" title="Edit" onclick="certEditSertifikat('${idAttr}')"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action-cert bac-print" title="Cetak" onclick="certPrintById('${idAttr}')"><i class="fas fa-print"></i></button>
+                                <button class="btn-action-cert bac-pdf" title="Download PDF" onclick="certPdfById('${idAttr}')"><i class="fas fa-file-pdf"></i></button>
+                                <button class="btn-action-cert bac-del" title="Hapus" onclick="certDeleteSertifikat('${idAttr}')"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+
+                document.getElementById('certDaftarInfo').textContent = certState.daftarCount > 0
+                    ? `Menampilkan ${from + 1}\u2013${from + (data || []).length} dari ${certState.daftarCount} sertifikat`
+                    : 'Tidak ada data';
+                certRenderDaftarPagination();
+                certPopulateFilterOptions();
+            } catch (err) {
+                console.error('loadSertifikat error:', err);
+                const msg = /does not exist|schema cache|PGRST205/i.test(err.message || '')
+                    ? 'Tabel sertifikat belum tersedia di Supabase.<br>Jalankan file <b>migration_sertifikat.sql</b> di Supabase SQL Editor terlebih dahulu.'
+                    : 'Gagal memuat daftar sertifikat. Periksa koneksi ke Supabase lalu klik Muat Ulang.';
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger" style="padding: 26px 0;">
+                    <i class="fas fa-triangle-exclamation" style="font-size:1.6rem;opacity:.6;"></i>
+                    <div class="mt-2">${msg}</div></td></tr>`;
+                document.getElementById('certDaftarInfo').textContent = '-';
             }
-
-            document.getElementById('certPaginationInfo').textContent =
-                `Menampilkan ${start + 1} - ${Math.min(start + CERT_ITEMS_PER_PAGE, _certDaftarFiltered.length)} dari ${_certDaftarFiltered.length} data`;
-
-            const pagination = document.getElementById('certPagination');
-            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
-            let html = `<li class="page-item ${_certCurrentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="certChangePage(${_certCurrentPage - 1});return false;">Previous</a></li>`;
-            for (let i = 1; i <= totalPages; i++) {
-                html += `<li class="page-item ${_certCurrentPage === i ? 'active' : ''}"><a class="page-link" href="#" onclick="certChangePage(${i});return false;">${i}</a></li>`;
-            }
-            html += `<li class="page-item ${_certCurrentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="certChangePage(${_certCurrentPage + 1});return false;">Next</a></li>`;
-            pagination.innerHTML = html;
         }
 
-        function certChangePage(page) {
-            _certCurrentPage = page;
-            certRenderDaftar();
+        async function certPopulateFilterOptions() {
+            try {
+                const [u, tm] = await Promise.all([
+                    sb.from('sertifikat_pembuatan').select('unit_kerja').limit(1000),
+                    sb.from('sertifikat_pembuatan').select('tema_kegiatan').limit(1000)
+                ]);
+                const selUnit = document.getElementById('certFilterUnit');
+                const selTema = document.getElementById('certFilterTema');
+                if (!selUnit || !selTema) return;
+                const curU = selUnit.value, curT = selTema.value;
+                const units = [...new Set((u.data || []).map(x => (x.unit_kerja || '').trim()).filter(Boolean))].sort();
+                const temas = [...new Set((tm.data || []).map(x => (x.tema_kegiatan || '').trim()).filter(Boolean))].sort();
+                selUnit.innerHTML = '<option value="">Semua Unit Kerja</option>' +
+                    units.map(x => `<option value="${certEsc(x)}" ${x === curU ? 'selected' : ''}>${certEsc(x.length > 45 ? x.slice(0, 45) + '…' : x)}</option>`).join('');
+                selTema.innerHTML = '<option value="">Semua Tema</option>' +
+                    temas.slice(0, 300).map(x => `<option value="${certEsc(x)}" ${x === curT ? 'selected' : ''}>${certEsc(x.length > 60 ? x.slice(0, 60) + '…' : x)}</option>`).join('');
+            } catch (e) { console.warn('certPopulateFilterOptions:', e.message); }
+        }
+
+        function certRenderDaftarPagination() {
+            const ul = document.getElementById('certDaftarPagination');
+            if (!ul) return;
+            const maxPage = Math.max(1, Math.ceil(certState.daftarCount / CERT_PAGE_SIZE));
+            const page = certState.daftarPage;
+            const pages = [];
+            const start = Math.max(1, page - 2), end = Math.min(maxPage, page + 2);
+            if (start > 1) pages.push(1);
+            if (start > 2) pages.push('…');
+            for (let i = start; i <= end; i++) pages.push(i);
+            if (end < maxPage - 1) pages.push('…');
+            if (end < maxPage) pages.push(maxPage);
+            ul.innerHTML =
+                `<li class="page-item ${page <= 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="certGotoPage(${page - 1});return false;"><i class="fas fa-chevron-left"></i></a></li>` +
+                pages.map(p => p === '…'
+                    ? '<li class="page-item disabled"><span class="page-link">…</span></li>'
+                    : `<li class="page-item ${p === page ? 'active' : ''}"><a class="page-link" href="#" onclick="certGotoPage(${p});return false;">${p}</a></li>`).join('') +
+                `<li class="page-item ${page >= maxPage ? 'disabled' : ''}"><a class="page-link" href="#" onclick="certGotoPage(${page + 1});return false;"><i class="fas fa-chevron-right"></i></a></li>`;
+        }
+
+        function certGotoPage(p) {
+            const maxPage = Math.max(1, Math.ceil(certState.daftarCount / CERT_PAGE_SIZE));
+            if (p < 1 || p > maxPage) return;
+            certState.daftarPage = p;
+            loadSertifikat();
+        }
+
+        function certResetFilters() {
+            document.getElementById('certFilterSearch').value = '';
+            document.getElementById('certFilterTanggal').value = '';
+            document.getElementById('certFilterUnit').value = '';
+            document.getElementById('certFilterTema').value = '';
+            certState.daftarPage = 1;
+            loadSertifikat();
+        }
+
+        // ============================================================
+        // HAPUS SERTIFIKAT (konfirmasi + hapus detail secara aman)
+        // ============================================================
+        async function certDeleteSertifikat(id) {
+            const row = certState.lastListRows.find(x => String(x.id) === String(id));
+            const nomor = row?.nomor_sertifikat || 'ini';
+            if (!confirm('Apakah Anda yakin ingin menghapus sertifikat ini?\n\nNomor: ' + nomor + '\n\nSeluruh rincian materi terkait juga akan dihapus.')) return;
+            showLoading();
+            try {
+                let done = false;
+                try {
+                    const { error } = await sb.rpc('delete_sertifikat_lengkap', { p_id: id });
+                    if (!error) done = true;
+                    else console.warn('RPC delete_sertifikat_lengkap gagal, memakai fallback:', error.message);
+                } catch (e) { console.warn('RPC tidak tersedia:', e); }
+                if (!done) {
+                    // fallback: hapus materi dulu, baru header (aman walau FK CASCADE belum ada)
+                    const dm = await sb.from('sertifikat_materi').delete().eq('sertifikat_id', id);
+                    if (dm.error) throw dm.error;
+                    const dh = await sb.from('sertifikat_pembuatan').delete().eq('id', id).select('id');
+                    if (dh.error) throw dh.error;
+                    if (!dh.data || dh.data.length === 0) {
+                        throw new Error('Gagal: data tidak terhapus (kebijakan RLS menolak DELETE). Jalankan SQL migration (bagian policy).');
+                    }
+                }
+                showToast('Sertifikat berhasil dihapus: ' + nomor, 'success');
+                certLog('menghapus sertifikat', nomor);
+                const maxPage = Math.max(1, Math.ceil((certState.daftarCount - 1) / CERT_PAGE_SIZE));
+                if (certState.daftarPage > maxPage) certState.daftarPage = maxPage;
+                loadSertifikat();
+            } catch (err) {
+                console.error('certDeleteSertifikat error:', err);
+                showToast('Gagal menghapus sertifikat. ' + (err.message || 'Silakan coba lagi.'), 'danger');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ============================================================
+        // AUDIT LOG (opsional, non-blocking — tabel log_aktivitas)
+        // ============================================================
+        function certLog(aktivitas, nomor) {
+            try {
+                sb.from('log_aktivitas').insert([{
+                    username: certCurrentUser(),
+                    aktivitas: aktivitas,
+                    nomor_sertifikat: nomor || null,
+                    detail: null
+                }]).then(({ error }) => {
+                    if (error) console.warn('log_aktivitas belum tersedia (diabaikan):', error.message);
+                }).catch(() => {});
+            } catch (e) { /* logging tidak boleh mengganggu alur utama */ }
+        }
+
+        // ============================================================
+        // OPSI JADWAL — helper mengisi materi dari tabel `jadwal` yang ada
+        // ============================================================
+        async function loadCertJadwalOptions() {
+            try {
+                if (certState.jadwalList.length > 0) { certFillJadwalOptions(); return; }
+                const { data, error } = await sb.from('jadwal')
+                    .select('id, tema, narasumber, jp, tanggal')
+                    .order('tanggal', { ascending: false })
+                    .limit(100);
+                if (error) throw error;
+                certState.jadwalList = data || [];
+                certFillJadwalOptions();
+            } catch (e) { console.warn('loadCertJadwalOptions:', e.message); }
+        }
+
+        function certFillJadwalOptions() {
+            const sel = document.getElementById('certJadwalSelect');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">&mdash; Ambil awal dari jadwal kegiatan &mdash;</option>' +
+                certState.jadwalList.map(j =>
+                    `<option value="${certEsc(j.id)}">${certEsc((j.tema || '(tanpa tema)').slice(0, 70))} — ${certEsc(j.tanggal || '')}</option>`).join('');
+        }
+
+        // ============================================================
+        // AMBIL 1 SERTIFIKAT LENGKAP (header + materi)
+        // ============================================================
+        async function certFetchFull(id) {
+            const { data: head, error: e1 } = await sb.from('sertifikat_pembuatan').select('*').eq('id', id).single();
+            if (e1) throw e1;
+            const { data: materi, error: e2 } = await sb.from('sertifikat_materi').select('*').eq('sertifikat_id', id).order('urutan', { ascending: true });
+            if (e2) throw e2;
+            return { ...head, materi: materi || [] };
+        }
+
+        // ============================================================
+        // PREVIEW (data aktual dari form / dari database)
+        // ============================================================
+        function renderCertificateFront(data) {
+            return CERT_TEMPLATES[certActiveTemplate].front(data);
+        }
+        function renderCertificateBack(data) {
+            return CERT_TEMPLATES[certActiveTemplate].back(data);
+        }
+
+        function certPreviewFromForm() {
+            const data = certCollectFormData();
+            certOpenPreview(data, 'Draft dari Form');
         }
 
         async function certPreviewById(id) {
+            showLoading();
             try {
-                const { data, error } = await sb.from(CERT_TABLE)
-                    .select('*, ' + CERT_MATERI_TABLE + '(*)')
-                    .eq('id', id)
-                    .single();
-                if (error) throw error;
-                if (!data) { showToast('Sertifikat tidak ditemukan', 'warning'); return; }
-                certFillPreviewFromData(data);
-                bootstrap.Modal.getOrCreateInstance(document.getElementById('certPreviewModal')).show();
+                const data = await certFetchFull(id);
+                certOpenPreview(data, 'Data Tersimpan');
             } catch (err) {
                 console.error('certPreviewById:', err);
-                showToast('Gagal memuat preview', 'danger');
+                showToast('Gagal memuat sertifikat untuk preview. Silakan coba lagi.', 'danger');
+            } finally {
+                hideLoading();
             }
         }
 
-        function certFillPreviewFromData(d) {
-            document.getElementById('previewNomor').textContent = 'Nomor: ' + (d.nomor_sertifikat || '-');
-            document.getElementById('previewNama').textContent = d.nama_lengkap || '-';
-            document.getElementById('previewUnit').textContent = d.unit_kerja || '-';
-            document.getElementById('previewTema').textContent = '"' + (d.tema_kegiatan || '-') + '"';
-            document.getElementById('previewTanggal').textContent = formatDate(d.tanggal_pelaksanaan);
-            document.getElementById('previewTempat').textContent = d.tempat_pelaksanaan || '-';
-            const tglTerbit = d.tanggal_terbit ? formatDate(d.tanggal_terbit) : formatDate(d.created_at ? d.created_at.split('T')[0] : new Date().toISOString().split('T')[0]);
-            document.getElementById('previewTempatTgl').textContent = (d.tempat_terbit || 'Tenggarong') + ', ' + tglTerbit;
-            document.getElementById('previewPenyelenggara').textContent = d.penyelenggara || 'Dinas Kesehatan Kabupaten Kutai Kartanegara';
-            document.getElementById('previewNamaPejabat').textContent = d.nama_pejabat || '_______________________';
-            document.getElementById('previewJabatanPejabat').textContent = d.jabatan_pejabat || 'Kepala Dinas Kesehatan';
+        function certOpenPreview(data, modeLabel) {
+            certState.lastPreviewData = data;
+            document.getElementById('certPreviewModeBadge').textContent = modeLabel || 'Preview';
+            certRenderPreview(data);
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('certPreviewModal')).show();
+            setTimeout(() => {
+                const outer = document.querySelector('#certPreviewModal .cert-zoom-outer');
+                const fit = Math.min(1, Math.max(0.35, ((outer?.clientWidth || 1100) - 40) / 1123));
+                certState.zoom = Math.round(fit * 10) / 10;
+                certApplyZoom();
+            }, 250);
+        }
 
-            document.getElementById('previewBackNama').textContent = d.nama_lengkap || '-';
-            document.getElementById('previewBackUnit').textContent = d.unit_kerja || '-';
-            document.getElementById('previewBackNomor').textContent = d.nomor_sertifikat || '-';
-            document.getElementById('previewBackTotalJP').textContent = (d.total_jp || 0) + ' JP';
+        function certRenderPreview(data) {
+            certState.lastPreviewData = data;
+            const html = renderCertificateFront(data) + renderCertificateBack(data);
+            const preview = document.getElementById('certPreviewPages');
+            if (preview) preview.innerHTML = html;
+            document.getElementById('certPdfStage').innerHTML = html; // stage selalu sinkron
+            certApplyZoom();
+        }
 
-            const materi = (d.sertifikat_materi || d[CERT_MATERI_TABLE] || []).sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
-            const tbody = document.getElementById('previewMateriBody');
-            if (materi.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada materi</td></tr>';
-            } else {
-                tbody.innerHTML = materi.map((m, i) => `
-                    <tr>
-                        <td class="text-center">${i + 1}</td>
-                        <td>${escStat(m.judul_materi)}</td>
-                        <td>${escStat(m.narasumber)}</td>
-                        <td>${escStat(m.penyelenggara)}</td>
-                        <td class="text-center">${m.jumlah_jp || 0}</td>
-                    </tr>
-                `).join('');
+        function certLivePreviewRefresh() {
+            const modalEl = document.getElementById('certPreviewModal');
+            if (modalEl && modalEl.classList.contains('show')) {
+                certRenderPreview(certCollectFormData());
             }
         }
 
-        async function certEdit(id) {
+        function certZoom(delta) {
+            certState.zoom = Math.min(1.5, Math.max(0.3, Math.round((certState.zoom + delta) * 100) / 100));
+            certApplyZoom();
+        }
+
+        function certApplyZoom() {
+            document.querySelectorAll('.cert-zoom-inner').forEach(el => el.style.setProperty('--cert-zoom', certState.zoom));
+            const val = document.getElementById('certZoomVal');
+            if (val) val.textContent = Math.round(certState.zoom * 100) + '%';
+        }
+
+        // ============================================================
+        // TEMPLATE DEFAULT — halaman 1 (SERTIFIKAT)
+        // Struktur siap dikembangkan: tambahkan CERT_TEMPLATES.formal, dst.
+        // ============================================================
+        CERT_TEMPLATES.default.front = function(d) {
+            const logo = d.logo_url
+                ? `<img src="${certEsc(d.logo_url)}" alt="Logo Instansi" onerror="certLogoFallback(this)">`
+                : '<div class="logo-fallback"><i class="fas fa-heart-pulse"></i></div>';
+            return `
+            <div class="certificate-page">
+                <div class="cert-frame">
+                    <div class="cert-frame-bottom"></div>
+                    <div class="cert-corner cert-c-tl"></div><div class="cert-corner cert-c-tr"></div>
+                    <div class="cert-corner cert-c-bl"></div><div class="cert-corner cert-c-br"></div>
+                </div>
+                <div class="cert-content">
+                    <div class="cert-logo">${logo}</div>
+                    <div class="cert-title">SERTIFIKAT</div>
+                    <div class="cert-subtitle">Nomor: ${certEsc(d.nomor_sertifikat || '.......................')}</div>
+                    <div class="cert-diberikan">Dengan ini diberikan kepada:</div>
+                    <div class="cert-nama">${certEsc(d.nama_lengkap || '( Nama Peserta )')}</div>
+                    <div class="cert-unit">${certEsc(d.unit_kerja || '( Unit Kerja )')}</div>
+                    <div class="cert-atas">atas partisipasinya dalam:</div>
+                    <div class="cert-tema">&ldquo;${certEsc(d.tema_kegiatan || '( Tema Kegiatan )')}&rdquo;</div>
+                    <div class="cert-pada">yang dilaksanakan pada:</div>
+                    <div class="cert-waktu">${certEsc(d.tanggal_pelaksanaan ? certFormatTanggalPanjang(d.tanggal_pelaksanaan) : '.......................')} &bull; ${certEsc(d.tempat_pelaksanaan || '.......................')}</div>
+                </div>
+                <div class="cert-sign">
+                    <div>${certEsc(d.kota_penerbitan || '.......................')}, ${certEsc(d.tanggal_penerbitan ? certFormatTanggalPanjang(d.tanggal_penerbitan) : '.......................')}</div>
+                    <div class="cs-instansi">${certEsc(d.penyelenggara || 'PENYELENGGARA')}</div>
+                    <div class="cs-nama">${certEsc(d.nama_pejabat || '..........................................')}</div>
+                    <div class="cs-jabatan">${certEsc(d.jabatan_pejabat || 'Jabatan Pejabat Penanda Tangan')}</div>
+                </div>
+            </div>`;
+        };
+
+        // ============================================================
+        // TEMPLATE DEFAULT — halaman 2 (RINCIAN KEGIATAN DAN MATERI)
+        // ============================================================
+        CERT_TEMPLATES.default.back = function(d) {
+            const rows = (d.materi && d.materi.length ? d.materi : []).map((m, i) => `
+                        <tr>
+                            <td class="num">${i + 1}</td>
+                            <td>${certEsc(m.judul_materi || '-')}</td>
+                            <td>${certEsc(m.narasumber || '-')}</td>
+                            <td>${certEsc(m.penyelenggara || '-')}</td>
+                            <td class="jp">${certEsc(m.jumlah_jp ?? 0)}</td>
+                        </tr>`).join('');
+            const total = d.total_jp ?? (d.materi || []).reduce((s, m) => s + (Number(m.jumlah_jp) || 0), 0);
+            const logo = d.logo_url
+                ? `<img src="${certEsc(d.logo_url)}" alt="Logo Instansi" onerror="certLogoFallback(this)">`
+                : '<div class="logo-fallback"><i class="fas fa-heart-pulse"></i></div>';
+            return `
+            <div class="certificate-page">
+                <div class="cert-frame">
+                    <div class="cert-frame-bottom"></div>
+                    <div class="cert-corner cert-c-tl"></div><div class="cert-corner cert-c-tr"></div>
+                    <div class="cert-corner cert-c-bl"></div><div class="cert-corner cert-c-br"></div>
+                </div>
+                <div class="certb-content">
+                    <div class="certb-header">
+                        <div class="ch-logo">${logo}</div>
+                        <div class="certb-title">RINCIAN KEGIATAN DAN MATERI</div>
+                        <div style="width: 15mm;"></div>
+                    </div>
+                    <div class="certb-info">
+                        <div class="ci-label">Nama Peserta</div><div class="ci-value">${certEsc(d.nama_lengkap || '-')}</div>
+                        <div class="ci-label">Unit Kerja</div><div class="ci-value">${certEsc(d.unit_kerja || '-')}</div>
+                        <div class="ci-label">Nomor Sertifikat</div><div class="ci-value">${certEsc(d.nomor_sertifikat || '-')}</div>
+                    </div>
+                    <table class="certb-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10mm;" class="num">No</th>
+                                <th>Judul Materi</th>
+                                <th style="width: 52mm;">Narasumber</th>
+                                <th style="width: 45mm;">Penyelenggara</th>
+                                <th style="width: 18mm;" class="jp">JP</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows || '<tr><td colspan="5" class="text-center" style="color: #9CA3AF;">Belum ada materi</td></tr>'}</tbody>
+                    </table>
+                    <div class="certb-total">TOTAL JUMLAH JP: ${certEsc(total)} JP</div>
+                    <div class="certb-ket">
+                        <div class="ck-label">Keterangan</div>
+                        <div class="ck-value">${d.keterangan ? certEsc(d.keterangan) : '<span class="ck-empty">&mdash;</span>'}</div>
+                    </div>
+                    <div class="certb-footer">Dokumen ini merupakan bagian tidak terpisahkan dari Sertifikat No. ${certEsc(d.nomor_sertifikat || '-')}${d.penyelenggara ? ' — ' + certEsc(d.penyelenggara) : ''}</div>
+                </div>
+            </div>`;
+        };
+
+        // ============================================================
+        // CETAK (A4 landscape, 2 halaman, tanpa elemen UI aplikasi)
+        // ============================================================
+        function printCertificate() {
+            if (!document.getElementById('certPdfStage').innerHTML.trim()) {
+                certRenderPreview(certState.lastPreviewData || certCollectFormData());
+            }
+            // @page A4 landscape hanya aktif saat mencetak sertifikat
+            // (cetak Bukti Pendaftaran yang lama tetap tidak berubah)
+            let st = document.getElementById('certPrintPageStyle');
+            if (!st) {
+                st = document.createElement('style');
+                st.id = 'certPrintPageStyle';
+                document.head.appendChild(st);
+            }
+            st.textContent = '@page { size: A4 landscape; margin: 0; }';
+            document.body.classList.add('print-sertifikat');
+            setTimeout(() => {
+                try { window.print(); }
+                catch (e) { console.error('print error:', e); showToast('Gagal membuka dialog cetak.', 'danger'); }
+                setTimeout(() => {
+                    document.body.classList.remove('print-sertifikat');
+                    st.textContent = '';
+                }, 1200);
+            }, 150);
+        }
+
+        window.addEventListener('afterprint', () => {
+            document.body.classList.remove('print-sertifikat');
+            const st = document.getElementById('certPrintPageStyle');
+            if (st) st.textContent = '';
+        });
+
+        async function certPrintById(id) {
+            showLoading();
             try {
-                const { data, error } = await sb.from(CERT_TABLE)
-                    .select('*, ' + CERT_MATERI_TABLE + '(*)')
-                    .eq('id', id)
-                    .single();
-                if (error) throw error;
-                if (!data) { showToast('Sertifikat tidak ditemukan', 'warning'); return; }
+                const data = await certFetchFull(id);
+                certRenderPreview(data);
+                hideLoading();
+                printCertificate();
+            } catch (err) {
+                console.error('certPrintById:', err);
+                hideLoading();
+                showToast('Gagal menyiapkan cetak. Silakan coba lagi.', 'danger');
+            }
+        }
 
-                _certEditId = id;
-                // Isi form
-                document.getElementById('certRegistrasiId').value = data.registrasi_id || '';
-                document.getElementById('certNomor').value = data.nomor_sertifikat || '';
-                document.getElementById('certNama').value = data.nama_lengkap || '';
-                document.getElementById('certUnitKerja').value = data.unit_kerja || '';
-                document.getElementById('certTema').value = data.tema_kegiatan || '';
-                document.getElementById('certTanggal').value = data.tanggal_pelaksanaan || '';
-                document.getElementById('certTempat').value = data.tempat_pelaksanaan || '';
-                document.getElementById('certTempatTerbit').value = data.tempat_terbit || '';
-                document.getElementById('certTanggalTerbit').value = data.tanggal_terbit || '';
-                document.getElementById('certNamaPejabat').value = data.nama_pejabat || '';
-                document.getElementById('certJabatanPejabat').value = d.jabatan_pejabat || '';
-                document.getElementById('certPenyelenggara').value = data.penyelenggara || '';
-
-                // Tampilkan info peserta
-                document.getElementById('certSpNama').textContent = data.nama_lengkap || '-';
-                document.getElementById('certSpUnit').textContent = data.unit_kerja || '-';
-                document.getElementById('certSpNik').textContent = '-';
-                document.getElementById('certSpEmail').textContent = '-';
-                document.getElementById('certSelectedPeserta').style.display = 'block';
-
-                // Isi materi
-                const materi = (data.sertifikat_materi || data[CERT_MATERI_TABLE] || []).sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
-                const tbody = document.getElementById('certMateriBody');
-                if (materi.length > 0) {
-                    tbody.innerHTML = materi.map((m, i) => `
-                        <tr data-index="${i}">
-                            <td class="text-center cert-materi-no">${i + 1}</td>
-                            <td><input type="text" class="form-control cert-m-judul" value="${escStat(m.judul_materi)}" placeholder="Judul materi" required></td>
-                            <td><input type="text" class="form-control cert-m-narasumber" value="${escStat(m.narasumber)}" placeholder="Nama narasumber" required></td>
-                            <td><input type="text" class="form-control cert-m-penyelenggara" value="${escStat(m.penyelenggara)}" placeholder="Penyelenggara" required></td>
-                            <td><input type="number" class="form-control cert-m-jp" value="${m.jumlah_jp || 0}" placeholder="0" min="0" required oninput="certHitungTotalJP()"></td>
-                            <td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="certHapusMateriRow(this)" title="Hapus"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                    `).join('');
+        // ============================================================
+        // DOWNLOAD PDF (html2canvas + jsPDF — A4 landscape, 2 halaman, tajam)
+        // ============================================================
+        async function downloadPDF() {
+            const btn = document.getElementById('certBtnPdf');
+            if (!window.html2canvas || !window.jspdf) {
+                showToast('Pustaka PDF belum termuat. Periksa koneksi internet lalu muat ulang halaman.', 'danger');
+                return;
+            }
+            certRenderPreview(certState.lastPreviewData || certCollectFormData());
+            certBtnLoading(btn, 'Menyiapkan PDF...');
+            await new Promise(r => setTimeout(r, 60)); // beri waktu render
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
+                const pages = document.querySelectorAll('#certPdfStage .certificate-page');
+                for (let i = 0; i < pages.length; i++) {
+                    const canvas = await window.html2canvas(pages[i], {
+                        scale: 2.5,
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        windowWidth: 1250,
+                        windowHeight: 900
+                    });
+                    const img = canvas.toDataURL('image/jpeg', 0.95);
+                    if (i > 0) pdf.addPage('a4', 'landscape');
+                    pdf.addImage(img, 'JPEG', 0, 0, 297, 210, undefined, 'FAST');
                 }
-                certHitungTotalJP();
-                document.getElementById('certBtnSimpan').innerHTML = '<i class="fas fa-save me-2"></i>Update Sertifikat';
-
-                // Pindah ke tab buat
-                const tabEl = document.getElementById('cert-buat-tab');
-                if (tabEl) bootstrap.Tab.getOrCreateInstance(tabEl).show();
-                showToast('Data sertifikat dimuat. Silakan edit.', 'info');
+                const fname = 'Sertifikat_' + String((certState.lastPreviewData || {}).nomor_sertifikat || 'draft')
+                    .replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80) + '.pdf';
+                pdf.save(fname);
+                showToast('PDF berhasil dibuat: ' + fname, 'success');
             } catch (err) {
-                console.error('certEdit:', err);
-                showToast('Gagal memuat data sertifikat', 'danger');
+                console.error('downloadPDF error:', err);
+                showToast(/tainted|SecurityError/i.test(err.message || '')
+                    ? 'Gagal membuat PDF: logo eksternal menolak akses (CORS). Gunakan URL logo lain atau kosongkan logo.'
+                    : 'Gagal membuat PDF. Silakan coba lagi.', 'danger');
+            } finally {
+                certBtnRestore(btn);
             }
         }
 
-        async function certHapus(id) {
-            if (!confirm('Apakah Anda yakin ingin menghapus sertifikat ini? Data materi terkait juga akan dihapus.')) return;
+        async function certPdfById(id) {
+            showLoading();
             try {
-                // Hapus materi dulu (FK)
-                await sb.from(CERT_MATERI_TABLE).delete().eq('sertifikat_id', id);
-                // Hapus sertifikat
-                const { error } = await sb.from(CERT_TABLE).delete().eq('id', id);
-                if (error) throw error;
-                showToast('Sertifikat berhasil dihapus!', 'success');
-                certLoadDaftar();
+                const data = await certFetchFull(id);
+                certRenderPreview(data);
+                hideLoading();
+                await downloadPDF();
             } catch (err) {
-                console.error('certHapus:', err);
-                showToast('Gagal menghapus sertifikat: ' + (err.message || ''), 'danger');
+                console.error('certPdfById:', err);
+                hideLoading();
+                showToast('Gagal menyiapkan PDF. Silakan coba lagi.', 'danger');
             }
         }
 
-        // Event listener untuk tab Pembuatan Sertifikat
-        document.getElementById('tab-pembuatan-sertifikat-tab')?.addEventListener('shown.bs.tab', function() {
-            certLoadDaftar();
-        });
-
-        // Debounce search
-        document.getElementById('certSearchPeserta')?.addEventListener('input', function() {
-            clearTimeout(_certSearchDebounce);
-            _certSearchDebounce = setTimeout(() => {
-                if (this.value.trim().length >= 2) certCariPeserta();
-            }, 400);
-        });
-
-        document.getElementById('certSearchPeserta')?.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); certCariPeserta(); }
-        });
-
-        </script>
-
-    <!-- Preview Sertifikat Modal -->
-    <div class="modal fade cert-preview-modal" id="certPreviewModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-eye me-2 text-primary"></i>Preview Sertifikat</h5>
-                    <div class="d-flex gap-2 align-items-center">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="certPrint()">
-                            <i class="fas fa-print me-1"></i>Cetak
-                        </button>
-                        <button type="button" class="btn btn-sm btn-success" onclick="certDownloadPDF()">
-                            <i class="fas fa-file-pdf me-1"></i>PDF
-                        </button>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                </div>
-                <div class="modal-body cert-print-area" id="certPrintArea">
-                    <div class="cert-preview-wrap">
-                        <!-- Halaman 1: Depan -->
-                        <div class="cert-page cert-front" id="certPreviewFront">
-                            <div class="cert-border"></div>
-                            <div class="cert-border-inner"></div>
-                            <div class="cert-logo-area">
-                                <i class="fas fa-heart-pulse"></i>
-                            </div>
-                            <div class="cert-title">Sertifikat</div>
-                            <div class="cert-subtitle">Sertifikat Penghargaan</div>
-                            <div class="cert-nomor" id="previewNomor">Nomor: -</div>
-                            <div class="cert-diberikan">Dengan ini diberikan kepada:</div>
-                            <div class="cert-nama" id="previewNama">-</div>
-                            <div class="cert-unit" id="previewUnit">-</div>
-                            <div class="cert-atas">Atas partisipasinya dalam:</div>
-                            <div class="cert-tema" id="previewTema">"-"</div>
-                            <div class="cert-info-row">
-                                <div class="cert-info-item">
-                                    <div class="lbl">Tanggal Pelaksanaan</div>
-                                    <div class="val" id="previewTanggal">-</div>
-                                </div>
-                                <div class="cert-info-item">
-                                    <div class="lbl">Tempat</div>
-                                    <div class="val" id="previewTempat">-</div>
-                                </div>
-                            </div>
-                            <div class="cert-footer">
-                                <div class="tempat-tgl" id="previewTempatTgl">-</div>
-                                <div class="penyelenggara" id="previewPenyelenggara">-</div>
-                                <div class="ttd-line"></div>
-                                <div class="ttd-nama" id="previewNamaPejabat">-</div>
-                                <div class="ttd-jabatan" id="previewJabatanPejabat">-</div>
-                            </div>
-                        </div>
-                        <!-- Halaman 2: Belakang -->
-                        <div class="cert-page cert-back" id="certPreviewBack">
-                            <div class="cb-title">Rincian Kegiatan dan Materi</div>
-                            <div class="cb-info">
-                                <div class="cb-info-item">
-                                    <div class="lbl">Nama Peserta</div>
-                                    <div class="val" id="previewBackNama">-</div>
-                                </div>
-                                <div class="cb-info-item">
-                                    <div class="lbl">Unit Kerja</div>
-                                    <div class="val" id="previewBackUnit">-</div>
-                                </div>
-                                <div class="cb-info-item">
-                                    <div class="lbl">Nomor Sertifikat</div>
-                                    <div class="val" id="previewBackNomor">-</div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="cb-table" id="previewMateriTable">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:50px;">No</th>
-                                            <th>Judul Materi</th>
-                                            <th>Narasumber</th>
-                                            <th>Penyelenggara</th>
-                                            <th style="width:70px;" class="text-center">JP</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="previewMateriBody">
-                                        <tr><td colspan="5" class="text-center">Belum ada materi</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="cb-total">
-                                <span class="lbl">Total Jumlah JP</span>
-                                <span class="value" id="previewBackTotalJP">0 JP</span>
-                            </div>
-                            <div class="cb-keterangan" id="previewKeterangan" style="display:none;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+        console.log('Modul Pembuatan Sertifikat siap. Buka menu "Pembuatan Sertifikat" pada Panel Admin.');
+    </script>
 </body>
 </html>
