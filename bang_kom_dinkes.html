@@ -310,6 +310,16 @@
         .stat-card .icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 2.8rem; opacity: 0.22; }
         .stat-card .stat-number { font-size: 2.1rem; font-weight: 800; color: inherit; letter-spacing: -0.02em; }
         .stat-card .stat-label { font-size: 0.88rem; color: inherit; opacity: 0.85; font-weight: 600; }
+        .stat-clickable { cursor: pointer; }
+        .stat-clickable .detail-hint { position: absolute; left: 16px; bottom: 10px; font-size: 0.7rem; font-weight: 700; opacity: 0; transition: opacity 0.25s; color: inherit; display: inline-flex; align-items: center; gap: 5px; }
+        .stat-clickable:hover .detail-hint, .stat-clickable:focus-visible .detail-hint { opacity: 0.8; }
+        .stat-clickable:focus-visible { outline: 3px solid rgba(13,148,136,0.35); outline-offset: 2px; }
+        .stat-modal .modal-content { border: none; border-radius: 18px; box-shadow: 0 24px 60px rgba(7,42,38,0.28); }
+        .stat-modal .modal-header { border-bottom: 1px solid rgba(12,59,54,0.08); }
+        .stat-modal .table thead th { position: sticky; top: 0; z-index: 2; }
+        [data-theme="dark"] .stat-modal .modal-content { background: #10241F; color: #E6F1EF; }
+        [data-theme="dark"] .stat-modal .modal-header { border-bottom-color: #1D3B36; }
+        [data-theme="dark"] .stat-modal .btn-close { filter: invert(1) grayscale(100%); }
 
         .bg-gradient-blue { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%); color: #0369A1; }
         .bg-gradient-green { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); color: #047857; }
@@ -823,10 +833,11 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="stat-card bg-gradient-green">
+                        <div class="stat-card bg-gradient-green stat-clickable" role="button" tabindex="0" title="Klik untuk melihat detail peserta" onclick="openStatModal('peserta')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatModal('peserta');}">
                             <i class="fas fa-users icon"></i>
                             <div class="stat-number" data-count="0" id="totalParticipants">0</div>
                             <div class="stat-label">Total Peserta</div>
+                            <span class="detail-hint"><i class="fas fa-hand-pointer"></i> Klik untuk detail</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
@@ -837,10 +848,11 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="stat-card bg-gradient-orange">
+                        <div class="stat-card bg-gradient-orange stat-clickable" role="button" tabindex="0" title="Klik untuk melihat detail narasumber" onclick="openStatModal('narasumber')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatModal('narasumber');}">
                             <i class="fas fa-chalkboard-teacher icon"></i>
                             <div class="stat-number" data-count="0" id="totalSpeakers">0</div>
                             <div class="stat-label">Total Narasumber</div>
+                            <span class="detail-hint"><i class="fas fa-hand-pointer"></i> Klik untuk detail</span>
                         </div>
                     </div>
                 </div>
@@ -854,10 +866,11 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
-                        <div class="stat-card bg-gradient-red">
+                        <div class="stat-card bg-gradient-red stat-clickable" role="button" tabindex="0" title="Klik untuk melihat detail absensi" onclick="openStatModal('absensi')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStatModal('absensi');}">
                             <i class="fas fa-clipboard-check icon"></i>
                             <div class="stat-number" data-count="0" id="totalAbsensi">0</div>
                             <div class="stat-label">Total Absensi</div>
+                            <span class="detail-hint"><i class="fas fa-hand-pointer"></i> Klik untuk detail</span>
                         </div>
                     </div>
                 </div>
@@ -1188,7 +1201,7 @@
                                     <option value="BLUD">BLUD</option>
                                     <option value="TUGSUS">TUGSUS</option>
                                     <option value="MAGANG/INTERNSHIP">MAGANG/INTERNSHIP</option>
-
+                                    
                                 </select>
                             </div>
 
@@ -2003,6 +2016,41 @@
         </main>
     </div>
 
+    <!-- Stat Detail Modal (Popup Total Peserta / Narasumber / Absensi) -->
+    <div class="modal fade stat-modal" id="statDetailModal" tabindex="-1" aria-labelledby="statDetailTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statDetailTitle">Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="statDetailSearch" placeholder="Cari nama, unit kerja, atau jenis SDMK..." autocomplete="off">
+                    </div>
+                    <div class="table-responsive" style="max-height: 55vh;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:56px;">No</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Unit Kerja</th>
+                                    <th>Jenis SDMK</th>
+                                    <th class="text-center" id="statDetailExtraCol"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="statDetailBody">
+                                <tr><td colspan="5" class="text-center">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <small class="text-muted d-block mt-2" id="statDetailFoot"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Supabase JS Client -->
@@ -2088,11 +2136,15 @@
                 sb.from('absensi').select('nip')
             ]);
             const totalActivities = jadwalRes.data?.length || 0;
-            const allNip = regRes.data?.map(r => r.nip) || [];
-            const totalParticipants = [...new Set(allNip)].length;
+            // Peserta unik per NIP (fallback nama bila NIP kosong) - konsisten dengan popup detail
+            const pesertaKeys = new Set();
+            regRes.data?.forEach(r => pesertaKeys.add(r.nip || 'nama:' + (r.namalengkap || '').toLowerCase()));
+            const totalParticipants = pesertaKeys.size;
             const totalJP = jadwalRes.data?.reduce((sum, j) => sum + (j.jp || 0), 0);
-            const allNarasumber = jadwalRes.data?.map(j => j.narasumber).filter(n => n) || [];
-            const totalSpeakers = [...new Set(allNarasumber)].length;
+            // Hitung narasumber sebagai orang unik (urai daftar "1) A 2) B" dan buang unit kerja dalam kurung)
+            const allNarasumber = [];
+            jadwalRes.data?.forEach(j => allNarasumber.push(...parseNarasumberNames(j.narasumber)));
+            const totalSpeakers = [...new Set(allNarasumber.map(n => n.toLowerCase()))].length;
             const totalRegistrasi = regRes.data?.length || 0;
             const totalAbsensi = absRes.data?.length || 0;
             return { success: true, data: { totalActivities, totalParticipants, totalJP, totalSpeakers, totalRegistrasi, totalAbsensi } };
@@ -4550,6 +4602,139 @@
                 return dateString;
             }
         }
+
+        // ============================================
+        // STAT CARD DETAIL POPUP (Peserta / Narasumber / Absensi)
+        // ============================================
+
+        let statDetailRows = [];
+        let statDetailType = null;
+
+        function escStat(v) {
+            return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // Uraikan teks narasumber menjadi daftar nama:
+        // "1) A 2) B" -> [A, B]; "Nama (Unit Kerja)" -> [Nama]
+        function parseNarasumberNames(text) {
+            return String(text || '')
+                .split(/(?:^|[\s.;,])\d+[\)\.]\s*/)
+                .map(s => s.trim())
+                .filter(Boolean)
+                .map(p => {
+                    const m = p.match(/^(.*?)\s*\((.+)\)\s*$/);
+                    return (m ? m[1] : p).trim();
+                })
+                .filter(Boolean);
+        }
+
+        function openStatModal(type) {
+            statDetailType = type;
+            const meta = {
+                peserta: { title: 'Detail Total Peserta', icon: 'fa-users', extra: 'Jml Kegiatan' },
+                narasumber: { title: 'Detail Total Narasumber', icon: 'fa-chalkboard-teacher', extra: 'Jml Kegiatan' },
+                absensi: { title: 'Detail Total Absensi', icon: 'fa-clipboard-check', extra: 'Waktu Absen' }
+            }[type];
+            if (!meta) return;
+            document.getElementById('statDetailTitle').innerHTML = `<i class="fas ${meta.icon} me-2"></i>${meta.title}`;
+            document.getElementById('statDetailExtraCol').textContent = meta.extra;
+            document.getElementById('statDetailSearch').value = '';
+            document.getElementById('statDetailBody').innerHTML = '<tr><td colspan="5" class="text-center">Memuat data...</td></tr>';
+            document.getElementById('statDetailFoot').textContent = '';
+
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('statDetailModal')).show();
+
+            buildStatDetailRows(type).then(rows => {
+                statDetailRows = rows;
+                renderStatDetailRows();
+            }).catch(err => {
+                console.error('Stat detail:', err);
+                document.getElementById('statDetailBody').innerHTML = '<tr><td colspan="5" class="text-center text-danger">Gagal memuat data</td></tr>';
+            });
+        }
+
+        async function buildStatDetailRows(type) {
+            // Ambil data terbaru dari Supabase agar popup selalu akurat
+            const [regRes, jadwalRes, absRes] = await Promise.all([
+                getRegistrasi(), getJadwal(), getAbsensi()
+            ]);
+            const registrasi = regRes.success ? (regRes.data || []) : allRegistrasi;
+            const jadwal = jadwalRes.success ? (jadwalRes.data || []) : allJadwal;
+            const absensi = absRes.success ? (absRes.data || []) : allAbsensi;
+            allRegistrasi = registrasi;
+            allJadwal = jadwal;
+            allAbsensi = absensi;
+
+            if (type === 'peserta') {
+                // Satu peserta unik per NIP (fallback nama), plus jumlah kegiatan yang didaftar
+                const map = {};
+                registrasi.forEach(r => {
+                    const key = r.nip || 'nama:' + (r.namalengkap || '').toLowerCase();
+                    if (!map[key]) map[key] = { nama: r.namalengkap || '-', unit: r.unitkerja || '-', sdmk: r.jenissdmk || '-', n: 0 };
+                    map[key].n++;
+                });
+                return Object.values(map).sort((a, b) => a.nama.localeCompare(b.nama));
+            }
+
+            if (type === 'narasumber') {
+                // Satu narasumber per nama; unit kerja diambil dari tanda kurung pada teks nama
+                const map = {};
+                jadwal.forEach(j => {
+                    String(j.narasumber || '').split(/(?:^|[\s.;,])\d+[\)\.]\s*/).map(s => s.trim()).filter(Boolean).forEach(p => {
+                        const m = p.match(/^(.*?)\s*\((.+)\)\s*$/);
+                        const nama = (m ? m[1] : p).trim() || '-';
+                        const unit = m ? m[2].trim() : '';
+                        const key = nama.toLowerCase();
+                        if (!map[key]) map[key] = { nama, unit: unit || '-', sdmk: '-', n: 0 };
+                        if (unit && map[key].unit === '-') map[key].unit = unit;
+                        map[key].n++;
+                    });
+                });
+                return Object.values(map).sort((a, b) => b.n - a.n || a.nama.localeCompare(b.nama));
+            }
+
+            // absensi: jenis SDMK diperkaya dari data registrasi berdasarkan NIP
+            const sdmkByNip = {};
+            registrasi.forEach(r => { if (r.nip) sdmkByNip[String(r.nip)] = r.jenissdmk || '-'; });
+            return absensi.map(a => ({
+                nama: a.namalengkap || '-',
+                unit: a.unitkerja || '-',
+                sdmk: sdmkByNip[String(a.nip)] || '-',
+                waktu: a.created_at ? new Date(a.created_at).toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-',
+                n: 0
+            }));
+        }
+
+        function renderStatDetailRows() {
+            const tbody = document.getElementById('statDetailBody');
+            if (!tbody) return;
+            const q = document.getElementById('statDetailSearch').value.trim().toLowerCase();
+            const rows = statDetailRows.filter(r =>
+                !q || (r.nama || '').toLowerCase().includes(q) || (r.unit || '').toLowerCase().includes(q) || (r.sdmk || '').toLowerCase().includes(q)
+            );
+            const foot = document.getElementById('statDetailFoot');
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center">${statDetailRows.length ? 'Data tidak ditemukan' : 'Tidak ada data'}</td></tr>`;
+                foot.textContent = statDetailRows.length ? '' : 'Belum ada data yang tercatat.';
+                return;
+            }
+            const extra = statDetailType === 'absensi' ? 'waktu' : 'n';
+            tbody.innerHTML = rows.map((r, i) => `
+                <tr>
+                    <td class="text-muted">${i + 1}</td>
+                    <td class="fw-semibold">${escStat(r.nama)}</td>
+                    <td>${escStat(r.unit)}</td>
+                    <td>${escStat(r.sdmk)}</td>
+                    <td class="text-center">${escStat(r[extra] ?? '-')}</td>
+                </tr>
+            `).join('');
+            let note = `Menampilkan ${rows.length} dari ${statDetailRows.length} data`;
+            if (statDetailType === 'narasumber') note += ' • Unit kerja diambil dari tanda kurung pada nama narasumber; jenis SDMK belum tersedia untuk data narasumber';
+            if (statDetailType === 'absensi') note += ' • Jenis SDMK diambil dari data pendaftaran berdasarkan NIP';
+            foot.textContent = note;
+        }
+
+        document.getElementById('statDetailSearch')?.addEventListener('input', renderStatDetailRows);
 
         function animateCounter(elementId, target) {
             const element = document.getElementById(elementId);
