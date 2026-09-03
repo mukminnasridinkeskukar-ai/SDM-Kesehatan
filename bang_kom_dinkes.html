@@ -787,7 +787,7 @@
                                 <div class="gs-num">3</div>
                                 <i class="fas fa-chart-pie gs-icon"></i>
                                 <h5>Pantau Statistik</h5>
-                                <p>Tab <strong>Statistik Grafik</strong> menampilkan jumlah kegiatan &amp; JP per bulan, sedangkan <strong>Grafik Evaluasi</strong> merangkum penilaian peserta. Semua tab admin juga dapat di-export ke Excel/CSV.</p>
+                                <p>Tab <strong>Statistik Grafik</strong> menampilkan jumlah kegiatan &amp; JP per bulan, sedangkan <strong>Grafik Evaluasi</strong> menyajikan rekap rata-rata penilaian peserta (penyelenggaraan, fasilitator, sarana) per kegiatan dalam bentuk tabel dan grafik. Semua tab admin juga dapat di-export ke Excel/CSV.</p>
                             </div>
                         </div>
                     </div>
@@ -1947,6 +1947,30 @@
 
                     <!-- Grafik Evaluasi Tab -->
                     <div class="tab-pane fade" id="adminEvaluasi" role="tabpanel">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="chart-container">
+                                    <h3 class="chart-title"><i class="fas fa-table me-2"></i>Rekap Evaluasi per Kegiatan</h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0" id="rekapEvaluasiTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tema Kegiatan</th>
+                                                    <th class="text-center">Responden</th>
+                                                    <th class="text-center">Penyelenggaraan</th>
+                                                    <th class="text-center">Fasilitator</th>
+                                                    <th class="text-center">Sarana</th>
+                                                    <th class="text-center">Rata-rata Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td colspan="6" class="text-center">Memuat data...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row mb-4">
                             <div class="col-lg-6">
                                 <div class="chart-container">
@@ -3369,7 +3393,7 @@
         });
         
         document.getElementById('tab-evaluasi-tab')?.addEventListener('shown.bs.tab', function() {
-            initEvaluasiCharts();
+            initEvaluasiCharts().catch(err => console.error('Grafik Evaluasi:', err));
         });
 
         // ============================================
@@ -4269,48 +4293,113 @@
         // EVALUASI CHARTS
         // ============================================
         
-        function initEvaluasiCharts() {
+        async function loadRekapEvaluasi() {
+            // 1) Prioritas: ambil dari view v_rekap_evaluasi di Supabase (jika view sudah dibuat)
+            try {
+                const { data: viewData, error: viewError } = await sb.from('v_rekap_evaluasi').select('*');
+                if (!viewError && viewData && viewData.length > 0) {
+                    return viewData.map(r => ({
+                        tema: r.tema,
+                        jumlah_responden: Number(r.jumlah_responden) || 0,
+                        rata_eval_penyelenggara: Number(r.rata_eval_penyelenggara) || 0,
+                        rata_eval_fasilitator: Number(r.rata_eval_fasilitator) || 0,
+                        rata_eval_sarana: Number(r.rata_eval_sarana) || 0,
+                        rata_total: Number(r.rata_total) || 0
+                    }));
+                }
+            } catch (e) { /* view belum ada -> lanjut hitung manual */ }
+
+            // 2) Fallback: hitung rekap di browser dari data absensi (logika sama dengan view)
+            const byTema = {};
+            allAbsensi.forEach(d => {
+                const t = d.tema || 'Tidak Diketahui';
+                if (!byTema[t]) byTema[t] = { n: 0, s: [0, 0, 0], c: [0, 0, 0] };
+                byTema[t].n++;
+                [d.evalpenyelenggara, d.evalfasilitator, d.evalsarana].forEach((v, i) => {
+                    if (v !== null && v !== undefined && v !== '' && !isNaN(Number(v))) {
+                        byTema[t].s[i] += Number(v);
+                        byTema[t].c[i]++;
+                    }
+                });
+            });
+            return Object.keys(byTema).map(t => {
+                const b = byTema[t];
+                const r = b.s.map((s, i) => b.c[i] ? Math.round((s / b.c[i]) * 100) / 100 : 0);
+                return {
+                    tema: t,
+                    jumlah_responden: b.n,
+                    rata_eval_penyelenggara: r[0],
+                    rata_eval_fasilitator: r[1],
+                    rata_eval_sarana: r[2],
+                    rata_total: Math.round(((r[0] + r[1] + r[2]) / 3) * 100) / 100
+                };
+            }).sort((a, b) => b.rata_total - a.rata_total);
+        }
+
+        function renderRekapEvaluasiTable(rekap) {
+            const tbody = document.querySelector('#rekapEvaluasiTable tbody');
+            if (!tbody) return;
+            if (!rekap.length) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data evaluasi</td></tr>';
+                return;
+            }
+            tbody.innerHTML = rekap.map(r => `
+                <tr>
+                    <td class="fw-semibold">${r.tema}</td>
+                    <td class="text-center">${r.jumlah_responden}</td>
+                    <td class="text-center"><span class="badge bg-${getEvalColor(r.rata_eval_penyelenggara)}">${r.rata_eval_penyelenggara.toFixed(2)}</span></td>
+                    <td class="text-center"><span class="badge bg-${getEvalColor(r.rata_eval_fasilitator)}">${r.rata_eval_fasilitator.toFixed(2)}</span></td>
+                    <td class="text-center"><span class="badge bg-${getEvalColor(r.rata_eval_sarana)}">${r.rata_eval_sarana.toFixed(2)}</span></td>
+                    <td class="text-center"><span class="badge bg-${getEvalColor(r.rata_total)}">${r.rata_total.toFixed(2)}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        async function initEvaluasiCharts() {
             // Destroy existing evaluation charts
             if (charts.evaluasi) charts.evaluasi.destroy();
             if (charts.evaluasiRadar) charts.evaluasiRadar.destroy();
             if (charts.evaluasiTrend) charts.evaluasiTrend.destroy();
+
+            // Pastikan data absensi terbaru tersedia sebelum menghitung rekap
+            if (allAbsensi.length === 0) {
+                const res = await getAbsensi();
+                if (res.success) allAbsensi = res.data || [];
+            }
+
+            // Ambil rekap evaluasi (prioritas view v_rekap_evaluasi, fallback hitung manual)
+            const rekap = await loadRekapEvaluasi();
+            renderRekapEvaluasiTable(rekap);
             
-            const absensiData = allAbsensi.length > 0 ? allAbsensi : [
-                { tema: 'Leadership Transformation', evalpenyelenggara: 5, evalfasilitator: 4, evalsarana: 4 },
-                { tema: 'Digital Government Innovation', evalpenyelenggara: 4, evalfasilitator: 5, evalsarana: 4 },
-                { tema: 'Public Service Excellence', evalpenyelenggara: 5, evalfasilitator: 5, evalsarana: 5 }
-            ];
+            // (data dummy dihapus - semua grafik kini memakai rekap evaluasi asli)
             
             // Chart 1: Rata-rata Nilai Evaluasi per Kegiatan (Bar Chart)
             const ctx1 = document.getElementById('evaluasiChart')?.getContext('2d');
             if (ctx1) {
-                const temas = absensiData.map(d => d.tema || 'Tidak Diketahui').slice(0, 6);
-                const avgPenyelenggara = absensiData.map(d => d.evalpenyelenggara || d.evalpenyelenggara || d.evpenyelenggara || 0);
-                const avgFasilitator = absensiData.map(d => d.evfasilitator || d.evalfasilitator || 0);
-                const avgSarana = absensiData.map(d => d.evsarana || d.evalsarana || 0);
+                const top = rekap.slice(0, 6);
                 
                 charts.evaluasi = new Chart(ctx1, {
                     type: 'bar',
                     data: {
-                        labels: temas,
+                        labels: top.map(r => r.tema),
                         datasets: [
                             {
                                 label: 'Penyelenggaraan',
-                                data: avgPenyelenggara,
+                                data: top.map(r => r.rata_eval_penyelenggara),
                                 backgroundColor: 'rgba(13, 148, 136, 0.7)',
                                 borderColor: '#0D9488',
                                 borderWidth: 1
                             },
                             {
                                 label: 'Fasilitator',
-                                data: avgFasilitator,
+                                data: top.map(r => r.rata_eval_fasilitator),
                                 backgroundColor: 'rgba(124, 58, 237, 0.7)',
                                 borderColor: '#7C3AED',
                                 borderWidth: 1
                             },
                             {
                                 label: 'Sarana',
-                                data: avgSarana,
+                                data: top.map(r => r.rata_eval_sarana),
                                 backgroundColor: 'rgba(5, 150, 105, 0.7)',
                                 borderColor: '#059669',
                                 borderWidth: 1
@@ -4331,17 +4420,17 @@
             // Chart 2: Perbandingan Kategori Evaluasi (Radar Chart)
             const ctx2 = document.getElementById('evaluasiRadarChart')?.getContext('2d');
             if (ctx2) {
-                const avgPenyelenggara = absensiData.reduce((sum, d) => sum + (d.evalpenyelenggara || d.evalpenyelenggara || d.evpenyelenggara || 0), 0) / (absensiData.length || 1);
-                const avgFasilitator = absensiData.reduce((sum, d) => sum + (d.evfasilitator || d.evalfasilitator || 0), 0) / (absensiData.length || 1);
-                const avgSarana = absensiData.reduce((sum, d) => sum + (d.evsarana || d.evalsarana || 0), 0) / (absensiData.length || 1);
+                // Rata-rata keseluruhan tertimbang jumlah responden per tema
+                const totN = rekap.reduce((s, r) => s + r.jumlah_responden, 0) || 1;
+                const wAvg = key => rekap.reduce((s, r) => s + r[key] * r.jumlah_responden, 0) / totN;
                 
                 charts.evaluasiRadar = new Chart(ctx2, {
                     type: 'radar',
                     data: {
-                        labels: ['Penyelenggaraan', 'Fasilitator', 'Sarana', 'Materi', 'Waktu'],
+                        labels: ['Penyelenggaraan', 'Fasilitator', 'Sarana'],
                         datasets: [{
                             label: 'Rata-rata Keseluruhan',
-                            data: [parseFloat(avgPenyelenggara.toFixed(1)), parseFloat(avgFasilitator.toFixed(1)), parseFloat(avgSarana.toFixed(1)), 4.2, 4.0],
+                            data: [parseFloat(wAvg('rata_eval_penyelenggara').toFixed(2)), parseFloat(wAvg('rata_eval_fasilitator').toFixed(2)), parseFloat(wAvg('rata_eval_sarana').toFixed(2))],
                             backgroundColor: 'rgba(13, 148, 136, 0.2)',
                             borderColor: '#0D9488',
                             borderWidth: 2,
@@ -4358,17 +4447,42 @@
                 });
             }
             
-            // Chart 3: Tren Evaluasi (Line Chart)
+            // Chart 3: Tren Evaluasi (Line Chart) — dihitung dari bulan aktual pada data absensi
             const ctx3 = document.getElementById('evaluasiTrendChart')?.getContext('2d');
             if (ctx3) {
+                const bulanNama = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                const byBulan = {};
+                allAbsensi.forEach(d => {
+                    if (!d.created_at) return;
+                    const dt = new Date(d.created_at);
+                    if (isNaN(dt.getTime())) return;
+                    const key = dt.getFullYear() + '-' + dt.getMonth();
+                    if (!byBulan[key]) byBulan[key] = { s: [0, 0, 0], c: [0, 0, 0] };
+                    [d.evalpenyelenggara, d.evalfasilitator, d.evalsarana].forEach((v, i) => {
+                        if (v !== null && v !== undefined && v !== '' && !isNaN(Number(v))) {
+                            byBulan[key].s[i] += Number(v);
+                            byBulan[key].c[i]++;
+                        }
+                    });
+                });
+                const keys = Object.keys(byBulan).sort((a, b) => {
+                    const [ya, ma] = a.split('-').map(Number);
+                    const [yb, mb] = b.split('-').map(Number);
+                    return ya - yb || ma - mb;
+                }).slice(-6);
+                const bulanAvg = (k, i) => byBulan[k].c[i] ? Math.round((byBulan[k].s[i] / byBulan[k].c[i]) * 100) / 100 : null;
+                const labels3 = keys.map(k => {
+                    const p = k.split('-').map(Number);
+                    return bulanNama[p[1]] + ' ' + String(p[0]).slice(2);
+                });
                 charts.evaluasiTrend = new Chart(ctx3, {
                     type: 'line',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                        labels: labels3,
                         datasets: [
                             {
                                 label: 'Penyelenggaraan',
-                                data: [4.2, 4.3, 4.5, 4.4, 4.6, 4.5],
+                                data: keys.map(k => bulanAvg(k, 0)),
                                 borderColor: '#0D9488',
                                 backgroundColor: 'rgba(13, 148, 136, 0.1)',
                                 fill: true,
@@ -4376,7 +4490,7 @@
                             },
                             {
                                 label: 'Fasilitator',
-                                data: [4.0, 4.2, 4.3, 4.5, 4.4, 4.6],
+                                data: keys.map(k => bulanAvg(k, 1)),
                                 borderColor: '#7C3AED',
                                 backgroundColor: 'rgba(124, 58, 237, 0.1)',
                                 fill: true,
@@ -4384,7 +4498,7 @@
                             },
                             {
                                 label: 'Sarana',
-                                data: [3.8, 4.0, 4.2, 4.3, 4.4, 4.5],
+                                data: keys.map(k => bulanAvg(k, 2)),
                                 borderColor: '#059669',
                                 backgroundColor: 'rgba(5, 150, 105, 0.1)',
                                 fill: true,
@@ -4398,7 +4512,7 @@
                             legend: { position: 'top' },
                             title: { display: true, text: 'Tren Evaluasi Bulanan' }
                         },
-                        scales: { y: { beginAtZero: false, min: 3, max: 5 } }
+                        scales: { y: { beginAtZero: true, max: 5 } }
                     }
                 });
             }
