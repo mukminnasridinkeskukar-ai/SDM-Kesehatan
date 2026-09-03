@@ -1203,7 +1203,7 @@
                             <div class="mb-3">
                                 <label class="form-label required">NIP</label>
                                 <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP (18 digit)" maxlength="18" minlength="18" data-exactlen="18" required oninput="validateNIP(this)">
-                                <div class="invalid-feedback">NIP wajib diisi lengkap 18 digit angka.</div>
+                                <div class="invalid-feedback">Non ASN isi dengan NIK.</div>
                             </div>
 
                             <div class="mb-3">
@@ -1218,6 +1218,10 @@
                                     <option value="">-- Pilih Status --</option>
                                     <option value="PNS">PNS</option>
                                     <option value="PPPK">PPPK</option>
+                                    <option value="BKKD">BKKD</option>
+                                    <option value="BLUD">BLUD</option>
+                                    <option value="TUGSUS">TUGSUS</option>
+                                    <option value="MAGANG/INTERNSHIP">MAGANG/INTERNSHIP</option>
                                     
                                 </select>
                                 <div class="invalid-feedback">Status pegawai wajib dipilih.</div>
