@@ -795,7 +795,7 @@
                                 <div class="gs-num">3</div>
                                 <i class="fas fa-user-check gs-icon"></i>
                                 <h5>Isi Absensi</h5>
-                                <p>Pada hari kegiatan, buka menu <strong>Absensi</strong> saat jam absensi dibuka. Pilih kegiatan, lalu verifikasi identitas dengan email &amp; NIP yang didaftarkan. Isi penilaian evaluasi (penyelenggaraan, fasilitator, sarana) dan submit. Absensi hanya bisa diisi satu kali.</p>
+                                <p>Pada hari kegiatan, buka menu <strong>Absensi</strong> saat jam absensi dibuka. Pilih kegiatan, lalu verifikasi identitas dengan <strong>email</strong> serta <strong>salah satu</strong> dari NIP, NIK, atau Nomor WhatsApp yang Anda daftarkan. Isi penilaian evaluasi (penyelenggaraan, fasilitator, sarana) dan submit. Absensi hanya bisa diisi satu kali per kegiatan.</p>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
@@ -1366,7 +1366,7 @@
                     <div class="verification-card">
                         <div class="verification-icon"><i class="fas fa-qrcode"></i></div>
                         <h4>Verifikasi Identitas</h4>
-                        <p class="text-muted mb-4">Pilih kegiatan & masukkan email/NIP yang digunakan saat pendaftaran</p>
+                        <p class="text-muted mb-4">Pilih kegiatan &amp; masukkan <strong>email</strong> serta <strong>salah satu</strong> dari NIP / NIK / Nomor WhatsApp yang Anda daftarkan</p>
                         
                         <form id="verifyForm">
                             <div class="mb-3">
@@ -1378,11 +1378,14 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label required">Email</label>
-                                <input type="email" class="form-control" id="verifyEmail" placeholder="email@domain.com" required>
+                                <input type="email" class="form-control" id="verifyEmail" placeholder="email@domain.com" required autocomplete="email">
+                                <div class="invalid-feedback">Email wajib diisi dengan format yang benar.</div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label required">NIP</label>
-                                <input type="text" class="form-control" id="verifyNIP" placeholder="Masukkan NIP" maxlength="18" required>
+                                <label class="form-label required">NIP / NIK / Nomor WhatsApp</label>
+                                <input type="text" class="form-control" id="verifyIdentifier" placeholder="Masukkan NIP / NIK / No. WhatsApp" inputmode="numeric" minlength="10" data-minlen="10" maxlength="20" required autocomplete="off" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                                <div class="invalid-feedback">Wajib diisi: NIP (18 digit), NIK (16 digit), atau No. WhatsApp (min. 10 digit) yang terdaftar.</div>
+                                <div class="form-text"><i class="fas fa-info-circle me-1"></i>Salah satu sudah cukup untuk verifikasi — sesuaikan dengan data yang Anda daftarkan.</div>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="fas fa-check-circle me-2"></i>Verifikasi
@@ -1401,7 +1404,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <p class="mb-1"><strong>Nama:</strong> <span id="absensiNama">-</span></p>
-                                    <p class="mb-1"><strong>NIP:</strong> <span id="absensiNIP">-</span></p>
+                                    <p class="mb-1"><strong>NIP / NIK / WA:</strong> <span id="absensiNIP">-</span></p>
                                 </div>
                                 <div class="col-md-6">
                                     <p class="mb-1"><strong>Unit Kerja:</strong> <span id="absensiUnit">-</span></p>
@@ -2038,8 +2041,9 @@
                                                 <input type="text" class="form-control" id="absensiNamaEdit" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <label class="form-label">NIP</label>
-                                                <input type="text" class="form-control" id="absensiNip" maxlength="18" required oninput="validateNIP(this)">
+                                                <label class="form-label">NIP / NIK / Nomor WhatsApp</label>
+                                                <input type="text" class="form-control" id="absensiNip" inputmode="numeric" maxlength="20" required oninput="this.value=this.value.replace(/[^0-9]/g,'')" placeholder="NIP / NIK / No. WA">
+                                                <small class="text-muted">Identifier peserta (nilai tersimpan di kolom <code>nip</code>).</small>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label class="form-label">Unit Kerja</label>
@@ -2093,7 +2097,7 @@
                             </div>
 
                             <div class="table-filters mb-3">
-                                <input type="text" class="form-control" id="searchAbsensiAdmin" placeholder="Search nama/NIP..." style="max-width: 250px;">
+                                <input type="text" class="form-control" id="searchAbsensiAdmin" placeholder="Cari nama / NIP / NIK / WA..." style="max-width: 280px;">
                             </div>
                             <div class="table-responsive">
                                 <table class="table" id="absensiAdminTable">
@@ -2101,7 +2105,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>NIP</th>
+                                            <th>NIP / NIK / WA</th>
                                             <th>Unit Kerja</th>
                                             <th>Tema</th>
                                             <th>Tanggal</th>
@@ -2542,14 +2546,52 @@
             return { success: false, message: 'Gagal menyimpan pendaftaran setelah beberapa percobaan.' };
         }
 
-        async function verifyPeserta(email, nip) {
+        // Verifikasi peserta absensi: email + salah satu dari NIP / NIK / Nomor WhatsApp.
+        // Karena kolom nik / whatsapp pada tabel registrasi bisa belum tersedia di
+        // semua environment, kita ambil semua baris dengan email yang cocok lalu
+        // menyaringnya di sisi klien. Input apapun di antara NIP/NIK/WA sudah cukup.
+        async function verifyPeserta(email, identifier) {
+            if (!email || !identifier) {
+                return { success: false, message: 'Email dan identitas wajib diisi' };
+            }
             const { data, error } = await sb.from('registrasi')
                 .select('*')
-                .eq('email', email)
-                .eq('nip', nip)
-                .single();
-            if (error || !data) return { success: false, message: 'Data tidak ditemukan' };
-            return { success: true, data: data };
+                .eq('email', email);
+            if (error) return { success: false, message: error.message };
+            if (!data || data.length === 0) {
+                return { success: false, message: 'Email belum terdaftar pada kegiatan manapun' };
+            }
+
+            // Normalisasi: hanya digit & huruf kecil, hilangkan pemisah/spasi
+            const norm = s => (s || '').toString().trim().toLowerCase().replace(/[^0-9a-z]/g, '');
+            const idKey = norm(identifier);
+            if (!idKey) return { success: false, message: 'Identitas tidak valid' };
+
+            // Cocokkan bila salah satu (NIP / NIK / WhatsApp) sama persis dengan input
+            const matched = data.find(r => {
+                if (r.nip && norm(r.nip) === idKey) return true;
+                if (r.nik !== undefined && r.nik && norm(r.nik) === idKey) return true;
+                if (r.whatsapp !== undefined && r.whatsapp && norm(r.whatsapp) === idKey) return true;
+                // Fallback nama kolom alternatif yang mungkin dipakai
+                if (r.no_wa !== undefined && r.no_wa && norm(r.no_wa) === idKey) return true;
+                if (r.nohp !== undefined && r.nohp && norm(r.nohp) === idKey) return true;
+                if (r.no_hp !== undefined && r.no_hp && norm(r.no_hp) === idKey) return true;
+                return false;
+            });
+
+            if (!matched) {
+                return { success: false, message: 'NIP / NIK / Nomor WhatsApp tidak cocok dengan email' };
+            }
+
+            // Tentukan matchedBy untuk info display
+            let matchedBy = 'NIP';
+            if (matched.nip && norm(matched.nip) === idKey) matchedBy = 'NIP';
+            else if (matched.nik !== undefined && matched.nik && norm(matched.nik) === idKey) matchedBy = 'NIK';
+            else if (matched.whatsapp !== undefined && matched.whatsapp && norm(matched.whatsapp) === idKey) matchedBy = 'WhatsApp';
+            else if (matched.no_wa !== undefined && matched.no_wa && norm(matched.no_wa) === idKey) matchedBy = 'WhatsApp';
+            else if (matched.nohp !== undefined && matched.nohp && norm(matched.nohp) === idKey) matchedBy = 'WhatsApp';
+
+            return { success: true, data: matched, matchedBy: matchedBy };
         }
 
         async function checkAbsensiExists(nip, tema) {
@@ -3867,50 +3909,72 @@
         
         document.getElementById('verifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
+            const formEl = document.getElementById('verifyForm');
+            formEl.classList.add('was-validated');
+
             const tema = document.getElementById('selectAbsensiTema').value;
-            const email = document.getElementById('verifyEmail').value;
-            const nip = document.getElementById('verifyNIP').value;
-            
+            const email = document.getElementById('verifyEmail').value.trim();
+            const identifier = document.getElementById('verifyIdentifier').value.trim();
+
             if (!tema) {
                 showToast('Pilih kegiatan terlebih dahulu!', 'warning');
                 return;
             }
-            
-            // Verify via Supabase
-            const result = await verifyPeserta(email, nip);
-            
+            if (!email) {
+                showToast('Email wajib diisi!', 'warning');
+                return;
+            }
+            if (!identifier || identifier.length < 10) {
+                showToast('NIP / NIK / Nomor WhatsApp minimal 10 digit!', 'warning');
+                return;
+            }
+
+            // Verify via Supabase — email + salah satu dari NIP/NIK/WA
+            const result = await verifyPeserta(email, identifier);
+
             if (result.success && result.data) {
                 // Check if registered for the selected tema
                 if (result.data.tema !== tema) {
                     showToast('Anda tidak terdaftar untuk kegiatan ini!', 'warning');
                     return;
                 }
-                
-                // Check if already absented
-                const checkAbsen = await checkAbsensiExists(nip, tema);
+
+                // Check if already absented — gunakan NIP canonical dari record;
+                // bila nip kosong (edge case), fallback ke identifier yang dipakai user.
+                const canonicalNip = result.data.nip || identifier;
+                const checkAbsen = await checkAbsensiExists(canonicalNip, tema);
 
                 if (checkAbsen.success && checkAbsen.exists) {
-                    showToast('Anda sudah melakukan absensi!', 'warning');
+                    showToast('Anda sudah melakukan absensi untuk kegiatan ini!', 'warning');
                     return;
                 }
-                
+
                 verifiedUser = result.data;
-                
+                // Simpan info verifikasi untuk fallback & display
+                verifiedUser.__matchedBy = result.matchedBy || 'NIP';
+                verifiedUser.__identifier = identifier;
+
+                // Tampilkan identifier yang relevan: prioritaskan nip canonical,
+                // bila kosong tampilkan identifier yang dipakai user beserta label verifikasi.
+                const displayIdentifier = result.data.nip || result.data.nik || result.data.whatsapp || identifier;
+                const verifyLabel = result.matchedBy && result.matchedBy !== 'NIP'
+                    ? ` (diverifikasi via ${result.matchedBy})`
+                    : '';
                 document.getElementById('absensiNama').textContent = result.data.namalengkap || '-';
-                document.getElementById('absensiNIP').textContent = result.data.nip || '-';
+                document.getElementById('absensiNIP').textContent = displayIdentifier + verifyLabel;
                 document.getElementById('absensiUnit').textContent = result.data.unitkerja || '-';
                 document.getElementById('absensiPlatform').textContent = result.data.platform || '-';
-                
+
                 document.getElementById('absensiId').value = result.data.id || '';
                 document.getElementById('absensiTema').value = tema;
-                
+
                 document.getElementById('verificationForm').style.display = 'none';
                 document.getElementById('absensiForm').style.display = 'block';
-                
+
                 showToast('Verifikasi berhasil! Silakan isi form absensi', 'success');
             } else {
-                showToast('Data tidak ditemukan atau belum terdaftar!', 'danger');
+                showToast(result.message || 'Data tidak ditemukan atau belum terdaftar!', 'danger');
             }
         });
 
@@ -3928,7 +3992,7 @@
             const submitData = {
                 id: document.getElementById('absensiId').value,
                 namalengkap: verifiedUser.namalengkap,
-                nip: verifiedUser.nip,
+                nip: verifiedUser.nip || verifiedUser.__identifier || null,
                 unitkerja: verifiedUser.unitkerja,
                 tema: verifiedUser.tema,
                 platform: verifiedUser.platform,
@@ -3943,12 +4007,14 @@
             setTimeout(() => {
                 if (result.success) {
                     showToast('Absensi Berhasil - Terima Kasih!', 'success');
-                    
+
                     document.getElementById('absensiSubmitForm').reset();
                     document.getElementById('verificationForm').style.display = 'block';
                     document.getElementById('absensiForm').style.display = 'none';
                     document.getElementById('verifyEmail').value = '';
-                    document.getElementById('verifyNIP').value = '';
+                    document.getElementById('verifyIdentifier').value = '';
+                    document.getElementById('verifyForm').classList.remove('was-validated');
+                    verifiedUser = null;
                 } else {
                     showToast(result.message || 'Gagal menyimpan absensi', 'danger');
                 }
