@@ -2745,11 +2745,6 @@
             return { success: true, exists: true, matchedBy: matchedBy, matchedName: found.namalengkap || '-' };
         }
 
-        function isNikColumnError(err) {
-            const msg = (err && err.message) || '';
-            return /nik/i.test(msg) && /column|schema/i.test(msg);
-        }
-
         // Deteksi error "kolom tidak ditemukan" untuk kolom tertentu (PGRST204 / PostgREST schema cache)
         function isColumnError(err, col) {
             if (!err || !col) return false;
@@ -5737,11 +5732,6 @@
                 temas.map(t => `<option value="${t}">${t}</option>`).join('');
         }
         
-        function showAdminSubmenu(menu) {
-            // Legacy function - now handled by Bootstrap tabs
-            // This is kept for backward compatibility
-        }
-
         // ============================================
         // UTILITY FUNCTIONS
         // ============================================
