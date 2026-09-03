@@ -355,6 +355,17 @@
             transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
         .form-control:focus, .form-select:focus { border-color: #14B8A6; box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15); }
+        /* Paksa tampilan merah utk kolom bertanda .is-invalid (aturan panjang eksplisit,
+           mis. NIK/NIP kurang digit) meski browser menganggap nilainya :valid */
+        .was-validated .form-control.is-invalid,
+        .was-validated .form-select.is-invalid {
+            border-color: #dc3545 !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right calc(.375em + .1875rem) center !important;
+            background-size: calc(.75em + .375rem) calc(.75em + .375rem) !important;
+            padding-right: calc(1.5em + .75rem) !important;
+        }
         .form-label.required::after { content: ' *'; color: var(--danger-color); }
         .form-card { background: white; border-radius: 16px; box-shadow: var(--card-shadow); border: 1px solid rgba(12,59,54,0.05); padding: 30px; max-width: 700px; margin: 0 auto; }
         .form-title { font-size: 1.3rem; font-weight: 600; color: var(--secondary-color); margin-bottom: 25px; text-align: center; }
@@ -1130,7 +1141,7 @@
                         <div class="step" id="step2"><div class="step-circle">2</div></div>
                     </div>
 
-                    <form id="pendaftaranForm">
+                    <form id="pendaftaranForm" novalidate>
                         <div id="step1Content">
                             <div class="mb-3">
                                 <label class="form-label required">Pilih Tema Pembelajaran</label>
@@ -1178,24 +1189,27 @@
                         <div id="step2Content" style="display: none;">
                             <div class="mb-3">
                                 <label class="form-label required">NIK</label>
-                                <input type="text" class="form-control" id="nik" placeholder="Masukkan NIK (16 digit)" maxlength="16" minlength="16" required oninput="validateNIK(this)">
+                                <input type="text" class="form-control" id="nik" placeholder="Masukkan NIK (16 digit)" maxlength="16" minlength="16" data-exactlen="16" required oninput="validateNIK(this)">
+                                <div class="invalid-feedback">NIK wajib diisi lengkap 16 digit angka.</div>
                                 <div class="form-text">NIK sesuai identitas kepegawaian (16 digit) — digunakan untuk mencegah pendaftaran ganda.</div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label required">Nama Lengkap</label>
                                 <input type="text" class="form-control" id="namaLengkap" placeholder="Masukkan nama lengkap" required>
+                                <div class="invalid-feedback">Nama lengkap wajib diisi.</div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label required">NIP</label>
-                                <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP (18 digit)" maxlength="18" required oninput="validateNIP(this)">
-                                <div class="form-text">**Untuk NON ASN masukkan 16 digit pertama NIK.</div>
+                                <input type="text" class="form-control" id="nip" placeholder="Masukkan NIP (18 digit)" maxlength="18" minlength="18" data-exactlen="18" required oninput="validateNIP(this)">
+                                <div class="invalid-feedback">NIP wajib diisi lengkap 18 digit angka.</div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label required">Unit Kerja</label>
                                 <input type="text" class="form-control" id="unitKerja" placeholder="Masukkan unit kerja" required>
+                                <div class="invalid-feedback">Unit kerja wajib diisi.</div>
                             </div>
 
                             <div class="mb-3">
@@ -1204,12 +1218,9 @@
                                     <option value="">-- Pilih Status --</option>
                                     <option value="PNS">PNS</option>
                                     <option value="PPPK">PPPK</option>
-                                    <option value="BKKD">BKKD</option>
-                                    <option value="BLUD">BLUD</option>
-                                    <option value="TUGSUS">TUGSUS</option>
-                                    <option value="MAGANG/INTERNSHIP">MAGANG/INTERNSHIP</option>
                                     
                                 </select>
+                                <div class="invalid-feedback">Status pegawai wajib dipilih.</div>
                             </div>
 
                             <div class="mb-3">
@@ -1233,12 +1244,14 @@
 
                             <div class="mb-3">
                                 <label class="form-label required">Nomor WhatsApp</label>
-                                <input type="tel" class="form-control" id="whatsapp" placeholder="Contoh: 081234567890" required oninput="validateWhatsApp(this)">
+                                <input type="tel" class="form-control" id="whatsapp" placeholder="Contoh: 081234567890" minlength="10" data-minlen="10" required oninput="validateWhatsApp(this)">
+                                <div class="invalid-feedback">Nomor WhatsApp wajib diisi (minimal 10 digit angka).</div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label required">Email</label>
                                 <input type="email" class="form-control" id="email" placeholder="name@email.com" required>
+                                <div class="invalid-feedback">Email wajib diisi dengan format yang benar.</div>
                             </div>
 
                             <input type="hidden" id="hiddenTema">
@@ -3433,12 +3446,65 @@
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
+        // Kumpulkan pesan kelengkapan semua kolom wajib pada sebuah form
+        function getFormFieldIssues(form) {
+            const issues = [];
+            form.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.type === 'hidden' || el.disabled || !el.validity) return;
+                // Aturan panjang eksplisit — tidak bergantung dirty-flag browser
+                // (mengatasi NIK/NIP/WA pendek yang lolos bila nilai diisi autofill/programatik)
+                const exact = el.getAttribute('data-exactlen');
+                const minL = el.getAttribute('data-minlen');
+                let lenBad = false;
+                if (exact && el.value.length > 0 && el.value.length !== parseInt(exact, 10)) lenBad = true;
+                else if (!exact && minL && el.value.length > 0 && el.value.length < parseInt(minL, 10)) lenBad = true;
+                el.classList.toggle('is-invalid', lenBad);
+                if (el.validity.valid && !lenBad) return;
+                const labelEl = el.closest('.mb-3') ? el.closest('.mb-3').querySelector('label') : null;
+                const label = (labelEl ? labelEl.textContent : (el.id || 'Kolom ini')).trim();
+                if (lenBad) {
+                    issues.push(exact ? label + ' harus ' + exact + ' digit' : label + ' minimal ' + minL + ' digit');
+                } else if (el.validity.valueMissing) {
+                    issues.push(label + (el.tagName === 'SELECT' ? ' wajib dipilih' : ' wajib diisi'));
+                } else if (el.validity.tooShort) {
+                    issues.push(label + (el.minLength === el.maxLength ? ' harus ' + el.minLength + ' digit' : ' minimal ' + el.minLength + ' karakter'));
+                } else if (el.validity.typeMismatch) {
+                    issues.push('Format ' + label + ' tidak valid');
+                } else if (el.validity.patternMismatch) {
+                    issues.push('Format ' + label + ' tidak sesuai');
+                } else {
+                    issues.push(label + ' belum valid');
+                }
+            });
+            return issues;
+        }
+
+        // Sorot kolom pertama yang bermasalah: gulir + fokus
+        function focusFirstInvalid(form) {
+            const firstInvalid = form.querySelector('.is-invalid, input:invalid, select:invalid, textarea:invalid');
+            if (!firstInvalid) return;
+            try { firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (err) {}
+            try { firstInvalid.focus({ preventScroll: true }); } catch (err2) { firstInvalid.focus(); }
+        }
+
         function validateWhatsApp(input) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
         document.getElementById('pendaftaranForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            const formEl = document.getElementById('pendaftaranForm');
+            
+            // ===== VALIDASI KELENGKAPAN: semua kolom wajib harus terisi lengkap =====
+            formEl.classList.add('was-validated');
+            const issues = getFormFieldIssues(formEl);
+            if (issues.length > 0) {
+                const daftar = issues.slice(0, 4).join(' • ') + (issues.length > 4 ? ' • +' + (issues.length - 4) + ' lainnya' : '');
+                showToast('<strong>Pendaftaran belum dapat dikirim</strong><br>' + daftar, 'warning');
+                focusFirstInvalid(formEl);
+                return;
+            }
             
             const btn = document.getElementById('submitBtn');
             btn.classList.add('btn-loading');
@@ -3498,6 +3564,7 @@
                     }
                     
                     document.getElementById('pendaftaranForm').reset();
+                    formEl.classList.remove('was-validated');
                     document.getElementById('temaDetails').style.display = 'none';
                     currentStep = 1;
                     changeStep(0);
@@ -4484,9 +4551,11 @@
             
             // Validasi manual (novalidate) agar pesan galat jelas via toast + tanda merah
             const adminForm = document.getElementById('pendaftaranAdminForm');
-            if (!adminForm.checkValidity()) {
-                adminForm.classList.add('was-validated');
-                showToast('Ada data yang belum lengkap. Periksa kolom bertanda merah.', 'warning');
+            adminForm.classList.add('was-validated');
+            const adminIssues = getFormFieldIssues(adminForm);
+            if (adminIssues.length > 0) {
+                showToast('<strong>Data belum lengkap</strong><br>' + adminIssues.slice(0, 4).join(' • ') + (adminIssues.length > 4 ? ' • +' + (adminIssues.length - 4) + ' lainnya' : ''), 'warning');
+                focusFirstInvalid(adminForm);
                 return;
             }
             adminForm.classList.remove('was-validated');
