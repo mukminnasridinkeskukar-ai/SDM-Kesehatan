@@ -384,6 +384,10 @@
 
         .badge-open { background: linear-gradient(135deg, #059669 0%, #10B981 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
         .badge-closed { background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-open.badge-daftar { border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: transform .15s ease, box-shadow .15s ease; text-decoration: none; }
+        .badge-open.badge-daftar:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(16,185,129,.45); color: white; }
+        .badge-open.badge-daftar:active { transform: translateY(0); }
+        .badge-open.badge-daftar:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
         .badge-unavailable { background: linear-gradient(135deg, #64748B 0%, #475569 100%); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
         .quota-info, .registration-timer {
@@ -1320,7 +1324,6 @@
                                     <option value="BLUD">BLUD</option>
                                     <option value="TUGSUS">TUGSUS</option>
                                     <option value="MAGANG/INTERNSHIP">MAGANG/INTERNSHIP</option>
-                                    <option value="APBDes">APBDes</option>
                                     
                                 </select>
                                 <div class="invalid-feedback">Status pegawai wajib dipilih.</div>
@@ -1984,7 +1987,6 @@
                                                     <option value="BLUD">BLUD</option>
                                                     <option value="TUGSUS">TUGSUS</option>
                                                     <option value="MAGANG/INTERNSHIP">MAGANG/INTERNSHIP</option>
-                                                    <option value="APBDes">APBDes</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-3 mb-3">
@@ -2581,6 +2583,31 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="btnCetakBukti"><i class="fas fa-print me-2"></i>Cetak Bukti</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-check me-2"></i>Selesai</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Pendaftaran dari Jadwal Kegiatan (badge "Pendaftaran Dibuka") -->
+    <div class="modal fade" id="jadwalDaftarModal" tabindex="-1" aria-labelledby="jadwalDaftarTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jadwalDaftarTitle"><i class="fas fa-user-plus me-2 text-success"></i>Pendaftaran Kegiatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="mb-2" id="jdTema">-</h6>
+                    <div class="small text-muted mb-3" id="jdMeta">-</div>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="quota-info"><i class="fas fa-users me-2"></i><strong>Sisa Kuota:</strong> <span id="jdKuota" class="badge bg-secondary">-</span></div>
+                        <div class="quota-info"><i class="fas fa-calendar-xmark me-2"></i><strong>Pendaftaran Tutup:</strong> <span id="jdTutup" class="badge bg-warning text-dark">-</span></div>
+                    </div>
+                    <div class="alert alert-info mt-3 mb-0 small"><i class="fas fa-circle-info me-1"></i>Anda akan diarahkan ke <b>Formulir Pendaftaran</b> dengan kegiatan ini sudah terpilih. Lengkapi data diri Anda lalu kirim.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success" id="jdLanjutBtn"><i class="fas fa-arrow-right me-2"></i>Isi Formulir Pendaftaran</button>
                 </div>
             </div>
         </div>
@@ -3283,10 +3310,75 @@
             if (result.success) {
                 const openJadwal = result.data.filter(j => j.status === 'open');
                 const select = document.getElementById('selectTema');
+                const prev = select.value; // simpan pilihan agar tidak hilang saat dropdown dimuat ulang
                 select.innerHTML = '<option value="">-- Pilih Tema --</option>' + 
                     openJadwal.map(j => `<option value="${j.tema}">${j.tema}</option>`).join('');
+                if (prev && openJadwal.some(j => j.tema === prev)) select.value = prev;
             }
         }
+
+        // ============================================
+        // PENDAFTARAN DARI JADWAL (badge "Pendaftaran Dibuka")
+        // ============================================
+        
+        let jdDaftarId = null;
+        
+        async function bukaPopupDaftar(id) {
+            const j = (allJadwal || []).find(x => String(x.id) === String(id));
+            if (!j) { showToast('Data kegiatan tidak ditemukan.', 'warning'); return; }
+            if (j.status !== 'open') { showToast('Pendaftaran kegiatan ini sudah ditutup.', 'warning'); return; }
+            jdDaftarId = j.id;
+            document.getElementById('jdTema').textContent = j.tema || '-';
+            document.getElementById('jdMeta').innerHTML =
+                (j.narasumber ? '<i class="fas fa-user-tie me-1"></i>' + pscEsc(j.narasumber) + ' &bull; ' : '') +
+                '<i class="fas fa-calendar me-1"></i>' + formatDate(j.tanggal) +
+                (j.jammulai ? ' &bull; <i class="fas fa-clock me-1"></i>' + pscEsc(j.jammulai) + (j.jamselesai ? '-' + pscEsc(j.jamselesai) : '') : '') +
+                (j.platform ? ' &bull; <i class="fas fa-desktop me-1"></i>' + pscEsc(j.platform) : '');
+            document.getElementById('jdTutup').textContent = j.tglselesaidaftar ? formatDate(j.tglselesaidaftar) : '-';
+            const kuotaEl = document.getElementById('jdKuota');
+            const lanjutBtn = document.getElementById('jdLanjutBtn');
+            kuotaEl.textContent = '...'; kuotaEl.className = 'badge bg-secondary';
+            lanjutBtn.disabled = false;
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('jadwalDaftarModal')).show();
+            // Sisa kuota live dari tabel registrasi
+            try {
+                const regs = await getRegistrasi();
+                const count = (regs.data || []).filter(r => r.tema === j.tema).length;
+                const sisa = Math.max(0, (parseInt(j.maxpeserta) || 0) - count);
+                if (sisa === 0) { kuotaEl.className = 'badge bg-danger'; kuotaEl.textContent = 'PENUH'; lanjutBtn.disabled = true; }
+                else { kuotaEl.className = 'badge ' + (sisa <= 5 ? 'bg-warning text-dark' : 'bg-success'); kuotaEl.textContent = sisa; }
+            } catch (e) { console.error('bukaPopupDaftar kuota:', e); kuotaEl.textContent = '-'; }
+        }
+        
+        async function daftarDariJadwal(id) {
+            const j = (allJadwal || []).find(x => String(x.id) === String(id));
+            if (!j) { showToast('Data kegiatan tidak ditemukan.', 'warning'); return; }
+            if (j.status !== 'open') { showToast('Pendaftaran kegiatan ini sudah ditutup.', 'warning'); return; }
+            showSection('pendaftaran'); // buka menu formulir + muat dropdown kegiatan
+            const sel = document.getElementById('selectTema');
+            if (!Array.from(sel.options).some(o => o.value === j.tema)) {
+                await loadJadwalForDropdown(); // jaga-jaga dropdown belum termuat
+            }
+            if (!Array.from(sel.options).some(o => o.value === j.tema)) {
+                showToast('Kegiatan ini belum tersedia di formulir pendaftaran.', 'warning');
+                return;
+            }
+            sel.value = j.tema;       // pra-pilih tema kegiatan
+            currentStep = 1;          // mulai wizard dari awal
+            await loadTemaDetails();  // detail kegiatan + sisa kuota + hitung mundur
+            changeStep(1);            // langsung ke formulir data diri (langkah 2)
+            document.getElementById('pendaftaranForm')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('Kegiatan "' + j.tema + '" terpilih — silakan lengkapi data diri Anda.', 'info');
+        }
+        
+        document.getElementById('jdLanjutBtn').addEventListener('click', async function() {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('jadwalDaftarModal')).hide();
+            if (jdDaftarId != null) {
+                const id = jdDaftarId;
+                jdDaftarId = null;
+                await daftarDariJadwal(id);
+            }
+        });
 
         async function loadAdminData() {
             const [registrasiResult, absensiResult, jadwalResult, sertifikatResult, materiResult, narasumberResult] = await Promise.all([
@@ -3353,7 +3445,7 @@
                     <td>${item.narasumber}</td>
                     <td>
                         ${item.status === 'open' 
-                            ? '<span class="badge-open">Pendaftaran Dibuka</span>' 
+                            ? `<button type="button" class="badge-open badge-daftar" title="Klik untuk membuka formulir pendaftaran" onclick="bukaPopupDaftar(${item.id})"><i class="fas fa-user-plus"></i>Pendaftaran Dibuka</button>` 
                             : '<span class="badge-closed">Tutup</span>'}
                     </td>
                 </tr>
@@ -3399,7 +3491,7 @@
                         <td>${formatDate(item.tglselesaidaftar)}</td>
                         <td>
                             ${item.status === 'open' 
-                                ? '<span class="badge-open">Pendaftaran Dibuka</span>' 
+                                ? `<button type="button" class="badge-open badge-daftar" title="Klik untuk membuka formulir pendaftaran" onclick="bukaPopupDaftar(${item.id})"><i class="fas fa-user-plus"></i>Pendaftaran Dibuka</button>` 
                                 : '<span class="badge-closed">Tutup</span>'}
                         </td>
                     </tr>
