@@ -482,6 +482,21 @@
         .dark-mode-toggle { width: 45px; height: 45px; border-radius: 12px; background: white; border: 1px solid rgba(12,59,54,0.08); box-shadow: var(--card-shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--primary-dark); transition: all var(--transition-speed); }
         .dark-mode-toggle:hover { transform: scale(1.1); color: var(--primary-color); }
 
+        /* === Chip/Tag Input Narasumber (Kelola Jadwal) === */
+        .narsum-chip-box { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; border: 1px solid #ced4da; border-radius: 10px; padding: 6px 10px; min-height: 46px; background: #fff; cursor: text; transition: border-color 0.2s, box-shadow 0.2s; }
+        .narsum-chip-box:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
+        .narsum-chip-box.is-invalid { border-color: var(--danger-color); box-shadow: 0 0 0 3px rgba(220,38,38,0.12); }
+        .narsum-chip-list { display: contents; }
+        .narsum-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--primary-soft); color: var(--primary-deep); border: 1px solid rgba(13,148,136,0.3); border-radius: 999px; padding: 3px 6px 3px 11px; font-size: 0.78rem; font-weight: 600; max-width: 100%; animation: fadeIn 0.2s ease; }
+        .narsum-chip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .narsum-chip-remove { border: none; background: rgba(13,148,136,0.18); color: var(--primary-deep); width: 18px; height: 18px; border-radius: 50%; font-size: 0.72rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; padding: 0; flex: 0 0 auto; cursor: pointer; transition: all 0.15s; }
+        .narsum-chip-remove:hover { background: var(--danger-color); color: #fff; }
+        .narsum-chip-input { border: none !important; outline: none !important; box-shadow: none !important; flex: 1 1 110px; min-width: 110px; padding: 4px 2px; font-size: 0.9rem; background: transparent; color: inherit; }
+        [data-theme="dark"] .narsum-chip-box { background: #10241F; border-color: #1D3B36; }
+        [data-theme="dark"] .narsum-chip-box:focus-within { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45,212,191,0.15); }
+        [data-theme="dark"] .narsum-chip { background: rgba(45,212,191,0.12); color: #7DE4D8; border-color: rgba(45,212,191,0.35); }
+        [data-theme="dark"] .narsum-chip-remove { background: rgba(45,212,191,0.15); color: #7DE4D8; }
+
         .rating-group { display: flex; gap: 15px; flex-wrap: wrap; }
         .rating-option { display: flex; align-items: center; gap: 5px; }
         .rating-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--primary-color); }
@@ -1621,8 +1636,13 @@
                                                 <input type="time" class="form-control" id="jadwalJamSelesai" required>
                                             </div>
                                             <div class="col-md-3 mb-3">
-                                                <label class="form-label">Narasumber</label>
-                                                <input type="text" class="form-control" id="jadwalNarasumber" list="narasumberDatalist" placeholder="Ketik untuk mencari narasumber..." required>
+                                                <label class="form-label">Narasumber <span class="text-danger">*</span></label>
+                                                <div class="narsum-chip-box" id="narsumChipBox" onclick="document.getElementById('narsumChipInput').focus()">
+                                                    <div class="narsum-chip-list" id="narsumChipList"></div>
+                                                    <input type="text" class="narsum-chip-input" id="narsumChipInput" list="narasumberDatalist" placeholder="Ketik nama, Enter...">
+                                                </div>
+                                                <input type="hidden" id="jadwalNarasumber">
+                                                <small class="text-muted d-block mt-1">Ketik nama lalu tekan <strong>Enter</strong> untuk menambah; klik <strong>&times;</strong> pada chip untuk menghapus. Boleh lebih dari satu.</small>
                                                 <datalist id="narasumberDatalist"></datalist>
                                             </div>
                                             <div class="col-md-3 mb-3">
@@ -4481,6 +4501,116 @@
         });
 
         // ============================================
+        // NARASUMBER CHIP/TAG INPUT (Kelola Jadwal)
+        // ============================================
+
+        function getNarsumChipNames() {
+            return Array.from(document.querySelectorAll('#narsumChipList .narsum-chip-name'))
+                .map(el => el.textContent.trim())
+                .filter(Boolean);
+        }
+
+        // Gabungkan semua chip ke hidden field dalam format bernomor "1) A 2) B"
+        // agar parser Dashboard/Tab Narasumber (parseNarasumberNames) tetap akurat.
+        function syncNarsumHidden() {
+            const names = getNarsumChipNames();
+            const hidden = document.getElementById('jadwalNarasumber');
+            if (hidden) hidden.value = names.map((n, i) => (i + 1) + ') ' + n).join(' ');
+        }
+
+        function addNarsumChip(rawName, silent = false) {
+            const name = String(rawName || '').trim().replace(/\s+/g, ' ');
+            if (!name) return false;
+            const box = document.getElementById('narsumChipBox');
+            const list = document.getElementById('narsumChipList');
+            if (!box || !list) return false;
+
+            const lower = name.toLowerCase();
+            if (getNarsumChipNames().some(n => n.toLowerCase() === lower)) {
+                if (!silent) showToast('Narasumber "' + name + '" sudah ada dalam daftar.', 'warning');
+                return false;
+            }
+
+            const chip = document.createElement('span');
+            chip.className = 'narsum-chip';
+
+            const label = document.createElement('span');
+            label.className = 'narsum-chip-name';
+            label.textContent = name;
+            label.title = name;
+
+            const del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'narsum-chip-remove';
+            del.innerHTML = '&times;';
+            del.setAttribute('aria-label', 'Hapus narasumber ' + name);
+            del.title = 'Hapus';
+            del.onclick = function() {
+                chip.remove();
+                syncNarsumHidden();
+            };
+
+            chip.appendChild(label);
+            chip.appendChild(del);
+            list.appendChild(chip);
+            box.classList.remove('is-invalid');
+            syncNarsumHidden();
+            return true;
+        }
+
+        function clearNarsumChips() {
+            const list = document.getElementById('narsumChipList');
+            const input = document.getElementById('narsumChipInput');
+            const box = document.getElementById('narsumChipBox');
+            if (list) list.innerHTML = '';
+            if (input) input.value = '';
+            if (box) box.classList.remove('is-invalid');
+            syncNarsumHidden();
+        }
+
+        // Uraikan teks tersimpan (mis. "1) A (Dinkes) 2) B") menjadi chip.
+        // Teks utuh dipertahankan termasuk "(Unit Kerja)"; data lama tanpa
+        // penomoran tetap aman (jadi satu chip utuh).
+        function setNarsumChips(text) {
+            clearNarsumChips();
+            const parts = String(text || '')
+                .split(/(?:^|[\s.;,])\d+[\)\.]\s*/)
+                .map(s => s.trim())
+                .filter(Boolean);
+            if (parts.length) {
+                parts.forEach(p => addNarsumChip(p, true));
+            } else if (String(text || '').trim()) {
+                addNarsumChip(text, true);
+            }
+        }
+
+        function initNarsumChipEvents() {
+            const input = document.getElementById('narsumChipInput');
+            if (!input || input.dataset.chipInit) return;
+            input.dataset.chipInit = '1';
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // cegah form tersubmit saat menambah chip
+                    if (addNarsumChip(input.value)) input.value = '';
+                } else if (e.key === 'Backspace' && !input.value) {
+                    const chips = document.querySelectorAll('#narsumChipList .narsum-chip');
+                    if (chips.length) {
+                        chips[chips.length - 1].remove();
+                        syncNarsumHidden();
+                    }
+                }
+            });
+
+            // Jangan sisakan teks menggantung saat pengguna pindah field / klik Simpan
+            input.addEventListener('blur', function() {
+                if (input.value.trim() && addNarsumChip(input.value)) {
+                    input.value = '';
+                }
+            });
+        }
+
+        // ============================================
         // KELOLA JADWAL FUNCTIONS
         // ============================================
         
@@ -4489,6 +4619,7 @@
             const formTitle = document.getElementById('jadwalFormTitle');
             const form = document.getElementById('jadwalForm');
             
+            initNarsumChipEvents();
             formCard.style.display = 'block';
             
             if (jadwal) {
@@ -4499,7 +4630,7 @@
                 document.getElementById('jadwalJP').value = jadwal.jp || '';
                 document.getElementById('jadwalJamMulai').value = jadwal.jammulai || '';
                 document.getElementById('jadwalJamSelesai').value = jadwal.jamselesai || '';
-                document.getElementById('jadwalNarasumber').value = jadwal.narasumber || '';
+                setNarsumChips(jadwal.narasumber || '');
                 document.getElementById('jadwalMaxPeserta').value = jadwal.maxpeserta || '';
                 document.getElementById('jadwalTglMulaiDaftar').value = jadwal.tglmulaidaftar || '';
                 document.getElementById('jadwalTglSelesaiDaftar').value = jadwal.tglselesaidaftar || '';
@@ -4510,6 +4641,7 @@
                 form.reset();
                 document.getElementById('jadwalId').value = '';
                 document.getElementById('jadwalStatus').value = 'open';
+                clearNarsumChips();
             }
             
             // Scroll to form
@@ -4520,6 +4652,7 @@
             document.getElementById('jadwalFormCard').style.display = 'none';
             document.getElementById('jadwalForm').reset();
             document.getElementById('jadwalId').value = '';
+            clearNarsumChips();
         }
         
         async function saveJadwal(event) {
@@ -4527,6 +4660,20 @@
             
             const btn = document.getElementById('jadwalForm')?.querySelector('button[type="submit"]');
             if (btn) { btn.disabled = true; }
+            
+            // Pastikan teks yang masih tertinggal di kolom chip ikut tersimpan
+            const chipInput = document.getElementById('narsumChipInput');
+            if (chipInput && chipInput.value.trim() && addNarsumChip(chipInput.value)) {
+                chipInput.value = '';
+            }
+            
+            if (!getNarsumChipNames().length) {
+                document.getElementById('narsumChipBox').classList.add('is-invalid');
+                showToast('Isi minimal satu narasumber (ketik nama lalu tekan Enter).', 'warning');
+                if (btn) btn.disabled = false;
+                chipInput?.focus();
+                return;
+            }
             
             const jadwalId = document.getElementById('jadwalId').value;
             const jadwalData = {
