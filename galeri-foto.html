@@ -1,4 +1,4 @@
-<html lang="id" data-theme="dark"><head>
+<html lang="id" data-theme="light"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeri Kegiatan | Dokumentasi Dinas Kesehatan</title>
@@ -2060,7 +2060,7 @@
         }
     </style>
 </head>
-<body>
+<body style="">
     <!-- Skip to Content Link (Accessibility) -->
     <a href="#main-content" class="skip-link">Langsung ke Konten Utama</a>
 
@@ -2078,7 +2078,7 @@
     ============================================ -->
     
     <!-- Header / Navigation -->
-    <header class="header scrolled" id="header" role="banner">
+    <header class="header" id="header" role="banner">
         <div class="header-container">
             <a href="#" class="logo" onclick="showHome(); return false;">
                 <div class="logo-icon">🏥</div>
@@ -2095,7 +2095,7 @@
             </nav>
             
             <div class="header-actions">
-                <button class="btn-icon" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle tema gelap/terang">☀️</button>
+                <button class="btn-icon" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle tema gelap/terang">🌙</button>
                 <button class="btn btn-primary" onclick="openLoginModal()">
                     🔒 Login Admin
                 </button>
@@ -2121,7 +2121,7 @@
     <main id="main-content" style="display: block;">
         
         <!-- Home View -->
-        <div id="homeView" style="display: block;">
+        <div id="homeView" style="display: none;">
             <!-- Hero Section -->
             <section class="hero" role="banner">
                 <div class="hero-bg-pattern"></div>
@@ -2146,11 +2146,11 @@
                     
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statEvents">3</div>
+                            <div class="hero-stat-value" id="statEvents">4</div>
                             <div class="hero-stat-label">Total Kegiatan</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value" id="statPhotos">28</div>
+                            <div class="hero-stat-value" id="statPhotos">52</div>
                             <div class="hero-stat-label">Total Foto</div>
                         </div>
                         <div class="hero-stat">
@@ -2191,6 +2191,29 @@
                     <!-- Gallery Grid -->
                     <div class="gallery-grid" id="galleryGrid"><div class="event-card" style="animation-delay: 0s;">
                 <div class="card-image-wrapper">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" class="card-image" loading="lazy">
+                    <span class="card-badge">Pelatihan</span>
+                    <span class="card-photo-count">📸 24 foto</span>
+                    <div class="card-overlay">
+                        <button class="card-btn">Lihat Galeri →</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-category">Pelatihan</div>
+                    <h3 class="card-title">Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes</h3>
+                    <div class="card-meta">
+                        <span class="card-meta-item">
+                            <span class="card-meta-icon">📅</span>
+                            7 September 2026
+                        </span>
+                        <span class="card-meta-item">
+                            <span class="card-meta-icon">📍</span>
+                            Hotel Yello Samarinda
+                        </span>
+                    </div>
+                </div>
+            </div><div class="event-card" style="animation-delay: 0.1s;">
+                <div class="card-image-wrapper">
                     <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_ahbiwy" alt="Pelatihan Pengelolaan Limbah Fasyankes" class="card-image" loading="lazy">
                     <span class="card-badge">Pelatihan</span>
                     <span class="card-photo-count">📸 20 foto</span>
@@ -2212,7 +2235,7 @@
                         </span>
                     </div>
                 </div>
-            </div><div class="event-card" style="animation-delay: 0.1s;">
+            </div><div class="event-card" style="animation-delay: 0.2s;">
                 <div class="card-image-wrapper">
                     <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-peningkatan-kemahiran-berbahasa-indonesia-pada-pelayanan-publik-dan-media-sosial/IMG_20260813_152459_che6ds" alt="Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial" class="card-image" loading="lazy">
                     <span class="card-badge">Pelatihan</span>
@@ -2235,7 +2258,7 @@
                         </span>
                     </div>
                 </div>
-            </div><div class="event-card" style="animation-delay: 0.2s;">
+            </div><div class="event-card" style="animation-delay: 0.3s;">
                 <div class="card-image-wrapper">
                     
                     <div class="card-image-placeholder">
@@ -2268,7 +2291,7 @@
             </section>
             
             <!-- About Section -->
-            <section class="section" id="tentang" style="display: none;">
+            <section class="section" id="tentang" style="display: block;">
                 <div class="container" style="max-width: 800px;">
                     <div class="section-header" style="justify-content: center;">
                         <h2 class="section-title">
@@ -2312,27 +2335,147 @@
         <!-- Event Detail View -->
         <div class="detail-view" id="detailView">
             <div class="detail-hero" id="detailHero">
-                <div class="detail-hero-bg" id="detailHeroBg"></div>
+                <div class="detail-hero-bg" id="detailHeroBg" style="background-image: url(&quot;https://res.cloudinary.com/cla7jrww/image/upload/q_auto,f_auto,w_1600/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu&quot;);"></div>
                 <div class="detail-hero-content">
                     <button class="detail-back-btn" onclick="showHome()">
                         ← Kembali ke Galeri
                     </button>
-                    <h1 class="detail-title" id="detailTitle">Judul Event</h1>
+                    <h1 class="detail-title" id="detailTitle">Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes</h1>
                     <div class="detail-meta-row" id="detailMetaRow">
-                        <!-- Meta items will be rendered here -->
-                    </div>
-                    <p class="detail-description" id="detailDescription">Deskripsi event...</p>
+                <span class="detail-meta-item">📅 7 September 2026</span>
+                <span class="detail-meta-item">📍 Hotel Yello Samarinda</span>
+                <span class="detail-meta-item">📂 Pelatihan</span>
+            </div>
+                    <p class="detail-description" id="detailDescription">Kegiatan berlangsung secara daring dari tanggal 31 Agustus 2026 sampai dengan 5 September 2026, dilanjutkan luring di Hotel Yello Samarinda pada tanggal 7 September s.d. 12 September 2026</p>
                 </div>
             </div>
             
             <section class="detail-section">
                 <div class="container">
                     <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
-                        📸 Foto Kegiatan (<span id="detailPhotoCount">0</span>)
+                        📸 Foto Kegiatan (<span id="detailPhotoCount">24</span>)
                     </h3>
-                    <div class="detail-photo-grid" id="detailPhotoGrid">
-                        <!-- Photos will be rendered here -->
+                    <div class="detail-photo-grid" id="detailPhotoGrid"><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
                     </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_1_zrwaq0" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_2_ypips3" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_j8ahmd" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_1_h0ardy" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_2_pwj9z8" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_vcbcdl" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_1_hatsj8" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_elwbez" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_1_n2tfef" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_2_ifd7wb" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_xpwz2h" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_1_uz5et3" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_nwxxyk" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_1_q4mlcs" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_2_jgfvw1" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_v2erwv" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_1_f7zqnr" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_2_dfrhpl" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_ubyetw" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_1_izztwx" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_natgjj" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_1_mgeytt" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div><div class="photo-thumb">
+                    <img src="https://res.cloudinary.com/cla7jrww/image/upload/w_400,h_300,q_auto,f_auto,c_fill/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_dugvm9" alt="Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes" loading="lazy">
+                    <div class="photo-thumb-overlay">
+                        <div class="photo-zoom-icon">🔍</div>
+                    </div>
+                </div></div>
                 </div>
             </section>
         </div>
@@ -2383,10 +2526,10 @@
         <button class="lightbox-close" onclick="closeLightbox()" aria-label="Tutup">✕</button>
         <button class="lightbox-nav lightbox-prev" onclick="prevPhoto()" aria-label="Foto sebelumnya">‹</button>
         <button class="lightbox-nav lightbox-next" onclick="nextPhoto()" aria-label="Foto selanjutnya">›</button>
-        <div class="lightbox-counter" id="lightboxCounter">1 / 10</div>
+        <div class="lightbox-counter" id="lightboxCounter">24 / 24</div>
         
         <div class="lightbox-image-container">
-            <img src="" alt="" class="lightbox-image" id="lightboxImage" draggable="false" oncontextmenu="return false;">
+            <img src="https://res.cloudinary.com/cla7jrww/image/upload/q_auto,f_auto,w_1600/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_dugvm9" alt="Foto kegiatan" class="lightbox-image" id="lightboxImage" draggable="false" oncontextmenu="return false;">
         </div>
         
         <div class="lightbox-caption">
@@ -2439,12 +2582,12 @@
                     <div class="admin-stats">
                         <div class="stat-card">
                             <div class="stat-icon">📊</div>
-                            <div class="stat-value" id="adminStatEvents">3</div>
+                            <div class="stat-value" id="adminStatEvents">4</div>
                             <div class="stat-label">Total Kegiatan</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">📸</div>
-                            <div class="stat-value" id="adminStatPhotos">28</div>
+                            <div class="stat-value" id="adminStatPhotos">52</div>
                             <div class="stat-label">Total Foto</div>
                         </div>
                         <div class="stat-card">
@@ -2468,6 +2611,18 @@
                             Selamat datang di panel administrasi. Kelola galeri kegiatan dari sini.
                         </p>
                         <div class="events-list" id="recentEventsList">
+                <div class="event-list-item">
+                    <img src="galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy">
+                    <div class="event-list-info">
+                        <div class="event-list-title">Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes</div>
+                        <div class="event-list-date">7 September 2026 • 24 foto</div>
+                    </div>
+                    <div class="event-list-actions">
+                        <button class="action-btn" onclick="editEvent('event-1788819978591')" title="Edit">✏️</button>
+                        <button class="action-btn danger" onclick="deleteEvent('event-1788819978591')" title="Hapus">🗑️</button>
+                    </div>
+                </div>
+            
                 <div class="event-list-item">
                     <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
                     <div class="event-list-info">
@@ -2559,6 +2714,18 @@
                         
                         <div class="events-list" id="allEventsList">
                 <div class="event-list-item">
+                    <img src="galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy">
+                    <div class="event-list-info">
+                        <div class="event-list-title">Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes</div>
+                        <div class="event-list-date">7 September 2026 • 24 foto</div>
+                    </div>
+                    <div class="event-list-actions">
+                        <button class="action-btn" onclick="editEvent('event-1788819978591')" title="Edit">✏️</button>
+                        <button class="action-btn danger" onclick="deleteEvent('event-1788819978591')" title="Hapus">🗑️</button>
+                    </div>
+                </div>
+            
+                <div class="event-list-item">
                     <img src="" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
                     <div class="event-list-info">
                         <div class="event-list-title">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</div>
@@ -2571,7 +2738,7 @@
                 </div>
             
                 <div class="event-list-item">
-                    <img src="galeri-kegiatan/2026/pelatihan-peningkatan-kemahiran-berbahasa-indonesia-pada-pelayanan-publik-dan-media-sosial/IMG_20260813_152459_che6ds" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
+                    <img src="galeri-kegiatan/2026/pelatihan-peningkatan-kemahiran-berbahasa-indonesia-pada-pelayanan-publik-dan-media-sosial/IMG_20260813_152459_che6ds" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy">
                     <div class="event-list-info">
                         <div class="event-list-title">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</div>
                         <div class="event-list-date">13 Agustus 2026 • 8 foto</div>
@@ -2583,7 +2750,7 @@
                 </div>
             
                 <div class="event-list-item">
-                    <img src="galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_ahbiwy" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy" style="display: none;">
+                    <img src="galeri-kegiatan/2026/pelatihan-pengelolaan-limbah-fasyankes/Pelatihan_Pengelolaan_Limbah_Fasyankes_1_ahbiwy" alt="" class="event-list-thumb" onerror="this.style.display='none'" loading="lazy">
                     <div class="event-list-info">
                         <div class="event-list-title">Pelatihan Pengelolaan Limbah Fasyankes</div>
                         <div class="event-list-date">18 Agustus 2026 • 20 foto</div>
@@ -2600,7 +2767,7 @@
                     <div class="tab-content" id="tab-upload">
                         <div class="form-group">
                             <label class="form-label">Pilih Kegiatan</label>
-                            <select class="form-input" id="uploadEventSelect"><option value="">-- Pilih kegiatan --</option><option value="event-1788092048133">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</option><option value="event-1788072935025">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</option><option value="event-1788072384526">Pelatihan Pengelolaan Limbah Fasyankes</option></select>
+                            <select class="form-input" id="uploadEventSelect"><option value="">-- Pilih kegiatan --</option><option value="event-1788819978591">Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes</option><option value="event-1788092048133">Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer</option><option value="event-1788072935025">Pelatihan Peningkatan Kemahiran Berbahasa Indonesia Pada Pelayanan Publik Dan Media Sosial</option><option value="event-1788072384526">Pelatihan Pengelolaan Limbah Fasyankes</option></select>
                         </div>
                         
                         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -2762,6 +2929,164 @@
         // - status: published/draft
         
         const EMBEDDED_EVENTS = [
+        {
+                "id": "event-1788819978591",
+                "title": "Pelatihan Kontrasepsi bagi Dokter dan Bidan di Fasyankes",
+                "description": "Kegiatan berlangsung secara daring dari tanggal 31 Agustus 2026 sampai dengan 5 September 2026, dilanjutkan luring di Hotel Yello Samarinda pada tanggal 7 September s.d. 12 September 2026",
+                "date": "2026-09-07",
+                "year": 2026,
+                "category": "pelatihan",
+                "location": "Hotel Yello Samarinda",
+                "folder": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes",
+                "coverPhoto": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu",
+                "photos": [
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820135/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.44_izgdlu.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:28:56.450Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_1_zrwaq0",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820137/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_1_zrwaq0.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:28:58.311Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_2_ypips3",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820139/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_2_ypips3.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:00.325Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_j8ahmd",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820141/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.45_j8ahmd.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:02.332Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_1_h0ardy",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820143/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_1_h0ardy.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:04.439Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_2_pwj9z8",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820145/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_2_pwj9z8.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:07.071Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_vcbcdl",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820147/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.46_vcbcdl.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:09.664Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_1_hatsj8",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820150/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_1_hatsj8.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:11.503Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_elwbez",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820152/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.47_elwbez.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:13.495Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_1_n2tfef",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820154/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_1_n2tfef.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:15.682Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_2_ifd7wb",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820156/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_2_ifd7wb.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:18.009Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_xpwz2h",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820158/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.48_xpwz2h.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:19.962Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_1_uz5et3",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820160/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_1_uz5et3.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:22.122Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_nwxxyk",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820163/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.49_nwxxyk.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:24.694Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_1_q4mlcs",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820165/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_1_q4mlcs.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:26.875Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_2_jgfvw1",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820167/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_2_jgfvw1.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:29.680Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_v2erwv",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820170/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.50_v2erwv.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:31.693Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_1_f7zqnr",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820172/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_1_f7zqnr.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:33.702Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_2_dfrhpl",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820174/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_2_dfrhpl.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:35.895Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_ubyetw",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820177/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.51_ubyetw.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:38.424Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_1_izztwx",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820179/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_1_izztwx.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:40.404Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_natgjj",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820181/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.52_natgjj.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:42.662Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_1_mgeytt",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820183/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_1_mgeytt.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:44.475Z"
+                        },
+                        {
+                                "publicId": "galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_dugvm9",
+                                "secureUrl": "https://res.cloudinary.com/cla7jrww/image/upload/v1788820185/galeri-kegiatan/2026/pelatihan-kontrasepsi-bagi-dokter-dan-bidan-di-fasyankes/WhatsApp_Image_2026-09-08_at_06.27.53_dugvm9.jpg",
+                                "caption": "",
+                                "uploadedAt": "2026-09-07T22:29:46.331Z"
+                        }
+                ],
+                "status": "published"
+        },
         {
                 "id": "event-1788092048133",
                 "title": "Pelatihan Sumber Daya Manusia (SDM) bagi Tenaga Kesehatan dalam Upaya Berhenti Merokok (UBM) di Fasilitas Pelayanan Kesehatan Primer",
