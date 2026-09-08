@@ -1480,9 +1480,6 @@
                         </div>
 
                         <form id="absensiSubmitForm">
-                            <input type="hidden" id="absensiId">
-                            <input type="hidden" id="absensiTema">
-                            
                             <div class="mb-4">
                                 <label class="form-label required">Evaluasi Penyelenggaraan</label>
                                 <div class="rating-group">
@@ -2966,7 +2963,12 @@
         }
 
         async function submitAbsensi(absData) {
-            const { data, error } = await sb.from('absensi').insert([absData]).select();
+            // Pengaman: buang 'id' bila ada — kolom id tabel absensi identity,
+            // insert dengan nilai eksplisit ditolak PostgreSQL
+            // ("cannot insert a non-DEFAULT value into column \"id\"").
+            const payload = { ...absData };
+            delete payload.id;
+            const { data, error } = await sb.from('absensi').insert([payload]).select();
             if (error) return { success: false, message: error.message };
             return { success: true, data: data };
         }
@@ -4405,9 +4407,6 @@
                 document.getElementById('absensiUnit').textContent = result.data.unitkerja || '-';
                 document.getElementById('absensiPlatform').textContent = result.data.platform || '-';
 
-                document.getElementById('absensiId').value = result.data.id || '';
-                document.getElementById('absensiTema').value = tema;
-
                 document.getElementById('verificationForm').style.display = 'none';
                 document.getElementById('absensiForm').style.display = 'block';
 
@@ -4429,7 +4428,8 @@
             const evalSarana = document.querySelector('input[name="evalSarana"]:checked')?.value || '4';
             
             const submitData = {
-                id: document.getElementById('absensiId').value,
+                // id absensi TIDAK dikirim — kolom id bersifat identity (dibuat otomatis Supabase).
+                // id yang tersimpan di field verifikasi adalah id registrasi, bukan absensi.
                 namalengkap: verifiedUser.namalengkap,
                 nip: verifiedUser.nip || verifiedUser.__identifier || null,
                 unitkerja: verifiedUser.unitkerja,
