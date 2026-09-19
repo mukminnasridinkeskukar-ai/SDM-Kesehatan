@@ -22,14 +22,14 @@
    * menyesuaikan struktur folder website apapun.
    * ============================================================ */
   var DEFAULT_PLAYLIST = [
-    { title: 'Step From Hell', src: 'assets/audio/step-from-hell.mp3' },
+    { title: 'Lagu 01', src: 'assets/audio/lagu-01.mp3' },
     { title: 'Lagu 02',        src: 'assets/audio/lagu-02.mp3' },
     { title: 'Lagu 03',        src: 'assets/audio/lagu-03.mp3' },
     { title: 'Lagu 04',        src: 'assets/audio/lagu-04.mp3' },
     { title: 'Lagu 05',        src: 'assets/audio/lagu-05.mp3' }
   ];
 
-  /* Default track index (Step From Hell = index 0) */
+  /* Default track index (Lagu 01 = index 0) */
   var DEFAULT_TRACK_INDEX = 0;
 
   /* Default preferences */
