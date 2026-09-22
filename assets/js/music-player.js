@@ -22,22 +22,54 @@
    * menyesuaikan struktur folder website apapun.
    * ============================================================ */
   var DEFAULT_PLAYLIST = [
-<<<<<<< HEAD
-    { title: 'Step From Hell', src: 'assets/audio/step-from-hell.mp3' },
-=======
     { title: 'Lagu 01', src: 'assets/audio/lagu-01.mp3' },
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
-    { title: 'Lagu 02',        src: 'assets/audio/lagu-02.mp3' },
-    { title: 'Lagu 03',        src: 'assets/audio/lagu-03.mp3' },
+    { title: 'Lagu 02', src: 'assets/audio/lagu-02.mp3' },
+    { title: 'Lagu 03', src: 'assets/audio/lagu-03.mp3' },
+    { title: 'Lagu 04', src: 'assets/audio/lagu-04.mp3' },
+    { title: 'Lagu 05', src: 'assets/audio/lagu-05.mp3' }
+    { title: 'Lagu 06', src: 'assets/audio/lagu-06.mp3' },
+    { title: 'Lagu 07', src: 'assets/audio/lagu-07.mp3' },
+    { title: 'Lagu 08', src: 'assets/audio/lagu-08.mp3' },
+    { title: 'Lagu 09', src: 'assets/audio/lagu-09.mp3' },
+    { title: 'Lagu 10', src: 'assets/audio/lagu-10.mp3' }
+    { title: 'Lagu 11', src: 'assets/audio/lagu-11.mp3' }
+  ];
+
+  /* ============================================================
+   * 2. SINGLETON — mencegah double audio / double init
+   * ============================================================ */
+  var instance = null;
+
+  function MusicPlayer() {
+    if (instance) {
+      instance.destroy();
+    }
+    instance = this;
+    this._init();
+  }
+
+  MusicPlayer.prototype._init = function () {
+    var self = this;
+
+    /* state */
+    this.playlist           = DEFAULT_PLAYLIST.slice();
+    this.currentIndex        = DEFAULT_TRACK_INDEX;
+    this.playMode            = DEFAULT_PLAY_MODE;
+    this.volume              = DEFAULT_VOLUME;
+    this.muted               = DEFAULT_MUTED;
+    this.lastVolumeBeforeMute = DEFAULT_VOLUME;
+    this.isReady             = false;
+    this.isPlaying           = false;
+    this.isSeeking           = false;
+    this.isAutoplayBlocked   = false;
+    this.isPlaylistOpen      = false;
+    this.isCollapsed         = false;
+    this.trackErrors         = {}; // { src: true } daftar lagu yang gagal load
     { title: 'Lagu 04',        src: 'assets/audio/lagu-04.mp3' },
     { title: 'Lagu 05',        src: 'assets/audio/lagu-05.mp3' }
   ];
 
-<<<<<<< HEAD
   /* Default track index (Step From Hell = index 0) */
-=======
-  /* Default track index (Lagu 01 = index 0) */
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   var DEFAULT_TRACK_INDEX = 0;
 
   /* Default preferences */
@@ -53,14 +85,7 @@
     playMode:     'music_play_mode',
     playlistOpen: 'music_playlist_open',
     position:     'music_last_position',
-<<<<<<< HEAD
-    collapsed:    'music_collapsed',
-    hidden:       'music_hidden',
-    posLeft:      'music_pos_left',
-    posTop:       'music_pos_top'
-=======
     collapsed:    'music_collapsed'
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   };
 
   /* Mode konstan */
@@ -107,12 +132,6 @@
     this.isAutoplayBlocked   = false;
     this.isPlaylistOpen      = false;
     this.isCollapsed         = false;
-<<<<<<< HEAD
-    this.isHidden            = false;
-    this.isDragging          = false;
-    this._dragState          = null;
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     this.trackErrors         = {}; // { src: true } daftar lagu yang gagal load
     this.firstInteractionHandled = false;
     this.positionSaveTimer   = null;
@@ -132,24 +151,12 @@
     this._applyPlaylistUI();
     this._updateTrackDisplay();
 
-<<<<<<< HEAD
-    /* restore visual state (collapsed / hidden / position) */
-    this._applyVisualState();
-
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     /* attach audio events */
     this._bindAudioEvents();
 
     /* attach UI events */
     this._bindUIEvents();
 
-<<<<<<< HEAD
-    /* enable drag-by-brand */
-    this._initDrag();
-
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     /* load initial track */
     this._loadTrack(this.currentIndex, { autoplay: false });
 
@@ -179,30 +186,13 @@
     root.setAttribute('aria-label', 'Music Player');
 
     root.innerHTML =
-<<<<<<< HEAD
-      '<div class="music-player__fab mp-js-fab" title="Buka music player" aria-hidden="true" role="button" tabindex="0">'
-=======
       '<div class="music-player__fab" title="Buka music player" aria-hidden="true">'
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       + '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
       + '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
       + '</svg></div>'
 
-<<<<<<< HEAD
-      + '<button type="button" class="music-player__mini-fab mp-js-mini-fab" title="Tampilkan music player" aria-label="Tampilkan music player">'
-      +   '<span class="music-player__mini-fab--pulse"></span>'
-      +   '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
-      +     '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
-      +   '</svg>'
-      + '</button>'
-
-      + '<div class="music-player__header">'
-      +   '<div class="music-player__brand mp-js-drag-handle" title="Geser untuk memindahkan" aria-label="Geser music player">'
-      +     '<span class="music-player__brand-dots" aria-hidden="true"><span></span><span></span><span></span></span>'
-=======
       + '<div class="music-player__header">'
       +   '<div class="music-player__brand">'
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       +     '<span class="music-player__brand-icon" aria-hidden="true">'
       +       '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">'
       +         '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
@@ -211,14 +201,7 @@
       +     '<span>Music Player</span>'
       +   '</div>'
       +   '<div class="music-player__header-actions">'
-<<<<<<< HEAD
-      +     '<button type="button" class="music-player__icon-btn mp-js-minimize" title="Minimalkan" aria-label="Minimalkan music player">'
-      +       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 20 20 4"/></svg>'
-      +     '</button>'
-      +     '<button type="button" class="music-player__icon-btn mp-js-hide" title="Sembunyikan" aria-label="Sembunyikan music player">'
-=======
       +     '<button type="button" class="music-player__icon-btn mp-js-collapse" title="Minimalkan" aria-label="Minimalkan">'
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       +       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"/></svg>'
       +     '</button>'
       +   '</div>'
@@ -303,15 +286,7 @@
 
     /* cache elements */
     this.el = {
-<<<<<<< HEAD
-      fab:              root.querySelector('.mp-js-fab'),
-      miniFab:          root.querySelector('.mp-js-mini-fab'),
-      dragHandle:       root.querySelector('.mp-js-drag-handle'),
-      minimizeBtn:      root.querySelector('.mp-js-minimize'),
-      hideBtn:          root.querySelector('.mp-js-hide'),
-=======
       fab:              root.querySelector('.mp-js-collapse'),
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       autoplayPrompt:  root.querySelector('.mp-js-autoplay-prompt'),
       title:            root.querySelector('.mp-js-title'),
       status:           root.querySelector('.mp-js-status'),
@@ -532,44 +507,11 @@
       }
     });
 
-<<<<<<< HEAD
-    /* Collapse button (minimize) — shrink to pill */
-    this.el.minimizeBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      self._setCollapsed(true);
-    });
-
-    /* FAB (collapsed pill) click — expand back */
-=======
     /* Collapse button */
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     this.el.fab.addEventListener('click', function (e) {
       e.preventDefault();
       self._setCollapsed(false);
     });
-<<<<<<< HEAD
-    this.el.fab.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        self._setCollapsed(false);
-      }
-    });
-
-    /* Hide button (X) — hide entirely, show mini-FAB */
-    this.el.hideBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      self._setHidden(true);
-    });
-
-    /* Mini-FAB click — restore player */
-    this.el.miniFab.addEventListener('click', function (e) {
-      e.preventDefault();
-      self._setHidden(false);
-    });
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 
     /* Click outside playlist to close (optional nicety) */
     document.addEventListener('click', function (e) {
@@ -929,11 +871,7 @@
   };
 
   /* ============================================================
-<<<<<<< HEAD
-   * 13. COLLAPSE / EXPAND / HIDE / DRAG
-=======
    * 13. COLLAPSE / EXPAND
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
    * ============================================================ */
   MusicPlayer.prototype._setCollapsed = function (collapsed) {
     this.isCollapsed = collapsed;
@@ -941,170 +879,6 @@
     this._savePreferences();
   };
 
-<<<<<<< HEAD
-  MusicPlayer.prototype._setHidden = function (hidden) {
-    this.isHidden = hidden;
-    this.root.classList.toggle('is-hidden', hidden);
-    this._savePreferences();
-  };
-
-  /* Apply persisted visual state (collapsed / hidden / position) on boot */
-  MusicPlayer.prototype._applyVisualState = function () {
-    this.root.classList.toggle('is-collapsed', !!this.isCollapsed);
-    this.root.classList.toggle('is-hidden',    !!this.isHidden);
-    this._restorePosition();
-  };
-
-  /* ============================================================
-   * 13b. DRAG (move the box by its brand / header)
-   * ============================================================ */
-  MusicPlayer.prototype._initDrag = function () {
-    var self = this;
-    var handle = this.el.dragHandle;
-    if (!handle) return;
-
-    var startDrag = function (clientX, clientY, ev) {
-      // Don't start drag if player is collapsed (no header visible) or hidden
-      if (self.isCollapsed || self.isHidden) return;
-      // Only allow drag from the brand area itself (not the buttons)
-      if (ev && ev.target && self.el.minimizeBtn && self.el.minimizeBtn.contains(ev.target)) return;
-      if (ev && ev.target && self.el.hideBtn     && self.el.hideBtn.contains(ev.target))     return;
-
-      var rect = self.root.getBoundingClientRect();
-      // Store offset between pointer and box origin
-      self._dragState = {
-        startX: clientX,
-        startY: clientY,
-        originLeft: rect.left,
-        originTop:  rect.top,
-        moved: false
-      };
-      self.isDragging = false; // becomes true after threshold
-    };
-
-    var moveDrag = function (clientX, clientY) {
-      if (!self._dragState) return;
-      var dx = clientX - self._dragState.startX;
-      var dy = clientY - self._dragState.startY;
-      if (!self.isDragging) {
-        // require small movement to actually start dragging (avoid jitter on click)
-        if (Math.abs(dx) < 4 && Math.abs(dy) < 4) return;
-        self.isDragging = true;
-        self.root.classList.add('is-dragging');
-      }
-      // Compute new position
-      var newLeft = self._dragState.originLeft + dx;
-      var newTop  = self._dragState.originTop  + dy;
-      // Clamp to viewport (with small margin so the box stays grabable)
-      var rect = self.root.getBoundingClientRect();
-      var maxLeft = window.innerWidth  - rect.width  - 4;
-      var maxTop  = window.innerHeight - rect.height - 4;
-      newLeft = Math.max(4, Math.min(maxLeft, newLeft));
-      newTop  = Math.max(4, Math.min(maxTop,  newTop));
-      self.root.style.left   = newLeft + 'px';
-      self.root.style.top    = newTop  + 'px';
-      self.root.style.right  = 'auto';
-      self.root.style.bottom = 'auto';
-      self._dragState.moved = true;
-    };
-
-    var endDrag = function () {
-      if (!self._dragState) return;
-      // Save final position
-      if (self._dragState.moved) {
-        self._savePosition();
-      }
-      self._dragState = null;
-      if (self.isDragging) {
-        self.isDragging = false;
-        self.root.classList.remove('is-dragging');
-      }
-    };
-
-    /* MOUSE */
-    handle.addEventListener('mousedown', function (e) {
-      // Only left button
-      if (e.button !== 0) return;
-      startDrag(e.clientX, e.clientY, e);
-      if (!self._dragState) return;
-      e.preventDefault();
-      var onMove = function (ev) { moveDrag(ev.clientX, ev.clientY); };
-      var onUp   = function () {
-        endDrag();
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup',   onUp);
-      };
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup',   onUp);
-    });
-
-    /* TOUCH */
-    handle.addEventListener('touchstart', function (e) {
-      if (e.touches.length !== 1) return;
-      var t = e.touches[0];
-      startDrag(t.clientX, t.clientY, e);
-    }, { passive: true });
-
-    handle.addEventListener('touchmove', function (e) {
-      if (!self._dragState || e.touches.length !== 1) return;
-      var t = e.touches[0];
-      moveDrag(t.clientX, t.clientY);
-      // Prevent page scroll while dragging the player
-      if (e.cancelable) e.preventDefault();
-    }, { passive: false });
-
-    handle.addEventListener('touchend',    endDrag);
-    handle.addEventListener('touchcancel', endDrag);
-
-    // Re-clamp on window resize so the box never ends up off-screen
-    window.addEventListener('resize', function () {
-      if (self.isCollapsed || self.isHidden) return;
-      var rect = self.root.getBoundingClientRect();
-      if (rect.left <= 0 && rect.top <= 0) return; // using default right/bottom
-      var maxLeft = window.innerWidth  - rect.width  - 4;
-      var maxTop  = window.innerHeight - rect.height - 4;
-      var newLeft = Math.max(4, Math.min(maxLeft, rect.left));
-      var newTop  = Math.max(4, Math.min(maxTop,  rect.top));
-      self.root.style.left   = newLeft + 'px';
-      self.root.style.top    = newTop  + 'px';
-      self.root.style.right  = 'auto';
-      self.root.style.bottom = 'auto';
-      self._savePosition();
-    });
-  };
-
-  MusicPlayer.prototype._savePosition = function () {
-    try {
-      var left = parseInt(this.root.style.left, 10);
-      var top  = parseInt(this.root.style.top, 10);
-      if (!isNaN(left)) localStorage.setItem(LS.posLeft, String(left));
-      if (!isNaN(top))  localStorage.setItem(LS.posTop,  String(top));
-    } catch (e) {}
-  };
-
-  MusicPlayer.prototype._restorePosition = function () {
-    try {
-      var left = parseInt(localStorage.getItem(LS.posLeft), 10);
-      var top  = parseInt(localStorage.getItem(LS.posTop),  10);
-      if (!isNaN(left) && !isNaN(top)) {
-        // Clamp to current viewport (in case window shrunk since last save)
-        var rect = this.root.getBoundingClientRect();
-        // Use rect width/height (rect is computed AFTER cssom initial layout,
-        // so width/height are valid even though we haven't set left/top yet)
-        var maxLeft = window.innerWidth  - rect.width  - 4;
-        var maxTop  = window.innerHeight - rect.height - 4;
-        left = Math.max(4, Math.min(maxLeft, left));
-        top  = Math.max(4, Math.min(maxTop,  top));
-        this.root.style.left   = left + 'px';
-        this.root.style.top    = top  + 'px';
-        this.root.style.right  = 'auto';
-        this.root.style.bottom = 'auto';
-      }
-    } catch (e) {}
-  };
-
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   /* ============================================================
    * 14. LOCAL STORAGE
    * ============================================================ */
@@ -1122,11 +896,6 @@
       if (po !== null) { this.isPlaylistOpen = (po === '1' || po === 'true'); }
       var col = localStorage.getItem(LS.collapsed);
       if (col !== null) { this.isCollapsed = (col === '1' || col === 'true'); }
-<<<<<<< HEAD
-      var hid = localStorage.getItem(LS.hidden);
-      if (hid !== null) { this.isHidden = (hid === '1' || hid === 'true'); }
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     } catch (e) { /* localStorage disabled */ }
   };
 
@@ -1138,10 +907,6 @@
       localStorage.setItem(LS.playMode,      this.playMode);
       localStorage.setItem(LS.playlistOpen, this.isPlaylistOpen ? '1' : '0');
       localStorage.setItem(LS.collapsed,    this.isCollapsed ? '1' : '0');
-<<<<<<< HEAD
-      localStorage.setItem(LS.hidden,       this.isHidden    ? '1' : '0');
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     } catch (e) { /* ignore */ }
   };
 
@@ -1217,10 +982,7 @@
   /* ============================================================
    * 16. PUBLIC API
    * ============================================================ */
-<<<<<<< HEAD
-=======
   MusicPlayer.prototype.togglePlay    = MusicPlayer.prototype.togglePlay;
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   MusicPlayer.prototype.destroy       = function () {
     try {
       if (this.positionSaveTimer) { clearInterval(this.positionSaveTimer); }
@@ -1270,13 +1032,6 @@
     toggle:  function () { if (instance) instance.togglePlay(); },
     next:    function () { if (instance) instance.next(); },
     prev:    function () { if (instance) instance.prev(); },
-<<<<<<< HEAD
-    collapse:function () { if (instance) instance._setCollapsed(true); },
-    expand:  function () { if (instance) instance._setCollapsed(false); },
-    hide:    function () { if (instance) instance._setHidden(true); },
-    show:    function () { if (instance) instance._setHidden(false); },
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     destroy: function () { if (instance) instance.destroy(); }
   };
 })();
