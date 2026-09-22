@@ -30,7 +30,6 @@
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
-<<<<<<< HEAD
   transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease, width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
 }
 
@@ -44,7 +43,8 @@
 }
 
 /* ---------------------------- Hidden state ----------------------------
-   Completely hide the box; show only the mini-FAB to bring it back. */
+   Completely hide the box. The mini-FAB lives OUTSIDE the root element
+   (as a sibling) so it remains visible & clickable while the box is hidden. */
 .music-player.is-hidden {
   width: 0 !important;
   height: 0 !important;
@@ -54,18 +54,10 @@
   background: transparent !important;
   box-shadow: none !important;
   overflow: visible !important;
-=======
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease;
-}
-
-.music-player.is-hidden {
-  transform: translateY(140%);
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   opacity: 0;
   pointer-events: none;
 }
 
-<<<<<<< HEAD
 .music-player.is-hidden .music-player__fab,
 .music-player.is-hidden .music-player__header,
 .music-player.is-hidden .music-player__body,
@@ -73,23 +65,42 @@
   display: none !important;
 }
 
-.music-player.is-hidden .music-player__mini-fab {
-  display: inline-flex;
-  pointer-events: auto;
-  opacity: 1;
+/* Mini-FAB visibility is controlled by the `music_hidden` state class
+   on the mini-fab itself (added/removed via JS) — NOT via the parent. */
+.music-player__mini-fab {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1bbd36, #16a34a);
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(27, 189, 54, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: none;
+  z-index: 10000;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  padding: 0;
 }
 
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
+/* When JS adds .is-visible to the mini-fab, it shows up */
+.music-player__mini-fab.is-visible {
+  display: inline-flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .music-player * {
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
 /* Collapsed (icon-only) pill — minimize result */
-=======
-/* Collapsed (icon-only) pill */
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 .music-player.is-collapsed {
   width: 56px;
   height: 56px;
@@ -117,34 +128,13 @@
   color: #1bbd36;
 }
 
-<<<<<<< HEAD
-/* Mini-FAB shown ONLY when player is fully hidden (X button).
-   Tiny floating music-note bubble that restores the player. */
-.music-player__mini-fab {
-  display: none;
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1bbd36, #16a34a);
-  color: #fff;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(27, 189, 54, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
-  border: none;
-  z-index: 10000;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.music-player__mini-fab:hover {
+/* Hover & active states for the mini-FAB (visibility toggled via .is-visible) */
+.music-player__mini-fab.is-visible:hover {
   transform: scale(1.08);
   box-shadow: 0 10px 28px rgba(27, 189, 54, 0.55), 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-.music-player__mini-fab:active {
+.music-player__mini-fab.is-visible:active {
   transform: scale(0.94);
 }
 
@@ -162,8 +152,6 @@
   100% { transform: scale(1.4);  opacity: 0; }
 }
 
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 /* ---------------------------- Header ---------------------------- */
 .music-player__header {
   display: flex;
@@ -173,12 +161,9 @@
   gap: 8px;
 }
 
-<<<<<<< HEAD
 /* The brand area is the DRAG HANDLE for moving the player around.
    cursor: grab indicates draggability; touch-action: none prevents
    page scroll from hijacking touch drag on mobile. */
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 .music-player__brand {
   display: flex;
   align-items: center;
@@ -188,7 +173,6 @@
   letter-spacing: 0.5px;
   color: #94a3b8;
   text-transform: uppercase;
-<<<<<<< HEAD
   cursor: grab;
   touch-action: none;
   -webkit-touch-action: none;
@@ -214,8 +198,6 @@
   height: 3px;
   border-radius: 50%;
   background: currentColor;
-=======
->>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 }
 
 .music-player__brand-icon {
