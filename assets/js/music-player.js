@@ -22,14 +22,22 @@
    * menyesuaikan struktur folder website apapun.
    * ============================================================ */
   var DEFAULT_PLAYLIST = [
+<<<<<<< HEAD
     { title: 'Step From Hell', src: 'assets/audio/step-from-hell.mp3' },
+=======
+    { title: 'Lagu 01', src: 'assets/audio/lagu-01.mp3' },
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     { title: 'Lagu 02',        src: 'assets/audio/lagu-02.mp3' },
     { title: 'Lagu 03',        src: 'assets/audio/lagu-03.mp3' },
     { title: 'Lagu 04',        src: 'assets/audio/lagu-04.mp3' },
     { title: 'Lagu 05',        src: 'assets/audio/lagu-05.mp3' }
   ];
 
+<<<<<<< HEAD
   /* Default track index (Step From Hell = index 0) */
+=======
+  /* Default track index (Lagu 01 = index 0) */
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   var DEFAULT_TRACK_INDEX = 0;
 
   /* Default preferences */
@@ -45,10 +53,14 @@
     playMode:     'music_play_mode',
     playlistOpen: 'music_playlist_open',
     position:     'music_last_position',
+<<<<<<< HEAD
     collapsed:    'music_collapsed',
     hidden:       'music_hidden',
     posLeft:      'music_pos_left',
     posTop:       'music_pos_top'
+=======
+    collapsed:    'music_collapsed'
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   };
 
   /* Mode konstan */
@@ -95,9 +107,12 @@
     this.isAutoplayBlocked   = false;
     this.isPlaylistOpen      = false;
     this.isCollapsed         = false;
+<<<<<<< HEAD
     this.isHidden            = false;
     this.isDragging          = false;
     this._dragState          = null;
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     this.trackErrors         = {}; // { src: true } daftar lagu yang gagal load
     this.firstInteractionHandled = false;
     this.positionSaveTimer   = null;
@@ -117,18 +132,24 @@
     this._applyPlaylistUI();
     this._updateTrackDisplay();
 
+<<<<<<< HEAD
     /* restore visual state (collapsed / hidden / position) */
     this._applyVisualState();
 
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     /* attach audio events */
     this._bindAudioEvents();
 
     /* attach UI events */
     this._bindUIEvents();
 
+<<<<<<< HEAD
     /* enable drag-by-brand */
     this._initDrag();
 
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     /* load initial track */
     this._loadTrack(this.currentIndex, { autoplay: false });
 
@@ -158,11 +179,16 @@
     root.setAttribute('aria-label', 'Music Player');
 
     root.innerHTML =
+<<<<<<< HEAD
       '<div class="music-player__fab mp-js-fab" title="Buka music player" aria-hidden="true" role="button" tabindex="0">'
+=======
+      '<div class="music-player__fab" title="Buka music player" aria-hidden="true">'
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       + '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
       + '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
       + '</svg></div>'
 
+<<<<<<< HEAD
       + '<button type="button" class="music-player__mini-fab mp-js-mini-fab" title="Tampilkan music player" aria-label="Tampilkan music player">'
       +   '<span class="music-player__mini-fab--pulse"></span>'
       +   '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
@@ -173,6 +199,10 @@
       + '<div class="music-player__header">'
       +   '<div class="music-player__brand mp-js-drag-handle" title="Geser untuk memindahkan" aria-label="Geser music player">'
       +     '<span class="music-player__brand-dots" aria-hidden="true"><span></span><span></span><span></span></span>'
+=======
+      + '<div class="music-player__header">'
+      +   '<div class="music-player__brand">'
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       +     '<span class="music-player__brand-icon" aria-hidden="true">'
       +       '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">'
       +         '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
@@ -181,10 +211,14 @@
       +     '<span>Music Player</span>'
       +   '</div>'
       +   '<div class="music-player__header-actions">'
+<<<<<<< HEAD
       +     '<button type="button" class="music-player__icon-btn mp-js-minimize" title="Minimalkan" aria-label="Minimalkan music player">'
       +       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 20 20 4"/></svg>'
       +     '</button>'
       +     '<button type="button" class="music-player__icon-btn mp-js-hide" title="Sembunyikan" aria-label="Sembunyikan music player">'
+=======
+      +     '<button type="button" class="music-player__icon-btn mp-js-collapse" title="Minimalkan" aria-label="Minimalkan">'
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       +       '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"/></svg>'
       +     '</button>'
       +   '</div>'
@@ -269,11 +303,15 @@
 
     /* cache elements */
     this.el = {
+<<<<<<< HEAD
       fab:              root.querySelector('.mp-js-fab'),
       miniFab:          root.querySelector('.mp-js-mini-fab'),
       dragHandle:       root.querySelector('.mp-js-drag-handle'),
       minimizeBtn:      root.querySelector('.mp-js-minimize'),
       hideBtn:          root.querySelector('.mp-js-hide'),
+=======
+      fab:              root.querySelector('.mp-js-collapse'),
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
       autoplayPrompt:  root.querySelector('.mp-js-autoplay-prompt'),
       title:            root.querySelector('.mp-js-title'),
       status:           root.querySelector('.mp-js-status'),
@@ -494,6 +532,7 @@
       }
     });
 
+<<<<<<< HEAD
     /* Collapse button (minimize) — shrink to pill */
     this.el.minimizeBtn.addEventListener('click', function (e) {
       e.preventDefault();
@@ -502,10 +541,14 @@
     });
 
     /* FAB (collapsed pill) click — expand back */
+=======
+    /* Collapse button */
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     this.el.fab.addEventListener('click', function (e) {
       e.preventDefault();
       self._setCollapsed(false);
     });
+<<<<<<< HEAD
     this.el.fab.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -525,6 +568,8 @@
       e.preventDefault();
       self._setHidden(false);
     });
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 
     /* Click outside playlist to close (optional nicety) */
     document.addEventListener('click', function (e) {
@@ -884,7 +929,11 @@
   };
 
   /* ============================================================
+<<<<<<< HEAD
    * 13. COLLAPSE / EXPAND / HIDE / DRAG
+=======
+   * 13. COLLAPSE / EXPAND
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
    * ============================================================ */
   MusicPlayer.prototype._setCollapsed = function (collapsed) {
     this.isCollapsed = collapsed;
@@ -892,6 +941,7 @@
     this._savePreferences();
   };
 
+<<<<<<< HEAD
   MusicPlayer.prototype._setHidden = function (hidden) {
     this.isHidden = hidden;
     this.root.classList.toggle('is-hidden', hidden);
@@ -1053,6 +1103,8 @@
     } catch (e) {}
   };
 
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   /* ============================================================
    * 14. LOCAL STORAGE
    * ============================================================ */
@@ -1070,8 +1122,11 @@
       if (po !== null) { this.isPlaylistOpen = (po === '1' || po === 'true'); }
       var col = localStorage.getItem(LS.collapsed);
       if (col !== null) { this.isCollapsed = (col === '1' || col === 'true'); }
+<<<<<<< HEAD
       var hid = localStorage.getItem(LS.hidden);
       if (hid !== null) { this.isHidden = (hid === '1' || hid === 'true'); }
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     } catch (e) { /* localStorage disabled */ }
   };
 
@@ -1083,7 +1138,10 @@
       localStorage.setItem(LS.playMode,      this.playMode);
       localStorage.setItem(LS.playlistOpen, this.isPlaylistOpen ? '1' : '0');
       localStorage.setItem(LS.collapsed,    this.isCollapsed ? '1' : '0');
+<<<<<<< HEAD
       localStorage.setItem(LS.hidden,       this.isHidden    ? '1' : '0');
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     } catch (e) { /* ignore */ }
   };
 
@@ -1159,6 +1217,10 @@
   /* ============================================================
    * 16. PUBLIC API
    * ============================================================ */
+<<<<<<< HEAD
+=======
+  MusicPlayer.prototype.togglePlay    = MusicPlayer.prototype.togglePlay;
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   MusicPlayer.prototype.destroy       = function () {
     try {
       if (this.positionSaveTimer) { clearInterval(this.positionSaveTimer); }
@@ -1208,10 +1270,13 @@
     toggle:  function () { if (instance) instance.togglePlay(); },
     next:    function () { if (instance) instance.next(); },
     prev:    function () { if (instance) instance.prev(); },
+<<<<<<< HEAD
     collapse:function () { if (instance) instance._setCollapsed(true); },
     expand:  function () { if (instance) instance._setCollapsed(false); },
     hide:    function () { if (instance) instance._setHidden(true); },
     show:    function () { if (instance) instance._setHidden(false); },
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
     destroy: function () { if (instance) instance.destroy(); }
   };
 })();

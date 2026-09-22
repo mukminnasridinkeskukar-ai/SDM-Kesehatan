@@ -30,6 +30,7 @@
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+<<<<<<< HEAD
   transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease, width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
 }
 
@@ -53,10 +54,18 @@
   background: transparent !important;
   box-shadow: none !important;
   overflow: visible !important;
+=======
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease;
+}
+
+.music-player.is-hidden {
+  transform: translateY(140%);
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
   opacity: 0;
   pointer-events: none;
 }
 
+<<<<<<< HEAD
 .music-player.is-hidden .music-player__fab,
 .music-player.is-hidden .music-player__header,
 .music-player.is-hidden .music-player__body,
@@ -70,11 +79,17 @@
   opacity: 1;
 }
 
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 .music-player * {
   box-sizing: border-box;
 }
 
+<<<<<<< HEAD
 /* Collapsed (icon-only) pill — minimize result */
+=======
+/* Collapsed (icon-only) pill */
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 .music-player.is-collapsed {
   width: 56px;
   height: 56px;
@@ -102,6 +117,7 @@
   color: #1bbd36;
 }
 
+<<<<<<< HEAD
 /* Mini-FAB shown ONLY when player is fully hidden (X button).
    Tiny floating music-note bubble that restores the player. */
 .music-player__mini-fab {
@@ -146,6 +162,8 @@
   100% { transform: scale(1.4);  opacity: 0; }
 }
 
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 /* ---------------------------- Header ---------------------------- */
 .music-player__header {
   display: flex;
@@ -155,9 +173,12 @@
   gap: 8px;
 }
 
+<<<<<<< HEAD
 /* The brand area is the DRAG HANDLE for moving the player around.
    cursor: grab indicates draggability; touch-action: none prevents
    page scroll from hijacking touch drag on mobile. */
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 .music-player__brand {
   display: flex;
   align-items: center;
@@ -167,6 +188,7 @@
   letter-spacing: 0.5px;
   color: #94a3b8;
   text-transform: uppercase;
+<<<<<<< HEAD
   cursor: grab;
   touch-action: none;
   -webkit-touch-action: none;
@@ -192,6 +214,8 @@
   height: 3px;
   border-radius: 50%;
   background: currentColor;
+=======
+>>>>>>> 7fed9cc9436e49e7e150500960b1fb361993f12b
 }
 
 .music-player__brand-icon {
