@@ -32,7 +32,8 @@
     { title: 'Lagu 08',        src: 'assets/audio/lagu-08.mp3' },
     { title: 'Lagu 09',        src: 'assets/audio/lagu-09.mp3' },
     { title: 'Lagu 10',        src: 'assets/audio/lagu-10.mp3' },
-    { title: 'Lagu 11',        src: 'assets/audio/lagu-11.mp3' }
+    { title: 'Lagu 11',        src: 'assets/audio/lagu-11.mp3' },
+    { title: 'Lagu 12',        src: 'assets/audio/lagu-12.mp3' }
   ];
 
   /* Default track index (Step From Hell = index 0) */
