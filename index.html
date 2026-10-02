@@ -596,6 +596,12 @@
         </button>
       </nav>
 
+      <!-- Elemen stub untuk main.js template: mencegah TypeError
+           "Cannot read properties of null (reading 'addEventListener')".
+           Sengaja disembunyikan (d-none) karena nav mobile dikelola
+           oleh tombol #navToggle + skrip custom di bawah. -->
+      <button class="mobile-nav-toggle d-none" type="button" aria-hidden="true" tabindex="-1"></button>
+
       <div class="header-social-links">
         <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -668,7 +674,9 @@
           <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
         </a>
 
-        <ol class="carousel-indicators"></ol>
+        <!-- catatan: elemen .carousel-indicators kosong dihapus karena
+             membuat Bootstrap carousel melempar TypeError saat auto-slide
+             (indikator tidak punya child yang cocok dengan jumlah slide) -->
 
       </div>
 
@@ -1472,21 +1480,40 @@
       });
     }
 
-    // ===== GEOLOCATION (client-side) =====
+    // ===== GEOLOCATION (client-side, dengan fallback berlapis) =====
+    // Urutan: ipapi.co → ipwho.is → default Indonesia
     function fetchGeo() {
+      function applyGeo(code, name, city, region) {
+        visitorCountry = {
+          code: (code || 'id').toLowerCase(),
+          name: name || 'Indonesia',
+          city: city || '',
+          region: region || ''
+        };
+      }
+      function tryIpwho() {
+        return fetch('https://ipwho.is/')
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (d && d.success && d.country_code) {
+              applyGeo(d.country_code, d.country, d.city, d.region);
+            } else { applyGeo('id', 'Indonesia', '', ''); }
+          })
+          .catch(function() { applyGeo('id', 'Indonesia', '', ''); });
+      }
       return fetch('https://ipapi.co/json/')
-        .then(function(r) { return r.json(); })
+        .then(function(r) {
+          if (!r.ok) throw new Error('ipapi HTTP ' + r.status);
+          return r.json();
+        })
         .then(function(d) {
           if (d.country_code && !d.error) {
-            visitorCountry = {
-              code: d.country_code.toLowerCase(),
-              name: d.country_name || 'Unknown',
-              city: d.city || '',
-              region: d.region || ''
-            };
-          } else { visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' }; }
+            applyGeo(d.country_code, d.country_name, d.city, d.region);
+            return null;
+          }
+          return tryIpwho();
         })
-        .catch(function() { visitorCountry = { code: 'id', name: 'Indonesia', city: '', region: '' }; });
+        .catch(function() { return tryIpwho(); });
     }
 
     // ===== RENDER COUNTRY LIST =====
@@ -1643,7 +1670,13 @@
         renderCountries(result.countries);
         startHeartbeat();
       }).catch(function(e) {
-        showError('Gagal terhubung ke database: ' + (e && e.message ? e.message : ''));
+        var m = (e && e.message) ? e.message : '';
+        // 401 = aturan keamanan database menolak akses publik
+        if (m.indexOf('401') !== -1) {
+          showError('Database terkunci (Permission denied). Pemilik situs: buka Firebase Console → Realtime Database → Rules, lalu izinkan read/write publik.');
+        } else {
+          showError('Gagal terhubung ke database: ' + m);
+        }
       });
     }
 
