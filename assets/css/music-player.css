@@ -12,7 +12,8 @@
 /* ---------------------------- Container ---------------------------- */
 .music-player {
   position: fixed;
-  right: 16px;
+  left: 16px;
+  right: auto;
   bottom: 16px;
   z-index: 9999;
   width: 340px;
@@ -30,7 +31,7 @@
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease, width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease, width 0.25s ease, height 0.25s ease, border-radius 0.25s ease, left 0.35s cubic-bezier(.2,.8,.2,1), top 0.35s cubic-bezier(.2,.8,.2,1);
 }
 
 /* When user has dragged the box, position is set via inline left/top.
@@ -70,7 +71,8 @@
 .music-player__mini-fab {
   display: none;
   position: fixed;
-  right: 16px;
+  left: 16px;
+  right: auto;
   bottom: 16px;
   width: 48px;
   height: 48px;
@@ -106,6 +108,10 @@
   height: 56px;
   border-radius: 28px;
   cursor: pointer;
+  /* Dock pojok kiri bawah (fallback; JS men-set posisi inline yang sama) */
+  right: auto;
+  left: 16px;
+  bottom: 16px;
 }
 
 .music-player.is-collapsed .music-player__body,
@@ -694,6 +700,16 @@
     border-radius: 14px;
   }
 
+  /* Lingkaran minimize & mini-FAB tetap kecil dan menempel di pojok kiri bawah */
+  .music-player.is-collapsed,
+  .music-player__mini-fab {
+    left: 12px;
+    right: auto;
+    bottom: 12px;
+    width: 52px;
+    height: 52px;
+  }
+
   .music-player__controls {
     gap: 2px;
   }
@@ -715,6 +731,20 @@
   .music-player__playlist-list {
     max-height: 50vh;
   }
+}
+
+/* ---------------------------------------------------------------------
+ * Jangan tutupi UI penting website:
+ *  - body.modal-lock : modal platform (popup) sedang terbuka (dari index.html)
+ *  - body.nav-open   : menu navigasi mobile sedang terbuka
+ * Player & mini-FAB menghilang selama UI tersebut aktif.
+ * ------------------------------------------------------------------- */
+body.modal-lock .music-player,
+body.modal-lock .music-player__mini-fab,
+body.nav-open .music-player,
+body.nav-open .music-player__mini-fab {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Respect prefers-reduced-motion */

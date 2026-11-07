@@ -908,7 +908,37 @@
   MusicPlayer.prototype._setCollapsed = function (collapsed) {
     this.isCollapsed = collapsed;
     this.root.classList.toggle('is-collapsed', collapsed);
+    if (collapsed) {
+      /* MINIMIZE: parkirkan lingkaran player di pojok KIRI BAWAH supaya
+         tidak menutupi konten layar maupun tombol scroll-top (kanan bawah).
+         Posisi drag mode terbuka tetap tersimpan & dipulihkan saat dibuka lagi. */
+      this._dockCollapsed();
+    } else {
+      /* EXPAND: kembali ke posisi terbuka terakhir (jika pernah digeser) */
+      this._clearInlinePosition();
+      this._restorePosition();
+    }
     this._savePreferences();
+  };
+
+  /* Hapus posisi inline -> kembali ke aturan posisi default di CSS */
+  MusicPlayer.prototype._clearInlinePosition = function () {
+    this.root.style.left   = '';
+    this.root.style.top    = '';
+    this.root.style.right  = '';
+    this.root.style.bottom = '';
+  };
+
+  /* Parkirkan player yang di-minimize di pojok KIRI BAWAH */
+  MusicPlayer.prototype._dockCollapsed = function () {
+    var small = (window.innerWidth <= 480);
+    var off   = small ? 12 : 16;
+    var size  = small ? 52 : 56; /* ukuran lingkaran minimize sesuai CSS (bukan offsetWidth,
+                                    karena transi width/height masih berjalan saat dipanggil) */
+    this.root.style.right  = 'auto';
+    this.root.style.bottom = 'auto';
+    this.root.style.left   = off + 'px';
+    this.root.style.top    = Math.max(off, window.innerHeight - size - off) + 'px';
   };
 
   MusicPlayer.prototype._setHidden = function (hidden) {
@@ -923,7 +953,13 @@
     this.root.classList.toggle('is-collapsed', !!this.isCollapsed);
     this.root.classList.toggle('is-hidden',    !!this.isHidden);
     this.el.miniFab.classList.toggle('is-visible', !!this.isHidden);
-    this._restorePosition();
+    /* Saat halaman dibuka dalam kondisi minimized, JANGAN memulihkan posisi
+       drag lama (rawan menutupi konten). Parkirkan langsung di pojok kiri bawah. */
+    if (this.isCollapsed) {
+      this._dockCollapsed();
+    } else {
+      this._restorePosition();
+    }
   };
 
   /* ============================================================
@@ -1029,9 +1065,10 @@
 
     // Re-clamp on window resize so the box never ends up off-screen
     window.addEventListener('resize', function () {
-      if (self.isCollapsed || self.isHidden) return;
+      if (self.isCollapsed) { self._dockCollapsed(); return; }
+      if (self.isHidden) return;
       var rect = self.root.getBoundingClientRect();
-      if (rect.left <= 0 && rect.top <= 0) return; // using default right/bottom
+      if (!self.root.style.left && !self.root.style.top) return; // masih posisi default CSS
       var maxLeft = window.innerWidth  - rect.width  - 4;
       var maxTop  = window.innerHeight - rect.height - 4;
       var newLeft = Math.max(4, Math.min(maxLeft, rect.left));
@@ -1054,6 +1091,12 @@
   };
 
   MusicPlayer.prototype._restorePosition = function () {
+    /* Di layar kecil, posisi diserahkan ke media query CSS (panel lebar penuh).
+       Posisi drag dari layar besar tidak relevan & bisa merusak tampilan HP. */
+    if (window.innerWidth <= 480) {
+      this._clearInlinePosition();
+      return;
+    }
     try {
       var left = parseInt(localStorage.getItem(LS.posLeft), 10);
       var top  = parseInt(localStorage.getItem(LS.posTop),  10);
