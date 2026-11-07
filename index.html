@@ -1461,27 +1461,6 @@
 
     function getCountryName(code) { return COUNTRY_NAMES[code] || code.toUpperCase(); }
 
-    // Angka aman: kalau nilai di database rusak (bukan angka), anggap 0
-    function toNum(v) {
-      var n = parseInt(v, 10);
-      return (isFinite(n) && n >= 0) ? n : 0;
-    }
-
-    // Cadangan bendera: emoji dari kode negara, atau ikon globe
-    function flagEmoji(code) {
-      code = String(code || '').toLowerCase();
-      if (/^[a-z]{2}$/.test(code)) {
-        return String.fromCodePoint(0x1F1E6 + code.charCodeAt(0) - 97, 0x1F1E6 + code.charCodeAt(1) - 97);
-      }
-      return '\uD83C\uDF10';
-    }
-    window.__flagFallback = function(img) {
-      var span = document.createElement('span');
-      span.className = 'country-emoji-flag';
-      span.textContent = img.getAttribute('data-emoji') || '\uD83C\uDF10';
-      if (img.parentNode) img.parentNode.replaceChild(span, img);
-    };
-
     // ===== FIREBASE HELPERS =====
     function fbGet(path) {
       return fetch(FIREBASE_URL + '/' + path + '.json').then(function(r) {
@@ -1542,7 +1521,7 @@
       var container = document.getElementById('country-list');
       var countEl = document.getElementById('v-country-count');
       if (!container) return;
-      var entries = Object.keys(data || {}).map(function(k) { return [String(k).toLowerCase(), toNum(data[k])]; });
+      var entries = Object.keys(data || {}).map(function(k) { return [k, data[k]]; });
       var sorted = entries.filter(function(e) { return e[1] > 0; }).sort(function(a, b) { return b[1] - a[1]; });
       if (sorted.length === 0) {
         container.innerHTML = '<div class="country-loading"><p class="text-muted">Belum ada data negara</p></div>';
@@ -1557,7 +1536,7 @@
         var barPct = Math.max(Math.round((visits / totalVisits) * 100), 2);
         var name = getCountryName(code);
         h += '<div class="country-item">' +
-          '<img src="' + FLAG_CDN + code + '.png" alt="' + name + '" class="country-flag" loading="lazy" data-emoji="' + flagEmoji(code) + '" onerror="__flagFallback(this)">' +
+          '<img src="' + FLAG_CDN + code + '.png" alt="' + name + '" class="country-flag" onerror="this.style.display=\x27none\x27">' +
           '<div style="flex:1"><div class="d-flex justify-content-between align-items-center">' +
           '<span class="country-name">' + name + '</span>' +
           '<span class="country-visits">' + visits.toLocaleString('id-ID') + '</span></div>' +
@@ -1647,7 +1626,7 @@
       var today = new Date();
       var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
       var monthStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
-      var cc = (visitorCountry ? visitorCountry.code : 'id').toLowerCase();
+      var cc = visitorCountry ? visitorCountry.code : 'id';
 
       // Read current stats
       fbGet('stats').then(function(stats) {
@@ -1658,9 +1637,9 @@
         if (stats.monthDate !== monthStr) { stats.monthCount = 0; stats.monthDate = monthStr; }
 
         // Increment
-        stats.total = toNum(stats.total) + 1;
-        stats.todayCount = toNum(stats.todayCount) + 1;
-        stats.monthCount = toNum(stats.monthCount) + 1;
+        stats.total = (stats.total || 0) + 1;
+        stats.todayCount = (stats.todayCount || 0) + 1;
+        stats.monthCount = (stats.monthCount || 0) + 1;
 
         return fbSet('stats', stats).then(function() { return stats; });
       }).then(function(stats) {
@@ -1675,7 +1654,7 @@
       }).then(function(result) {
         // Update country
         return fbGet('countries/' + cc).then(function(count) {
-          return fbSet('countries/' + cc, toNum(count) + 1).then(function() {
+          return fbSet('countries/' + cc, (count || 0) + 1).then(function() {
             return fbGet('countries');
           });
         }).then(function(countries) {
